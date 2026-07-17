@@ -12,6 +12,7 @@ import { NavMobile } from './nav/mobile';
 import { NavDesktop } from './nav/desktop';
 import { Footer, HomeFooter } from './footer';
 import { MenuButton } from '../components/menu-button';
+import { CloseCursor } from '../components/close-cursor';
 import { navData as mainNavData } from '../nav-config-main';
 import { SignInButton } from '../components/sign-in-button';
 import { SettingsButton } from '../components/settings-button';
@@ -110,6 +111,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
       sx={sx}
     >
       {renderMain()}
+      <CloseCursor />
     </LayoutSection>
   );
 }
