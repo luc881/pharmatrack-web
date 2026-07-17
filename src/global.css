@@ -9,6 +9,10 @@
 @import '@fontsource/barlow/700.css';
 @import '@fontsource/barlow/800.css';
 
+/* monospace para nombres científicos y datos de taxonomía (look "ficha de museo") */
+@import '@fontsource/space-mono/400.css';
+@import '@fontsource/space-mono/700.css';
+
 /** **************************************
 * Fonts: options
 *************************************** */

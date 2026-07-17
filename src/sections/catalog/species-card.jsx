@@ -5,7 +5,6 @@ import Card from '@mui/material/Card';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
@@ -19,6 +18,7 @@ import { Iconify } from 'src/components/iconify';
 
 import { useFavorites } from './use-favorites';
 import { scientificName, saleFormatLabel } from './utils';
+import { TaxonomyBadge, ScientificName } from './scientific';
 
 // ----------------------------------------------------------------------
 
@@ -138,18 +138,26 @@ export function SpeciesCard({ item, horizontal = false }) {
 
         <Stack spacing={1} sx={{ p: 3, flexGrow: 1, minWidth: 0, justifyContent: 'center' }}>
           {groupName && (
-            <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-              {groupName}
-            </Typography>
+            <Box>
+              <TaxonomyBadge>{groupName}</TaxonomyBadge>
+            </Box>
           )}
 
           <Link component={RouterLink} href={href} color="inherit" variant="subtitle1" noWrap>
             {title}
           </Link>
 
-          <Typography variant="body2" noWrap sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
+          <ScientificName
+            sx={{
+              display: 'block',
+              typography: 'body2',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {sci}
-          </Typography>
+          </ScientificName>
 
           <PriceText minPrice={minPrice} maxPrice={maxPrice} />
 
@@ -257,11 +265,7 @@ export function SpeciesCard({ item, horizontal = false }) {
       </Box>
 
       <Stack spacing={0.5} sx={{ p: 3, pt: 2, textAlign: 'center', alignItems: 'center' }}>
-        {groupName && (
-          <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-            {groupName}
-          </Typography>
-        )}
+        {groupName && <TaxonomyBadge>{groupName}</TaxonomyBadge>}
 
         <Link
           component={RouterLink}
@@ -274,20 +278,17 @@ export function SpeciesCard({ item, horizontal = false }) {
           {title}
         </Link>
 
-        <Box
-          component="span"
+        <ScientificName
           sx={{
             maxWidth: 1,
             typography: 'caption',
-            fontStyle: 'italic',
-            color: 'text.secondary',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
           }}
         >
           {sci}
-        </Box>
+        </ScientificName>
 
         <PriceText minPrice={minPrice} maxPrice={maxPrice} sx={{ pt: 1 }} />
       </Stack>

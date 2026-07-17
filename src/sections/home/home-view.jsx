@@ -11,8 +11,8 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { varFade, MotionViewport } from 'src/components/animate';
 import { BackToTopButton } from 'src/components/animate/back-to-top-button';
+import { varFade, varContainer, MotionViewport } from 'src/components/animate';
 import { ScrollProgress, useScrollProgress } from 'src/components/animate/scroll-progress';
 
 import { HomeHero } from './home-hero';
@@ -55,20 +55,24 @@ export function HomeView({ species, categories }) {
 function HomeCTA() {
   return (
     <Box component="section" sx={{ overflow: 'hidden' }}>
-      <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 8, md: 12 } }}>
-        <m.div variants={varFade('inUp')}>
+      <Container
+        component={MotionViewport}
+        variants={varContainer({ transitionIn: { staggerChildren: 0.18, delayChildren: 0.15 } })}
+        sx={{ textAlign: 'center', py: { xs: 8, md: 12 } }}
+      >
+        <m.div variants={varFade('inUp', { distance: 40, transitionIn: { duration: 0.9 } })}>
           <Typography variant="h2" sx={{ mb: 2 }}>
             ¿Buscas algo en especial?
           </Typography>
         </m.div>
 
-        <m.div variants={varFade('inUp')}>
+        <m.div variants={varFade('inUp', { distance: 40, transitionIn: { duration: 0.9 } })}>
           <Typography sx={{ mx: 'auto', maxWidth: 480, color: 'text.secondary', mb: 5 }}>
             Revisa el catálogo completo con fotos, precios y detalles de cada animal.
           </Typography>
         </m.div>
 
-        <m.div variants={varFade('inUp')}>
+        <m.div variants={varFade('inUp', { distance: 40, transitionIn: { duration: 0.9 } })}>
           <Button
             component={RouterLink}
             href={paths.catalog}

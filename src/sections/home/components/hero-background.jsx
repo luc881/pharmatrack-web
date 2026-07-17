@@ -56,8 +56,9 @@ export function HeroBackground({ sx, ...other }) {
   const renderBackground = () => (
     <Box
       component={m.div}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, scale: 1.12 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
       sx={[
         (theme) => ({
           ...theme.mixins.bgGradient({

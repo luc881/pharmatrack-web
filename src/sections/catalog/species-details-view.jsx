@@ -27,6 +27,7 @@ import { SHOP_INFO } from './shop-info';
 import { useFavorites } from './use-favorites';
 import { AnimalGallery } from './animal-gallery';
 import { RelatedSpecies } from './related-species';
+import { TaxonomyBadge, ScientificName } from './scientific';
 import { SEX_LABELS, scientificName, saleFormatLabel } from './utils';
 
 // ----------------------------------------------------------------------
@@ -128,12 +129,13 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
         <Grid size={{ xs: 12, md: 6, lg: 5 }}>
           <Stack spacing={2}>
             <Box>
+              {category && <TaxonomyBadge sx={{ mb: 1 }}>{category.name}</TaxonomyBadge>}
               <Typography variant="h4" component="h1">
                 {title}
               </Typography>
-              <Typography variant="body1" sx={{ mt: 0.5, fontStyle: 'italic', color: 'text.secondary' }}>
+              <ScientificName sx={{ display: 'block', mt: 0.5, typography: 'body1' }}>
                 {sci}
-              </Typography>
+              </ScientificName>
             </Box>
 
             {excerpt && (

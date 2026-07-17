@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { varAlpha } from 'minimal-shared/utils';
 import { useBoolean } from 'minimal-shared/hooks';
 
@@ -10,7 +11,6 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
@@ -25,6 +25,7 @@ import { NavMobile } from './nav/mobile';
 import { Footer, HomeFooter } from './footer';
 import { MenuButton } from '../components/menu-button';
 import { CloseCursor } from '../components/close-cursor';
+import { SearchDialog } from '../components/search-dialog';
 import { SignInButton } from '../components/sign-in-button';
 import { SettingsButton } from '../components/settings-button';
 import { FavoritesButton } from '../components/favorites-button';
@@ -84,8 +85,21 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
   const pathname = usePathname();
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
+  const search = useBoolean();
 
   const isHomePage = pathname === '/';
+
+  // Atajo de teclado: ⌘K / Ctrl+K abre el buscador
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        search.onToggle();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [search]);
 
   const navData = slotProps?.nav?.data ?? mainNavData;
 
@@ -150,10 +164,9 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
           {/** @slot Logo (solo móvil: en desktop va centrado) */}
           <Logo sx={(theme) => ({ [theme.breakpoints.up(layoutQuery)]: { display: 'none' } })} />
 
-          {/** @slot Búsqueda — lleva al catálogo, donde viven los filtros */}
+          {/** @slot Búsqueda — abre el modal con navegación por teclado (⌘K) */}
           <IconButton
-            component={RouterLink}
-            href={paths.catalog}
+            onClick={search.onTrue}
             aria-label="Buscar en el catálogo"
             sx={(theme) => ({
               color: 'common.white',
@@ -272,6 +285,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
       sx={sx}
     >
       {renderMain()}
+      <SearchDialog open={search.value} onClose={search.onFalse} />
       <CloseCursor />
     </LayoutSection>
   );

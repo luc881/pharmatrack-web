@@ -10,7 +10,12 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { Image } from 'src/components/image';
-import { varFade, MotionViewport } from 'src/components/animate';
+import { varFade, varContainer, MotionViewport } from 'src/components/animate';
+
+import { SectionLabel } from 'src/sections/catalog/scientific';
+
+const slowStagger = varContainer({ transitionIn: { staggerChildren: 0.18, delayChildren: 0.15 } });
+const slowFade = (dir) => varFade(dir, { distance: 40, transitionIn: { duration: 0.9 } });
 
 // ----------------------------------------------------------------------
 
@@ -27,15 +32,17 @@ export function HomeGroups({ categories, sx, ...other }) {
       ]}
       {...other}
     >
-      <Container component={MotionViewport} sx={{ py: { xs: 8, md: 12 } }}>
-        <m.div variants={varFade('inDown')}>
-          <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-            Categorías
-          </Typography>
+      <Container
+        component={MotionViewport}
+        variants={slowStagger}
+        sx={{ py: { xs: 8, md: 12 } }}
+      >
+        <m.div variants={slowFade('inDown')}>
+          <SectionLabel sx={{ justifyContent: 'flex-start' }}>Categorías</SectionLabel>
         </m.div>
 
-        <m.div variants={varFade('inUp')}>
-          <Typography variant="h2" sx={{ mt: 3, mb: 5 }}>
+        <m.div variants={slowFade('inUp')}>
+          <Typography variant="h2" sx={{ mt: 2, mb: 5 }}>
             Explora por grupo
           </Typography>
         </m.div>

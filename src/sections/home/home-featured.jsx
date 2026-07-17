@@ -10,10 +10,15 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { Iconify } from 'src/components/iconify';
-import { varFade, MotionViewport } from 'src/components/animate';
+import { varFade, varContainer, MotionViewport } from 'src/components/animate';
 import { Carousel, useCarousel, CarouselArrowFloatButtons } from 'src/components/carousel';
 
+import { SectionLabel } from 'src/sections/catalog/scientific';
 import { SpeciesCard } from 'src/sections/catalog/species-card';
+
+// stagger más lento y entradas más largas: los reveals se sienten deliberados
+const slowStagger = varContainer({ transitionIn: { staggerChildren: 0.18, delayChildren: 0.15 } });
+const slowFade = (dir) => varFade(dir, { distance: 40, transitionIn: { duration: 0.9 } });
 
 // ----------------------------------------------------------------------
 
@@ -36,15 +41,17 @@ export function HomeFeatured({ items, sx, ...other }) {
       sx={[{ overflow: 'hidden' }, ...(Array.isArray(sx) ? sx : [sx])]}
       {...other}
     >
-      <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 8, md: 12 } }}>
-        <m.div variants={varFade('inDown')}>
-          <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-            Novedades
-          </Typography>
+      <Container
+        component={MotionViewport}
+        variants={slowStagger}
+        sx={{ textAlign: 'center', py: { xs: 8, md: 12 } }}
+      >
+        <m.div variants={slowFade('inDown')}>
+          <SectionLabel>Novedades</SectionLabel>
         </m.div>
 
-        <m.div variants={varFade('inUp')}>
-          <Typography variant="h2" sx={{ my: 3 }}>
+        <m.div variants={slowFade('inUp')}>
+          <Typography variant="h2" sx={{ mt: 2, mb: 3 }}>
             Recién llegados
           </Typography>
         </m.div>
