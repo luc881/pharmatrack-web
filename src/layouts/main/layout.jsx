@@ -1,20 +1,25 @@
 'use client';
 
+import { varAlpha } from 'minimal-shared/utils';
 import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 
+import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
 
 import { Logo } from 'src/components/logo';
+import { Iconify } from 'src/components/iconify';
 
-import { ANNOUNCEMENT } from 'src/sections/catalog/shop-info';
+import { SOCIALS, ANNOUNCEMENT } from 'src/sections/catalog/shop-info';
 
 import { NavMobile } from './nav/mobile';
 import { Footer, HomeFooter } from './footer';
@@ -28,11 +33,11 @@ import { navLeft, navRight, navData as mainNavData } from '../nav-config-main';
 
 // ----------------------------------------------------------------------
 
-function NavColumn({ items, align }) {
+function NavColumn({ items }) {
   const pathname = usePathname();
 
   return (
-    <Stack spacing={1} sx={{ alignItems: align, minWidth: 180 }}>
+    <Stack spacing={1.5} sx={{ alignItems: 'center', minWidth: 220 }}>
       {items.map((item) => {
         const active = pathname === item.path || pathname === `${item.path}/`;
         return (
@@ -42,12 +47,29 @@ function NavColumn({ items, align }) {
             href={item.path}
             underline="none"
             sx={{
-              typography: 'overline',
-              fontSize: 12,
-              letterSpacing: '0.12em',
-              color: active ? 'primary.main' : 'text.primary',
-              transition: 'color 0.2s ease',
-              '&:hover': { color: 'primary.main' },
+              pb: 0.5,
+              fontSize: 14,
+              fontWeight: 600,
+              lineHeight: 1.2,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: 'common.white',
+              position: 'relative',
+              whiteSpace: 'nowrap',
+              // la línea crece desde el centro al hacer hover (o si es la página activa)
+              '&::after': {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: '2px',
+                content: '""',
+                position: 'absolute',
+                bgcolor: 'currentColor',
+                transform: active ? 'scaleX(1)' : 'scaleX(0)',
+                transformOrigin: 'center',
+                transition: 'transform 0.3s ease',
+              },
+              '&:hover::after': { transform: 'scaleX(1)' },
             }}
           >
             {item.title}
@@ -69,24 +91,48 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
 
   const renderHeader = () => {
     const headerSlots = {
-      /** @slot Barra de anuncio (texto en shop-info.js) */
-      topArea: ANNOUNCEMENT ? (
-        <Box
-          sx={{
-            py: 0.75,
-            px: 2,
-            textAlign: 'center',
-            bgcolor: 'primary.main',
-            color: 'primary.contrastText',
-            typography: 'caption',
-            fontWeight: 700,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-          }}
-        >
-          {ANNOUNCEMENT}
-        </Box>
-      ) : null,
+      /** @slot Anuncio + redes sociales (textos y links en shop-info.js) */
+      topArea: (
+        <>
+          {ANNOUNCEMENT && (
+            <Box
+              sx={{
+                py: 0.75,
+                px: 2,
+                textAlign: 'center',
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
+                typography: 'caption',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+              }}
+            >
+              {ANNOUNCEMENT}
+            </Box>
+          )}
+
+          {SOCIALS.length > 0 && (
+            <Box sx={(theme) => ({ borderBottom: `solid 1px ${varAlpha(theme.vars.palette.common.whiteChannel, 0.08)}` })}>
+              <Container sx={{ py: 0.5, gap: 0.5, display: 'flex', justifyContent: 'flex-end' }}>
+                {SOCIALS.map((social) => (
+                  <IconButton
+                    key={social.label}
+                    size="small"
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={social.label}
+                    sx={{ color: 'common.white', opacity: 0.8, '&:hover': { opacity: 1 } }}
+                  >
+                    <Iconify icon={social.icon} width={17} />
+                  </IconButton>
+                ))}
+              </Container>
+            </Box>
+          )}
+        </>
+      ),
       leftArea: (
         <>
           {/** @slot Nav mobile */}
@@ -95,6 +141,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
             sx={(theme) => ({
               mr: 1,
               ml: -1,
+              color: 'common.white',
               [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
             })}
           />
@@ -102,6 +149,20 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
 
           {/** @slot Logo (solo móvil: en desktop va centrado) */}
           <Logo sx={(theme) => ({ [theme.breakpoints.up(layoutQuery)]: { display: 'none' } })} />
+
+          {/** @slot Búsqueda — lleva al catálogo, donde viven los filtros */}
+          <IconButton
+            component={RouterLink}
+            href={paths.catalog}
+            aria-label="Buscar en el catálogo"
+            sx={(theme) => ({
+              color: 'common.white',
+              display: 'none',
+              [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+            })}
+          >
+            <Iconify icon="ri:search-line" width={22} />
+          </IconButton>
         </>
       ),
       /** @slot Nav de escritorio: columnas de categorías a los lados del logo */
@@ -110,7 +171,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
           sx={(theme) => ({
             display: 'none',
             [theme.breakpoints.up(layoutQuery)]: {
-              gap: 8,
+              gap: 10,
               width: 1,
               display: 'flex',
               alignItems: 'center',
@@ -118,33 +179,43 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
             },
           })}
         >
-          <NavColumn items={navLeft} align="flex-end" />
+          <NavColumn items={navLeft} />
 
           <Link
             component={RouterLink}
             href="/"
             underline="none"
-            sx={{ gap: 1.5, display: 'flex', alignItems: 'center', color: 'inherit' }}
+            sx={{ gap: 1.5, display: 'flex', alignItems: 'center', color: 'primary.main' }}
           >
-            <Logo isSingle sx={{ width: 52, height: 52 }} />
-            <Typography variant="h3" component="span" sx={{ whiteSpace: 'nowrap' }}>
+            <Logo isSingle sx={{ width: 56, height: 56 }} />
+            <Typography
+              variant="h3"
+              component="span"
+              sx={{ whiteSpace: 'nowrap', fontWeight: 800, letterSpacing: '0.02em' }}
+            >
               {CONFIG.appName}
             </Typography>
           </Link>
 
-          <NavColumn items={navRight} align="flex-start" />
+          <NavColumn items={navRight} />
         </Box>
       ),
       rightArea: (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 }, color: 'common.white' }}>
           {/** @slot Favorites button */}
-          <FavoritesButton />
+          <FavoritesButton sx={{ color: 'inherit' }} />
 
           {/** @slot Settings button */}
-          <SettingsButton />
+          <SettingsButton sx={{ color: 'inherit' }} />
 
           {/** @slot Sign in button */}
-          <SignInButton />
+          <SignInButton
+            sx={(theme) => ({
+              color: 'common.white',
+              borderColor: varAlpha(theme.vars.palette.common.whiteChannel, 0.4),
+              '&:hover': { borderColor: 'common.white' },
+            })}
+          />
         </Box>
       ),
     };
@@ -155,7 +226,18 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
         {...slotProps?.header}
         slots={{ ...headerSlots, ...slotProps?.header?.slots }}
         slotProps={slotProps?.header?.slotProps}
-        sx={slotProps?.header?.sx}
+        sx={[
+          (theme) => ({
+            // barra oscura fija en ambos temas; sin el velo claro del scroll
+            bgcolor: theme.vars.palette.grey[900],
+            color: theme.vars.palette.common.white,
+            '--offset-color': theme.vars.palette.common.white,
+            '&::before': { display: 'none' },
+          }),
+          ...(Array.isArray(slotProps?.header?.sx)
+            ? slotProps.header.sx
+            : [slotProps?.header?.sx]),
+        ]}
       />
     );
   };
@@ -184,7 +266,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
        *************************************** */
       cssVars={{
         // header más alto en desktop: 4 filas de links flanqueando el logo
-        '--layout-header-desktop-height': '148px',
+        '--layout-header-desktop-height': '160px',
         ...cssVars,
       }}
       sx={sx}
