@@ -44,6 +44,9 @@
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.16.0",
     "dayjs": "^1.11.20",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "es-toolkit": "^1.46.1",
     "framer-motion": "^12.38.0",
     "minimal-shared": "^1.1.6",
@@ -54,6 +57,7 @@
     "react-hook-form": "^7.75.0",
     "simplebar-react": "^3.3.2",
     "stylis": "^4.4.0",
+    "yet-another-react-lightbox": "^3.32.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {

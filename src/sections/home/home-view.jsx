@@ -1,6 +1,9 @@
 'use client';
 
+import { m } from 'framer-motion';
+
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -8,31 +11,64 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { CONFIG } from 'src/global-config';
+import { varFade, MotionViewport } from 'src/components/animate';
+import { BackToTopButton } from 'src/components/animate/back-to-top-button';
+import { ScrollProgress, useScrollProgress } from 'src/components/animate/scroll-progress';
 
-import { AnimalCard } from 'src/sections/catalog/animal-card';
+import { HomeHero } from './home-hero';
+import { HomeGroups } from './home-groups';
+import { HomeFeatured } from './home-featured';
 
 // ----------------------------------------------------------------------
 
-export function HomeView({ featured }) {
+export function HomeView({ animals }) {
+  const pageProgress = useScrollProgress();
+
+  // ponytail: sin created_at en la respuesta pública, el id ordena por llegada
+  const featured = [...animals].sort((a, b) => b.id - a.id).slice(0, 8);
+
   return (
     <>
-      {/* Hero */}
-      <Box
-        sx={(theme) => ({
-          py: { xs: 10, md: 15 },
-          textAlign: 'center',
-          background: `linear-gradient(180deg, ${theme.vars.palette.background.neutral}, ${theme.vars.palette.background.default})`,
-        })}
-      >
-        <Container>
-          <Typography variant="h1" sx={{ mb: 2 }}>
-            {CONFIG.appName}
+      <ScrollProgress
+        variant="linear"
+        progress={pageProgress.scrollYProgress}
+        sx={[(theme) => ({ position: 'fixed', zIndex: theme.zIndex.appBar + 1 })]}
+      />
+
+      <BackToTopButton />
+
+      <HomeHero />
+
+      <Stack sx={{ position: 'relative', bgcolor: 'background.default' }}>
+        <HomeFeatured animals={featured} />
+
+        <HomeGroups animals={animals} />
+
+        <HomeCTA />
+      </Stack>
+    </>
+  );
+}
+
+// ----------------------------------------------------------------------
+
+function HomeCTA() {
+  return (
+    <Box component="section" sx={{ overflow: 'hidden' }}>
+      <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 8, md: 12 } }}>
+        <m.div variants={varFade('inUp')}>
+          <Typography variant="h2" sx={{ mb: 2 }}>
+            ¿Buscas algo en especial?
           </Typography>
-          <Typography sx={{ mb: 4, mx: 'auto', maxWidth: 480, color: 'text.secondary' }}>
-            Tarántulas, reptiles y más animales exóticos con procedencia legal, criados con
-            cuidado y listos para un nuevo hogar.
+        </m.div>
+
+        <m.div variants={varFade('inUp')}>
+          <Typography sx={{ mx: 'auto', maxWidth: 480, color: 'text.secondary', mb: 5 }}>
+            Revisa el catálogo completo con fotos, precios y detalles de cada animal.
           </Typography>
+        </m.div>
+
+        <m.div variants={varFade('inUp')}>
           <Button
             component={RouterLink}
             href={paths.catalog}
@@ -42,33 +78,8 @@ export function HomeView({ featured }) {
           >
             Ver catálogo
           </Button>
-        </Container>
-      </Box>
-
-      {/* Destacados */}
-      {featured.length > 0 && (
-        <Container sx={{ py: { xs: 5, md: 8 } }}>
-          <Typography variant="h4" sx={{ mb: 3 }}>
-            Recién llegados
-          </Typography>
-          <Box
-            sx={{
-              gap: 3,
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-            }}
-          >
-            {featured.map((animal) => (
-              <AnimalCard key={animal.id} animal={animal} />
-            ))}
-          </Box>
-          <Box sx={{ mt: 5, textAlign: 'center' }}>
-            <Button component={RouterLink} href={paths.catalog} size="large" variant="outlined">
-              Ver todo el catálogo
-            </Button>
-          </Box>
-        </Container>
-      )}
-    </>
+        </m.div>
+      </Container>
+    </Box>
   );
 }

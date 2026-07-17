@@ -11,13 +11,14 @@ export const metadata = {
 };
 
 export default async function Page({ searchParams }) {
-  const { genus_id: genusId, species_id: speciesId } = await searchParams;
+  const { group_id: groupId, genus_id: genusId, species_id: speciesId } = await searchParams;
   const { data: animals } = await getAnimals();
 
   return (
     <MainLayout>
       <CatalogView
         animals={animals}
+        initialGroupId={Number(groupId) || null}
         initialGenusId={Number(genusId) || null}
         initialSpeciesId={Number(speciesId) || null}
       />

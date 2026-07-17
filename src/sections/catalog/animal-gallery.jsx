@@ -1,69 +1,109 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 
 import Box from '@mui/material/Box';
+
+import { Image } from 'src/components/image';
+import { Lightbox, useLightbox } from 'src/components/lightbox';
+import {
+  Carousel,
+  useCarousel,
+  CarouselThumb,
+  CarouselThumbs,
+  CarouselArrowNumberButtons,
+} from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 
 export function AnimalGallery({ photos, alt }) {
-  const [selected, setSelected] = useState(0);
+  const carousel = useCarousel({ thumbs: { slidesToShow: 'auto' } });
 
-  if (!photos.length) {
+  const slides = photos.map((src) => ({ src }));
+
+  const lightbox = useLightbox(slides);
+
+  useEffect(() => {
+    if (lightbox.open) {
+      carousel.mainApi?.scrollTo(lightbox.selected, true);
+    }
+  }, [carousel.mainApi, lightbox.open, lightbox.selected]);
+
+  if (!slides.length) {
     return (
       <Box
         sx={{
           width: 1,
-          aspectRatio: '4/3',
-          display: 'flex',
           borderRadius: 2,
+          aspectRatio: '1/1',
+          display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           bgcolor: 'background.neutral',
           color: 'text.disabled',
+          typography: 'body2',
         }}
       >
-        Sin fotos
+        Sin foto
       </Box>
     );
   }
 
   return (
-    <Box>
-      <Box
-        component="img"
-        src={photos[selected]}
-        alt={alt}
-        sx={{
-          width: 1,
-          aspectRatio: '4/3',
-          borderRadius: 2,
-          objectFit: 'cover',
-          bgcolor: 'background.neutral',
-        }}
-      />
-      {photos.length > 1 && (
-        <Box sx={{ mt: 1.5, gap: 1, display: 'flex', flexWrap: 'wrap' }}>
-          {photos.map((url, index) => (
-            <Box
-              key={url}
-              component="img"
-              src={url}
-              alt={`${alt} — foto ${index + 1}`}
-              onClick={() => setSelected(index)}
-              sx={{
-                width: 64,
-                height: 64,
-                borderRadius: 1,
-                objectFit: 'cover',
-                cursor: 'pointer',
-                border: (t) =>
-                  `2px solid ${index === selected ? t.vars.palette.primary.main : 'transparent'}`,
-              }}
+    <>
+      <div>
+        <Box sx={{ mb: 2.5, position: 'relative' }}>
+          {slides.length > 1 && (
+            <CarouselArrowNumberButtons
+              {...carousel.arrows}
+              options={carousel.options}
+              totalSlides={carousel.dots.dotCount}
+              selectedIndex={carousel.dots.selectedIndex + 1}
+              sx={{ right: 16, bottom: 16, position: 'absolute' }}
             />
-          ))}
+          )}
+
+          <Carousel carousel={carousel} sx={{ borderRadius: 2 }}>
+            {slides.map((slide) => (
+              <Image
+                key={slide.src}
+                alt={alt}
+                src={slide.src}
+                ratio="1/1"
+                onClick={() => lightbox.onOpen(slide.src)}
+                sx={{ cursor: 'zoom-in', minWidth: 320 }}
+              />
+            ))}
+          </Carousel>
         </Box>
-      )}
-    </Box>
+
+        {slides.length > 1 && (
+          <CarouselThumbs
+            ref={carousel.thumbs.thumbsRef}
+            options={carousel.options?.thumbs}
+            slotProps={{ disableMask: true }}
+            sx={{ width: 360, maxWidth: 1 }}
+          >
+            {slides.map((item, index) => (
+              <CarouselThumb
+                key={item.src}
+                index={index}
+                src={item.src}
+                selected={index === carousel.thumbs.selectedIndex}
+                onClick={() => carousel.thumbs.onClickThumb(index)}
+              />
+            ))}
+          </CarouselThumbs>
+        )}
+      </div>
+
+      <Lightbox
+        index={lightbox.selected}
+        slides={slides}
+        open={lightbox.open}
+        close={lightbox.onClose}
+        onGetCurrentIndex={(index) => lightbox.setSelected(index)}
+      />
+    </>
   );
 }

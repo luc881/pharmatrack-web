@@ -6,11 +6,11 @@ import { HomeView } from 'src/sections/home/home-view';
 // ----------------------------------------------------------------------
 
 export default async function Page() {
-  const { data: featured } = await getAnimals({ page_size: 8 });
+  const { data: animals } = await getAnimals();
 
   return (
     <MainLayout>
-      <HomeView featured={featured} />
+      <HomeView animals={animals} />
     </MainLayout>
   );
 }
