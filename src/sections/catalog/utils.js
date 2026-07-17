@@ -90,5 +90,13 @@ export function buildSpeciesList(animals) {
       if (!entry.morphs.some((m) => m.id === morph.id)) entry.morphs.push(morph);
     });
   });
-  return [...map.values()];
+  return [...map.values()].map((entry) => {
+    // Con escalas de precio (paquetes de 6/12/18), el rango sale de las escalas
+    const tiers = entry.species.price_tiers;
+    if (tiers?.length) {
+      const prices = tiers.map((t) => t.price);
+      return { ...entry, minPrice: Math.min(...prices), maxPrice: Math.max(...prices) };
+    }
+    return entry;
+  });
 }

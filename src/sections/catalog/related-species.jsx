@@ -25,7 +25,10 @@ export function RelatedSpecies({ items, sx, ...other }) {
       </Typography>
 
       <Box sx={{ position: 'relative' }}>
-        <CarouselArrowFloatButtons {...carousel.arrows} options={carousel.options} />
+        {/* con pocos items no hay overflow en desktop: las flechas solo estorban */}
+        {items.length > 4 && (
+          <CarouselArrowFloatButtons {...carousel.arrows} options={carousel.options} />
+        )}
 
         <Carousel carousel={carousel} sx={{ px: 0.5, py: 1 }}>
           {items.map((item) => (

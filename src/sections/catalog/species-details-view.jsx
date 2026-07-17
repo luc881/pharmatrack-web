@@ -20,10 +20,10 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 
 import { CareInfo } from './care-info';
+import { SHOP_INFO } from './shop-info';
 import { useFavorites } from './use-favorites';
 import { AnimalGallery } from './animal-gallery';
 import { RelatedSpecies } from './related-species';
@@ -32,25 +32,6 @@ import { SEX_LABELS, scientificName, saleFormatLabel } from './utils';
 // ----------------------------------------------------------------------
 
 const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP ?? '';
-
-// ponytail: textos de confianza placeholder; edítalos cuando definan la marca
-const TRUST_ITEMS = [
-  {
-    title: 'Procedencia legal',
-    description: 'Animales criados en cautiverio con documentación en regla.',
-    icon: 'solar:verified-check-bold',
-  },
-  {
-    title: 'Criados con cuidado',
-    description: 'Cada animal recibe la alimentación y el entorno adecuados.',
-    icon: 'solar:heart-bold',
-  },
-  {
-    title: 'Asesoría incluida',
-    description: 'Te acompañamos con recomendaciones de manejo y cuidado.',
-    icon: 'solar:chat-round-dots-bold',
-  },
-];
 
 function MetaRow({ label, children }) {
   return (
@@ -104,6 +85,13 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
   const sci = scientificName(species);
   const title = species.common_name ?? sci;
   const formatLabel = saleFormatLabel(species);
+
+  // Escalas de precio por cantidad (p. ej. isópodos: 6 / 12 / 18)
+  const tiers = species.price_tiers ?? [];
+  const [tierIndex, setTierIndex] = useState(0);
+  const selectedTier = tiers[tierIndex];
+
+  const whatsappText = `Hola, me interesa ${title} (${sci})${selectedTier ? ` — paquete de ${selectedTier.quantity}` : ''}`;
 
   const paragraphs = (species.description ?? '').split('\n').filter(Boolean);
   const excerpt = paragraphs[0];
@@ -173,14 +161,56 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
               )}
             </Stack>
 
-            <Typography variant="h3">
-              {minPrice !== maxPrice && (
-                <Box component="span" sx={{ typography: 'h6', color: 'text.secondary', mr: 1, fontWeight: 400 }}>
-                  Desde
+            {tiers.length > 0 && (
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                  Cantidad
+                </Typography>
+                <Box sx={{ gap: 1, display: 'flex', flexWrap: 'wrap' }}>
+                  {tiers.map((tier, index) => (
+                    <Box
+                      key={tier.quantity}
+                      component="button"
+                      type="button"
+                      onClick={() => setTierIndex(index)}
+                      sx={(theme) => ({
+                        px: 2.5,
+                        py: 1,
+                        cursor: 'pointer',
+                        borderRadius: 1,
+                        typography: 'subtitle2',
+                        color: 'text.primary',
+                        bgcolor: 'transparent',
+                        border: `solid 1px ${theme.vars.palette.divider}`,
+                        transition: theme.transitions.create(['border-color', 'box-shadow']),
+                        ...(index === tierIndex && {
+                          borderColor: 'text.primary',
+                          boxShadow: `inset 0 0 0 1px ${theme.vars.palette.text.primary}`,
+                        }),
+                      })}
+                    >
+                      {tier.quantity}
+                    </Box>
+                  ))}
                 </Box>
+              </Box>
+            )}
+
+            <Box>
+              <Typography variant="h3">
+                {!selectedTier && minPrice !== maxPrice && (
+                  <Box component="span" sx={{ typography: 'h6', color: 'text.secondary', mr: 1, fontWeight: 400 }}>
+                    Desde
+                  </Box>
+                )}
+                {fCurrency(selectedTier ? selectedTier.price : minPrice)}
+              </Typography>
+              {selectedTier && (
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  Paquete de {selectedTier.quantity} ejemplares
+                </Typography>
               )}
-              {fCurrency(minPrice)}
-            </Typography>
+            </Box>
 
             {morphs.length > 0 && (
               <Box>
@@ -201,7 +231,7 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
               {WHATSAPP ? (
                 <Button
                   fullWidth
-                  href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hola, me interesa ${title} (${sci})`)}`}
+                  href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(whatsappText)}`}
                   target="_blank"
                   rel="noopener"
                   size="large"
@@ -230,11 +260,24 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
               <ShareButton title={title} />
             </Box>
 
-            {formatLabel && (
-              <Label variant="soft" color="info" sx={{ alignSelf: 'flex-start' }}>
-                {formatLabel}
-              </Label>
-            )}
+            <Divider sx={{ borderStyle: 'dashed' }} />
+
+            {/* Info de compra/envío — editable en shop-info.js */}
+            <Stack spacing={2}>
+              {SHOP_INFO.map((info) => (
+                <Box key={info.title} sx={{ gap: 1.5, display: 'flex' }}>
+                  <Iconify icon={info.icon} width={24} sx={{ color: info.color, flexShrink: 0 }} />
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ color: info.color }}>
+                      {info.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      {info.description}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Stack>
           </Stack>
         </Grid>
       </Grid>
@@ -265,30 +308,7 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
         </Box>
       )}
 
-      <Box
-        sx={{
-          gap: 5,
-          my: 10,
-          display: 'grid',
-          gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' },
-        }}
-      >
-        {TRUST_ITEMS.map((trust) => (
-          <Box key={trust.title} sx={{ textAlign: 'center', px: 5 }}>
-            <Iconify icon={trust.icon} width={32} sx={{ color: 'primary.main' }} />
-
-            <Typography variant="subtitle1" sx={{ mb: 1, mt: 2 }}>
-              {trust.title}
-            </Typography>
-
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {trust.description}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
-
-      <RelatedSpecies items={related} />
+      <RelatedSpecies items={related} sx={{ mt: { xs: 6, md: 10 } }} />
     </Container>
   );
 }

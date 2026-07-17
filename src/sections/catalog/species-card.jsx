@@ -22,13 +22,14 @@ import { scientificName, saleFormatLabel } from './utils';
 
 // ----------------------------------------------------------------------
 
-function FavoriteButton({ speciesId, sx }) {
+function FavoriteButton({ speciesId, reveal = false, sx }) {
   const { ids, toggle } = useFavorites();
   const isFavorite = ids.includes(speciesId);
 
   return (
     <IconButton
       size="small"
+      className="fav-btn"
       aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
       onClick={(event) => {
         event.preventDefault();
@@ -41,6 +42,13 @@ function FavoriteButton({ speciesId, sx }) {
           boxShadow: theme.vars.customShadows?.z8,
           '&:hover': { bgcolor: 'background.paper' },
         }),
+        // aparece suave al pasar el cursor; si ya es favorito (o es táctil) queda fijo
+        reveal && !isFavorite && {
+          opacity: 0,
+          transform: 'translateY(-6px)',
+          transition: 'opacity 0.45s ease, transform 0.45s ease',
+          '@media (hover: none)': { opacity: 1, transform: 'none' },
+        },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
@@ -66,6 +74,24 @@ function PriceText({ minPrice, maxPrice, sx }) {
   );
 }
 
+function NoPhoto() {
+  return (
+    <Box
+      sx={{
+        aspectRatio: '1/1',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bgcolor: 'background.neutral',
+        color: 'text.disabled',
+        typography: 'caption',
+      }}
+    >
+      Sin foto
+    </Box>
+  );
+}
+
 // ----------------------------------------------------------------------
 
 export function SpeciesCard({ item, horizontal = false }) {
@@ -75,30 +101,11 @@ export function SpeciesCard({ item, horizontal = false }) {
   const formatLabel = saleFormatLabel(species);
   const groupName = species.genus?.group?.name;
   const href = paths.catalogSpecies(slug);
-
-  const renderImage = (sx) =>
-    photos[0] ? (
-      <Image alt={title} src={photos[0]} ratio="1/1" sx={sx} />
-    ) : (
-      <Box
-        sx={{
-          ...sx,
-          aspectRatio: '1/1',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          bgcolor: 'background.neutral',
-          color: 'text.disabled',
-          typography: 'caption',
-        }}
-      >
-        Sin foto
-      </Box>
-    );
+  const hoverPhoto = photos[1];
 
   if (horizontal) {
     return (
-      <Card sx={{ display: 'flex', '&:hover img': { transform: 'scale(1.08)' } }}>
+      <Card sx={{ display: 'flex', '&:hover img': { transform: 'scale(1.06)' } }}>
         <Box sx={{ p: 1, position: 'relative', width: { xs: 144, sm: 240 }, flexShrink: 0 }}>
           {formatLabel && (
             <Label
@@ -110,11 +117,22 @@ export function SpeciesCard({ item, horizontal = false }) {
             </Label>
           )}
           <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
-            {renderImage({
-              borderRadius: 1.5,
-              overflow: 'hidden',
-              '& img': { transition: 'transform 0.4s ease' },
-            })}
+            {photos[0] ? (
+              <Image
+                alt={title}
+                src={photos[0]}
+                ratio="1/1"
+                sx={{
+                  borderRadius: 1.5,
+                  overflow: 'hidden',
+                  '& img': { transition: 'transform 0.6s ease' },
+                }}
+              />
+            ) : (
+              <Box sx={{ borderRadius: 1.5, overflow: 'hidden' }}>
+                <NoPhoto />
+              </Box>
+            )}
           </Link>
         </Box>
 
@@ -129,11 +147,7 @@ export function SpeciesCard({ item, horizontal = false }) {
             {title}
           </Link>
 
-          <Typography
-            variant="body2"
-            noWrap
-            sx={{ fontStyle: 'italic', color: 'text.secondary' }}
-          >
+          <Typography variant="body2" noWrap sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
             {sci}
           </Typography>
 
@@ -154,8 +168,15 @@ export function SpeciesCard({ item, horizontal = false }) {
     <Card
       sx={{
         height: 1,
-        '&:hover img': { transform: 'scale(1.08)' },
+        // la foto principal cede a la segunda con un zoom suave que se asienta
+        ...(hoverPhoto
+          ? {
+              '&:hover .img-main': { opacity: 0 },
+              '&:hover .img-hover': { opacity: 1, transform: 'scale(1)' },
+            }
+          : { '&:hover .img-main img': { transform: 'scale(1.08)' } }),
         '&:hover .quick-cta': { opacity: 1, transform: 'translateY(0)' },
+        '&:hover .fav-btn': { opacity: 1, transform: 'translateY(0)' },
       }}
     >
       {formatLabel && (
@@ -169,17 +190,46 @@ export function SpeciesCard({ item, horizontal = false }) {
       )}
 
       <FavoriteButton
+        reveal
         speciesId={species.id}
         sx={{ top: 16, right: 16, zIndex: 9, position: 'absolute' }}
       />
 
       <Box sx={{ p: 1, position: 'relative' }}>
         <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
-          {renderImage({
-            borderRadius: 1.5,
-            overflow: 'hidden',
-            '& img': { transition: 'transform 0.4s ease' },
-          })}
+          <Box sx={{ borderRadius: 1.5, overflow: 'hidden', position: 'relative' }}>
+            {photos[0] ? (
+              <>
+                <Image
+                  alt={title}
+                  src={photos[0]}
+                  ratio="1/1"
+                  className="img-main"
+                  sx={{
+                    transition: 'opacity 0.5s ease',
+                    '& img': { transition: 'transform 0.6s ease' },
+                  }}
+                />
+                {hoverPhoto && (
+                  <Image
+                    alt={title}
+                    src={hoverPhoto}
+                    ratio="1/1"
+                    className="img-hover"
+                    sx={{
+                      position: 'absolute',
+                      inset: 0,
+                      opacity: 0,
+                      transform: 'scale(1.12)',
+                      transition: 'opacity 0.5s ease, transform 1s ease',
+                    }}
+                  />
+                )}
+              </>
+            ) : (
+              <NoPhoto />
+            )}
+          </Box>
         </Link>
 
         <Button
@@ -197,9 +247,8 @@ export function SpeciesCard({ item, horizontal = false }) {
             width: 'auto',
             position: 'absolute',
             opacity: 0,
-            transform: 'translateY(8px)',
-            transition: (theme) =>
-              theme.transitions.create(['opacity', 'transform'], { duration: 250 }),
+            transform: 'translateY(10px)',
+            transition: 'opacity 0.45s ease, transform 0.45s ease',
             display: { xs: 'none', md: 'inline-flex' },
           }}
         >
@@ -214,7 +263,14 @@ export function SpeciesCard({ item, horizontal = false }) {
           </Typography>
         )}
 
-        <Link component={RouterLink} href={href} color="inherit" variant="subtitle2" noWrap sx={{ maxWidth: 1 }}>
+        <Link
+          component={RouterLink}
+          href={href}
+          color="inherit"
+          variant="subtitle2"
+          noWrap
+          sx={{ maxWidth: 1 }}
+        >
           {title}
         </Link>
 

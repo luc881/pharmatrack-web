@@ -50,7 +50,9 @@ export function HomeFeatured({ items, sx, ...other }) {
         </m.div>
 
         <Box sx={{ position: 'relative' }}>
-          <CarouselArrowFloatButtons {...carousel.arrows} options={carousel.options} />
+          {items.length > 4 && (
+            <CarouselArrowFloatButtons {...carousel.arrows} options={carousel.options} />
+          )}
 
           <Carousel carousel={carousel} sx={{ px: 0.5 }}>
             {items.map((item) => (
