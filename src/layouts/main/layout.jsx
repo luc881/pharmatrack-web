@@ -99,7 +99,8 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [search]);
+    // onToggle es estable (useCallback); el objeto search cambia cada render
+  }, [search.onToggle]);
 
   const navData = slotProps?.nav?.data ?? mainNavData;
 
