@@ -86,6 +86,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
   const search = useBoolean();
+  const { onToggle: onToggleSearch } = search;
 
   const isHomePage = pathname === '/';
 
@@ -94,13 +95,12 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
     const onKeyDown = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
-        search.onToggle();
+        onToggleSearch();
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-    // onToggle es estable (useCallback); el objeto search cambia cada render
-  }, [search.onToggle]);
+  }, [onToggleSearch]);
 
   const navData = slotProps?.nav?.data ?? mainNavData;
 
