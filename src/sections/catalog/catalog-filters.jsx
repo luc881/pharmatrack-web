@@ -20,41 +20,19 @@ import { SEX_LABELS } from './utils';
 
 // ----------------------------------------------------------------------
 
-export function CatalogFilters({ open, onOpen, onClose, canReset, filters, options }) {
-  const { state: currentFilters, setState: updateFilters, resetState: resetFilters } = filters;
+// Controles compartidos entre el drawer (móvil) y el sidebar (desktop)
+
+export function SexFilterControl({ filters }) {
+  const { state, setState } = filters;
 
   const toggleSex = (value) => {
-    const checked = currentFilters.sex.includes(value)
-      ? currentFilters.sex.filter((v) => v !== value)
-      : [...currentFilters.sex, value];
-    updateFilters({ sex: checked });
+    const checked = state.sex.includes(value)
+      ? state.sex.filter((v) => v !== value)
+      : [...state.sex, value];
+    setState({ sex: checked });
   };
 
-  const renderHead = () => (
-    <>
-      <Box sx={{ py: 2, pr: 1, pl: 2.5, display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Filtros
-        </Typography>
-
-        <Tooltip title="Limpiar">
-          <IconButton onClick={() => resetFilters()}>
-            <Badge color="error" variant="dot" invisible={!canReset}>
-              <Iconify icon="solar:restart-bold" />
-            </Badge>
-          </IconButton>
-        </Tooltip>
-
-        <IconButton onClick={onClose}>
-          <Iconify icon="mingcute:close-line" />
-        </IconButton>
-      </Box>
-
-      <Divider sx={{ borderStyle: 'dashed' }} />
-    </>
-  );
-
-  const renderSex = () => (
+  return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Sexo
@@ -65,7 +43,8 @@ export function CatalogFilters({ open, onOpen, onClose, canReset, filters, optio
           label={label}
           control={
             <Checkbox
-              checked={currentFilters.sex.includes(value)}
+              size="small"
+              checked={state.sex.includes(value)}
               onClick={() => toggleSex(value)}
             />
           }
@@ -73,29 +52,39 @@ export function CatalogFilters({ open, onOpen, onClose, canReset, filters, optio
       ))}
     </Box>
   );
+}
 
-  const renderPrice = () => (
+export function PriceFilterControl({ filters, maxPrice }) {
+  const { state, setState } = filters;
+
+  return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Precio
       </Typography>
 
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {fCurrency(currentFilters.priceRange[0])} — {fCurrency(currentFilters.priceRange[1])}
+        {fCurrency(state.priceRange[0])} — {fCurrency(state.priceRange[1])}
       </Typography>
 
       <Slider
         min={0}
-        max={options.maxPrice}
-        step={Math.max(1, Math.round(options.maxPrice / 100))}
-        value={currentFilters.priceRange}
-        onChange={(event, newValue) => updateFilters({ priceRange: newValue })}
+        max={maxPrice}
+        step={Math.max(1, Math.round(maxPrice / 100))}
+        value={state.priceRange}
+        onChange={(event, newValue) => setState({ priceRange: newValue })}
         valueLabelDisplay="auto"
         valueLabelFormat={(value) => fCurrency(value)}
         sx={{ alignSelf: 'center', width: 'calc(100% - 24px)' }}
       />
     </Box>
   );
+}
+
+// ----------------------------------------------------------------------
+
+export function CatalogFilters({ open, onOpen, onClose, canReset, filters, options }) {
+  const { resetState: resetFilters } = filters;
 
   return (
     <>
@@ -121,12 +110,30 @@ export function CatalogFilters({ open, onOpen, onClose, canReset, filters, optio
           paper: { sx: { width: 320 } },
         }}
       >
-        {renderHead()}
+        <Box sx={{ py: 2, pr: 1, pl: 2.5, display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Filtros
+          </Typography>
+
+          <Tooltip title="Limpiar">
+            <IconButton onClick={() => resetFilters()}>
+              <Badge color="error" variant="dot" invisible={!canReset}>
+                <Iconify icon="solar:restart-bold" />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+
+          <IconButton onClick={onClose}>
+            <Iconify icon="mingcute:close-line" />
+          </IconButton>
+        </Box>
+
+        <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Scrollbar sx={{ px: 2.5, py: 3 }}>
           <Stack spacing={3}>
-            {renderSex()}
-            {renderPrice()}
+            <SexFilterControl filters={filters} />
+            <PriceFilterControl filters={filters} maxPrice={options.maxPrice} />
           </Stack>
         </Scrollbar>
       </Drawer>

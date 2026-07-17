@@ -7,6 +7,7 @@ export const paths = {
   // otro texto = categoría raíz, numérico puro = URL vieja de animal (redirige)
   catalogCategory: (slug) => `/catalogo/${slug}`,
   catalogSpecies: (slug) => `/catalogo/${slug}`,
+  favorites: '/favoritos',
   // Dashboard de administración (proyecto aparte)
   appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.farmaciaselene.com',
 };

@@ -12,6 +12,7 @@ import { CustomPopover } from 'src/components/custom-popover';
 
 export const SORT_OPTIONS = [
   { value: 'newest', label: 'Más recientes' },
+  { value: 'nameAsc', label: 'Alfabético' },
   { value: 'priceAsc', label: 'Precio: menor a mayor' },
   { value: 'priceDesc', label: 'Precio: mayor a menor' },
 ];
