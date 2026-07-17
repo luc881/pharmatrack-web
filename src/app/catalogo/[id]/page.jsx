@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { MainLayout } from 'src/layouts/main';
@@ -40,7 +40,13 @@ async function loadCatalog() {
 export async function generateMetadata({ params }) {
   const { id: param } = await params;
 
-  if (isLegacyAnimalId(param)) return { title: 'Catálogo' };
+  // Los redirects van aquí y no solo en la página: generateMetadata corre
+  // antes de que empiece el streaming, así el 308 sale como status real
+  if (isLegacyAnimalId(param)) {
+    const animal = await getAnimal(param);
+    if (!animal?.species) return { title: 'No encontrado' };
+    permanentRedirect(`/catalogo/${speciesSlug(animal.species)}`);
+  }
 
   const { categories, speciesList } = await loadCatalog();
 
@@ -48,6 +54,7 @@ export async function generateMetadata({ params }) {
   if (sid) {
     const item = speciesList.find((i) => i.species.id === sid);
     if (!item) return { title: 'No encontrado' };
+    if (param !== item.slug) permanentRedirect(`/catalogo/${item.slug}`);
 
     const sci = scientificName(item.species);
     const title = item.species.common_name ? `${item.species.common_name} — ${sci}` : sci;
@@ -60,6 +67,7 @@ export async function generateMetadata({ params }) {
     return {
       title,
       description,
+      alternates: { canonical: `/catalogo/${item.slug}` },
       openGraph: {
         title,
         description,
@@ -84,7 +92,8 @@ export default async function Page({ params }) {
   if (isLegacyAnimalId(param)) {
     const animal = await getAnimal(param);
     if (!animal?.species) notFound();
-    redirect(`/catalogo/${speciesSlug(animal.species)}`);
+    // permanente: Google transfiere la URL vieja de animal a la de especie
+    permanentRedirect(`/catalogo/${speciesSlug(animal.species)}`);
   }
 
   const { groups, categories, speciesList } = await loadCatalog();
@@ -94,7 +103,7 @@ export default async function Page({ params }) {
     const item = speciesList.find((i) => i.species.id === sid);
     if (!item) notFound();
     // slug desactualizado o manipulado → URL canónica (evita duplicados en Google)
-    if (param !== item.slug) redirect(`/catalogo/${item.slug}`);
+    if (param !== item.slug) permanentRedirect(`/catalogo/${item.slug}`);
 
     const root = rootGroupOf(item.species, groups);
     const category = root ? { name: root.name, slug: slugify(root.name) } : null;
