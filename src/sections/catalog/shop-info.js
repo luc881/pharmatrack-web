@@ -1,3 +1,6 @@
+// Barra de anuncio en la parte superior del sitio (vacío = no se muestra)
+export const ANNOUNCEMENT = 'Envíos a todo México — enviamos de lunes a miércoles';
+
 // Información de compra/envío que se muestra en cada detalle de especie.
 // ponytail: vive aquí como constante (un solo lugar, se edita con deploy);
 // migrar a una tabla de settings del backend si quieren cambiarla sin deploy.
