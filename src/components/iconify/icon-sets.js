@@ -699,4 +699,25 @@ export default {
   'custom:calendar-agenda-outline': {
     body: '<path fill="currentColor" d="M21 19C21.0002 19.5046 20.8096 19.9906 20.4665 20.3605C20.1234 20.7305 19.6532 20.9572 19.15 20.995L19 21H5C4.49542 21.0002 4.00943 20.8096 3.63945 20.4665C3.26947 20.1234 3.04284 19.6532 3.005 19.15L3 19L3 5C2.99984 4.49542 3.19041 4.00943 3.5335 3.63945C3.87659 3.26947 4.34685 3.04284 4.85 3.005L5 3L19 3C19.5046 2.99984 19.9906 3.19041 20.3605 3.5335C20.7305 3.87659 20.9572 4.34685 20.995 4.85L21 5V19ZM19 19V5L5 5L5 19H19ZM17 8C17 8.24493 16.91 8.48134 16.7473 8.66437C16.5845 8.84741 16.3603 8.96434 16.117 8.993L16 9L8 9C7.74512 8.99972 7.49997 8.90212 7.31463 8.72715C7.1293 8.55218 7.01777 8.31305 7.00283 8.05861C6.98789 7.80416 7.07067 7.55362 7.23426 7.35817C7.39786 7.16271 7.6299 7.0371 7.883 7.007L8 7L16 7C16.2652 7 16.5196 7.10536 16.7071 7.29289C16.8946 7.48043 17 7.73478 17 8ZM17 12C17 12.2652 16.8946 12.5196 16.7071 12.7071C16.5196 12.8946 16.2652 13 16 13H8C7.73478 13 7.48043 12.8946 7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929C7.48043 11.1054 7.73478 11 8 11H16C16.2652 11 16.5196 11.1054 16.7071 11.2929C16.8946 11.4804 17 11.7348 17 12ZM17 16C17 16.2449 16.91 16.4813 16.7473 16.6644C16.5845 16.8474 16.3603 16.9643 16.117 16.993L16 17H8C7.74512 16.9997 7.49997 16.9021 7.31463 16.7272C7.1293 16.5522 7.01777 16.313 7.00283 16.0586C6.98789 15.8042 7.07067 15.5536 7.23426 15.3582C7.39785 15.1627 7.6299 15.0371 7.883 15.007L8 15H16C16.2652 15 16.5196 15.1054 16.7071 15.2929C16.8946 15.4804 17 15.7348 17 16Z" />',
   },
+  /**
+   * @set Care info (ficha de cuidados del catalogo)
+   */
+  'care:origin': {
+    body: '<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.6 2.4 15.4 0 18c-2.4-2.6-2.4-15.4 0-18Z"/></g>',
+  },
+  'care:temp': {
+    body: '<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13.8V5.5a2 2 0 1 1 4 0v8.3a4 4 0 1 1-4 0Z"/><path d="M12 9.5v6"/></g><circle cx="12" cy="17.5" r="1.6" fill="currentColor"/>',
+  },
+  'care:humidity': {
+    body: '<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c3 3.4 5.5 6.4 5.5 9.4a5.5 5.5 0 0 1-11 0c0-3 2.5-6 5.5-9.4Z"/><path d="m10.4 14.6l3.2-3.2"/></g><circle cx="10.4" cy="11.4" r="1" fill="currentColor"/><circle cx="13.6" cy="14.6" r="1" fill="currentColor"/>',
+  },
+  'care:size': {
+    body: '<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8v8M21 8v8"/><path d="M3 12h18"/><path d="m7 9l-3 3l3 3M17 9l3 3l-3 3"/></g>',
+  },
+  'care:difficulty': {
+    body: '<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 17.5a8.5 8.5 0 1 1 17 0"/><path d="M12 17.5L16 11"/></g><circle cx="12" cy="17.5" r="1.6" fill="currentColor"/>',
+  },
+  'care:rarity': {
+    body: '<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path fill="currentColor" d="m12 3.5l2.1 4.3l4.7.7l-3.4 3.3l.8 4.7L12 14.3l-4.2 2.2l.8-4.7L5.2 8.5l4.7-.7Z"/><path d="m5.5 18.5l1 2l1-2l-1-2Z"/><path d="m17.5 18.5l1 2l1-2l-1-2Z"/></g>',
+  },
 };

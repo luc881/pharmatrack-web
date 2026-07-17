@@ -52,7 +52,10 @@ export async function generateMetadata({ params }) {
     const sci = scientificName(item.species);
     const title = item.species.common_name ? `${item.species.common_name} — ${sci}` : sci;
     const format = saleFormatLabel(item.species);
-    const description = `${item.species.common_name ?? sci} (${sci}) en venta${format ? ` — ${format.toLowerCase()}` : ''}. Animales exóticos con procedencia legal.`;
+    // la ficha de la especie es mejor meta description que el texto genérico
+    const description =
+      item.species.description?.split('\n')[0]?.slice(0, 300) ??
+      `${item.species.common_name ?? sci} (${sci}) en venta${format ? ` — ${format.toLowerCase()}` : ''}. Animales exóticos con procedencia legal.`;
 
     return {
       title,
@@ -97,12 +100,18 @@ export default async function Page({ params }) {
     const category = root ? { name: root.name, slug: slugify(root.name) } : null;
     const title = item.species.common_name ?? scientificName(item.species);
 
+    // Relacionados: misma categoría raíz, sin repetir la especie actual
+    const related = speciesList
+      .filter((i) => i.species.id !== sid && rootGroupOf(i.species, groups)?.id === root?.id)
+      .slice(0, 8);
+
     // Datos estructurados para resultados enriquecidos (precio/disponibilidad)
     const jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: title,
-      description: `${scientificName(item.species)} en venta en ${CONFIG.appName}.`,
+      description:
+        item.species.description ?? `${scientificName(item.species)} en venta en ${CONFIG.appName}.`,
       ...(item.photos.length ? { image: item.photos } : {}),
       offers: {
         '@type': 'AggregateOffer',
@@ -120,7 +129,7 @@ export default async function Page({ params }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <SpeciesDetailsView item={item} category={category} />
+        <SpeciesDetailsView item={item} category={category} related={related} />
       </MainLayout>
     );
   }
