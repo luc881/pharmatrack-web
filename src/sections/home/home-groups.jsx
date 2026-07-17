@@ -14,24 +14,9 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
-export function HomeGroups({ animals, sx, ...other }) {
-  // ponytail: los grupos salen de los animales ya cargados; foto = primer animal con imagen
-  const groups = [];
-  const seen = new Map();
-  animals.forEach((animal) => {
-    const group = animal.species?.genus?.group;
-    if (!group) return;
-    if (!seen.has(group.id)) {
-      const entry = { id: group.id, name: group.name, count: 0, photo: null };
-      seen.set(group.id, entry);
-      groups.push(entry);
-    }
-    const entry = seen.get(group.id);
-    entry.count += 1;
-    if (!entry.photo) entry.photo = animal.image ?? animal.photos?.[0] ?? null;
-  });
-
-  if (groups.length < 2) return null;
+// Recibe las categorías raíz (arácnidos, reptiles, etc.) ya armadas en el servidor
+export function HomeGroups({ categories, sx, ...other }) {
+  if (categories.length < 2) return null;
 
   return (
     <Box
@@ -62,8 +47,8 @@ export function HomeGroups({ animals, sx, ...other }) {
             gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
           }}
         >
-          {groups.map((group) => (
-            <Box key={group.id} component={m.div} variants={varFade('inUp')}>
+          {categories.map((category) => (
+            <Box key={category.id} component={m.div} variants={varFade('inUp')}>
               <Card
                 sx={{
                   position: 'relative',
@@ -72,14 +57,14 @@ export function HomeGroups({ animals, sx, ...other }) {
               >
                 <Link
                   component={RouterLink}
-                  href={`${paths.catalog}?group_id=${group.id}`}
+                  href={paths.catalogCategory(category.slug)}
                   color="inherit"
                   underline="none"
                 >
-                  {group.photo ? (
+                  {category.photo ? (
                     <Image
-                      alt={group.name}
-                      src={group.photo}
+                      alt={category.name}
+                      src={category.photo}
                       ratio="4/3"
                       slotProps={{
                         overlay: {
@@ -105,9 +90,9 @@ export function HomeGroups({ animals, sx, ...other }) {
                       color: 'common.white',
                     }}
                   >
-                    <Typography variant="h5">{group.name}</Typography>
+                    <Typography variant="h5">{category.name}</Typography>
                     <Typography variant="body2" sx={{ opacity: 0.72 }}>
-                      {group.count} {group.count === 1 ? 'disponible' : 'disponibles'}
+                      {category.count} {category.count === 1 ? 'disponible' : 'disponibles'}
                     </Typography>
                   </Box>
                 </Link>

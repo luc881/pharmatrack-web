@@ -1,14 +1,20 @@
 import { CONFIG } from 'src/global-config';
-import { getAnimals } from 'src/lib/public-api';
+import { getGroups, getAnimals } from 'src/lib/public-api';
+
+import { buildCategories } from 'src/sections/catalog/utils';
 
 // ----------------------------------------------------------------------
 
 export default async function sitemap() {
-  const { data: animals } = await getAnimals();
+  const [{ data: animals }, groups] = await Promise.all([getAnimals(), getGroups()]);
 
   return [
     { url: CONFIG.siteUrl, changeFrequency: 'daily' },
     { url: `${CONFIG.siteUrl}/catalogo`, changeFrequency: 'daily' },
+    ...buildCategories(animals, groups).map((category) => ({
+      url: `${CONFIG.siteUrl}/catalogo/${category.slug}`,
+      changeFrequency: 'daily',
+    })),
     ...animals.map((animal) => ({
       url: `${CONFIG.siteUrl}/catalogo/${animal.id}`,
       lastModified: animal.updated_at ?? undefined,

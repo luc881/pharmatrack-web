@@ -17,6 +17,17 @@ export async function getAnimals(params = {}) {
   }
 }
 
+// La taxonomía cambia poco: revalidate más largo
+export async function getGroups() {
+  try {
+    const res = await fetch(`${BASE}/groups`, { next: { revalidate: 300 } });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
 export async function getAnimal(id) {
   try {
     const res = await fetch(`${BASE}/${id}`, { next: { revalidate: 60 } });

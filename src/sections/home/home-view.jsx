@@ -21,7 +21,7 @@ import { HomeFeatured } from './home-featured';
 
 // ----------------------------------------------------------------------
 
-export function HomeView({ animals }) {
+export function HomeView({ animals, categories }) {
   const pageProgress = useScrollProgress();
 
   // ponytail: sin created_at en la respuesta pública, el id ordena por llegada
@@ -42,7 +42,7 @@ export function HomeView({ animals }) {
       <Stack sx={{ position: 'relative', bgcolor: 'background.default' }}>
         <HomeFeatured animals={featured} />
 
-        <HomeGroups animals={animals} />
+        <HomeGroups categories={categories} />
 
         <HomeCTA />
       </Stack>

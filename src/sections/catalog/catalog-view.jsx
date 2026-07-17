@@ -4,9 +4,13 @@ import { useMemo, useState } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 
 import { EmptyContent } from 'src/components/empty-content';
 
@@ -17,93 +21,84 @@ import { CatalogFilters } from './catalog-filters';
 // ----------------------------------------------------------------------
 
 // ponytail: el catálogo llega completo del servidor (page_size=100) y los
-// filtros son en memoria; filtrar en servidor cuando pase de 100 animales
-export function CatalogView({
-  animals,
-  initialGroupId = null,
-  initialGenusId = null,
-  initialSpeciesId = null,
-}) {
+// filtros son en memoria; filtrar en servidor cuando pase de 100 animales.
+// Las categorías (grupos raíz) son links reales para que Google las indexe.
+export function CatalogView({ animals, categories, category = null }) {
   const openFilters = useBoolean();
 
   const [sortBy, setSortBy] = useState('newest');
 
-  const maxPrice = useMemo(
-    () => Math.max(...animals.map((a) => a.price), 0),
-    [animals]
-  );
+  const maxPrice = useMemo(() => Math.max(...animals.map((a) => a.price), 0), [animals]);
 
-  const defaults = useMemo(
-    () => ({ groupId: null, genusId: null, speciesId: null, sex: [], priceRange: [0, maxPrice] }),
-    [maxPrice]
-  );
+  const defaults = useMemo(() => ({ sex: [], priceRange: [0, maxPrice] }), [maxPrice]);
 
-  const [state, setStateRaw] = useState({
-    ...defaults,
-    groupId: initialGroupId,
-    genusId: initialGenusId,
-    speciesId: initialSpeciesId,
-  });
+  const [state, setState] = useState(defaults);
 
   const filters = {
     state,
-    setState: (patch) =>
-      setStateRaw((prev) => {
-        const next = { ...prev, ...patch };
-        // cambiar de grupo o género invalida la selección más específica
-        if ('groupId' in patch) Object.assign(next, { genusId: null, speciesId: null });
-        if ('genusId' in patch) next.speciesId = null;
-        return next;
-      }),
-    resetState: () => setStateRaw(defaults),
+    setState: (patch) => setState((prev) => ({ ...prev, ...patch })),
+    resetState: () => setState(defaults),
   };
 
-  const groups = useMemo(() => {
-    const map = new Map();
-    animals.forEach((a) => {
-      const g = a.species?.genus?.group;
-      if (g) map.set(g.id, g.name);
-    });
-    return [...map.entries()].map(([id, name]) => ({ id, name }));
-  }, [animals]);
-
-  const genera = useMemo(() => {
-    const map = new Map();
-    animals.forEach((a) => {
-      const g = a.species?.genus;
-      if (g && (!state.groupId || g.group?.id === state.groupId)) map.set(g.id, g.name);
-    });
-    return [...map.entries()].map(([id, name]) => ({ id, name }));
-  }, [animals, state.groupId]);
-
   const canReset =
-    !!state.groupId ||
-    !!state.genusId ||
-    !!state.speciesId ||
-    state.sex.length > 0 ||
-    state.priceRange[0] !== 0 ||
-    state.priceRange[1] !== maxPrice;
+    state.sex.length > 0 || state.priceRange[0] !== 0 || state.priceRange[1] !== maxPrice;
 
   const filtered = applyFilter({ animals, state, sortBy });
 
   return (
     <Container sx={{ mb: 10 }}>
       <Typography variant="h3" component="h1" sx={{ mb: 3, mt: { xs: 1, md: 3 } }}>
-        Catálogo
+        {category ? category.name : 'Catálogo'}
       </Typography>
 
       <Stack spacing={2.5} sx={{ mb: { xs: 3, md: 5 } }}>
-        <Box sx={{ gap: 1, display: 'flex', justifyContent: 'flex-end' }}>
-          <CatalogFilters
-            filters={filters}
-            canReset={canReset}
-            open={openFilters.value}
-            onOpen={openFilters.onTrue}
-            onClose={openFilters.onFalse}
-            options={{ groups, genera, maxPrice }}
-          />
+        <Box
+          sx={{
+            gap: 3,
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'flex-start', sm: 'center' },
+          }}
+        >
+          {categories.length > 1 ? (
+            <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1 }}>
+              <Chip
+                clickable
+                component={RouterLink}
+                href={paths.catalog}
+                label="Todos"
+                variant={category ? 'outlined' : 'filled'}
+                color={category ? 'default' : 'primary'}
+              />
+              {categories.map((c) => (
+                <Chip
+                  key={c.id}
+                  clickable
+                  component={RouterLink}
+                  href={paths.catalogCategory(c.slug)}
+                  label={c.name}
+                  variant={category?.id === c.id ? 'filled' : 'outlined'}
+                  color={category?.id === c.id ? 'primary' : 'default'}
+                />
+              ))}
+            </Stack>
+          ) : (
+            <div />
+          )}
 
-          <CatalogSort sort={sortBy} onSort={setSortBy} />
+          <Box sx={{ gap: 1, flexShrink: 0, display: 'flex' }}>
+            <CatalogFilters
+              filters={filters}
+              canReset={canReset}
+              open={openFilters.value}
+              onOpen={openFilters.onTrue}
+              onClose={openFilters.onFalse}
+              options={{ maxPrice }}
+            />
+
+            <CatalogSort sort={sortBy} onSort={setSortBy} />
+          </Box>
         </Box>
 
         {canReset && (
@@ -146,9 +141,6 @@ export function CatalogView({
 function applyFilter({ animals, state, sortBy }) {
   let data = animals.filter(
     (a) =>
-      (!state.groupId || a.species?.genus?.group?.id === state.groupId) &&
-      (!state.genusId || a.species?.genus?.id === state.genusId) &&
-      (!state.speciesId || a.species?.id === state.speciesId) &&
       (!state.sex.length || state.sex.includes(a.sex)) &&
       a.price >= state.priceRange[0] &&
       a.price <= state.priceRange[1]

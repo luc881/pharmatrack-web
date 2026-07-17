@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import Radio from '@mui/material/Radio';
 import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
@@ -55,37 +54,6 @@ export function CatalogFilters({ open, onOpen, onClose, canReset, filters, optio
     </>
   );
 
-  const renderRadioGroup = (title, items, key, italic = false) =>
-    items.length > 1 && (
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
-          {title}
-        </Typography>
-        <FormControlLabel
-          label="Todos"
-          control={
-            <Radio
-              checked={currentFilters[key] === null}
-              onClick={() => updateFilters({ [key]: null })}
-            />
-          }
-        />
-        {items.map((item) => (
-          <FormControlLabel
-            key={item.id}
-            label={item.name}
-            control={
-              <Radio
-                checked={currentFilters[key] === item.id}
-                onClick={() => updateFilters({ [key]: item.id })}
-              />
-            }
-            sx={{ ...(italic && { '& .MuiFormControlLabel-label': { fontStyle: 'italic' } }) }}
-          />
-        ))}
-      </Box>
-    );
-
   const renderSex = () => (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -96,7 +64,10 @@ export function CatalogFilters({ open, onOpen, onClose, canReset, filters, optio
           key={value}
           label={label}
           control={
-            <Checkbox checked={currentFilters.sex.includes(value)} onClick={() => toggleSex(value)} />
+            <Checkbox
+              checked={currentFilters.sex.includes(value)}
+              onClick={() => toggleSex(value)}
+            />
           }
         />
       ))}
@@ -154,8 +125,6 @@ export function CatalogFilters({ open, onOpen, onClose, canReset, filters, optio
 
         <Scrollbar sx={{ px: 2.5, py: 3 }}>
           <Stack spacing={3}>
-            {renderRadioGroup('Grupo', options.groups, 'groupId')}
-            {renderRadioGroup('Género', options.genera, 'genusId', true)}
             {renderSex()}
             {renderPrice()}
           </Stack>

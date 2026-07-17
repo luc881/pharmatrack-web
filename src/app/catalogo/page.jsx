@@ -1,27 +1,23 @@
 import { MainLayout } from 'src/layouts/main';
-import { getAnimals } from 'src/lib/public-api';
+import { getGroups, getAnimals } from 'src/lib/public-api';
 
+import { buildCategories } from 'src/sections/catalog/utils';
 import { CatalogView } from 'src/sections/catalog/catalog-view';
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
   title: 'Catálogo',
-  description: 'Animales exóticos disponibles: tarántulas, reptiles y más.',
+  description:
+    'Animales exóticos en venta: arácnidos, reptiles, anfibios y más, con fotos, precios y procedencia legal.',
 };
 
-export default async function Page({ searchParams }) {
-  const { group_id: groupId, genus_id: genusId, species_id: speciesId } = await searchParams;
-  const { data: animals } = await getAnimals();
+export default async function Page() {
+  const [{ data: animals }, groups] = await Promise.all([getAnimals(), getGroups()]);
 
   return (
     <MainLayout>
-      <CatalogView
-        animals={animals}
-        initialGroupId={Number(groupId) || null}
-        initialGenusId={Number(genusId) || null}
-        initialSpeciesId={Number(speciesId) || null}
-      />
+      <CatalogView animals={animals} categories={buildCategories(animals, groups)} />
     </MainLayout>
   );
 }

@@ -57,7 +57,7 @@ function InfoRow({ label, children }) {
   );
 }
 
-export function AnimalDetailsView({ animal }) {
+export function AnimalDetailsView({ animal, category = null }) {
   const photos = [...new Set([...(animal.image ? [animal.image] : []), ...(animal.photos ?? [])])];
   const sci = scientificName(animal.species);
   const title = animal.species?.common_name ?? sci;
@@ -72,15 +72,14 @@ export function AnimalDetailsView({ animal }) {
         <Link component={RouterLink} href={paths.catalog} color="inherit" variant="body2">
           Catálogo
         </Link>
-        {animal.species?.genus && (
+        {category && (
           <Link
             component={RouterLink}
-            href={`${paths.catalog}?genus_id=${animal.species.genus.id}`}
+            href={paths.catalogCategory(category.slug)}
             color="inherit"
             variant="body2"
-            sx={{ fontStyle: 'italic' }}
           >
-            {animal.species.genus.name}
+            {category.name}
           </Link>
         )}
         <Typography variant="body2" sx={{ color: 'text.primary' }}>
@@ -125,6 +124,23 @@ export function AnimalDetailsView({ animal }) {
             )}
             <InfoRow label="Sexo">{SEX_LABELS[animal.sex] ?? animal.sex}</InfoRow>
             {animal.birth_date && <InfoRow label="Nacimiento">{animal.birth_date}</InfoRow>}
+            {animal.species?.genus?.group && (
+              <InfoRow label="Grupo">{animal.species.genus.group.name}</InfoRow>
+            )}
+            {animal.species?.genus && (
+              <InfoRow label="Género">
+                <Box component="span" sx={{ fontStyle: 'italic' }}>
+                  {animal.species.genus.name}
+                </Box>
+              </InfoRow>
+            )}
+            {animal.species && (
+              <InfoRow label="Especie">
+                <Box component="span" sx={{ fontStyle: 'italic' }}>
+                  {animal.species.name}
+                </Box>
+              </InfoRow>
+            )}
 
             {available && WHATSAPP && (
               <>

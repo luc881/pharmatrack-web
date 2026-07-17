@@ -1,16 +1,17 @@
 import { MainLayout } from 'src/layouts/main';
-import { getAnimals } from 'src/lib/public-api';
+import { getGroups, getAnimals } from 'src/lib/public-api';
 
 import { HomeView } from 'src/sections/home/home-view';
+import { buildCategories } from 'src/sections/catalog/utils';
 
 // ----------------------------------------------------------------------
 
 export default async function Page() {
-  const { data: animals } = await getAnimals();
+  const [{ data: animals }, groups] = await Promise.all([getAnimals(), getGroups()]);
 
   return (
     <MainLayout>
-      <HomeView animals={animals} />
+      <HomeView animals={animals} categories={buildCategories(animals, groups)} />
     </MainLayout>
   );
 }
