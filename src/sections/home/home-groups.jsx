@@ -92,7 +92,7 @@ export function HomeGroups({ categories, sx, ...other }) {
                   >
                     <Typography variant="h5">{category.name}</Typography>
                     <Typography variant="body2" sx={{ opacity: 0.72 }}>
-                      {category.count} {category.count === 1 ? 'disponible' : 'disponibles'}
+                      Ver disponibles
                     </Typography>
                   </Box>
                 </Link>

@@ -21,11 +21,11 @@ import { HomeFeatured } from './home-featured';
 
 // ----------------------------------------------------------------------
 
-export function HomeView({ animals, categories }) {
+export function HomeView({ species, categories }) {
   const pageProgress = useScrollProgress();
 
   // ponytail: sin created_at en la respuesta pública, el id ordena por llegada
-  const featured = [...animals].sort((a, b) => b.id - a.id).slice(0, 8);
+  const featured = [...species].sort((a, b) => b.latestId - a.latestId).slice(0, 8);
 
   return (
     <>
@@ -40,7 +40,7 @@ export function HomeView({ animals, categories }) {
       <HomeHero />
 
       <Stack sx={{ position: 'relative', bgcolor: 'background.default' }}>
-        <HomeFeatured animals={featured} />
+        <HomeFeatured items={featured} />
 
         <HomeGroups categories={categories} />
 

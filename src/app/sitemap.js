@@ -1,7 +1,7 @@
 import { CONFIG } from 'src/global-config';
 import { getGroups, getAnimals } from 'src/lib/public-api';
 
-import { buildCategories } from 'src/sections/catalog/utils';
+import { buildCategories, buildSpeciesList } from 'src/sections/catalog/utils';
 
 // ----------------------------------------------------------------------
 
@@ -15,9 +15,9 @@ export default async function sitemap() {
       url: `${CONFIG.siteUrl}/catalogo/${category.slug}`,
       changeFrequency: 'daily',
     })),
-    ...animals.map((animal) => ({
-      url: `${CONFIG.siteUrl}/catalogo/${animal.id}`,
-      lastModified: animal.updated_at ?? undefined,
+    ...buildSpeciesList(animals).map((item) => ({
+      url: `${CONFIG.siteUrl}/catalogo/${item.slug}`,
+      changeFrequency: 'daily',
     })),
   ];
 }

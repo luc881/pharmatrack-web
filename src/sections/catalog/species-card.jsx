@@ -11,41 +11,33 @@ import { fCurrency } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 import { Image } from 'src/components/image';
 
-import { STATUS_LABELS, STATUS_COLORS, scientificName } from './utils';
+import { scientificName, saleFormatLabel } from './utils';
 
 // ----------------------------------------------------------------------
 
-export function AnimalCard({ animal }) {
-  const photo = animal.image ?? animal.photos?.[0];
-  const sci = scientificName(animal.species);
-  const title = animal.species?.common_name ?? sci;
-  const available = animal.status === 'available';
+export function SpeciesCard({ item }) {
+  const { species, slug, photos, minPrice, maxPrice } = item;
+  const sci = scientificName(species);
+  const title = species.common_name ?? sci;
+  const formatLabel = saleFormatLabel(species);
+  const href = paths.catalogSpecies(slug);
 
   return (
     <Card sx={{ height: 1 }}>
-      {!available && (
+      {formatLabel && (
         <Label
           variant="filled"
-          color={STATUS_COLORS[animal.status] ?? 'default'}
+          color="info"
           sx={{ top: 16, right: 16, zIndex: 9, position: 'absolute' }}
         >
-          {STATUS_LABELS[animal.status] ?? animal.status}
+          {formatLabel}
         </Label>
       )}
 
       <Box sx={{ p: 1 }}>
-        <Link
-          component={RouterLink}
-          href={paths.catalogDetails(animal.id)}
-          sx={{ display: 'block' }}
-        >
-          {photo ? (
-            <Image
-              alt={title}
-              src={photo}
-              ratio="1/1"
-              sx={{ borderRadius: 1.5, ...(!available && { opacity: 0.64 }) }}
-            />
+        <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
+          {photos[0] ? (
+            <Image alt={title} src={photos[0]} ratio="1/1" sx={{ borderRadius: 1.5 }} />
           ) : (
             <Box
               sx={{
@@ -66,13 +58,7 @@ export function AnimalCard({ animal }) {
       </Box>
 
       <Stack spacing={0.5} sx={{ p: 3, pt: 2 }}>
-        <Link
-          component={RouterLink}
-          href={paths.catalogDetails(animal.id)}
-          color="inherit"
-          variant="subtitle2"
-          noWrap
-        >
+        <Link component={RouterLink} href={href} color="inherit" variant="subtitle2" noWrap>
           {title}
         </Link>
 
@@ -87,11 +73,20 @@ export function AnimalCard({ animal }) {
             textOverflow: 'ellipsis',
           }}
         >
-          {sci} · {animal.code}
+          {sci}
         </Box>
 
         <Box component="span" sx={{ pt: 1, typography: 'subtitle1' }}>
-          {fCurrency(animal.price)}
+          {minPrice === maxPrice ? (
+            fCurrency(minPrice)
+          ) : (
+            <>
+              <Box component="span" sx={{ typography: 'body2', color: 'text.secondary', mr: 0.5 }}>
+                Desde
+              </Box>
+              {fCurrency(minPrice)}
+            </>
+          )}
         </Box>
       </Stack>
     </Card>

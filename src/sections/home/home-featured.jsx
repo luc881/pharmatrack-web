@@ -13,11 +13,11 @@ import { Iconify } from 'src/components/iconify';
 import { varFade, MotionViewport } from 'src/components/animate';
 import { Carousel, useCarousel, CarouselArrowFloatButtons } from 'src/components/carousel';
 
-import { AnimalCard } from 'src/sections/catalog/animal-card';
+import { SpeciesCard } from 'src/sections/catalog/species-card';
 
 // ----------------------------------------------------------------------
 
-export function HomeFeatured({ animals, sx, ...other }) {
+export function HomeFeatured({ items, sx, ...other }) {
   const carousel = useCarousel(
     {
       align: 'start',
@@ -28,7 +28,7 @@ export function HomeFeatured({ animals, sx, ...other }) {
     [Autoplay({ delay: 4000, stopOnInteraction: true })]
   );
 
-  if (!animals.length) return null;
+  if (!items.length) return null;
 
   return (
     <Box
@@ -53,14 +53,14 @@ export function HomeFeatured({ animals, sx, ...other }) {
           <CarouselArrowFloatButtons {...carousel.arrows} options={carousel.options} />
 
           <Carousel carousel={carousel} sx={{ px: 0.5 }}>
-            {animals.map((animal) => (
+            {items.map((item) => (
               <Box
-                key={animal.id}
+                key={item.species.id}
                 component={m.div}
                 variants={varFade('in')}
                 sx={{ py: { xs: 5, md: 8 }, textAlign: 'left' }}
               >
-                <AnimalCard animal={animal} />
+                <SpeciesCard item={item} />
               </Box>
             ))}
           </Carousel>

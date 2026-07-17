@@ -1,7 +1,6 @@
 'use client';
 
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
@@ -21,7 +20,7 @@ import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 
 import { AnimalGallery } from './animal-gallery';
-import { SEX_LABELS, STATUS_LABELS, STATUS_COLORS, scientificName } from './utils';
+import { SEX_LABELS, scientificName, saleFormatLabel } from './utils';
 
 // ----------------------------------------------------------------------
 
@@ -57,11 +56,11 @@ function InfoRow({ label, children }) {
   );
 }
 
-export function AnimalDetailsView({ animal, category = null }) {
-  const photos = [...new Set([...(animal.image ? [animal.image] : []), ...(animal.photos ?? [])])];
-  const sci = scientificName(animal.species);
-  const title = animal.species?.common_name ?? sci;
-  const available = animal.status === 'available';
+export function SpeciesDetailsView({ item, category = null }) {
+  const { species, photos, morphs, sexes, minPrice, maxPrice } = item;
+  const sci = scientificName(species);
+  const title = species.common_name ?? sci;
+  const formatLabel = saleFormatLabel(species);
 
   return (
     <Container sx={{ mb: 10 }}>
@@ -83,7 +82,7 @@ export function AnimalDetailsView({ animal, category = null }) {
           </Link>
         )}
         <Typography variant="body2" sx={{ color: 'text.primary' }}>
-          {animal.code}
+          {title}
         </Typography>
       </Breadcrumbs>
 
@@ -98,55 +97,74 @@ export function AnimalDetailsView({ animal, category = null }) {
               <Typography variant="h4" component="h1">
                 {title}
               </Typography>
-              {!available && (
-                <Label variant="soft" color={STATUS_COLORS[animal.status] ?? 'default'}>
-                  {STATUS_LABELS[animal.status] ?? animal.status}
+              {formatLabel && (
+                <Label variant="soft" color="info">
+                  {formatLabel}
                 </Label>
               )}
             </Box>
 
             <Typography variant="body1" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
-              {sci} · {animal.code}
+              {sci}
             </Typography>
 
-            <Typography variant="h3">{fCurrency(animal.price)}</Typography>
+            <Typography variant="h3">
+              {minPrice === maxPrice ? (
+                fCurrency(minPrice)
+              ) : (
+                <>
+                  <Box
+                    component="span"
+                    sx={{ typography: 'h6', color: 'text.secondary', mr: 1, fontWeight: 400 }}
+                  >
+                    Desde
+                  </Box>
+                  {fCurrency(minPrice)}
+                </>
+              )}
+            </Typography>
 
             <Divider sx={{ borderStyle: 'dashed' }} />
 
-            {animal.morphs?.length > 0 && (
+            {species.sale_format === 'package' && (
+              <InfoRow label="Formato">Paquete de {species.package_size} ejemplares</InfoRow>
+            )}
+            {species.sale_format === 'colony' && (
+              <InfoRow label="Formato">Cepa (colonia establecida)</InfoRow>
+            )}
+            {morphs.length > 0 && (
               <InfoRow label="Morphs">
                 <Box sx={{ gap: 0.5, display: 'flex', flexWrap: 'wrap' }}>
-                  {animal.morphs.map((m) => (
+                  {morphs.map((m) => (
                     <Chip key={m.id} size="small" variant="outlined" label={m.name} />
                   ))}
                 </Box>
               </InfoRow>
             )}
-            <InfoRow label="Sexo">{SEX_LABELS[animal.sex] ?? animal.sex}</InfoRow>
-            {animal.birth_date && <InfoRow label="Nacimiento">{animal.birth_date}</InfoRow>}
-            {animal.species?.genus?.group && (
-              <InfoRow label="Grupo">{animal.species.genus.group.name}</InfoRow>
+            {species.sale_format === 'individual' && sexes.length > 0 && (
+              <InfoRow label="Sexos">
+                {sexes.map((s) => SEX_LABELS[s] ?? s).join(', ')}
+              </InfoRow>
             )}
-            {animal.species?.genus && (
+            {category && <InfoRow label="Grupo">{species.genus?.group?.name}</InfoRow>}
+            {species.genus && (
               <InfoRow label="Género">
                 <Box component="span" sx={{ fontStyle: 'italic' }}>
-                  {animal.species.genus.name}
+                  {species.genus.name}
                 </Box>
               </InfoRow>
             )}
-            {animal.species && (
-              <InfoRow label="Especie">
-                <Box component="span" sx={{ fontStyle: 'italic' }}>
-                  {animal.species.name}
-                </Box>
-              </InfoRow>
-            )}
+            <InfoRow label="Especie">
+              <Box component="span" sx={{ fontStyle: 'italic' }}>
+                {species.name}
+              </Box>
+            </InfoRow>
 
-            {available && WHATSAPP && (
+            {WHATSAPP && (
               <>
                 <Divider sx={{ borderStyle: 'dashed' }} />
                 <Button
-                  href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hola, me interesa ${title} (${animal.code})`)}`}
+                  href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hola, me interesa ${title} (${sci})`)}`}
                   target="_blank"
                   rel="noopener"
                   size="large"
@@ -170,34 +188,20 @@ export function AnimalDetailsView({ animal, category = null }) {
           gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' },
         }}
       >
-        {TRUST_ITEMS.map((item) => (
-          <Box key={item.title} sx={{ textAlign: 'center', px: 5 }}>
-            <Iconify icon={item.icon} width={32} sx={{ color: 'primary.main' }} />
+        {TRUST_ITEMS.map((trust) => (
+          <Box key={trust.title} sx={{ textAlign: 'center', px: 5 }}>
+            <Iconify icon={trust.icon} width={32} sx={{ color: 'primary.main' }} />
 
             <Typography variant="subtitle1" sx={{ mb: 1, mt: 2 }}>
-              {item.title}
+              {trust.title}
             </Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {item.description}
+              {trust.description}
             </Typography>
           </Box>
         ))}
       </Box>
-
-      {animal.description && (
-        <Card>
-          <Typography variant="h6" sx={{ px: 3, pt: 3 }}>
-            Descripción
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{ p: 3, color: 'text.secondary', whiteSpace: 'pre-wrap' }}
-          >
-            {animal.description}
-          </Typography>
-        </Card>
-      )}
     </Container>
   );
 }

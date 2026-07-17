@@ -22,9 +22,9 @@ export function slugify(name) {
 }
 
 // Sube por parent_id hasta el grupo raíz (arácnidos, reptiles, etc.)
-export function rootGroupOf(animal, groups) {
+export function rootGroupOf(species, groups) {
   const byId = new Map(groups.map((g) => [g.id, g]));
-  let group = byId.get(animal.species?.genus?.group?.id);
+  let group = byId.get(species?.genus?.group?.id);
   while (group?.parent_id) group = byId.get(group.parent_id);
   return group ?? null;
 }
@@ -34,16 +34,61 @@ export function buildCategories(animals, groups) {
   const categories = [];
   const seen = new Map();
   animals.forEach((animal) => {
-    const root = rootGroupOf(animal, groups);
+    const root = rootGroupOf(animal.species, groups);
     if (!root) return;
     if (!seen.has(root.id)) {
-      const entry = { id: root.id, name: root.name, slug: slugify(root.name), count: 0, photo: null };
+      const entry = { id: root.id, name: root.name, slug: slugify(root.name), photo: null };
       seen.set(root.id, entry);
       categories.push(entry);
     }
     const entry = seen.get(root.id);
-    entry.count += 1;
     if (!entry.photo) entry.photo = animal.image ?? animal.photos?.[0] ?? null;
   });
   return categories;
+}
+
+// ----------------------------------------------------------------------
+
+export function speciesSlug(species) {
+  return `${slugify(species.common_name ?? scientificName(species))}-${species.id}`;
+}
+
+export function saleFormatLabel(species) {
+  if (species?.sale_format === 'package') return `Paquete de ${species.package_size}`;
+  if (species?.sale_format === 'colony') return 'Cepa';
+  return null;
+}
+
+// El público ve especies, no folios individuales: agrupa los animales
+// disponibles por especie con precio (rango), fotos y morphs combinados.
+export function buildSpeciesList(animals) {
+  const map = new Map();
+  animals.forEach((animal) => {
+    if (!animal.species) return;
+    let entry = map.get(animal.species.id);
+    if (!entry) {
+      entry = {
+        species: animal.species,
+        slug: speciesSlug(animal.species),
+        minPrice: animal.price,
+        maxPrice: animal.price,
+        latestId: animal.id,
+        photos: [],
+        morphs: [],
+        sexes: [],
+      };
+      map.set(animal.species.id, entry);
+    }
+    entry.minPrice = Math.min(entry.minPrice, animal.price);
+    entry.maxPrice = Math.max(entry.maxPrice, animal.price);
+    entry.latestId = Math.max(entry.latestId, animal.id);
+    if (!entry.sexes.includes(animal.sex)) entry.sexes.push(animal.sex);
+    [animal.image, ...(animal.photos ?? [])].filter(Boolean).forEach((url) => {
+      if (!entry.photos.includes(url)) entry.photos.push(url);
+    });
+    (animal.morphs ?? []).forEach((morph) => {
+      if (!entry.morphs.some((m) => m.id === morph.id)) entry.morphs.push(morph);
+    });
+  });
+  return [...map.values()];
 }

@@ -14,7 +14,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { EmptyContent } from 'src/components/empty-content';
 
-import { AnimalCard } from './animal-card';
+import { SpeciesCard } from './species-card';
 import { CatalogSort } from './catalog-sort';
 import { CatalogFilters } from './catalog-filters';
 
@@ -22,13 +22,13 @@ import { CatalogFilters } from './catalog-filters';
 
 // ponytail: el catálogo llega completo del servidor (page_size=100) y los
 // filtros son en memoria; filtrar en servidor cuando pase de 100 animales.
-// Las categorías (grupos raíz) son links reales para que Google las indexe.
-export function CatalogView({ animals, categories, category = null }) {
+// items = especies agrupadas (buildSpeciesList) — el público no ve folios.
+export function CatalogView({ items, categories, category = null }) {
   const openFilters = useBoolean();
 
   const [sortBy, setSortBy] = useState('newest');
 
-  const maxPrice = useMemo(() => Math.max(...animals.map((a) => a.price), 0), [animals]);
+  const maxPrice = useMemo(() => Math.max(...items.map((i) => i.maxPrice), 0), [items]);
 
   const defaults = useMemo(() => ({ sex: [], priceRange: [0, maxPrice] }), [maxPrice]);
 
@@ -43,7 +43,7 @@ export function CatalogView({ animals, categories, category = null }) {
   const canReset =
     state.sex.length > 0 || state.priceRange[0] !== 0 || state.priceRange[1] !== maxPrice;
 
-  const filtered = applyFilter({ animals, state, sortBy });
+  const filtered = applyFilter({ items, state, sortBy });
 
   return (
     <Container sx={{ mb: 10 }}>
@@ -121,8 +121,8 @@ export function CatalogView({ animals, categories, category = null }) {
             },
           }}
         >
-          {filtered.map((animal) => (
-            <AnimalCard key={animal.id} animal={animal} />
+          {filtered.map((item) => (
+            <SpeciesCard key={item.species.id} item={item} />
           ))}
         </Box>
       ) : (
@@ -138,18 +138,18 @@ export function CatalogView({ animals, categories, category = null }) {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ animals, state, sortBy }) {
-  let data = animals.filter(
-    (a) =>
-      (!state.sex.length || state.sex.includes(a.sex)) &&
-      a.price >= state.priceRange[0] &&
-      a.price <= state.priceRange[1]
+function applyFilter({ items, state, sortBy }) {
+  let data = items.filter(
+    (i) =>
+      (!state.sex.length || i.sexes.some((s) => state.sex.includes(s))) &&
+      i.minPrice >= state.priceRange[0] &&
+      i.minPrice <= state.priceRange[1]
   );
 
   // ponytail: sin created_at en la respuesta pública, el id ordena por llegada
-  if (sortBy === 'newest') data = [...data].sort((a, b) => b.id - a.id);
-  if (sortBy === 'priceAsc') data = [...data].sort((a, b) => a.price - b.price);
-  if (sortBy === 'priceDesc') data = [...data].sort((a, b) => b.price - a.price);
+  if (sortBy === 'newest') data = [...data].sort((a, b) => b.latestId - a.latestId);
+  if (sortBy === 'priceAsc') data = [...data].sort((a, b) => a.minPrice - b.minPrice);
+  if (sortBy === 'priceDesc') data = [...data].sort((a, b) => b.minPrice - a.minPrice);
 
   return data;
 }
