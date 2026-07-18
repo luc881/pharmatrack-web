@@ -15,9 +15,12 @@ import { BackToTopButton } from 'src/components/animate/back-to-top-button';
 import { varFade, varContainer, MotionViewport } from 'src/components/animate';
 import { ScrollProgress, useScrollProgress } from 'src/components/animate/scroll-progress';
 
+import { HomeFaq } from './home-faq';
 import { HomeHero } from './home-hero';
 import { HomeGroups } from './home-groups';
+import { HomeReviews } from './home-reviews';
 import { HomeFeatured } from './home-featured';
+import { HomeArticles } from './home-articles';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +46,12 @@ export function HomeView({ species, categories }) {
         <HomeFeatured items={featured} />
 
         <HomeGroups categories={categories} />
+
+        <HomeArticles />
+
+        <HomeReviews />
+
+        <HomeFaq />
 
         <HomeCTA />
       </Stack>

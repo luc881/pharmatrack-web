@@ -27,6 +27,7 @@ import { SHOP_INFO } from './shop-info';
 import { useFavorites } from './use-favorites';
 import { AnimalGallery } from './animal-gallery';
 import { RelatedSpecies } from './related-species';
+import { SpeciesProfile } from './species-profile';
 import { TaxonomyBadge, ScientificName } from './scientific';
 import { SEX_LABELS, scientificName, saleFormatLabel } from './utils';
 
@@ -286,29 +287,13 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
 
       <CareInfo species={species} sx={{ mt: { xs: 6, md: 10 } }} />
 
-      {paragraphs.length > 0 && (
-        <Box component="section" sx={{ mt: { xs: 6, md: 10 } }}>
-          <Typography
-            variant="h4"
-            sx={{
-              pb: 2,
-              mb: 4,
-              textAlign: 'center',
-              borderBottom: (theme) => `solid 2px ${theme.vars.palette.divider}`,
-            }}
-          >
-            Descripción
-          </Typography>
-
-          <Stack spacing={2} sx={{ mx: 'auto', maxWidth: 720 }}>
-            {paragraphs.map((paragraph, index) => (
-              <Typography key={index} variant="body1" sx={{ color: 'text.secondary' }}>
-                {paragraph}
-              </Typography>
-            ))}
-          </Stack>
-        </Box>
-      )}
+      {/* Ficha estilo museo: descripción + taxonomía/origen/etiquetas */}
+      <SpeciesProfile
+        species={species}
+        category={category}
+        morphs={morphs}
+        sx={{ mt: { xs: 6, md: 10 } }}
+      />
 
       <RelatedSpecies items={related} sx={{ mt: { xs: 6, md: 10 } }} />
     </Container>
