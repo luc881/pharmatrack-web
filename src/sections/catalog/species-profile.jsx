@@ -69,8 +69,17 @@ function TaxonRow({ label, children, italic = false }) {
   );
 }
 
+// Convierte el texto libre del backend en párrafos (línea en blanco separa)
+const toParagraphs = (text) => (text ?? '').split('\n').filter(Boolean);
+
 export function SpeciesProfile({ species, category, morphs = [], sx }) {
-  const paragraphs = (species.description ?? '').split('\n').filter(Boolean);
+  const sections = [
+    { icon: 'solar:notebook-bold-duotone', title: 'Descripción general', text: species.description },
+    { icon: 'solar:home-angle-bold-duotone', title: 'Hábitat y comportamiento', text: species.habitat },
+    { icon: 'custom:fast-food-fill', title: 'Alimentación', text: species.diet },
+    { icon: 'solar:notes-bold-duotone', title: 'Notas de esta especie', text: species.notes },
+  ].filter((section) => section.text);
+
   const subgroup = species.genus?.group?.name;
   const formatLabel = saleFormatLabel(species);
 
@@ -93,17 +102,21 @@ export function SpeciesProfile({ species, category, morphs = [], sx }) {
   return (
     <Grid container spacing={{ xs: 4, md: 6 }} sx={sx}>
       <Grid size={{ xs: 12, md: 7 }}>
-        {paragraphs.length > 0 ? (
-          <>
-            <SectionHeader icon="solar:notebook-bold-duotone">Descripción general</SectionHeader>
-            <Stack spacing={2}>
-              {paragraphs.map((paragraph, index) => (
-                <Typography key={index} variant="body1" sx={{ color: 'text.secondary' }}>
-                  {paragraph}
-                </Typography>
-              ))}
-            </Stack>
-          </>
+        {sections.length > 0 ? (
+          <Stack spacing={5}>
+            {sections.map((section) => (
+              <Box key={section.title}>
+                <SectionHeader icon={section.icon}>{section.title}</SectionHeader>
+                <Stack spacing={2}>
+                  {toParagraphs(section.text).map((paragraph, index) => (
+                    <Typography key={index} variant="body1" sx={{ color: 'text.secondary' }}>
+                      {paragraph}
+                    </Typography>
+                  ))}
+                </Stack>
+              </Box>
+            ))}
+          </Stack>
         ) : (
           <>
             <SectionHeader icon="solar:notebook-bold-duotone">Descripción general</SectionHeader>
