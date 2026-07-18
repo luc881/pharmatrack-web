@@ -27,7 +27,6 @@ import { MenuButton } from '../components/menu-button';
 import { CloseCursor } from '../components/close-cursor';
 import { SearchDialog } from '../components/search-dialog';
 import { SignInButton } from '../components/sign-in-button';
-import { SettingsButton } from '../components/settings-button';
 import { FavoritesButton } from '../components/favorites-button';
 import { MainSection, LayoutSection, HeaderSection } from '../core';
 import { navLeft, navRight, navData as mainNavData } from '../nav-config-main';
@@ -218,9 +217,6 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 }, color: 'common.white' }}>
           {/** @slot Favorites button */}
           <FavoritesButton sx={{ color: 'inherit' }} />
-
-          {/** @slot Settings button */}
-          <SettingsButton sx={{ color: 'inherit' }} />
 
           {/** @slot Sign in button */}
           <SignInButton
