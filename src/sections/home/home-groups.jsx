@@ -10,6 +10,7 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { Image } from 'src/components/image';
+import { Iconify } from 'src/components/iconify';
 import { varFade, varContainer, MotionViewport } from 'src/components/animate';
 
 import { SectionLabel } from 'src/sections/catalog/scientific';
@@ -59,7 +60,20 @@ export function HomeGroups({ categories, sx, ...other }) {
               <Card
                 sx={{
                   position: 'relative',
-                  '&:hover img': { transform: 'scale(1.06)' },
+                  // zoom lento con easing suave + el texto sube y revela el CTA
+                  '& img': { transition: 'transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)' },
+                  '&:hover img': { transform: 'scale(1.07)' },
+                  '& .grp-text': {
+                    transform: 'translateY(22px)',
+                    transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                  },
+                  '&:hover .grp-text': { transform: 'translateY(0)' },
+                  '& .grp-cta': {
+                    opacity: 0,
+                    transform: 'translateY(6px)',
+                    transition: 'opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s',
+                  },
+                  '&:hover .grp-cta': { opacity: 1, transform: 'translateY(0)' },
                 }}
               >
                 <Link
@@ -80,13 +94,13 @@ export function HomeGroups({ categories, sx, ...other }) {
                           }),
                         },
                       }}
-                      sx={{ '& img': { transition: 'transform 0.4s ease' } }}
                     />
                   ) : (
                     <Box sx={{ aspectRatio: '4/3', bgcolor: 'background.default' }} />
                   )}
 
                   <Box
+                    className="grp-text"
                     sx={{
                       p: 3,
                       left: 0,
@@ -98,9 +112,13 @@ export function HomeGroups({ categories, sx, ...other }) {
                     }}
                   >
                     <Typography variant="h5">{category.name}</Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.72 }}>
+                    <Box
+                      className="grp-cta"
+                      sx={{ gap: 0.5, display: 'flex', alignItems: 'center', typography: 'body2' }}
+                    >
                       Ver disponibles
-                    </Typography>
+                      <Iconify icon="eva:arrow-ios-forward-fill" width={16} />
+                    </Box>
                   </Box>
                 </Link>
               </Card>

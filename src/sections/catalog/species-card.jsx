@@ -240,6 +240,8 @@ export function SpeciesCard({ item, horizontal = false }) {
           </Box>
         </Link>
 
+        {/* Barra integrada al contenedor de la imagen: mismo ancho y esquinas,
+            sube desde el borde inferior en lugar de flotar encima de la foto */}
         <Button
           className="quick-cta"
           component={RouterLink}
@@ -253,10 +255,12 @@ export function SpeciesCard({ item, horizontal = false }) {
             bottom: 8,
             zIndex: 9,
             width: 'auto',
+            height: 42,
             position: 'absolute',
+            borderRadius: '0 0 12px 12px',
             opacity: 0,
-            transform: 'translateY(10px)',
-            transition: 'opacity 0.45s ease, transform 0.45s ease',
+            transform: 'translateY(100%)',
+            transition: 'opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
             display: { xs: 'none', md: 'inline-flex' },
           }}
         >
