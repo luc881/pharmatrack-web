@@ -8,6 +8,8 @@ export const paths = {
   catalogCategory: (slug) => `/catalogo/${slug}`,
   catalogSpecies: (slug) => `/catalogo/${slug}`,
   favorites: '/favoritos',
+  articles: '/articulos',
+  article: (slug) => `/articulos/${slug}`,
   // Dashboard de administración (proyecto aparte)
   appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.farmaciaselene.com',
 };

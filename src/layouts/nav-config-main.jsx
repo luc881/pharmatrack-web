@@ -27,6 +27,11 @@ export const navData = [
     path: paths.catalogCategory(category.slug),
     icon: <Iconify width={22} icon="solar:star-bold-duotone" />,
   })),
+  {
+    title: 'Artículos',
+    path: paths.articles,
+    icon: <Iconify width={22} icon="solar:notebook-bold-duotone" />,
+  },
 ];
 
 // Nav de escritorio: columnas a los lados del logo centrado

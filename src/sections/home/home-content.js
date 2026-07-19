@@ -62,29 +62,3 @@ export const REVIEWS = [
     href: null,
   },
 ];
-
-// Artículos placeholder — la forma real y el backend vienen después.
-// tag: etiqueta mono dorada, photo: null usa un panel neutro editorial.
-export const ARTICLES = [
-  {
-    code: 'ART-001',
-    tag: 'Cuidados',
-    title: 'Guía básica para tu primera tarántula',
-    photo: null,
-    href: '#',
-  },
-  {
-    code: 'ART-002',
-    tag: 'Bioactivo',
-    title: 'Isópodos y colémbolos: el equipo de limpieza del terrario',
-    photo: null,
-    href: '#',
-  },
-  {
-    code: 'ART-003',
-    tag: 'Especies',
-    title: 'Cómo elegir un gecko según tu experiencia',
-    photo: null,
-    href: '#',
-  },
-];

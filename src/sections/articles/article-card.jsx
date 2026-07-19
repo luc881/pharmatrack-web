@@ -1,0 +1,123 @@
+import { varAlpha } from 'minimal-shared/utils';
+
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
+
+import { Image } from 'src/components/image';
+import { Iconify } from 'src/components/iconify';
+
+import { MONO_FONT } from 'src/sections/catalog/scientific';
+
+import { articleSlug } from './utils';
+
+// ----------------------------------------------------------------------
+// Tarjeta editorial numerada estilo phasmaMX: código mono en las esquinas,
+// etiqueta dorada, título grande y CTA que aparece al hover.
+// ----------------------------------------------------------------------
+
+const mono = {
+  fontFamily: MONO_FONT,
+  fontSize: 11,
+  fontWeight: 700,
+  letterSpacing: '0.18em',
+  textTransform: 'uppercase',
+};
+
+export function ArticleCard({ article, index = 0 }) {
+  return (
+    <Link
+      component={RouterLink}
+      href={paths.article(articleSlug(article))}
+      underline="none"
+      sx={(theme) => ({
+        display: 'block',
+        position: 'relative',
+        overflow: 'hidden',
+        borderRadius: 2,
+        aspectRatio: '3/4',
+        bgcolor: theme.vars.palette.grey[900],
+        color: 'common.white',
+        '&:hover .art-img': { transform: 'scale(1.06)' },
+        '&:hover .art-cta': { opacity: 1, transform: 'translateY(0)' },
+      })}
+    >
+      {article.cover_image ? (
+        <Image
+          alt={article.title}
+          src={article.cover_image}
+          className="art-img"
+          sx={{
+            width: 1,
+            height: 1,
+            position: 'absolute',
+            inset: 0,
+            transition: 'transform 0.8s ease',
+          }}
+        />
+      ) : (
+        // Sin portada: panel editorial con un degradado sutil del tono primario
+        <Box
+          className="art-img"
+          sx={(theme) => ({
+            position: 'absolute',
+            inset: 0,
+            transition: 'transform 0.8s ease',
+            backgroundImage: `radial-gradient(at 80% 0%, ${varAlpha(theme.vars.palette.primary.darkerChannel, 0.6)} 0%, transparent 60%)`,
+          })}
+        />
+      )}
+
+      {/* velo para que el texto siempre lea bien sobre la foto */}
+      <Box
+        sx={(theme) => ({
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `linear-gradient(to bottom, ${varAlpha(theme.vars.palette.common.blackChannel, 0.24)} 0%, transparent 35%, ${varAlpha(theme.vars.palette.common.blackChannel, 0.8)} 100%)`,
+        })}
+      />
+
+      <Box sx={{ position: 'absolute', inset: 0, p: 3, display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', opacity: 0.64 }}>
+          <Box component="span" sx={mono}>
+            ART-{String(article.id).padStart(3, '0')}
+          </Box>
+          <Box component="span" sx={mono}>
+            {String(index + 1).padStart(2, '0')}
+          </Box>
+        </Box>
+
+        <Box sx={{ mt: 'auto' }}>
+          {article.category && (
+            <Box component="span" sx={{ ...mono, color: 'warning.light' }}>
+              {article.category}
+            </Box>
+          )}
+
+          <Typography variant="h4" sx={{ mt: 1, mb: 1.5 }}>
+            {article.title}
+          </Typography>
+
+          <Box
+            className="art-cta"
+            sx={{
+              ...mono,
+              gap: 0.75,
+              display: 'flex',
+              alignItems: 'center',
+              opacity: { xs: 1, md: 0 },
+              transform: { md: 'translateY(8px)' },
+              transition: 'opacity 0.45s ease, transform 0.45s ease',
+            }}
+          >
+            Leer artículo
+            <Iconify icon="eva:diagonal-arrow-right-up-fill" width={16} />
+          </Box>
+        </Box>
+      </Box>
+    </Link>
+  );
+}

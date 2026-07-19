@@ -24,7 +24,7 @@ import { HomeArticles } from './home-articles';
 
 // ----------------------------------------------------------------------
 
-export function HomeView({ species, categories }) {
+export function HomeView({ species, categories, articles = [] }) {
   const pageProgress = useScrollProgress();
 
   // ponytail: sin created_at en la respuesta pública, el id ordena por llegada
@@ -47,7 +47,7 @@ export function HomeView({ species, categories }) {
 
         <HomeGroups categories={categories} />
 
-        <HomeArticles />
+        <HomeArticles articles={articles} />
 
         <HomeReviews />
 
