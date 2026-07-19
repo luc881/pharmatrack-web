@@ -1,8 +1,6 @@
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -10,14 +8,13 @@ import { RouterLink } from 'src/routes/components';
 import { fCurrency } from 'src/utils/format-number';
 
 import { Label } from 'src/components/label';
-import { Image } from 'src/components/image';
 
 import { slugify } from './utils';
+import { CatalogCard } from './catalog-card';
 import { TaxonomyBadge } from './scientific';
 
 // ----------------------------------------------------------------------
-// Tarjeta de producto/insumo — espejo de la de especies: zoom que se
-// asienta al hover y barra "Ver detalle" recortada dentro de la foto.
+// Tarjeta de producto/insumo: misma base (y animaciones) que la de especies.
 // ----------------------------------------------------------------------
 
 export function productSlug(product) {
@@ -39,81 +36,22 @@ export function ProductCard({ product }) {
   const unitSuffix = product.unit_name && product.unit_name !== 'pieza' ? product.unit_name : null;
 
   return (
-    <Card
-      sx={{
-        height: 1,
-        '&:hover .img-main img': { transform: 'scale(1.08)' },
-        '&:hover .quick-cta': { transform: 'translateY(0)' },
-      }}
-    >
-      {soldOut && (
-        <Label
-          variant="filled"
-          color="default"
-          sx={{ top: 16, left: 16, zIndex: 9, position: 'absolute' }}
-        >
-          Agotado
-        </Label>
-      )}
-
-      <Box sx={{ p: 1 }}>
-        {/* isolation: sin ella el transform de la barra deja artefactos de
-            pintado (líneas negras) al recortarse con las esquinas redondeadas */}
-        <Box sx={{ borderRadius: 1.5, overflow: 'hidden', position: 'relative', isolation: 'isolate' }}>
-          <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
-            {product.image ? (
-              <Image
-                alt={product.title}
-                src={product.image}
-                ratio="1/1"
-                className="img-main"
-                sx={{ '& img': { transition: 'transform 0.6s ease' } }}
-              />
-            ) : (
-              <Box
-                sx={{
-                  aspectRatio: '1/1',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: 'background.neutral',
-                  color: 'text.disabled',
-                  typography: 'caption',
-                }}
-              >
-                Sin foto
-              </Box>
-            )}
-          </Link>
-
-          <Button
-            className="quick-cta"
-            component={RouterLink}
-            href={href}
-            fullWidth
-            disableElevation
-            variant="contained"
-            color="inherit"
-            sx={{
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 9,
-              height: 42,
-              position: 'absolute',
-              borderRadius: 0,
-              boxShadow: 'none',
-              willChange: 'transform',
-              transform: 'translateY(100%)',
-              transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-              display: { xs: 'none', md: 'inline-flex' },
-            }}
+    <CatalogCard
+      href={href}
+      alt={product.title}
+      photo={product.image}
+      topLeft={
+        soldOut && (
+          <Label
+            variant="filled"
+            color="default"
+            sx={{ top: 16, left: 16, zIndex: 9, position: 'absolute' }}
           >
-            Ver detalle
-          </Button>
-        </Box>
-      </Box>
-
+            Agotado
+          </Label>
+        )
+      }
+    >
       <Stack spacing={0.5} sx={{ p: 3, pt: 2, textAlign: 'center', alignItems: 'center' }}>
         {product.category && <TaxonomyBadge>{product.category}</TaxonomyBadge>}
 
@@ -144,6 +82,6 @@ export function ProductCard({ product }) {
           </Box>
         )}
       </Stack>
-    </Card>
+    </CatalogCard>
   );
 }
