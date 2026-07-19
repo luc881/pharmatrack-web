@@ -4,6 +4,8 @@ import { useMemo, useState } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Chip from '@mui/material/Chip';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
@@ -20,6 +22,7 @@ import { Iconify } from 'src/components/iconify';
 import { EmptyContent } from 'src/components/empty-content';
 
 import { SpeciesCard } from './species-card';
+import { ProductCard } from './product-card';
 import { CatalogSort } from './catalog-sort';
 import { CatalogFilters, SexFilterControl, PriceFilterControl } from './catalog-filters';
 
@@ -40,8 +43,12 @@ const GRID_COLUMNS = {
 // ponytail: el catálogo llega completo del servidor (page_size=100) y los
 // filtros son en memoria; filtrar en servidor cuando pase de 100 animales.
 // items = especies agrupadas (buildSpeciesList) — el público no ve folios.
-export function CatalogView({ items, categories, category = null }) {
+export function CatalogView({ items, categories, category = null, products = [] }) {
   const openFilters = useBoolean();
+
+  // Pestañas Animales/Productos solo en la raíz del catálogo y si hay productos
+  const showTabs = !category && products.length > 0;
+  const [tab, setTab] = useState('animals');
 
   const [sortBy, setSortBy] = useState('newest');
   const [viewMode, setViewMode] = useState('grid3');
@@ -181,10 +188,30 @@ export function CatalogView({ items, categories, category = null }) {
 
   return (
     <Container sx={{ mb: 10 }}>
-      <Typography variant="h3" component="h1" sx={{ mb: { xs: 3, md: 5 }, mt: { xs: 1, md: 3 } }}>
+      <Typography variant="h3" component="h1" sx={{ mb: { xs: 2, md: 3 }, mt: { xs: 1, md: 3 } }}>
         {category ? category.name : 'Catálogo'}
       </Typography>
 
+      {showTabs && (
+        <Tabs value={tab} onChange={(_, value) => setTab(value)} sx={{ mb: { xs: 3, md: 4 } }}>
+          <Tab value="animals" label="Animales vivos" />
+          <Tab value="products" label="Productos e insumos" />
+        </Tabs>
+      )}
+
+      {showTabs && tab === 'products' ? (
+        <Box
+          sx={{
+            gap: 3,
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+          }}
+        >
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </Box>
+      ) : (
       <Box sx={{ gap: 5, display: 'flex', alignItems: 'flex-start' }}>
         {renderSidebar()}
 
@@ -206,6 +233,7 @@ export function CatalogView({ items, categories, category = null }) {
           )}
         </Box>
       </Box>
+      )}
     </Container>
   );
 }

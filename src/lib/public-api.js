@@ -62,3 +62,14 @@ export async function getArticle(id) {
     return null;
   }
 }
+
+// Productos con show_online (insumos de terrario, granel, etc.)
+export async function getProducts() {
+  try {
+    const res = await fetch(`${CONFIG.serverUrl}/api/v1/public/products`, { next: { revalidate: 60 } });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}

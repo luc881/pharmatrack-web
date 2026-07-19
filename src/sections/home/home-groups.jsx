@@ -60,9 +60,9 @@ export function HomeGroups({ categories, sx, ...other }) {
               <Card
                 sx={{
                   position: 'relative',
-                  // deriva lenta tipo Ken Burns: arranque suave, sin brinco inicial
-                  '& img': { transition: 'transform 2.5s cubic-bezier(0.25, 0.1, 0.25, 1)' },
-                  '&:hover img': { transform: 'scale(1.05)' },
+                  // deriva lenta tipo Ken Burns: 4s con arranque y freno suaves
+                  '& img': { transition: 'transform 4s cubic-bezier(0.33, 0, 0.2, 1)' },
+                  '&:hover img': { transform: 'scale(1.09)' },
                   '& .grp-text': {
                     transform: 'translateY(22px)',
                     transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
