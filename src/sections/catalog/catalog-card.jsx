@@ -44,7 +44,7 @@ export function CatalogCard({ href, photo, hoverPhoto = null, alt, topLeft, topR
               '&:hover .img-hover': { opacity: 1, transform: 'scale(1)' },
             }
           : { '&:hover .img-main img': { transform: 'scale(1.08)' } }),
-        '&:hover .quick-cta': { transform: 'translateY(0)' },
+        '&:hover .quick-cta': { opacity: 1 },
         '&:hover .fav-btn': { opacity: 1, transform: 'translateY(0)' },
       }}
     >
@@ -106,9 +106,10 @@ export function CatalogCard({ href, photo, hoverPhoto = null, alt, topLeft, topR
               position: 'absolute',
               borderRadius: 0,
               boxShadow: 'none',
-              willChange: 'transform',
-              transform: 'translateY(100%)',
-              transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              // solo opacidad: animar transform aquí junto con el zoom de la
+              // foto producía rasgaduras de composición en Windows/Chrome
+              opacity: 0,
+              transition: 'opacity 0.35s ease',
               display: { xs: 'none', md: 'inline-flex' },
             }}
           >
