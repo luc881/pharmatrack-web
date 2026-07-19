@@ -70,6 +70,28 @@ export function CatalogView({ items, categories, category = null, products = [] 
 
   const filtered = applyFilter({ items, state, sortBy });
 
+  // ── Pestaña Productos: su propio menú de categorías y filtro de precio ──
+  const productCategories = useMemo(
+    () => [...new Set(products.map((p) => p.category).filter(Boolean))],
+    [products]
+  );
+  const [productCategory, setProductCategory] = useState(null);
+  const productMaxPrice = useMemo(
+    () => Math.ceil(Math.max(...products.map((p) => p.price_retail), 0)),
+    [products]
+  );
+  const [productPrice, setProductPrice] = useState(null); // null = sin filtrar
+  const productFilters = {
+    state: { priceRange: productPrice ?? [0, productMaxPrice] },
+    setState: (patch) => setProductPrice(patch.priceRange),
+    resetState: () => setProductPrice(null),
+  };
+  const filteredProducts = products.filter(
+    (p) =>
+      (!productCategory || p.category === productCategory) &&
+      (!productPrice || (p.price_retail >= productPrice[0] && p.price_retail <= productPrice[1]))
+  );
+
   const renderSidebar = () => (
     <Stack
       component="aside"
@@ -200,16 +222,99 @@ export function CatalogView({ items, categories, category = null, products = [] 
       )}
 
       {showTabs && tab === 'products' ? (
-        <Box
-          sx={{
-            gap: 3,
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-          }}
-        >
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        <Box sx={{ gap: 5, display: 'flex', alignItems: 'flex-start' }}>
+          {/* Sidebar espejo de la de animales: menú de categorías + precio */}
+          <Stack
+            component="aside"
+            spacing={3}
+            sx={{ width: 220, flexShrink: 0, display: { xs: 'none', md: 'flex' } }}
+          >
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+                Menú
+              </Typography>
+              <Stack spacing={1.5}>
+                <Link
+                  component="button"
+                  type="button"
+                  onClick={() => setProductCategory(null)}
+                  variant="body2"
+                  underline="none"
+                  sx={{
+                    textAlign: 'left',
+                    color: productCategory ? 'text.secondary' : 'primary.main',
+                    fontWeight: productCategory ? 400 : 600,
+                  }}
+                >
+                  Todos
+                </Link>
+                {productCategories.map((name) => (
+                  <Link
+                    key={name}
+                    component="button"
+                    type="button"
+                    onClick={() => setProductCategory(name)}
+                    variant="body2"
+                    underline="none"
+                    sx={{
+                      textAlign: 'left',
+                      color: productCategory === name ? 'primary.main' : 'text.secondary',
+                      fontWeight: productCategory === name ? 600 : 400,
+                    }}
+                  >
+                    {name}
+                  </Link>
+                ))}
+              </Stack>
+            </Box>
+
+            <Divider sx={{ borderStyle: 'dashed' }} />
+
+            <PriceFilterControl filters={productFilters} maxPrice={productMaxPrice} />
+          </Stack>
+
+          <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+            {/* Categorías en móvil */}
+            {productCategories.length > 1 && (
+              <Stack direction="row" sx={{ mb: 3, flexWrap: 'wrap', gap: 1, display: { md: 'none' } }}>
+                <Chip
+                  clickable
+                  label="Todos"
+                  size="small"
+                  onClick={() => setProductCategory(null)}
+                  variant={productCategory ? 'outlined' : 'filled'}
+                  color={productCategory ? 'default' : 'primary'}
+                />
+                {productCategories.map((name) => (
+                  <Chip
+                    key={name}
+                    clickable
+                    label={name}
+                    size="small"
+                    onClick={() => setProductCategory(name)}
+                    variant={productCategory === name ? 'filled' : 'outlined'}
+                    color={productCategory === name ? 'primary' : 'default'}
+                  />
+                ))}
+              </Stack>
+            )}
+
+            {filteredProducts.length ? (
+              <Box
+                sx={{
+                  gap: 3,
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+                }}
+              >
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </Box>
+            ) : (
+              <EmptyContent filled title="Sin resultados" sx={{ py: 10 }} />
+            )}
+          </Box>
         </Box>
       ) : (
       <Box sx={{ gap: 5, display: 'flex', alignItems: 'flex-start' }}>

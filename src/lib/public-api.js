@@ -73,3 +73,13 @@ export async function getProducts() {
     return [];
   }
 }
+
+export async function getProduct(id) {
+  try {
+    const res = await fetch(`${CONFIG.serverUrl}/api/v1/public/products/${id}`, { next: { revalidate: 60 } });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
