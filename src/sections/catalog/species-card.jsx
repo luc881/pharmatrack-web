@@ -204,9 +204,9 @@ export function SpeciesCard({ item, horizontal = false }) {
       />
 
       <Box sx={{ p: 1 }}>
-        {/* El contenedor redondeado recorta también la franja de Ver detalle:
-            se desliza dentro de la foto y nunca se asoma fuera de ella */}
-        <Box sx={{ borderRadius: 1.5, overflow: 'hidden', position: 'relative' }}>
+        {/* El contenedor redondeado recorta también la franja de Ver detalle;
+            isolation evita artefactos de pintado del transform recortado */}
+        <Box sx={{ borderRadius: 1.5, overflow: 'hidden', position: 'relative', isolation: 'isolate' }}>
           <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
             {photos[0] ? (
               <>
@@ -246,6 +246,7 @@ export function SpeciesCard({ item, horizontal = false }) {
             component={RouterLink}
             href={href}
             fullWidth
+            disableElevation
             variant="contained"
             color="inherit"
             sx={{
@@ -256,6 +257,8 @@ export function SpeciesCard({ item, horizontal = false }) {
               height: 42,
               position: 'absolute',
               borderRadius: 0,
+              boxShadow: 'none',
+              willChange: 'transform',
               transform: 'translateY(100%)',
               transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
               display: { xs: 'none', md: 'inline-flex' },

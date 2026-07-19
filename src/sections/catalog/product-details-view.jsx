@@ -20,8 +20,8 @@ import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
 
 import { SHOP_INFO } from './shop-info';
-import { ProductCard } from './product-card';
 import { TaxonomyBadge } from './scientific';
+import { ProductCard, isBulkWeight } from './product-card';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +29,8 @@ const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP ?? '';
 
 export function ProductDetailsView({ product, related = [] }) {
   const soldOut = product.tracks_batches && (product.stock ?? 0) <= 0;
-  const perUnit = !product.is_unit_sale && product.unit_name;
+  const perWeight = isBulkWeight(product);
+  const unitSuffix = product.unit_name && product.unit_name !== 'pieza' ? product.unit_name : null;
 
   const whatsappText = `Hola, me interesa el producto ${product.title}`;
   const paragraphs = (product.description ?? '').split('\n').filter(Boolean);
@@ -97,14 +98,14 @@ export function ProductDetailsView({ product, related = [] }) {
             <Box>
               <Typography variant="h3">
                 {fCurrency(product.price_retail)}
-                {perUnit && (
+                {unitSuffix && (
                   <Box component="span" sx={{ typography: 'h6', color: 'text.secondary', fontWeight: 400 }}>
                     {' '}
-                    / {product.unit_name}
+                    / {unitSuffix}
                   </Box>
                 )}
               </Typography>
-              {perUnit ? (
+              {perWeight ? (
                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   Venta a granel: eliges la pieza, se pesa en tienda y se cobra por{' '}
                   {product.unit_name}.

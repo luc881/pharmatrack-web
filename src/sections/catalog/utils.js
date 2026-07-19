@@ -13,12 +13,16 @@ export function scientificName(species) {
 // ----------------------------------------------------------------------
 
 export function slugify(name) {
-  return name
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-');
+  return (
+    name
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      // todo lo que no sea alfanumérico se vuelve guion: títulos con "/",
+      // "+" o paréntesis rompían la ruta [slug] (el "/" partía la URL)
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  );
 }
 
 // Sube por parent_id hasta el grupo raíz (arácnidos, reptiles, etc.)

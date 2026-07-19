@@ -24,11 +24,19 @@ export function productSlug(product) {
   return `${slugify(product.title)}-${product.id}`;
 }
 
+// Granel = el precio es por unidad de MEDIDA (se pesa/mide al vender).
+// No usar is_unit_sale: en el modelo de farmacia significa otra cosa
+// (venta por pieza suelta de un empaque).
+export function isBulkWeight(product) {
+  return ['g', 'kg', 'ml', 'l'].includes((product.unit_name ?? '').toLowerCase());
+}
+
 export function ProductCard({ product }) {
   const href = paths.product(productSlug(product));
   const soldOut = product.tracks_batches && (product.stock ?? 0) <= 0;
-  // venta libre por peso: el precio es por unidad de medida (p. ej. gramo)
-  const perUnit = !product.is_unit_sale && product.unit_name;
+  const perWeight = isBulkWeight(product);
+  // sufijo de precio para cualquier unidad distinta de pieza (caja, bolsa, g…)
+  const unitSuffix = product.unit_name && product.unit_name !== 'pieza' ? product.unit_name : null;
 
   return (
     <Card
@@ -49,7 +57,9 @@ export function ProductCard({ product }) {
       )}
 
       <Box sx={{ p: 1 }}>
-        <Box sx={{ borderRadius: 1.5, overflow: 'hidden', position: 'relative' }}>
+        {/* isolation: sin ella el transform de la barra deja artefactos de
+            pintado (líneas negras) al recortarse con las esquinas redondeadas */}
+        <Box sx={{ borderRadius: 1.5, overflow: 'hidden', position: 'relative', isolation: 'isolate' }}>
           <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
             {product.image ? (
               <Image
@@ -81,6 +91,7 @@ export function ProductCard({ product }) {
             component={RouterLink}
             href={href}
             fullWidth
+            disableElevation
             variant="contained"
             color="inherit"
             sx={{
@@ -91,6 +102,8 @@ export function ProductCard({ product }) {
               height: 42,
               position: 'absolute',
               borderRadius: 0,
+              boxShadow: 'none',
+              willChange: 'transform',
               transform: 'translateY(100%)',
               transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
               display: { xs: 'none', md: 'inline-flex' },
@@ -117,15 +130,15 @@ export function ProductCard({ product }) {
 
         <Box component="span" sx={{ pt: 1, typography: 'subtitle1' }}>
           {fCurrency(product.price_retail)}
-          {perUnit && (
+          {unitSuffix && (
             <Box component="span" sx={{ typography: 'body2', color: 'text.secondary' }}>
               {' '}
-              / {product.unit_name}
+              / {unitSuffix}
             </Box>
           )}
         </Box>
 
-        {perUnit && (
+        {perWeight && (
           <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
             Venta a granel — se pesa en tienda
           </Box>
