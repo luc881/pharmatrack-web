@@ -60,9 +60,9 @@ export function HomeGroups({ categories, sx, ...other }) {
               <Card
                 sx={{
                   position: 'relative',
-                  // zoom lento con easing suave + el texto sube y revela el CTA
-                  '& img': { transition: 'transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)' },
-                  '&:hover img': { transform: 'scale(1.07)' },
+                  // deriva lenta tipo Ken Burns: arranque suave, sin brinco inicial
+                  '& img': { transition: 'transform 2.5s cubic-bezier(0.25, 0.1, 0.25, 1)' },
+                  '&:hover img': { transform: 'scale(1.05)' },
                   '& .grp-text': {
                     transform: 'translateY(22px)',
                     transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',

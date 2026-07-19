@@ -183,7 +183,7 @@ export function SpeciesCard({ item, horizontal = false }) {
               '&:hover .img-hover': { opacity: 1, transform: 'scale(1)' },
             }
           : { '&:hover .img-main img': { transform: 'scale(1.08)' } }),
-        '&:hover .quick-cta': { opacity: 1, transform: 'translateY(0)' },
+        '&:hover .quick-cta': { transform: 'translateY(0)' },
         '&:hover .fav-btn': { opacity: 1, transform: 'translateY(0)' },
       }}
     >
@@ -203,9 +203,11 @@ export function SpeciesCard({ item, horizontal = false }) {
         sx={{ top: 16, right: 16, zIndex: 9, position: 'absolute' }}
       />
 
-      <Box sx={{ p: 1, position: 'relative' }}>
-        <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
-          <Box sx={{ borderRadius: 1.5, overflow: 'hidden', position: 'relative' }}>
+      <Box sx={{ p: 1 }}>
+        {/* El contenedor redondeado recorta también la franja de Ver detalle:
+            se desliza dentro de la foto y nunca se asoma fuera de ella */}
+        <Box sx={{ borderRadius: 1.5, overflow: 'hidden', position: 'relative' }}>
+          <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
             {photos[0] ? (
               <>
                 <Image
@@ -237,35 +239,31 @@ export function SpeciesCard({ item, horizontal = false }) {
             ) : (
               <NoPhoto />
             )}
-          </Box>
-        </Link>
+          </Link>
 
-        {/* Barra integrada al contenedor de la imagen: mismo ancho y esquinas,
-            sube desde el borde inferior en lugar de flotar encima de la foto */}
-        <Button
-          className="quick-cta"
-          component={RouterLink}
-          href={href}
-          fullWidth
-          variant="contained"
-          color="inherit"
-          sx={{
-            left: 8,
-            right: 8,
-            bottom: 8,
-            zIndex: 9,
-            width: 'auto',
-            height: 42,
-            position: 'absolute',
-            borderRadius: '0 0 12px 12px',
-            opacity: 0,
-            transform: 'translateY(100%)',
-            transition: 'opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-            display: { xs: 'none', md: 'inline-flex' },
-          }}
-        >
-          Ver detalle
-        </Button>
+          <Button
+            className="quick-cta"
+            component={RouterLink}
+            href={href}
+            fullWidth
+            variant="contained"
+            color="inherit"
+            sx={{
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 9,
+              height: 42,
+              position: 'absolute',
+              borderRadius: 0,
+              transform: 'translateY(100%)',
+              transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              display: { xs: 'none', md: 'inline-flex' },
+            }}
+          >
+            Ver detalle
+          </Button>
+        </Box>
       </Box>
 
       <Stack spacing={0.5} sx={{ p: 3, pt: 2, textAlign: 'center', alignItems: 'center' }}>
