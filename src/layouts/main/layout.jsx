@@ -164,15 +164,11 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
           {/** @slot Logo (solo móvil: en desktop va centrado) */}
           <Logo sx={(theme) => ({ [theme.breakpoints.up(layoutQuery)]: { display: 'none' } })} />
 
-          {/** @slot Búsqueda — abre el modal con navegación por teclado (⌘K) */}
+          {/** @slot Búsqueda — abre el modal (⌘K en desktop); visible también en móvil */}
           <IconButton
             onClick={search.onTrue}
             aria-label="Buscar en el catálogo"
-            sx={(theme) => ({
-              color: 'common.white',
-              display: 'none',
-              [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
-            })}
+            sx={{ color: 'common.white' }}
           >
             <Iconify icon="ri:search-line" width={22} />
           </IconButton>

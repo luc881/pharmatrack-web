@@ -22,8 +22,17 @@ export function CloseCursor() {
   const rootRef = useRef(null);
   const lastPoint = useRef({ x: 0, y: 0 });
   const [active, setActive] = useState(false);
+  // Solo para dispositivos con mouse: en touch los pointermove de los toques
+  // dejaban la X congelada flotando en el último punto tocado
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    setEnabled(window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return undefined;
+
     const handleMove = (event) => {
       lastPoint.current = { x: event.clientX, y: event.clientY };
       const el = rootRef.current;
@@ -49,7 +58,9 @@ export function CloseCursor() {
       document.removeEventListener('pointermove', handleMove);
       document.removeEventListener('click', handleClick, true);
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <Box

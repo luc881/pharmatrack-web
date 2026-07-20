@@ -34,17 +34,20 @@
 * Clic fuera cierra el lightbox o el modal: el cursor nativo se oculta y
 * lo reemplaza la X animada de <CloseCursor /> (layouts/components)
 *************************************** */
-.yarl__container,
-.MuiModal-backdrop {
-  cursor: none;
-}
+/* solo dispositivos con mouse: en touch no hay cursor que reemplazar */
+@media (hover: hover) and (pointer: fine) {
+  .yarl__container,
+  .MuiModal-backdrop {
+    cursor: none;
+  }
 
-/* dentro del contenido el cursor vuelve a la normalidad */
-.yarl__slide_image {
-  cursor: default;
-}
-.yarl__button {
-  cursor: pointer;
+  /* dentro del contenido el cursor vuelve a la normalidad */
+  .yarl__slide_image {
+    cursor: default;
+  }
+  .yarl__button {
+    cursor: pointer;
+  }
 }
 
 /** **************************************
