@@ -3,8 +3,7 @@ import packageJson from '../package.json';
 // ----------------------------------------------------------------------
 
 export const CONFIG = {
-  // ponytail: nombre placeholder derivado del dominio; cambiarlo cuando definan la marca
-  appName: 'Selene Exotics',
+  appName: 'Opuntia Den',
   appVersion: packageJson.version,
   // Defaults de producción: el .env está gitignoreado, así Vercel funciona sin configurar nada
   serverUrl: process.env.NEXT_PUBLIC_SERVER_URL ?? 'https://api.farmaciaselene.com',

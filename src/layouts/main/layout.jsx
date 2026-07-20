@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { varAlpha } from 'minimal-shared/utils';
 import { useBoolean } from 'minimal-shared/hooks';
 
@@ -30,7 +30,7 @@ import { SearchDialog } from '../components/search-dialog';
 import { SignInButton } from '../components/sign-in-button';
 import { FavoritesButton } from '../components/favorites-button';
 import { MainSection, LayoutSection, HeaderSection } from '../core';
-import { navLeft, navRight, navData as mainNavData } from '../nav-config-main';
+import { splitNav, buildNavData, navData as mainNavData } from '../nav-config-main';
 
 // ----------------------------------------------------------------------
 
@@ -102,7 +102,25 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onToggleSearch]);
 
-  const navData = slotProps?.nav?.data ?? mainNavData;
+  // Categorías visibles del backend (proxy same-origin). Mientras carga usa el
+  // fallback fijo; al llegar, esconde los grupos marcados como no públicos.
+  const [categories, setCategories] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    fetch('/api/nav-categories/')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (alive && Array.isArray(data)) setCategories(data);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const dynamicNav = categories ? buildNavData(categories) : mainNavData;
+  const { left: navLeft, right: navRight } = splitNav(dynamicNav);
+  const navData = slotProps?.nav?.data ?? dynamicNav;
 
   const renderHeader = () => {
     const headerSlots = {
