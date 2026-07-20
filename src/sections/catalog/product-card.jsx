@@ -13,6 +13,7 @@ import { slugify } from './utils';
 import { offerPct } from './species-card';
 import { CatalogCard } from './catalog-card';
 import { TaxonomyBadge } from './scientific';
+import { QuickAddButton } from './quick-add-button';
 
 // ----------------------------------------------------------------------
 // Tarjeta de producto/insumo: misma base (y animaciones) que la de especies.
@@ -37,11 +38,30 @@ export function ProductCard({ product }) {
   // sufijo de precio para cualquier unidad distinta de pieza (caja, bolsa, g…)
   const unitSuffix = product.unit_name && product.unit_name !== 'pieza' ? product.unit_name : null;
 
+  const cartItem = {
+    key: `pr-${product.id}`,
+    title: product.title,
+    detail: product.category ?? null,
+    price: product.price_retail,
+    // granel: la cantidad son gramos (arranca en 100)
+    qty: perWeight ? 100 : 1,
+    unit: perWeight ? product.unit_name : null,
+    image: product.image ?? null,
+  };
+
   return (
     <CatalogCard
       href={href}
       alt={product.title}
       photo={product.image}
+      topRight={
+        !soldOut && (
+          <QuickAddButton
+            item={cartItem}
+            sx={{ top: 16, right: 16, zIndex: 9, position: 'absolute' }}
+          />
+        )
+      }
       topLeft={
         (soldOut || pct) && (
           <Stack spacing={0.5} sx={{ top: 16, left: 16, zIndex: 9, position: 'absolute', alignItems: 'flex-start' }}>

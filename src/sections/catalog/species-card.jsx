@@ -17,6 +17,7 @@ import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
 
 import { useFavorites } from './use-favorites';
+import { QuickAddButton } from './quick-add-button';
 import { NoPhoto, CatalogCard } from './catalog-card';
 import { scientificName, saleFormatLabel } from './utils';
 import { TaxonomyBadge, ScientificName } from './scientific';
@@ -101,6 +102,18 @@ export function SpeciesCard({ item, horizontal = false }) {
   const href = paths.catalogSpecies(slug);
   const hoverPhoto = photos[1];
 
+  // Agregado rápido: con escalas de precio usa el paquete más chico
+  // (misma llave que el detalle para que se acumulen juntos)
+  const firstTier = (species.price_tiers ?? [])[0];
+  const cartItem = {
+    key: `sp-${species.id}-${firstTier?.quantity ?? 'u'}`,
+    title,
+    detail: firstTier ? `Paquete de ${firstTier.quantity}` : sci,
+    price: firstTier ? firstTier.price : minPrice,
+    qty: 1,
+    image: photos[0] ?? null,
+  };
+
   if (horizontal) {
     return (
       <Card sx={{ display: 'flex', '&:hover img': { transform: 'scale(1.06)' } }}>
@@ -164,6 +177,7 @@ export function SpeciesCard({ item, horizontal = false }) {
               Ver detalle
             </Button>
             <FavoriteButton speciesId={species.id} />
+            <QuickAddButton item={cartItem} sx={{ opacity: 1, transform: 'none' }} />
           </Box>
         </Stack>
       </Card>
@@ -193,11 +207,10 @@ export function SpeciesCard({ item, horizontal = false }) {
         )
       }
       topRight={
-        <FavoriteButton
-          reveal
-          speciesId={species.id}
-          sx={{ top: 16, right: 16, zIndex: 9, position: 'absolute' }}
-        />
+        <Stack spacing={0.75} sx={{ top: 16, right: 16, zIndex: 9, position: 'absolute' }}>
+          <FavoriteButton reveal speciesId={species.id} />
+          <QuickAddButton item={cartItem} />
+        </Stack>
       }
     >
       <Stack spacing={0.5} sx={{ p: 3, pt: 2, textAlign: 'center', alignItems: 'center' }}>
