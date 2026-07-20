@@ -56,7 +56,7 @@ export function SearchDialog({ open, onClose }) {
   const results = !q
     ? []
     : (items ?? [])
-        .filter((item) => normalize(item.title).includes(q) || normalize(item.sci).includes(q))
+        .filter((item) => normalize(item.title).includes(q) || normalize(item.sub).includes(q))
         .slice(0, MAX_RESULTS);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export function SearchDialog({ open, onClose }) {
     (item) => {
       onClose();
       setQuery('');
-      router.push(paths.catalogSpecies(item.slug));
+      router.push(item.url);
     },
     [onClose, router]
   );
@@ -110,7 +110,7 @@ export function SearchDialog({ open, onClose }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Busca por nombre común o científico…"
+          placeholder="Busca animales, productos o artículos…"
           startAdornment={
             <InputAdornment position="start">
               <Iconify icon="ri:search-line" width={22} sx={{ color: 'text.disabled' }} />
@@ -178,13 +178,21 @@ export function SearchDialog({ open, onClose }) {
               <Typography variant="subtitle2" noWrap>
                 {item.title}
               </Typography>
-              <ScientificName sx={{ display: 'block', typography: 'caption' }}>
-                {item.sci}
-              </ScientificName>
+              {item.type === 'species' ? (
+                <ScientificName sx={{ display: 'block', typography: 'caption' }}>
+                  {item.sub}
+                </ScientificName>
+              ) : (
+                <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }} noWrap>
+                  {item.sub}
+                </Typography>
+              )}
             </Box>
-            <Typography variant="subtitle2" sx={{ flexShrink: 0 }}>
-              {fCurrency(item.price)}
-            </Typography>
+            {item.price != null && (
+              <Typography variant="subtitle2" sx={{ flexShrink: 0 }}>
+                {fCurrency(item.price)}
+              </Typography>
+            )}
           </Box>
         ))}
       </Box>
