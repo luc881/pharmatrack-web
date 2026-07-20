@@ -97,6 +97,14 @@ export function ProductDetailsView({ product, related = [] }) {
 
             <Box>
               <Typography variant="h3">
+                {product.compare_at_price > product.price_retail && (
+                  <Box
+                    component="span"
+                    sx={{ mr: 1.5, typography: 'h5', fontWeight: 400, color: 'text.disabled', textDecoration: 'line-through' }}
+                  >
+                    {fCurrency(product.compare_at_price)}
+                  </Box>
+                )}
                 {fCurrency(product.price_retail)}
                 {unitSuffix && (
                   <Box component="span" sx={{ typography: 'h6', color: 'text.secondary', fontWeight: 400 }}>
@@ -160,6 +168,41 @@ export function ProductDetailsView({ product, related = [] }) {
           </Stack>
         </Grid>
       </Grid>
+
+      {(product.components ?? []).length > 0 && (
+        <Box component="section" sx={{ mt: { xs: 6, md: 10 } }}>
+          <Typography variant="h4" sx={{ mb: 3 }}>
+            Este paquete incluye
+          </Typography>
+          <Stack
+            divider={<Divider sx={{ borderStyle: 'dashed' }} />}
+            sx={(theme) => ({ maxWidth: 560, borderRadius: 2, border: `solid 1px ${theme.vars.palette.divider}` })}
+          >
+            {product.components.map((component) => (
+              <Box key={component.product_id} sx={{ p: 2, gap: 2, display: 'flex', alignItems: 'center' }}>
+                <Box
+                  sx={{
+                    width: 48,
+                    height: 48,
+                    flexShrink: 0,
+                    borderRadius: 1,
+                    overflow: 'hidden',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {component.image && <Image alt={component.title} src={component.image} ratio="1/1" />}
+                </Box>
+                <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
+                  {component.title}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  × {component.quantity}
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
+        </Box>
+      )}
 
       {paragraphs.length > 1 && (
         <Box component="section" sx={{ mt: { xs: 6, md: 10 }, mx: 'auto', maxWidth: 720 }}>

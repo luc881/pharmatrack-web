@@ -10,6 +10,7 @@ import { fCurrency } from 'src/utils/format-number';
 import { Label } from 'src/components/label';
 
 import { slugify } from './utils';
+import { offerPct } from './species-card';
 import { CatalogCard } from './catalog-card';
 import { TaxonomyBadge } from './scientific';
 
@@ -31,6 +32,7 @@ export function isBulkWeight(product) {
 export function ProductCard({ product }) {
   const href = paths.product(productSlug(product));
   const soldOut = product.tracks_batches && (product.stock ?? 0) <= 0;
+  const pct = offerPct(product.price_retail, product.compare_at_price);
   const perWeight = isBulkWeight(product);
   // sufijo de precio para cualquier unidad distinta de pieza (caja, bolsa, g…)
   const unitSuffix = product.unit_name && product.unit_name !== 'pieza' ? product.unit_name : null;
@@ -41,14 +43,19 @@ export function ProductCard({ product }) {
       alt={product.title}
       photo={product.image}
       topLeft={
-        soldOut && (
-          <Label
-            variant="filled"
-            color="default"
-            sx={{ top: 16, left: 16, zIndex: 9, position: 'absolute' }}
-          >
-            Agotado
-          </Label>
+        (soldOut || pct) && (
+          <Stack spacing={0.5} sx={{ top: 16, left: 16, zIndex: 9, position: 'absolute', alignItems: 'flex-start' }}>
+            {pct && !soldOut && (
+              <Label variant="filled" color="error">
+                -{pct}%
+              </Label>
+            )}
+            {soldOut && (
+              <Label variant="filled" color="default">
+                Agotado
+              </Label>
+            )}
+          </Stack>
         )
       }
     >
@@ -67,6 +74,14 @@ export function ProductCard({ product }) {
         </Link>
 
         <Box component="span" sx={{ pt: 1, typography: 'subtitle1' }}>
+          {product.compare_at_price > product.price_retail && (
+            <Box
+              component="span"
+              sx={{ mr: 0.75, typography: 'body2', color: 'text.disabled', textDecoration: 'line-through' }}
+            >
+              {fCurrency(product.compare_at_price)}
+            </Box>
+          )}
           {fCurrency(product.price_retail)}
           {unitSuffix && (
             <Box component="span" sx={{ typography: 'body2', color: 'text.secondary' }}>

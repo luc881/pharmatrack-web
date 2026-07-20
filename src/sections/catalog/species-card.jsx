@@ -62,7 +62,7 @@ function FavoriteButton({ speciesId, reveal = false, sx }) {
   );
 }
 
-function PriceText({ minPrice, maxPrice, sx }) {
+function PriceText({ minPrice, maxPrice, compareAt = null, sx }) {
   return (
     <Box component="span" sx={[{ typography: 'subtitle1' }, ...(Array.isArray(sx) ? sx : [sx])]}>
       {minPrice !== maxPrice && (
@@ -70,15 +70,30 @@ function PriceText({ minPrice, maxPrice, sx }) {
           Desde
         </Box>
       )}
+      {compareAt > minPrice && (
+        <Box
+          component="span"
+          sx={{ mr: 0.75, typography: 'body2', color: 'text.disabled', textDecoration: 'line-through' }}
+        >
+          {fCurrency(compareAt)}
+        </Box>
+      )}
       {fCurrency(minPrice)}
     </Box>
   );
 }
 
+// "-15%" cuando hay precio anterior
+export function offerPct(price, compareAt) {
+  if (!compareAt || compareAt <= price) return null;
+  return Math.round((1 - price / compareAt) * 100);
+}
+
 // ----------------------------------------------------------------------
 
 export function SpeciesCard({ item, horizontal = false }) {
-  const { species, slug, photos, minPrice, maxPrice } = item;
+  const { species, slug, photos, minPrice, maxPrice, compareAt = null } = item;
+  const pct = offerPct(minPrice, compareAt);
   const sci = scientificName(species);
   const title = species.common_name ?? sci;
   const formatLabel = saleFormatLabel(species);
@@ -142,7 +157,7 @@ export function SpeciesCard({ item, horizontal = false }) {
             {sci}
           </ScientificName>
 
-          <PriceText minPrice={minPrice} maxPrice={maxPrice} />
+          <PriceText minPrice={minPrice} maxPrice={maxPrice} compareAt={compareAt} />
 
           <Box sx={{ pt: 1, gap: 1, display: 'flex', alignItems: 'center' }}>
             <Button component={RouterLink} href={href} size="small" variant="outlined">
@@ -162,14 +177,19 @@ export function SpeciesCard({ item, horizontal = false }) {
       photo={photos[0]}
       hoverPhoto={hoverPhoto}
       topLeft={
-        formatLabel && (
-          <Label
-            variant="filled"
-            color="info"
-            sx={{ top: 16, left: 16, zIndex: 9, position: 'absolute' }}
-          >
-            {formatLabel}
-          </Label>
+        (formatLabel || pct) && (
+          <Stack spacing={0.5} sx={{ top: 16, left: 16, zIndex: 9, position: 'absolute', alignItems: 'flex-start' }}>
+            {pct && (
+              <Label variant="filled" color="error">
+                -{pct}%
+              </Label>
+            )}
+            {formatLabel && (
+              <Label variant="filled" color="info">
+                {formatLabel}
+              </Label>
+            )}
+          </Stack>
         )
       }
       topRight={
@@ -206,7 +226,7 @@ export function SpeciesCard({ item, horizontal = false }) {
           {sci}
         </ScientificName>
 
-        <PriceText minPrice={minPrice} maxPrice={maxPrice} sx={{ pt: 1 }} />
+        <PriceText minPrice={minPrice} maxPrice={maxPrice} compareAt={compareAt} sx={{ pt: 1 }} />
       </Stack>
     </CatalogCard>
   );

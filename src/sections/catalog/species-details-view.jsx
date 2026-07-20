@@ -79,7 +79,7 @@ function ShareButton({ title }) {
 // ----------------------------------------------------------------------
 
 export function SpeciesDetailsView({ item, category = null, related = [] }) {
-  const { species, photos, morphs, sexes, minPrice, maxPrice } = item;
+  const { species, photos, morphs, sexes, minPrice, maxPrice, compareAt = null } = item;
 
   const { ids, toggle } = useFavorites();
   const isFavorite = ids.includes(species.id);
@@ -204,6 +204,14 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
                 {!selectedTier && minPrice !== maxPrice && (
                   <Box component="span" sx={{ typography: 'h6', color: 'text.secondary', mr: 1, fontWeight: 400 }}>
                     Desde
+                  </Box>
+                )}
+                {!selectedTier && compareAt > minPrice && (
+                  <Box
+                    component="span"
+                    sx={{ mr: 1.5, typography: 'h5', fontWeight: 400, color: 'text.disabled', textDecoration: 'line-through' }}
+                  >
+                    {fCurrency(compareAt)}
                   </Box>
                 )}
                 {fCurrency(selectedTier ? selectedTier.price : minPrice)}

@@ -76,6 +76,8 @@ export function buildSpeciesList(animals) {
         slug: speciesSlug(animal.species),
         minPrice: animal.price,
         maxPrice: animal.price,
+        // precio anterior (tachado) del ejemplar más barato — la oferta visible
+        compareAt: animal.compare_at_price ?? null,
         latestId: animal.id,
         photos: [],
         morphs: [],
@@ -83,7 +85,10 @@ export function buildSpeciesList(animals) {
       };
       map.set(animal.species.id, entry);
     }
-    entry.minPrice = Math.min(entry.minPrice, animal.price);
+    if (animal.price < entry.minPrice) {
+      entry.minPrice = animal.price;
+      entry.compareAt = animal.compare_at_price ?? null;
+    }
     entry.maxPrice = Math.max(entry.maxPrice, animal.price);
     entry.latestId = Math.max(entry.latestId, animal.id);
     if (!entry.sexes.includes(animal.sex)) entry.sexes.push(animal.sex);
@@ -99,7 +104,8 @@ export function buildSpeciesList(animals) {
     const tiers = entry.species.price_tiers;
     if (tiers?.length) {
       const prices = tiers.map((t) => t.price);
-      return { ...entry, minPrice: Math.min(...prices), maxPrice: Math.max(...prices) };
+      // con escalas de precio la oferta por ejemplar no aplica
+      return { ...entry, minPrice: Math.min(...prices), maxPrice: Math.max(...prices), compareAt: null };
     }
     return entry;
   });
