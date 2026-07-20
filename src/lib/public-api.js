@@ -38,6 +38,20 @@ export async function getAnimal(id) {
   }
 }
 
+// Ajustes públicos del sitio (p. ej. show_category_browse). Si el API no
+// responde, defaults sensatos para no romper la home.
+export async function getSiteSettings() {
+  try {
+    const res = await fetch(`${CONFIG.serverUrl}/api/v1/settings/site`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return { show_category_browse: true };
+    return await res.json();
+  } catch {
+    return { show_category_browse: true };
+  }
+}
+
 // ----------------------------------------------------------------------
 // Artículos de divulgación (solo publicados)
 

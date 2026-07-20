@@ -22,7 +22,15 @@ const slowFade = (dir) => varFade(dir, { distance: 40, transitionIn: { duration:
 
 // ----------------------------------------------------------------------
 
-export function HomeFeatured({ items, sx, ...other }) {
+export function HomeFeatured({
+  items,
+  label = 'Novedades',
+  title = 'Recién llegados',
+  href = paths.catalog,
+  ctaLabel = 'Ver todo el catálogo',
+  sx,
+  ...other
+}) {
   const carousel = useCarousel(
     {
       align: 'start',
@@ -47,12 +55,12 @@ export function HomeFeatured({ items, sx, ...other }) {
         sx={{ textAlign: 'center', py: { xs: 8, md: 12 } }}
       >
         <m.div variants={slowFade('inDown')}>
-          <SectionLabel>Novedades</SectionLabel>
+          <SectionLabel>{label}</SectionLabel>
         </m.div>
 
         <m.div variants={slowFade('inUp')}>
           <Typography variant="h2" sx={{ mt: 2, mb: 3 }}>
-            Recién llegados
+            {title}
           </Typography>
         </m.div>
 
@@ -77,14 +85,14 @@ export function HomeFeatured({ items, sx, ...other }) {
 
         <Button
           component={RouterLink}
-          href={paths.catalog}
+          href={href}
           size="large"
           color="inherit"
           variant="outlined"
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={24} />}
           sx={{ mx: 'auto' }}
         >
-          Ver todo el catálogo
+          {ctaLabel}
         </Button>
       </Container>
     </Box>

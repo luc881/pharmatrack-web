@@ -24,7 +24,13 @@ import { HomeArticles } from './home-articles';
 
 // ----------------------------------------------------------------------
 
-export function HomeView({ species, categories, articles = [] }) {
+export function HomeView({
+  species,
+  categories,
+  featuredCategories = [],
+  showCategoryBrowse = true,
+  articles = [],
+}) {
   const pageProgress = useScrollProgress();
 
   // ponytail: sin created_at en la respuesta pública, el id ordena por llegada
@@ -45,7 +51,19 @@ export function HomeView({ species, categories, articles = [] }) {
       <Stack sx={{ position: 'relative', bgcolor: 'background.default' }}>
         <HomeFeatured items={featured} />
 
-        <HomeGroups categories={categories} />
+        {/* Mini-catálogos por categoría destacada (toggle por grupo en el dashboard) */}
+        {featuredCategories.map((category) => (
+          <HomeFeatured
+            key={category.id}
+            items={category.species}
+            label="Categoría"
+            title={category.name}
+            href={paths.catalogCategory(category.slug)}
+            ctaLabel={`Ver todos los ${category.name.toLowerCase()}`}
+          />
+        ))}
+
+        {showCategoryBrowse && <HomeGroups categories={categories} />}
 
         <HomeArticles articles={articles} />
 
