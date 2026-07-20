@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
@@ -19,6 +21,7 @@ import { Label } from 'src/components/label';
 import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
 
+import { useCart } from './use-cart';
 import { SHOP_INFO } from './shop-info';
 import { TaxonomyBadge } from './scientific';
 import { ProductCard, isBulkWeight } from './product-card';
@@ -28,6 +31,8 @@ import { ProductCard, isBulkWeight } from './product-card';
 const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP ?? '';
 
 export function ProductDetailsView({ product, related = [] }) {
+  const cart = useCart();
+  const [added, setAdded] = useState(false);
   const soldOut = product.tracks_batches && (product.stock ?? 0) <= 0;
   const perWeight = isBulkWeight(product);
   const unitSuffix = product.unit_name && product.unit_name !== 'pieza' ? product.unit_name : null;
@@ -134,6 +139,32 @@ export function ProductDetailsView({ product, related = [] }) {
 
             <Divider sx={{ borderStyle: 'dashed' }} />
 
+            {!soldOut && (
+              <Button
+                fullWidth
+                size="large"
+                variant="contained"
+                color="primary"
+                startIcon={<Iconify icon="solar:cart-plus-bold" width={22} />}
+                onClick={() => {
+                  cart.add({
+                    key: `pr-${product.id}`,
+                    title: product.title,
+                    detail: product.category ?? null,
+                    price: product.price_retail,
+                    // granel: la cantidad son gramos (arranca en 100)
+                    qty: perWeight ? 100 : 1,
+                    unit: perWeight ? product.unit_name : null,
+                    image: product.image ?? null,
+                  });
+                  setAdded(true);
+                  setTimeout(() => setAdded(false), 2000);
+                }}
+              >
+                {added ? 'Agregado ✓' : 'Agregar a cotización'}
+              </Button>
+            )}
+
             {WHATSAPP && !soldOut && (
               <Button
                 fullWidth
@@ -141,7 +172,7 @@ export function ProductDetailsView({ product, related = [] }) {
                 target="_blank"
                 rel="noopener"
                 size="large"
-                variant="contained"
+                variant="outlined"
                 color="success"
                 startIcon={<Iconify icon="solar:chat-round-dots-bold" width={22} />}
               >

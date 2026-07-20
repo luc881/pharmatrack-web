@@ -24,6 +24,7 @@ import { SOCIALS, ANNOUNCEMENT } from 'src/sections/catalog/shop-info';
 import { NavMobile } from './nav/mobile';
 import { Footer, HomeFooter } from './footer';
 import { MenuButton } from '../components/menu-button';
+import { CartButton } from '../components/cart-button';
 import { CloseCursor } from '../components/close-cursor';
 import { SearchDialog } from '../components/search-dialog';
 import { SignInButton } from '../components/sign-in-button';
@@ -211,6 +212,9 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
       ),
       rightArea: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 }, color: 'common.white' }}>
+          {/** @slot Carrito de cotización */}
+          <CartButton sx={{ color: 'inherit' }} />
+
           {/** @slot Favorites button */}
           <FavoritesButton sx={{ color: 'inherit' }} />
 

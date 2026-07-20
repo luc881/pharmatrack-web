@@ -22,6 +22,7 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { Iconify } from 'src/components/iconify';
 
+import { useCart } from './use-cart';
 import { CareInfo } from './care-info';
 import { SHOP_INFO } from './shop-info';
 import { useFavorites } from './use-favorites';
@@ -83,6 +84,8 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
 
   const { ids, toggle } = useFavorites();
   const isFavorite = ids.includes(species.id);
+  const cart = useCart();
+  const [added, setAdded] = useState(false);
 
   const sci = scientificName(species);
   const title = species.common_name ?? sci;
@@ -238,6 +241,28 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
 
             <Divider sx={{ borderStyle: 'dashed' }} />
 
+            <Button
+              fullWidth
+              size="large"
+              variant="contained"
+              color="primary"
+              startIcon={<Iconify icon="solar:cart-plus-bold" width={22} />}
+              onClick={() => {
+                cart.add({
+                  key: `sp-${species.id}-${selectedTier?.quantity ?? 'u'}`,
+                  title,
+                  detail: selectedTier ? `Paquete de ${selectedTier.quantity}` : sci,
+                  price: selectedTier ? selectedTier.price : minPrice,
+                  qty: 1,
+                  image: photos[0] ?? null,
+                });
+                setAdded(true);
+                setTimeout(() => setAdded(false), 2000);
+              }}
+            >
+              {added ? 'Agregado ✓' : 'Agregar a cotización'}
+            </Button>
+
             <Box sx={{ gap: 1.5, display: 'flex', alignItems: 'center' }}>
               {WHATSAPP ? (
                 <Button
@@ -246,7 +271,7 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
                   target="_blank"
                   rel="noopener"
                   size="large"
-                  variant="contained"
+                  variant="outlined"
                   color="success"
                 >
                   Preguntar por WhatsApp
