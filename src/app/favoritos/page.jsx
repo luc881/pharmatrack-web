@@ -1,7 +1,7 @@
 import { MainLayout } from 'src/layouts/main';
 import { getAnimals } from 'src/lib/public-api';
 
-import { buildSpeciesList } from 'src/sections/catalog/utils';
+import { buildListings } from 'src/sections/catalog/utils';
 import { FavoritesView } from 'src/sections/catalog/favorites-view';
 
 // ----------------------------------------------------------------------
@@ -17,7 +17,7 @@ export default async function Page() {
 
   return (
     <MainLayout>
-      <FavoritesView items={buildSpeciesList(animals)} />
+      <FavoritesView items={buildListings(animals)} />
     </MainLayout>
   );
 }

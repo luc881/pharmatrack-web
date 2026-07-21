@@ -24,9 +24,9 @@ import { TaxonomyBadge, ScientificName } from './scientific';
 
 // ----------------------------------------------------------------------
 
-function FavoriteButton({ speciesId, reveal = false, sx }) {
+function FavoriteButton({ favKey, reveal = false, sx }) {
   const { ids, toggle } = useFavorites();
-  const isFavorite = ids.includes(speciesId);
+  const isFavorite = ids.includes(favKey);
 
   return (
     <IconButton
@@ -36,7 +36,7 @@ function FavoriteButton({ speciesId, reveal = false, sx }) {
       onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();
-        toggle(speciesId);
+        toggle(favKey);
       }}
       sx={[
         (theme) => ({
@@ -93,10 +93,11 @@ export function offerPct(price, compareAt) {
 // ----------------------------------------------------------------------
 
 export function SpeciesCard({ item, horizontal = false }) {
-  const { species, slug, photos, minPrice, maxPrice, compareAt = null } = item;
+  const { species, key, slug, photos, minPrice, maxPrice, compareAt = null } = item;
   const pct = offerPct(minPrice, compareAt);
   const sci = scientificName(species);
-  const title = species.common_name ?? sci;
+  // título del listado: incluye el morph (p. ej. "Cubaris Murina Papaya")
+  const title = item.title ?? species.common_name ?? sci;
   const formatLabel = saleFormatLabel(species);
   const groupName = species.genus?.group?.name;
   const href = paths.catalogSpecies(slug);
@@ -106,7 +107,7 @@ export function SpeciesCard({ item, horizontal = false }) {
   // (misma llave que el detalle para que se acumulen juntos)
   const firstTier = (species.price_tiers ?? [])[0];
   const cartItem = {
-    key: `sp-${species.id}-${firstTier?.quantity ?? 'u'}`,
+    key: `${key}-${firstTier?.quantity ?? 'u'}`,
     title,
     detail: firstTier ? `Paquete de ${firstTier.quantity}` : sci,
     price: firstTier ? firstTier.price : minPrice,
@@ -176,7 +177,7 @@ export function SpeciesCard({ item, horizontal = false }) {
             <Button component={RouterLink} href={href} size="small" variant="outlined">
               Ver detalle
             </Button>
-            <FavoriteButton speciesId={species.id} />
+            <FavoriteButton favKey={key} />
             <QuickAddButton item={cartItem} sx={{ opacity: 1, transform: 'none' }} />
           </Box>
         </Stack>
@@ -208,7 +209,7 @@ export function SpeciesCard({ item, horizontal = false }) {
       }
       topRight={
         <Stack spacing={0.75} sx={{ top: 16, right: 16, zIndex: 9, position: 'absolute' }}>
-          <FavoriteButton reveal speciesId={species.id} />
+          <FavoriteButton reveal favKey={key} />
           <QuickAddButton item={cartItem} />
         </Stack>
       }

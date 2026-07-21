@@ -2,7 +2,7 @@ import { MainLayout } from 'src/layouts/main';
 import { getGroups, getAnimals, getProducts } from 'src/lib/public-api';
 
 import { CatalogView } from 'src/sections/catalog/catalog-view';
-import { buildCategories, buildSpeciesList } from 'src/sections/catalog/utils';
+import { buildListings, buildCategories } from 'src/sections/catalog/utils';
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ export default async function Page() {
   return (
     <MainLayout>
       <CatalogView
-        items={buildSpeciesList(animals)}
+        items={buildListings(animals)}
         categories={buildCategories(animals, groups)}
         products={products}
       />

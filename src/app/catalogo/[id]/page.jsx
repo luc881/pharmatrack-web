@@ -9,62 +9,68 @@ import { SpeciesDetailsView } from 'src/sections/catalog/species-details-view';
 import {
   slugify,
   groupBySlug,
-  speciesSlug,
   rootGroupOf,
-  speciesInGroup,
+  listingSlug,
+  buildListings,
   scientificName,
   buildCategories,
   saleFormatLabel,
-  buildSpeciesList,
+  listingsInGroup,
+  parseListingParam,
 } from 'src/sections/catalog/utils';
 
 // ----------------------------------------------------------------------
 
 // Un solo segmento dinámico:
-//   /catalogo/gecko-crestado-3 → especie (termina en -id)
-//   /catalogo/aracnidos        → categoría raíz
-//   /catalogo/6                → URL vieja de animal: redirige a su especie
-const speciesIdOf = (param) => {
-  const match = /-(\d+)$/.exec(param);
-  return match ? Number(match[1]) : null;
-};
+//   /catalogo/cubaris-murina-papaya-m12 → listado de un morph
+//   /catalogo/gecko-crestado-s3         → listado de una especie (sin morph)
+//   /catalogo/aracnidos                 → categoría raíz
+//   /catalogo/gecko-crestado-3          → slug viejo de especie (redirige a -s3)
+//   /catalogo/6                         → URL vieja de animal (redirige a su listado)
 const isLegacyAnimalId = (param) => /^\d+$/.test(param);
+
+// Resuelve un listado (morph o especie) del listado agrupado
+const findListing = (listings, parsed) => {
+  if (parsed.type === 'morph') return listings.find((i) => i.morph?.id === parsed.id);
+  // species / legacy-species: el listado de la especie sin morph, o el primero de esa especie
+  return (
+    listings.find((i) => !i.morph && i.species.id === parsed.id) ||
+    listings.find((i) => i.species.id === parsed.id)
+  );
+};
 
 async function loadCatalog() {
   const [{ data: animals }, groups] = await Promise.all([getAnimals(), getGroups()]);
   return {
     groups,
     categories: buildCategories(animals, groups),
-    speciesList: buildSpeciesList(animals),
+    listings: buildListings(animals),
   };
 }
 
 export async function generateMetadata({ params }) {
   const { id: param } = await params;
 
-  // Los redirects van aquí y no solo en la página: generateMetadata corre
-  // antes de que empiece el streaming, así el 308 sale como status real
   if (isLegacyAnimalId(param)) {
     const animal = await getAnimal(param);
     if (!animal?.species) return { title: 'No encontrado' };
-    permanentRedirect(`/catalogo/${speciesSlug(animal.species)}`);
+    permanentRedirect(`/catalogo/${listingSlug(animal.species, animal.morphs?.[0] ?? null)}`);
   }
 
-  const { groups, speciesList } = await loadCatalog();
+  const { groups, listings } = await loadCatalog();
+  const parsed = parseListingParam(param);
 
-  const sid = speciesIdOf(param);
-  if (sid) {
-    const item = speciesList.find((i) => i.species.id === sid);
+  if (parsed) {
+    const item = findListing(listings, parsed);
     if (!item) return { title: 'No encontrado' };
     if (param !== item.slug) permanentRedirect(`/catalogo/${item.slug}`);
 
     const sci = scientificName(item.species);
-    const title = item.species.common_name ? `${item.species.common_name} — ${sci}` : sci;
+    const title = item.title !== sci ? `${item.title} — ${sci}` : sci;
     const format = saleFormatLabel(item.species);
-    // la ficha de la especie es mejor meta description que el texto genérico
     const description =
-      item.species.description?.split('\n')[0]?.slice(0, 300) ??
-      `${item.species.common_name ?? sci} (${sci}) en venta${format ? ` — ${format.toLowerCase()}` : ''}. Animales exóticos con procedencia legal.`;
+      item.description?.split('\n')[0]?.slice(0, 300) ??
+      `${item.title} (${sci}) en venta${format ? ` — ${format.toLowerCase()}` : ''}. Animales exóticos con procedencia legal.`;
 
     return {
       title,
@@ -90,39 +96,35 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { id: param } = await params;
 
-  // URLs viejas /catalogo/{animal_id}: redirige a la página de su especie
+  // URLs viejas /catalogo/{animal_id}: redirige al listado de su morph/especie
   if (isLegacyAnimalId(param)) {
     const animal = await getAnimal(param);
     if (!animal?.species) notFound();
-    // permanente: Google transfiere la URL vieja de animal a la de especie
-    permanentRedirect(`/catalogo/${speciesSlug(animal.species)}`);
+    permanentRedirect(`/catalogo/${listingSlug(animal.species, animal.morphs?.[0] ?? null)}`);
   }
 
-  const { groups, categories, speciesList } = await loadCatalog();
+  const { groups, categories, listings } = await loadCatalog();
+  const parsed = parseListingParam(param);
 
-  const sid = speciesIdOf(param);
-  if (sid) {
-    const item = speciesList.find((i) => i.species.id === sid);
+  if (parsed) {
+    const item = findListing(listings, parsed);
     if (!item) notFound();
     // slug desactualizado o manipulado → URL canónica (evita duplicados en Google)
     if (param !== item.slug) permanentRedirect(`/catalogo/${item.slug}`);
 
     const root = rootGroupOf(item.species, groups);
     const category = root ? { name: root.name, slug: slugify(root.name) } : null;
-    const title = item.species.common_name ?? scientificName(item.species);
 
-    // Relacionados: misma categoría raíz, sin repetir la especie actual
-    const related = speciesList
-      .filter((i) => i.species.id !== sid && rootGroupOf(i.species, groups)?.id === root?.id)
+    // Relacionados: mismos listados de la categoría raíz, sin repetir el actual
+    const related = listings
+      .filter((i) => i.key !== item.key && rootGroupOf(i.species, groups)?.id === root?.id)
       .slice(0, 8);
 
-    // Datos estructurados para resultados enriquecidos (precio/disponibilidad)
     const jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'Product',
-      name: title,
-      description:
-        item.species.description ?? `${scientificName(item.species)} en venta en ${CONFIG.appName}.`,
+      name: item.title,
+      description: item.description ?? `${scientificName(item.species)} en venta en ${CONFIG.appName}.`,
       ...(item.photos.length ? { image: item.photos } : {}),
       offers: {
         '@type': 'AggregateOffer',
@@ -148,7 +150,7 @@ export default async function Page({ params }) {
   const category = groupBySlug(param, groups);
   if (!category) notFound();
 
-  const filtered = speciesInGroup(speciesList, category, groups);
+  const filtered = listingsInGroup(listings, category, groups);
 
   return (
     <MainLayout>

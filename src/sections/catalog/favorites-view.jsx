@@ -18,7 +18,7 @@ import { useFavorites } from './use-favorites';
 export function FavoritesView({ items }) {
   const { ids } = useFavorites();
 
-  const favorites = items.filter((item) => ids.includes(item.species.id));
+  const favorites = items.filter((item) => ids.includes(item.key));
 
   return (
     <Container sx={{ mb: 10 }}>
@@ -40,7 +40,7 @@ export function FavoritesView({ items }) {
           }}
         >
           {favorites.map((item) => (
-            <SpeciesCard key={item.species.id} item={item} />
+            <SpeciesCard key={item.key} item={item} />
           ))}
         </Box>
       ) : (

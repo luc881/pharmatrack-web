@@ -326,7 +326,7 @@ export function CatalogView({ items, categories, category = null, products = [] 
           {filtered.length ? (
             <Box sx={{ gap: 3, display: 'grid', gridTemplateColumns: GRID_COLUMNS[viewMode] }}>
               {filtered.map((item) => (
-                <SpeciesCard key={item.species.id} item={item} horizontal={viewMode === 'list'} />
+                <SpeciesCard key={item.key} item={item} horizontal={viewMode === 'list'} />
               ))}
             </Box>
           ) : (
@@ -358,11 +358,7 @@ function applyFilter({ items, state, sortBy }) {
   if (sortBy === 'priceAsc') data = [...data].sort((a, b) => a.minPrice - b.minPrice);
   if (sortBy === 'priceDesc') data = [...data].sort((a, b) => b.minPrice - a.minPrice);
   if (sortBy === 'nameAsc')
-    data = [...data].sort((a, b) =>
-      (a.species.common_name ?? a.species.name).localeCompare(
-        b.species.common_name ?? b.species.name
-      )
-    );
+    data = [...data].sort((a, b) => (a.title ?? a.species.name).localeCompare(b.title ?? b.species.name));
 
   return data;
 }

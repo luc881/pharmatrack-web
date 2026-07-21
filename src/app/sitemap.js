@@ -3,7 +3,7 @@ import { getGroups, getAnimals, getProducts, getArticles } from 'src/lib/public-
 
 import { articleSlug } from 'src/sections/articles/utils';
 import { productSlug } from 'src/sections/catalog/product-card';
-import { buildCategories, buildSpeciesList } from 'src/sections/catalog/utils';
+import { buildListings, buildCategories } from 'src/sections/catalog/utils';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ export default async function sitemap() {
       url: `${CONFIG.siteUrl}/catalogo/${category.slug}`,
       changeFrequency: 'daily',
     })),
-    ...buildSpeciesList(animals).map((item) => ({
+    ...buildListings(animals).map((item) => ({
       url: `${CONFIG.siteUrl}/catalogo/${item.slug}`,
       changeFrequency: 'daily',
     })),

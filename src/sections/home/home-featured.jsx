@@ -74,7 +74,7 @@ export function HomeFeatured({
           <Carousel carousel={carousel} sx={{ px: 0.5 }}>
             {items.map((item) => (
               <Box
-                key={item.species.id}
+                key={item.key}
                 component={m.div}
                 variants={varFade('in')}
                 sx={{ py: { xs: 5, md: 8 }, textAlign: 'left' }}

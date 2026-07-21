@@ -1,7 +1,7 @@
 import { getAnimals, getProducts, getArticles } from 'src/lib/public-api';
 
 import { articleSlug } from 'src/sections/articles/utils';
-import { slugify, scientificName, buildSpeciesList } from 'src/sections/catalog/utils';
+import { slugify, buildListings, scientificName } from 'src/sections/catalog/utils';
 
 // ponytail: proxy en el servidor porque el API sólo permite CORS a app.*,
 // no a www.* — así el buscador del cliente pega same-origin y sin CORS.
@@ -13,10 +13,10 @@ export async function GET() {
     getArticles(),
   ]);
 
-  const species = buildSpeciesList(animals).map((item) => ({
+  const species = buildListings(animals).map((item) => ({
     type: 'species',
-    id: `sp-${item.species.id}`,
-    title: item.species.common_name ?? scientificName(item.species),
+    id: item.key,
+    title: item.title,
     sub: scientificName(item.species),
     photo: item.photos[0] ?? null,
     price: item.minPrice,

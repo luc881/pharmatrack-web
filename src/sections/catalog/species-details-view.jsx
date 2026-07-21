@@ -80,15 +80,16 @@ function ShareButton({ title }) {
 // ----------------------------------------------------------------------
 
 export function SpeciesDetailsView({ item, category = null, related = [] }) {
-  const { species, photos, morphs, sexes, minPrice, maxPrice, compareAt = null } = item;
+  const { species, morph, key, photos, morphs, sexes, minPrice, maxPrice, compareAt = null } = item;
 
   const { ids, toggle } = useFavorites();
-  const isFavorite = ids.includes(species.id);
+  const isFavorite = ids.includes(key);
   const cart = useCart();
   const [added, setAdded] = useState(false);
 
   const sci = scientificName(species);
-  const title = species.common_name ?? sci;
+  // título del listado (incluye el morph); la ficha de cuidados es de la especie
+  const title = item.title ?? species.common_name ?? sci;
   const formatLabel = saleFormatLabel(species);
 
   // Escalas de precio por cantidad (p. ej. isópodos: 6 / 12 / 18)
@@ -98,7 +99,8 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
 
   const whatsappText = `Hola, me interesa ${title} (${sci})${selectedTier ? ` — paquete de ${selectedTier.quantity}` : ''}`;
 
-  const paragraphs = (species.description ?? '').split('\n').filter(Boolean);
+  // descripción propia del listado (del morph si aplica; si no, de la especie)
+  const paragraphs = (item.description ?? '').split('\n').filter(Boolean);
   const excerpt = paragraphs[0];
 
   return (
@@ -226,7 +228,9 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
               )}
             </Box>
 
-            {morphs.length > 0 && (
+            {/* En páginas de morph el nombre ya va en el título; el chip sólo
+                aporta en listados de especie sin morph con variantes */}
+            {!morph && morphs.length > 0 && (
               <Box>
                 <Typography variant="subtitle2" sx={{ mb: 1 }}>
                   Morphs disponibles
@@ -249,7 +253,7 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
               startIcon={<Iconify icon="solar:cart-plus-bold" width={22} />}
               onClick={() => {
                 cart.add({
-                  key: `sp-${species.id}-${selectedTier?.quantity ?? 'u'}`,
+                  key: `${key}-${selectedTier?.quantity ?? 'u'}`,
                   title,
                   detail: selectedTier ? `Paquete de ${selectedTier.quantity}` : sci,
                   price: selectedTier ? selectedTier.price : minPrice,
@@ -282,7 +286,7 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
 
               <Tooltip title={isFavorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}>
                 <IconButton
-                  onClick={() => toggle(species.id)}
+                  onClick={() => toggle(key)}
                   sx={{ border: (theme) => `solid 1px ${theme.vars.palette.divider}` }}
                 >
                   <Iconify
@@ -325,6 +329,7 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
         species={species}
         category={category}
         morphs={morphs}
+        description={item.description}
         sx={{ mt: { xs: 6, md: 10 } }}
       />
 

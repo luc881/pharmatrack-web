@@ -72,9 +72,10 @@ function TaxonRow({ label, children, italic = false }) {
 // Convierte el texto libre del backend en párrafos (línea en blanco separa)
 const toParagraphs = (text) => (text ?? '').split('\n').filter(Boolean);
 
-export function SpeciesProfile({ species, category, morphs = [], sx }) {
+export function SpeciesProfile({ species, category, morphs = [], description, sx }) {
   const sections = [
-    { icon: 'solar:notebook-bold-duotone', title: 'Descripción general', text: species.description },
+    // en páginas de morph, la descripción propia del morph; si no, la de la especie
+    { icon: 'solar:notebook-bold-duotone', title: 'Descripción general', text: description ?? species.description },
     { icon: 'solar:home-angle-bold-duotone', title: 'Hábitat y comportamiento', text: species.habitat },
     { icon: 'custom:fast-food-fill', title: 'Alimentación', text: species.diet },
     { icon: 'solar:notes-bold-duotone', title: 'Notas de esta especie', text: species.notes },

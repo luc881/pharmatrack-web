@@ -32,7 +32,7 @@ export function RelatedSpecies({ items, sx, ...other }) {
 
         <Carousel carousel={carousel} sx={{ px: 0.5, py: 1 }}>
           {items.map((item) => (
-            <SpeciesCard key={item.species.id} item={item} />
+            <SpeciesCard key={item.key} item={item} />
           ))}
         </Carousel>
       </Box>

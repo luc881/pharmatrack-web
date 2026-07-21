@@ -94,6 +94,90 @@ export function saleFormatLabel(species) {
   return null;
 }
 
+// ----------------------------------------------------------------------
+// Listados por MORPH: cada morph de una especie es su propia entrada del
+// catálogo (precio, fotos, descripción propia); la ficha de cuidados se
+// hereda de la especie. Los ejemplares sin morph se agrupan por especie.
+// ----------------------------------------------------------------------
+
+export function listingKey(species, morph) {
+  return morph ? `m${morph.id}` : `s${species.id}`;
+}
+
+export function listingTitle(species, morph) {
+  const base = species.common_name ?? scientificName(species);
+  return morph ? `${base} ${morph.name}` : base;
+}
+
+export function listingSlug(species, morph) {
+  return `${slugify(listingTitle(species, morph))}-${listingKey(species, morph)}`;
+}
+
+// Sufijo del slug: -m{id} (morph), -s{id} (especie) o -{num} (species legacy)
+export function parseListingParam(param) {
+  const morph = /-m(\d+)$/.exec(param);
+  if (morph) return { type: 'morph', id: Number(morph[1]) };
+  const species = /-s(\d+)$/.exec(param);
+  if (species) return { type: 'species', id: Number(species[1]) };
+  const legacy = /-(\d+)$/.exec(param);
+  if (legacy) return { type: 'legacy-species', id: Number(legacy[1]) };
+  return null;
+}
+
+export function buildListings(animals) {
+  const map = new Map();
+  animals.forEach((animal) => {
+    if (!animal.species) return;
+    // ponytail: agrupa por el primer morph del ejemplar (un ejemplar suele
+    // tener un solo morph); sin morph, agrupa por especie
+    const morph = animal.morphs?.[0] ?? null;
+    const key = listingKey(animal.species, morph);
+    let entry = map.get(key);
+    if (!entry) {
+      entry = {
+        key,
+        species: animal.species,
+        morph,
+        title: listingTitle(animal.species, morph),
+        slug: listingSlug(animal.species, morph),
+        description: morph?.description ?? animal.species.description ?? null,
+        minPrice: animal.price,
+        maxPrice: animal.price,
+        compareAt: animal.compare_at_price ?? null,
+        latestId: animal.id,
+        photos: [],
+        morphs: morph ? [morph] : [],
+        sexes: [],
+      };
+      map.set(key, entry);
+    }
+    if (animal.price < entry.minPrice) {
+      entry.minPrice = animal.price;
+      entry.compareAt = animal.compare_at_price ?? null;
+    }
+    entry.maxPrice = Math.max(entry.maxPrice, animal.price);
+    entry.latestId = Math.max(entry.latestId, animal.id);
+    if (!entry.sexes.includes(animal.sex)) entry.sexes.push(animal.sex);
+    [animal.image, ...(animal.photos ?? [])].filter(Boolean).forEach((url) => {
+      if (!entry.photos.includes(url)) entry.photos.push(url);
+    });
+  });
+  return [...map.values()].map((entry) => {
+    const tiers = entry.species.price_tiers;
+    if (tiers?.length) {
+      const prices = tiers.map((t) => t.price);
+      return { ...entry, minPrice: Math.min(...prices), maxPrice: Math.max(...prices), compareAt: null };
+    }
+    return entry;
+  });
+}
+
+// Listados (morph/especie) cuyo género cuelga del grupo dado o un descendiente
+export function listingsInGroup(listings, group, groups) {
+  const ids = descendantGroupIds(group.id, groups);
+  return listings.filter((i) => ids.has(i.species?.genus?.group?.id));
+}
+
 // El público ve especies, no folios individuales: agrupa los animales
 // disponibles por especie con precio (rango), fotos y morphs combinados.
 export function buildSpeciesList(animals) {
