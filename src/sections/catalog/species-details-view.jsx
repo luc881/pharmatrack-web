@@ -20,6 +20,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
+import { CONFIG } from 'src/global-config';
+
 import { Iconify } from 'src/components/iconify';
 
 import { useCart } from './use-cart';
@@ -34,7 +36,6 @@ import { SEX_LABELS, scientificName, saleFormatLabel } from './utils';
 
 // ----------------------------------------------------------------------
 
-const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP ?? '';
 
 function MetaRow({ label, children }) {
   return (
@@ -268,10 +269,10 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
             </Button>
 
             <Box sx={{ gap: 1.5, display: 'flex', alignItems: 'center' }}>
-              {WHATSAPP ? (
+              {CONFIG.whatsapp ? (
                 <Button
                   fullWidth
-                  href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(whatsappText)}`}
+                  href={`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(whatsappText)}`}
                   target="_blank"
                   rel="noopener"
                   size="large"

@@ -17,6 +17,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
+import { CONFIG } from 'src/global-config';
+
 import { Label } from 'src/components/label';
 import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
@@ -28,7 +30,6 @@ import { ProductCard, isBulkWeight } from './product-card';
 
 // ----------------------------------------------------------------------
 
-const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP ?? '';
 
 export function ProductDetailsView({ product, related = [] }) {
   const cart = useCart();
@@ -165,10 +166,10 @@ export function ProductDetailsView({ product, related = [] }) {
               </Button>
             )}
 
-            {WHATSAPP && !soldOut && (
+            {CONFIG.whatsapp && !soldOut && (
               <Button
                 fullWidth
-                href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(whatsappText)}`}
+                href={`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(whatsappText)}`}
                 target="_blank"
                 rel="noopener"
                 size="large"

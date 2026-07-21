@@ -19,19 +19,19 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
+import { CONFIG } from 'src/global-config';
+
 import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
 
 import { useCart } from 'src/sections/catalog/use-cart';
 
 // ----------------------------------------------------------------------
-// Carrito de cotización. Con sesión iniciada el pedido queda guardado (y
-// visible en "Mis pedidos") y después se abre WhatsApp con el folio; sin
-// sesión sigue funcionando igual que siempre, sólo con el link de WhatsApp.
+// Carrito de cotización. Mandar el pedido requiere sesión: así queda
+// guardado con folio y el cliente puede seguir su estado en "Mis pedidos".
+// Después de guardarlo se abre WhatsApp con el resumen y el folio.
 // Nunca hay cobro en línea: el precio lo confirma el negocio.
 // ----------------------------------------------------------------------
-
-const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP ?? '';
 
 const buildSummary = (items, total) => {
   const lines = items.map((item) => {
@@ -90,19 +90,11 @@ export function CartButton({ sx }) {
   const drawer = useBoolean();
   const { items, count, total, setQty, remove, clear } = useCart();
   const { status } = useSession();
-  const [copied, setCopied] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState('');
 
   const signedIn = status === 'authenticated';
   const summary = buildSummary(items, total);
-  const whatsappUrl = (text) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(summary);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   // Guarda el pedido y sólo entonces abre WhatsApp con el folio. Si falla,
   // el carrito se queda intacto para poder reintentar.
@@ -122,13 +114,12 @@ export function CartButton({ sx }) {
       }
       clear();
       drawer.onFalse();
-      if (WHATSAPP) {
-        window.open(
-          whatsappUrl(`Hola, acabo de hacer el pedido #${body.id} en la página:\n\n${summary}`),
-          '_blank',
-          'noopener'
-        );
-      }
+      const text = `Hola, acabo de hacer el pedido #${body.id} en la página:\n\n${summary}`;
+      window.open(
+        `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`,
+        '_blank',
+        'noopener'
+      );
     } catch {
       setError('No se pudo enviar el pedido. Revisa tu conexión.');
     } finally {
@@ -225,51 +216,23 @@ export function CartButton({ sx }) {
                   </Button>
                 </>
               ) : (
-                <Button
-                  fullWidth
-                  size="large"
-                  variant="outlined"
-                  onClick={() => signIn('google')}
-                  startIcon={<Iconify icon="logos:google-icon" width={18} />}
-                >
-                  Entrar para guardar el pedido
-                </Button>
-              )}
-
-              {WHATSAPP && !signedIn ? (
-                <Button
-                  fullWidth
-                  size="large"
-                  variant="contained"
-                  color="success"
-                  href={whatsappUrl(summary)}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  Enviar cotización por WhatsApp
-                </Button>
-              ) : null}
-
-              {!WHATSAPP && !signedIn && (
-                <Button
-                  fullWidth
-                  size="large"
-                  variant="contained"
-                  startIcon={<Iconify icon="solar:copy-bold" width={18} />}
-                  onClick={handleCopy}
-                >
-                  {copied ? '¡Resumen copiado!' : 'Copiar resumen del pedido'}
-                </Button>
-              )}
-              {WHATSAPP && (
-                <Button
-                  fullWidth
-                  color="inherit"
-                  startIcon={<Iconify icon="solar:copy-bold" width={16} />}
-                  onClick={handleCopy}
-                >
-                  {copied ? '¡Copiado!' : 'Copiar resumen'}
-                </Button>
+                <>
+                  <Button
+                    fullWidth
+                    size="large"
+                    variant="contained"
+                    onClick={() => signIn('google')}
+                    startIcon={<Iconify icon="logos:google-icon" width={18} />}
+                  >
+                    Entrar para hacer tu pedido
+                  </Button>
+                  <Typography
+                    variant="caption"
+                    sx={{ textAlign: 'center', color: 'text.secondary' }}
+                  >
+                    Con tu cuenta guardamos el pedido y puedes seguir su estado.
+                  </Typography>
+                </>
               )}
             </Stack>
           </Box>

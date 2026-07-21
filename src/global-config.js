@@ -10,5 +10,7 @@ export const CONFIG = {
   assetsDir: process.env.NEXT_PUBLIC_ASSETS_DIR ?? '',
   // URL pública del sitio (metadata OG / sitemap)
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.farmaciaselene.com',
+  // WhatsApp del negocio con lada de país (52 = México), solo dígitos
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || '522225392960',
   isStaticExport: JSON.parse(process.env.BUILD_STATIC_EXPORT ?? 'false'),
 };
