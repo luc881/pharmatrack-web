@@ -15,5 +15,5 @@ export const paths = {
   product: (slug) => `/producto/${slug}`,
   article: (slug) => `/articulos/${slug}`,
   // Dashboard de administración (proyecto aparte)
-  appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.farmaciaselene.com',
+  appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.opuntiaden.com',
 };
