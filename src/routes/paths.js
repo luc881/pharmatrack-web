@@ -9,6 +9,9 @@ export const paths = {
   catalogSpecies: (slug) => `/catalogo/${slug}`,
   favorites: '/favoritos',
   articles: '/articulos',
+  // Cuenta de cliente (login con Google en el propio sitio)
+  account: '/cuenta',
+  orders: '/mis-pedidos',
   product: (slug) => `/producto/${slug}`,
   article: (slug) => `/articulos/${slug}`,
   // Dashboard de administración (proyecto aparte)

@@ -12,7 +12,7 @@ import { Scrollbar } from 'src/components/scrollbar';
 
 import { Nav, NavUl } from '../components';
 import { NavList } from './nav-mobile-list';
-import { SignInButton } from '../../../components/sign-in-button';
+import { AccountButton } from '../../../components/account-button';
 
 // ----------------------------------------------------------------------
 
@@ -82,7 +82,7 @@ export function NavMobile({ data, open, onClose, slots, sx }) {
             display: 'flex',
           }}
         >
-          <SignInButton fullWidth />
+          <AccountButton fullWidth />
 
           <Button
             fullWidth

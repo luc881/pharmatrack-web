@@ -2,15 +2,20 @@
 
 import { useState } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
+import { signIn, useSession } from 'next-auth/react';
 
 import Box from '@mui/material/Box';
 import Badge from '@mui/material/Badge';
+import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
@@ -20,8 +25,10 @@ import { Iconify } from 'src/components/iconify';
 import { useCart } from 'src/sections/catalog/use-cart';
 
 // ----------------------------------------------------------------------
-// Carrito de cotización: el resumen se manda por el WhatsApp del cliente
-// (link wa.me con el texto pre-llenado) — sin API de WhatsApp ni checkout.
+// Carrito de cotización. Con sesión iniciada el pedido queda guardado (y
+// visible en "Mis pedidos") y después se abre WhatsApp con el folio; sin
+// sesión sigue funcionando igual que siempre, sólo con el link de WhatsApp.
+// Nunca hay cobro en línea: el precio lo confirma el negocio.
 // ----------------------------------------------------------------------
 
 const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP ?? '';
@@ -82,14 +89,51 @@ function CartRow({ item, onQty, onRemove }) {
 export function CartButton({ sx }) {
   const drawer = useBoolean();
   const { items, count, total, setQty, remove, clear } = useCart();
+  const { status } = useSession();
   const [copied, setCopied] = useState(false);
+  const [placing, setPlacing] = useState(false);
+  const [error, setError] = useState('');
 
+  const signedIn = status === 'authenticated';
   const summary = buildSummary(items, total);
+  const whatsappUrl = (text) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(summary);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Guarda el pedido y sólo entonces abre WhatsApp con el folio. Si falla,
+  // el carrito se queda intacto para poder reintentar.
+  const handleOrder = async () => {
+    setPlacing(true);
+    setError('');
+    try {
+      const res = await fetch('/api/shop/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: items.map((i) => ({ key: i.key, qty: i.qty })) }),
+      });
+      const body = await res.json();
+      if (!res.ok) {
+        setError(body.detail ?? 'No se pudo enviar el pedido. Inténtalo de nuevo.');
+        return;
+      }
+      clear();
+      drawer.onFalse();
+      if (WHATSAPP) {
+        window.open(
+          whatsappUrl(`Hola, acabo de hacer el pedido #${body.id} en la página:\n\n${summary}`),
+          '_blank',
+          'noopener'
+        );
+      }
+    } catch {
+      setError('No se pudo enviar el pedido. Revisa tu conexión.');
+    } finally {
+      setPlacing(false);
+    }
   };
 
   return (
@@ -151,20 +195,62 @@ export function CartButton({ sx }) {
               Sin pago en línea: nos mandas el resumen y confirmamos disponibilidad, envío y total.
             </Typography>
 
+            {error && (
+              <Alert severity="error" sx={{ mb: 2, typography: 'caption' }}>
+                {error}
+              </Alert>
+            )}
+
             <Stack spacing={1}>
-              {WHATSAPP ? (
+              {signedIn ? (
+                <>
+                  <Button
+                    fullWidth
+                    size="large"
+                    variant="contained"
+                    color="success"
+                    loading={placing}
+                    onClick={handleOrder}
+                  >
+                    Hacer pedido
+                  </Button>
+                  <Button
+                    fullWidth
+                    color="inherit"
+                    component={RouterLink}
+                    href={paths.orders}
+                    onClick={drawer.onFalse}
+                  >
+                    Ver mis pedidos
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  fullWidth
+                  size="large"
+                  variant="outlined"
+                  onClick={() => signIn('google')}
+                  startIcon={<Iconify icon="logos:google-icon" width={18} />}
+                >
+                  Entrar para guardar el pedido
+                </Button>
+              )}
+
+              {WHATSAPP && !signedIn ? (
                 <Button
                   fullWidth
                   size="large"
                   variant="contained"
                   color="success"
-                  href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(summary)}`}
+                  href={whatsappUrl(summary)}
                   target="_blank"
                   rel="noopener"
                 >
                   Enviar cotización por WhatsApp
                 </Button>
-              ) : (
+              ) : null}
+
+              {!WHATSAPP && !signedIn && (
                 <Button
                   fullWidth
                   size="large"

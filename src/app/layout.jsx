@@ -1,5 +1,7 @@
 import 'src/global.css';
 
+import { SessionProvider } from 'next-auth/react';
+
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
@@ -10,6 +12,8 @@ import { ProgressBar } from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import { detectSettings } from 'src/components/settings/server';
 import { defaultSettings, SettingsProvider } from 'src/components/settings';
+
+import { AccountSync } from 'src/sections/account/account-sync';
 
 // ----------------------------------------------------------------------
 
@@ -71,7 +75,10 @@ export default async function RootLayout({ children }) {
             >
               <MotionLazy>
                 <ProgressBar />
-                {children}
+                <SessionProvider>
+                  <AccountSync />
+                  {children}
+                </SessionProvider>
               </MotionLazy>
             </ThemeProvider>
           </AppRouterCacheProvider>

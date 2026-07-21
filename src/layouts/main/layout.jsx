@@ -27,7 +27,7 @@ import { MenuButton } from '../components/menu-button';
 import { CartButton } from '../components/cart-button';
 import { CloseCursor } from '../components/close-cursor';
 import { SearchDialog } from '../components/search-dialog';
-import { SignInButton } from '../components/sign-in-button';
+import { AccountButton } from '../components/account-button';
 import { FavoritesButton } from '../components/favorites-button';
 import { MainSection, LayoutSection, HeaderSection } from '../core';
 import { splitNav, buildNavData, navData as mainNavData } from '../nav-config-main';
@@ -236,8 +236,8 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
           {/** @slot Favorites button */}
           <FavoritesButton sx={{ color: 'inherit' }} />
 
-          {/** @slot Sign in button */}
-          <SignInButton
+          {/** @slot Cuenta del cliente (login con Google) */}
+          <AccountButton
             sx={(theme) => ({
               color: 'common.white',
               borderColor: varAlpha(theme.vars.palette.common.whiteChannel, 0.4),

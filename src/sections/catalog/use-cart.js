@@ -8,8 +8,10 @@ import { useMemo, useState, useEffect, useCallback } from 'react';
 // Item: { key, title, detail?, price, qty, unit? ('g' para granel), image?, url? }
 // ----------------------------------------------------------------------
 
-const STORAGE_KEY = 'quote-cart';
-const EVENT = 'cart:change';
+export const CART_KEY = 'quote-cart';
+export const CART_EVENT = 'cart:change';
+const STORAGE_KEY = CART_KEY;
+const EVENT = CART_EVENT;
 
 const read = () => {
   try {

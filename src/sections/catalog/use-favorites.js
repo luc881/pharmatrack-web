@@ -4,8 +4,10 @@ import { useState, useEffect, useCallback } from 'react';
 
 // ponytail: favoritos por especie en localStorage; migrar a cuenta de
 // usuario el día que haya inicio de sesión
-const KEY = 'favorites';
-const EVENT = 'favorites:change';
+export const FAVORITES_KEY = 'favorites';
+export const FAVORITES_EVENT = 'favorites:change';
+const KEY = FAVORITES_KEY;
+const EVENT = FAVORITES_EVENT;
 
 const read = () => {
   try {
