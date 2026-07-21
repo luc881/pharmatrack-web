@@ -33,6 +33,37 @@ export function rootGroupOf(species, groups) {
   return group ?? null;
 }
 
+// Un grupo (raíz o subgrupo) y todos sus descendientes, por id
+export function descendantGroupIds(groupId, groups) {
+  const childrenOf = new Map();
+  groups.forEach((g) => {
+    const p = g.parent_id ?? null;
+    if (!childrenOf.has(p)) childrenOf.set(p, []);
+    childrenOf.get(p).push(g.id);
+  });
+  const ids = new Set();
+  const stack = [groupId];
+  while (stack.length) {
+    const cur = stack.pop();
+    if (ids.has(cur)) continue;
+    ids.add(cur);
+    (childrenOf.get(cur) ?? []).forEach((c) => stack.push(c));
+  }
+  return ids;
+}
+
+// Resuelve un slug a cualquier grupo (raíz o subgrupo). Si hay nombres
+// repetidos gana el primero — los nombres suelen ser únicos en la práctica.
+export function groupBySlug(slug, groups) {
+  return groups.find((g) => slugify(g.name) === slug) ?? null;
+}
+
+// Especies cuyo género cuelga del grupo dado o de cualquier descendiente
+export function speciesInGroup(speciesList, group, groups) {
+  const ids = descendantGroupIds(group.id, groups);
+  return speciesList.filter((i) => ids.has(i.species?.genus?.group?.id));
+}
+
 // Categorías = grupos raíz con animales; foto = primer animal con imagen
 export function buildCategories(animals, groups) {
   const categories = [];

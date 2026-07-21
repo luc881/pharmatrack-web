@@ -8,8 +8,10 @@ import { CatalogView } from 'src/sections/catalog/catalog-view';
 import { SpeciesDetailsView } from 'src/sections/catalog/species-details-view';
 import {
   slugify,
+  groupBySlug,
   speciesSlug,
   rootGroupOf,
+  speciesInGroup,
   scientificName,
   buildCategories,
   saleFormatLabel,
@@ -48,7 +50,7 @@ export async function generateMetadata({ params }) {
     permanentRedirect(`/catalogo/${speciesSlug(animal.species)}`);
   }
 
-  const { categories, speciesList } = await loadCatalog();
+  const { groups, speciesList } = await loadCatalog();
 
   const sid = speciesIdOf(param);
   if (sid) {
@@ -76,7 +78,7 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const category = categories.find((c) => c.slug === param);
+  const category = groupBySlug(param, groups);
   if (!category) return { title: 'No encontrado' };
 
   return {
@@ -143,12 +145,10 @@ export default async function Page({ params }) {
     );
   }
 
-  const category = categories.find((c) => c.slug === param);
+  const category = groupBySlug(param, groups);
   if (!category) notFound();
 
-  const filtered = speciesList.filter(
-    (i) => rootGroupOf(i.species, groups)?.id === category.id
-  );
+  const filtered = speciesInGroup(speciesList, category, groups);
 
   return (
     <MainLayout>
