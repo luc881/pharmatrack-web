@@ -9,7 +9,10 @@ const EVENT = 'favorites:change';
 
 const read = () => {
   try {
-    return JSON.parse(window.localStorage.getItem(KEY)) ?? [];
+    const stored = JSON.parse(window.localStorage.getItem(KEY)) ?? [];
+    // Migración: antes se guardaban ids numéricos de especie; hoy las llaves
+    // de listado son 's{speciesId}' o 'm{morphId}' — sin esto se perderían
+    return stored.map((id) => (typeof id === 'number' ? `s${id}` : id));
   } catch {
     return [];
   }
