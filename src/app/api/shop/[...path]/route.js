@@ -48,3 +48,4 @@ async function forward(req, { params }) {
 export const GET = forward;
 export const PUT = forward;
 export const POST = forward;
+export const DELETE = forward;

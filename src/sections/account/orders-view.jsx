@@ -31,8 +31,20 @@ export const ORDER_STATUS = {
   cancelled: { label: 'Cancelado', color: 'error' },
 };
 
-function OrderCard({ order }) {
+function OrderCard({ order, onCancel }) {
   const state = ORDER_STATUS[order.status] ?? ORDER_STATUS.pending;
+  const [cancelling, setCancelling] = useState(false);
+
+  const handleCancel = async () => {
+    // confirm nativo: es una acción reversible a medias (puede volver a pedir)
+    if (!window.confirm(`¿Cancelar el pedido #${order.id}?`)) return;
+    setCancelling(true);
+    try {
+      await onCancel(order.id);
+    } finally {
+      setCancelling(false);
+    }
+  };
 
   return (
     <Card sx={{ p: 3 }}>
@@ -74,9 +86,15 @@ function OrderCard({ order }) {
       </Box>
 
       {order.status === 'pending' && (
-        <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
-          Te confirmamos disponibilidad, envío y total. Todavía no se cobra nada.
-        </Typography>
+        <Box sx={{ mt: 1, gap: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+          <Typography variant="caption" sx={{ flexGrow: 1, color: 'text.secondary' }}>
+            Te confirmamos disponibilidad, envío y total. Todavía no se cobra nada.
+            ¿Te equivocaste? Cancela y vuelve a hacer el pedido desde el carrito.
+          </Typography>
+          <Button size="small" color="error" loading={cancelling} onClick={handleCancel}>
+            Cancelar pedido
+          </Button>
+        </Box>
       )}
     </Card>
   );
@@ -86,13 +104,25 @@ export function OrdersView() {
   const { status } = useSession();
   const [orders, setOrders] = useState(null);
 
-  useEffect(() => {
-    if (status !== 'authenticated') return;
+  const load = () =>
     fetch('/api/shop/orders')
       .then((res) => (res.ok ? res.json() : []))
       .then(setOrders)
       .catch(() => setOrders([]));
+
+  useEffect(() => {
+    if (status !== 'authenticated') return;
+    load();
   }, [status]);
+
+  const handleCancel = async (id) => {
+    const res = await fetch(`/api/shop/orders/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      window.alert(body.detail ?? 'No se pudo cancelar el pedido.');
+    }
+    await load();
+  };
 
   return (
     <Container sx={{ mb: 10, mt: { xs: 1, md: 3 } }}>
@@ -113,7 +143,7 @@ export function OrdersView() {
         (orders?.length ? (
           <Stack spacing={3} sx={{ maxWidth: 720 }}>
             {orders.map((order) => (
-              <OrderCard key={order.id} order={order} />
+              <OrderCard key={order.id} order={order} onCancel={handleCancel} />
             ))}
           </Stack>
         ) : (
