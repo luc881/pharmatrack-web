@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 
 import Box from '@mui/material/Box';
@@ -20,6 +21,9 @@ import { Iconify } from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export function SignInPrompt({ title = 'Entra a tu cuenta', description }) {
+  // Auth.js manda aquí con ?error=... cuando el login se cae a medias
+  const failed = useSearchParams().get('error');
+
   return (
     <Card sx={{ p: 5, textAlign: 'center', maxWidth: 420, mx: 'auto' }}>
       <Iconify icon="solar:user-circle-bold" width={56} sx={{ color: 'text.disabled', mb: 2 }} />
@@ -31,6 +35,13 @@ export function SignInPrompt({ title = 'Entra a tu cuenta', description }) {
         {description ??
           'Guarda tus favoritos y tu cotización, y consulta tus pedidos desde cualquier dispositivo.'}
       </Typography>
+
+      {failed && (
+        <Alert severity="error" sx={{ mb: 3, textAlign: 'left', typography: 'caption' }}>
+          No pudimos completar el inicio de sesión. Inténtalo de nuevo; si sigue fallando,
+          escríbenos por WhatsApp.
+        </Alert>
+      )}
 
       <Button
         fullWidth
