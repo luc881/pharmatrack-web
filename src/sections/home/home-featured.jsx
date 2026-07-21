@@ -38,7 +38,9 @@ export function HomeFeatured({
       slideSpacing: '24px',
       slidesToShow: { xs: 1, sm: 2, md: 3, lg: 4 },
     },
-    [Autoplay({ delay: 4000, stopOnInteraction: true })]
+    // sigue avanzando solo (no se detiene al hacer scroll/swipe); pausa al
+    // pasar el mouse y retoma al salir — así todas las secciones se ven animando
+    [Autoplay({ playOnInit: true, delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })]
   );
 
   if (!items.length) return null;
