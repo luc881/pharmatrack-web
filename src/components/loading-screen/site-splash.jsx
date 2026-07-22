@@ -103,8 +103,10 @@ export function SiteSplash() {
           opacity: 0,
           visibility: 'hidden',
           animation: 'none',
-          transition: (theme) =>
-            theme.transitions.create(['opacity', 'visibility'], { duration: 450 }),
+          // fade largo y suave: el contenido asoma detrás en vez de aparecer
+          // de golpe. `visibility` va con delay para no cortar el fade.
+          transition:
+            'opacity 800ms ease-out, visibility 0s linear 800ms',
         }),
       }}
     >
