@@ -29,10 +29,10 @@ import { Iconify } from 'src/components/iconify';
 import { useCart } from 'src/sections/catalog/use-cart';
 
 // ----------------------------------------------------------------------
-// Carrito de cotización. Mandar el pedido requiere sesión: así queda
-// guardado con folio y el cliente puede seguir su estado en "Mis pedidos".
-// Después de guardarlo se abre WhatsApp con el resumen y el folio.
-// Nunca hay cobro en línea: el precio lo confirma el negocio.
+// Carrito. Mandar el pedido requiere sesión: queda guardado con folio y el
+// cliente sigue su estado en "Mis pedidos". Entrega en CDMX se paga en línea
+// al momento (el precio del catálogo es el total); con envío se abre WhatsApp
+// y el cobro va después por link, cuando ya se cotizó el envío.
 // ----------------------------------------------------------------------
 
 const buildSummary = (items, total) => {

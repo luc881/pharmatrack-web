@@ -37,10 +37,12 @@ export const ORDER_STATUS = {
 
 const totalLabel = (status) => (status === 'pending' ? 'Total estimado' : 'Total');
 
-function OrderCard({ order, onCancel }) {
+function OrderCard({ order, onCancel, onPay }) {
   const state = ORDER_STATUS[order.status] ?? ORDER_STATUS.pending;
+  const isPickup = order.delivery_method === 'pickup';
   const [confirming, setConfirming] = useState(false);
   const [cancelling, setCancelling] = useState(false);
+  const [paying, setPaying] = useState(false);
   const [error, setError] = useState('');
 
   const handleCancel = async () => {
@@ -55,6 +57,19 @@ function OrderCard({ order, onCancel }) {
     } finally {
       setCancelling(false);
     }
+  };
+
+  // Reintentar el pago de un checkout abandonado: sin esto el pedido queda
+  // atorado (rehacerlo choca con el candado de duplicados)
+  const handlePay = async () => {
+    setPaying(true);
+    setError('');
+    const message = await onPay(order.id);
+    if (message) {
+      setError(message);
+      setPaying(false);
+    }
+    // si salió bien, el navegador ya va camino a Mercado Pago
   };
 
   return (
@@ -118,12 +133,18 @@ function OrderCard({ order, onCancel }) {
           <Collapse in={!confirming}>
             <Box sx={{ mt: 1, gap: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
               <Typography variant="caption" sx={{ flexGrow: 1, color: 'text.secondary' }}>
-                Te confirmamos disponibilidad, envío y total. Todavía no se cobra nada.
-                ¿Te equivocaste? Cancela y vuelve a hacer el pedido desde el carrito.
+                {isPickup
+                  ? 'Este pedido sigue pendiente de pago. Al pagarlo acordamos por WhatsApp el punto y la hora de entrega.'
+                  : 'Te confirmamos disponibilidad, envío y total. Todavía no se cobra nada. ¿Te equivocaste? Cancela y vuelve a hacer el pedido desde el carrito.'}
               </Typography>
-              <Button size="small" color="error" onClick={() => setConfirming(true)}>
-                Cancelar pedido
+              <Button size="small" color="error" disabled={paying} onClick={() => setConfirming(true)}>
+                Cancelar
               </Button>
+              {isPickup && (
+                <Button size="small" variant="contained" loading={paying} onClick={handlePay}>
+                  Pagar ahora
+                </Button>
+              )}
             </Box>
           </Collapse>
 
@@ -202,6 +223,23 @@ export function OrdersView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
+  // Devuelve el mensaje de error (o null y redirige) — mismo contrato que
+  // handleCancel para que la tarjeta lo muestre inline
+  const handlePay = async (id) => {
+    try {
+      const res = await fetch(`/api/shop/orders/${id}/checkout`, { method: 'POST' });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        await load();
+        return body.detail ?? 'No se pudo abrir el pago. Inténtalo de nuevo.';
+      }
+      window.location.href = body.payment_url;
+      return null;
+    } catch {
+      return 'No se pudo abrir el pago. Revisa tu conexión.';
+    }
+  };
+
   // Devuelve el mensaje de error (o null si salió bien) para que la tarjeta
   // lo muestre inline en lugar de un alert del navegador
   const handleCancel = async (id) => {
@@ -238,7 +276,7 @@ export function OrdersView() {
         (orders?.length ? (
           <Stack spacing={3} sx={{ maxWidth: 720 }}>
             {orders.map((order) => (
-              <OrderCard key={order.id} order={order} onCancel={handleCancel} />
+              <OrderCard key={order.id} order={order} onCancel={handleCancel} onPay={handlePay} />
             ))}
           </Stack>
         ) : (
