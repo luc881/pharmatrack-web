@@ -20,7 +20,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 const SRC = '/video/hero-moss';
 
-export function HeroVideo({ overlay = 0.55 }) {
+export function HeroVideo({ overlay = 0.42 }) {
   const videoRef = useRef(null);
   const [ready, setReady] = useState(false);
 
@@ -54,6 +54,7 @@ export function HeroVideo({ overlay = 0.55 }) {
           height: 1,
           objectFit: 'cover',
           position: 'absolute',
+          filter: 'saturate(1.25) contrast(1.08)',
         }}
       />
 
@@ -73,6 +74,7 @@ export function HeroVideo({ overlay = 0.55 }) {
             height: 1,
             objectFit: 'cover',
             position: 'absolute',
+            filter: 'saturate(1.25) contrast(1.08)',
             opacity: ready ? 1 : 0,
             transition: (theme) => theme.transitions.create(['opacity'], { duration: 700 }),
           }}
@@ -82,14 +84,18 @@ export function HeroVideo({ overlay = 0.55 }) {
         </Box>
       )}
 
-      {/* Velo: sin esto el texto compite con el musgo y pierde */}
+      {/* Velo OSCURO, no claro: un velo crema lava el musgo hasta dejarlo
+          verde pálido; oscurecer conserva los verdes y el texto claro encima
+          se lee mejor. Abajo funde con el crema de la página. */}
       <Box
         sx={(theme) => ({
           inset: 0,
           position: 'absolute',
           background: `linear-gradient(180deg,
-            ${varAlpha(theme.vars.palette.background.defaultChannel, overlay + 0.18)} 0%,
-            ${varAlpha(theme.vars.palette.background.defaultChannel, overlay)} 45%,
+            rgba(18, 24, 16, ${overlay + 0.08}) 0%,
+            rgba(18, 24, 16, ${overlay}) 55%,
+            rgba(18, 24, 16, ${overlay}) 72%,
+            ${varAlpha(theme.vars.palette.background.defaultChannel, 0.7)} 92%,
             ${theme.vars.palette.background.default} 100%)`,
         })}
       />

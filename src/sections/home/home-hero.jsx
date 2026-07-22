@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { varAlpha } from 'minimal-shared/utils';
 import { m, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion';
 
 import Box from '@mui/material/Box';
@@ -17,7 +18,6 @@ import { Iconify } from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
 
 import { HeroVideo } from './components/hero-video';
-import { HeroBackground } from './components/hero-background';
 
 // ----------------------------------------------------------------------
 
@@ -66,10 +66,10 @@ export function HomeHero({ sx, ...other }) {
           }),
         ]}
       >
-        <Box component="span" sx={{ width: 1, color: 'text.primary', opacity: 0.72 }}>
+        <Box component="span" sx={{ width: 1, color: 'common.white', opacity: 0.92 }}>
           Animales exóticos
         </Box>
-        de
+        <Box component="span" sx={{ color: 'common.white' }}>de</Box>
         <Box
           component={m.span}
           animate={{ backgroundPosition: '200% center' }}
@@ -84,7 +84,7 @@ export function HomeHero({ sx, ...other }) {
               // Degradado dentro del verde del logo: el ámbar que traía la
               // plantilla se perdía sobre el fondo crema
               ...theme.mixins.textGradient(
-                `300deg, ${theme.vars.palette.primary.dark} 0%, ${theme.vars.palette.primary.light} 25%, ${theme.vars.palette.primary.dark} 50%, ${theme.vars.palette.primary.light} 75%, ${theme.vars.palette.primary.dark} 100%`
+                `300deg, ${theme.vars.palette.primary.light} 0%, ${theme.vars.palette.primary.lighter} 25%, ${theme.vars.palette.primary.light} 50%, ${theme.vars.palette.primary.lighter} 75%, ${theme.vars.palette.primary.light} 100%`
               ),
               backgroundSize: '400%',
               ml: { xs: 0.75, md: 1, xl: 1.5 },
@@ -106,7 +106,8 @@ export function HomeHero({ sx, ...other }) {
             mx: 'auto',
             maxWidth: 480,
             fontWeight: 500,
-            color: 'text.primary',
+            color: 'common.white',
+            opacity: 0.88,
             [theme.breakpoints.up(lgKey)]: { fontSize: 20, lineHeight: '36px', maxWidth: 640 },
           }),
         ]}
@@ -130,7 +131,7 @@ export function HomeHero({ sx, ...other }) {
         <Button
           component={RouterLink}
           href={paths.catalog}
-          color="inherit"
+          color="primary"
           size="large"
           variant="contained"
           startIcon={<Iconify width={24} icon="solar:cat-bold-duotone" />}
@@ -148,7 +149,12 @@ export function HomeHero({ sx, ...other }) {
           size="large"
           variant="outlined"
           startIcon={<Iconify width={24} icon="solar:star-bold-duotone" />}
-          sx={{ height: 52, borderColor: 'currentColor' }}
+          sx={{
+            height: 52,
+            color: 'common.white',
+            borderColor: (theme) => varAlpha(theme.vars.palette.common.whiteChannel, 0.6),
+            '&:hover': { borderColor: 'common.white' },
+          }}
         >
           Recién llegados
         </Button>
@@ -222,7 +228,6 @@ export function HomeHero({ sx, ...other }) {
         </Container>
 
         <HeroVideo />
-        <HeroBackground />
       </Box>
     </Box>
   );
