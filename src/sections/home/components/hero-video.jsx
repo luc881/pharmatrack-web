@@ -86,18 +86,34 @@ export function HeroVideo({ overlay = 0.42 }) {
 
       {/* Velo OSCURO, no claro: un velo crema lava el musgo hasta dejarlo
           verde pálido; oscurecer conserva los verdes y el texto claro encima
-          se lee mejor. Abajo funde con el crema de la página. */}
+          se lee mejor.
+          Son DOS degradados apilados, no uno: pasar de "oscuro translúcido" a
+          "crema opaco" en un solo tramo cruza por un gris turbio que se ve
+          como banda. Así el oscuro se desvanece por su lado y el crema entra
+          por el suyo, con paradas intermedias que suavizan la curva. */}
       <Box
-        sx={(theme) => ({
-          inset: 0,
-          position: 'absolute',
-          background: `linear-gradient(180deg,
-            rgba(18, 24, 16, ${overlay + 0.08}) 0%,
-            rgba(18, 24, 16, ${overlay}) 55%,
-            rgba(18, 24, 16, ${overlay}) 86%,
-            ${varAlpha(theme.vars.palette.background.defaultChannel, 0.7)} 96%,
-            ${theme.vars.palette.background.default} 100%)`,
-        })}
+        sx={(theme) => {
+          const cream = theme.vars.palette.background.defaultChannel;
+          return {
+            inset: 0,
+            position: 'absolute',
+            background: [
+              `linear-gradient(180deg,
+                ${varAlpha(cream, 0)} 74%,
+                ${varAlpha(cream, 0.06)} 82%,
+                ${varAlpha(cream, 0.2)} 88%,
+                ${varAlpha(cream, 0.45)} 93%,
+                ${varAlpha(cream, 0.75)} 97%,
+                ${varAlpha(cream, 1)} 100%)`,
+              `linear-gradient(180deg,
+                rgba(18, 24, 16, ${overlay + 0.08}) 0%,
+                rgba(18, 24, 16, ${overlay}) 55%,
+                rgba(18, 24, 16, ${overlay * 0.9}) 80%,
+                rgba(18, 24, 16, ${overlay * 0.45}) 92%,
+                rgba(18, 24, 16, 0) 100%)`,
+            ].join(','),
+          };
+        }}
       />
     </Box>
   );
