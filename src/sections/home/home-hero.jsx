@@ -82,11 +82,11 @@ export function HomeHero({ sx, ...other }) {
           }}
           sx={[
             (theme) => ({
-              // Colores de tuna (el fruto del nopal): magenta-rojo a naranja.
-              // El verde se perdía sobre el musgo del fondo; estos cálidos
-              // contrastan y siguen siendo del mismo mundo del logo.
+              // El nopal entero: verde de la penca a la tuna madura
+              // (amarillo → naranja → rojo). Vuelve del rojo al verde para que
+              // el barrido en bucle no dé un salto.
               ...theme.mixins.textGradient(
-                `300deg, #E0384E 0%, #F26B3A 25%, #F59E42 50%, #F26B3A 75%, #E0384E 100%`
+                `300deg, ${theme.vars.palette.primary.light} 0%, #E9C64A 28%, #F59E42 46%, #F26B3A 62%, #E0384E 78%, ${theme.vars.palette.primary.light} 100%`
               ),
               backgroundSize: '400%',
               ml: { xs: 0.75, md: 1, xl: 1.5 },
