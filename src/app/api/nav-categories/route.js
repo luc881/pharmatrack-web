@@ -7,7 +7,9 @@ import { slugify } from 'src/sections/catalog/utils';
 export async function GET() {
   const groups = await getGroups();
   const roots = groups
-    .filter((g) => g.parent_id == null)
+    // show_in_nav es aparte de show_public: un grupo puede estar activo en el
+    // sitio (se vende, se destaca en la home) sin ocupar lugar en el menú
+    .filter((g) => g.parent_id == null && g.show_in_nav !== false)
     .map((g) => ({ title: g.name, slug: slugify(g.name) }));
   return Response.json(roots);
 }
