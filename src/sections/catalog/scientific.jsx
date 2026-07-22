@@ -10,7 +10,8 @@ import Box from '@mui/material/Box';
 // ----------------------------------------------------------------------
 
 export const MONO_FONT = "'Space Mono', ui-monospace, monospace";
-export const TAXON_COLOR = 'warning.dark';
+// Verde del logo: el ámbar de la plantilla se perdía sobre el fondo crema
+export const TAXON_COLOR = 'primary.dark';
 
 // Nombre científico: monospace en cursiva, un poco espaciado
 export function ScientificName({ children, sx }) {
@@ -50,7 +51,7 @@ export function TaxonomyBadge({ children, sx }) {
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
           color: TAXON_COLOR,
-          border: `solid 1px ${varAlpha(theme.vars.palette.warning.mainChannel, 0.32)}`,
+          border: `solid 1px ${varAlpha(theme.vars.palette.primary.mainChannel, 0.32)}`,
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

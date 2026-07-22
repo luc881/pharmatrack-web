@@ -68,7 +68,7 @@ function BodySection({ section }) {
           pl: 3,
           fontStyle: 'italic',
           fontWeight: 400,
-          borderLeft: (theme) => `solid 2px ${theme.vars.palette.warning.dark}`,
+          borderLeft: (theme) => `solid 2px ${theme.vars.palette.primary.dark}`,
         }}
       >
         {section.content}
@@ -150,7 +150,7 @@ export function ArticleDetailView({ article, related = [] }) {
 
           <Box sx={{ gap: 2, display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: 2 }}>
             {article.category && (
-              <Box component="span" sx={{ ...mono, color: 'warning.light' }}>
+              <Box component="span" sx={{ ...mono, color: 'primary.light' }}>
                 {article.category}
               </Box>
             )}
@@ -211,8 +211,8 @@ export function ArticleDetailView({ article, related = [] }) {
                         justifyContent: 'center',
                         fontFamily: MONO_FONT,
                         fontWeight: 700,
-                        color: theme.vars.palette.warning.contrastText,
-                        bgcolor: theme.vars.palette.warning.dark,
+                        color: theme.vars.palette.primary.contrastText,
+                        bgcolor: theme.vars.palette.primary.dark,
                       })}
                     >
                       {initials}

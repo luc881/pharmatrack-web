@@ -80,8 +80,10 @@ export function HomeHero({ sx, ...other }) {
           }}
           sx={[
             (theme) => ({
+              // Degradado dentro del verde del logo: el ámbar que traía la
+              // plantilla se perdía sobre el fondo crema
               ...theme.mixins.textGradient(
-                `300deg, ${theme.vars.palette.primary.main} 0%, ${theme.vars.palette.warning.main} 25%, ${theme.vars.palette.primary.main} 50%, ${theme.vars.palette.warning.main} 75%, ${theme.vars.palette.primary.main} 100%`
+                `300deg, ${theme.vars.palette.primary.dark} 0%, ${theme.vars.palette.primary.light} 25%, ${theme.vars.palette.primary.dark} 50%, ${theme.vars.palette.primary.light} 75%, ${theme.vars.palette.primary.dark} 100%`
               ),
               backgroundSize: '400%',
               ml: { xs: 0.75, md: 1, xl: 1.5 },

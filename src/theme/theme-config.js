@@ -26,12 +26,15 @@ export const themeConfig = {
    * Palette
    *************************************** */
   palette: {
+    // Verde del cactus del logo. `light` es el tono exacto (#919569); `main`
+    // va más oscuro a propósito: sobre ese verde el texto blanco de los
+    // botones daría 2.9:1 de contraste (ilegible). Así queda en 4.8:1.
     primary: {
-      lighter: '#C8FAD6',
-      light: '#5BE49B',
-      main: '#00A76F',
-      dark: '#007867',
-      darker: '#004B50',
+      lighter: '#EDEFE1',
+      light: '#919569',
+      main: '#6B7548',
+      dark: '#4C5432',
+      darker: '#2F3520',
       contrastText: '#FFFFFF',
     },
     secondary: {
@@ -75,16 +78,16 @@ export const themeConfig = {
       contrastText: '#FFFFFF',
     },
     grey: {
-      50: '#FCFDFD',
-      100: '#F9FAFB',
-      200: '#F4F6F8',
-      300: '#DFE3E8',
-      400: '#C4CDD5',
-      500: '#919EAB',
-      600: '#637381',
-      700: '#454F5B',
-      800: '#1C252E',
-      900: '#141A21',
+      50: '#FDFBF7',
+      100: '#F9F5EC',
+      200: '#F2EDE1',
+      300: '#E3DDCD',
+      400: '#C8C3B2',
+      500: '#9A968A',
+      600: '#6E6B62',
+      700: '#4C4A43',
+      800: '#26251F',
+      900: '#1A1A15',
     },
     common: {
       black: '#000000',

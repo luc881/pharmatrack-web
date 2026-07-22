@@ -122,7 +122,7 @@ export function SpeciesCard({ item, horizontal = false }) {
           {formatLabel && (
             <Label
               variant="filled"
-              color="info"
+              color="primary"
               sx={{ top: 16, left: 16, zIndex: 9, position: 'absolute' }}
             >
               {formatLabel}
@@ -200,7 +200,7 @@ export function SpeciesCard({ item, horizontal = false }) {
               </Label>
             )}
             {formatLabel && (
-              <Label variant="filled" color="info">
+              <Label variant="filled" color="primary">
                 {formatLabel}
               </Label>
             )}

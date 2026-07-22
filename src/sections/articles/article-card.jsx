@@ -92,7 +92,7 @@ export function ArticleCard({ article, index = 0 }) {
 
         <Box sx={{ mt: 'auto' }}>
           {article.category && (
-            <Box component="span" sx={{ ...mono, color: 'warning.light' }}>
+            <Box component="span" sx={{ ...mono, color: 'primary.light' }}>
               {article.category}
             </Box>
           )}
