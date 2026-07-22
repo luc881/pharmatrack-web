@@ -11,7 +11,9 @@ export const SETTINGS_STORAGE_KEY = 'app-settings';
 export const defaultSettings = {
   mode: themeConfig.defaultMode,
   direction: themeConfig.direction,
-  contrast: 'high',
+  // 'high' pisaba background.default con grey[200]; con 'default' manda
+  // el crema definido en la paleta
+  contrast: 'default',
   navLayout: 'vertical',
   primaryColor: 'default',
   navColor: 'integrate',

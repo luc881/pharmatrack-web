@@ -34,7 +34,7 @@ export const background = {
   // despeguen sin volver al blanco puro.
   // Las tarjetas llevan un punto de gris tibio en lugar de blanco puro:
   // sobre el crema el blanco saltaba demasiado.
-  light: createPaletteChannel({ paper: '#FAF7F0', default: '#FEFCF7', neutral: grey[200] }),
+  light: createPaletteChannel({ paper: '#FBF8F0', default: '#F6F2E8', neutral: grey[200] }),
   dark: createPaletteChannel({ paper: grey[800], default: grey[900], neutral: '#28323D' }),
 };
 
