@@ -179,12 +179,13 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
 
           {/** @slot Logo (solo móvil: en desktop va centrado) */}
           <Logo
+            variant="badge"
             sx={(theme) => ({
-              p: 0.5,
-              width: 44,
-              height: 44,
-              borderRadius: 1,
-              bgcolor: 'common.white',
+              width: 46,
+              height: 46,
+              borderRadius: '50%',
+              bgcolor: '#F7F0E6',
+              overflow: 'hidden',
               [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
             })}
           />
@@ -215,17 +216,18 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
         >
           <NavColumn items={navLeft} />
 
-          {/* Sólo el logo: ya trae el nombre. Va como emblema con fondo propio
-              porque la barra es oscura y el archivo tiene fondo crema. */}
+          {/* Medallón circular. El arte del logo está hecho para fondo claro
+              (el gecko es crema y desaparecería sobre la barra oscura), así
+              que el disco lleva el mismo crema del archivo: sin costura y sin
+              el doble marco que salía con un recuadro blanco. */}
           <Logo
-            isSingle={false}
+            variant="badge"
             sx={{
-              px: 1.5,
-              py: 0.75,
-              width: 190,
-              height: 88,
-              borderRadius: 1.5,
-              bgcolor: 'common.white',
+              width: 132,
+              height: 132,
+              borderRadius: '50%',
+              bgcolor: '#F7F0E6',
+              overflow: 'hidden',
             }}
           />
 
