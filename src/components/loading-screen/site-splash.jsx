@@ -24,7 +24,12 @@ import { Logo } from '../logo';
 
 const KEY = 'splash-shown';
 const MIN_MS = 1500; // en escritorio carga tan rápido que el splash ni se veía
-const MAX_MS = 2200;
+const MAX_MS = 4500; // techo de seguridad: nunca deja a nadie esperando de más
+
+// Imagen dominante de la primera pantalla. La pinta un componente cliente DESPUÉS
+// de hidratar, así que no está en el HTML inicial y `window.load` no la espera:
+// por eso el splash se iba y el fondo del hero aparecía de golpe justo después.
+const HERO_IMG = '/video/hero-moss.jpg';
 
 const fadeOut = keyframes`
   0%, 70% { opacity: 1; visibility: visible; }
@@ -49,22 +54,32 @@ export function SiteSplash() {
     }
     sessionStorage.setItem(KEY, '1');
 
-    // No se va antes del mínimo aunque la página ya esté lista.
+    // Se retira cuando la primera pantalla está lista (página cargada + imagen
+    // del hero decodificada) y ya pasó el mínimo. Lo que sigue es contenido
+    // debajo del pliegue, que carga perezoso al hacer scroll: no cuenta.
     const start = Date.now();
     let floor;
-    const finish = () => {
+    const reveal = () => {
       const left = MIN_MS - (Date.now() - start);
       if (left > 0) floor = setTimeout(() => setDone(true), left);
       else setDone(true);
     };
-    if (document.readyState === 'complete') {
-      finish();
-    } else {
-      window.addEventListener('load', finish);
-    }
+
+    const pageLoaded =
+      document.readyState === 'complete'
+        ? Promise.resolve()
+        : new Promise((res) => window.addEventListener('load', res, { once: true }));
+
+    const heroReady = new Promise((res) => {
+      const img = new Image();
+      img.onload = res;
+      img.onerror = res; // si falla, no bloqueamos el splash
+      img.src = HERO_IMG;
+    });
+
+    Promise.all([pageLoaded, heroReady]).then(reveal);
     const cap = setTimeout(() => setDone(true), MAX_MS);
     return () => {
-      window.removeEventListener('load', finish);
       clearTimeout(cap);
       clearTimeout(floor);
     };
