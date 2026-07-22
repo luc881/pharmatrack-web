@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -158,6 +159,7 @@ function OrderCard({ order, onCancel }) {
 
 export function OrdersView() {
   const { status } = useSession();
+  const params = useSearchParams();
   const [orders, setOrders] = useState(null);
 
   const load = () =>
@@ -168,7 +170,30 @@ export function OrdersView() {
 
   useEffect(() => {
     if (status !== 'authenticated') return;
-    load();
+
+    // Al volver de Mercado Pago (manda payment_id/status en la URL) puede que
+    // el webhook aún no haya llegado — o que se haya perdido. Le pedimos al
+    // servidor que verifique con Mercado Pago; los parámetros de la URL solo
+    // sirven de aviso, el servidor no se los cree.
+    const returningFromPayment =
+      params.has('payment_id') || params.has('collection_status') || params.has('status');
+
+    fetch('/api/shop/orders')
+      .then((res) => (res.ok ? res.json() : []))
+      .then(async (data) => {
+        setOrders(data);
+        if (!returningFromPayment) return;
+        const unpaid = data.filter((o) => o.status === 'pending' && !o.payment_id);
+        if (!unpaid.length) return;
+        await Promise.all(
+          unpaid.map((o) =>
+            fetch(`/api/shop/orders/${o.id}/sync-payment`, { method: 'POST' }).catch(() => {})
+          )
+        );
+        await load();
+      })
+      .catch(() => setOrders([]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   // Devuelve el mensaje de error (o null si salió bien) para que la tarjeta
