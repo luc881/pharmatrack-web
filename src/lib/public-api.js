@@ -17,10 +17,12 @@ export async function getAnimals(params = {}) {
   }
 }
 
-// La taxonomía cambia poco: revalidate más largo
+// Antes 300s "porque la taxonomía cambia poco", pero ahora estos grupos
+// llevan las banderas de visible/menú/destacado que se ajustan a mano desde
+// el dashboard: esperar 5 minutos para ver el efecto es demasiado.
 export async function getGroups() {
   try {
-    const res = await fetch(`${BASE}/groups`, { next: { revalidate: 300 } });
+    const res = await fetch(`${BASE}/groups`, { next: { revalidate: 30 } });
     if (!res.ok) return [];
     return await res.json();
   } catch {
