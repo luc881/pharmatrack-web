@@ -79,6 +79,7 @@ export function AccountView() {
   const { status } = useSession();
   const [form, setForm] = useState(EMPTY);
   const [states, setStates] = useState([]);
+  const [shippingEnabled, setShippingEnabled] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
@@ -98,6 +99,15 @@ export function AccountView() {
       })
       .catch(() => {});
   }, [status]);
+
+  useEffect(() => {
+    fetch('/api/site-settings')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((site) => {
+        if (site) setShippingEnabled(site.shipping_enabled !== false);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     fetch('/api/shop/mx-states')
@@ -178,6 +188,9 @@ export function AccountView() {
               helperText="Con este te contactamos para coordinar la entrega."
             />
 
+            {/* Sin envíos activos la dirección no sirve para nada: se oculta */}
+            {shippingEnabled && (
+              <>
             <Divider sx={{ borderStyle: 'dashed' }}>
               <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                 Dirección de envío
@@ -234,6 +247,8 @@ export function AccountView() {
               placeholder="Portón negro, entre Av. Juárez y Morelos"
               helperText="Lo que le ayude a la paquetería a encontrarte."
             />
+              </>
+            )}
 
             {error && (
               <Alert severity="error" sx={{ typography: 'caption' }}>

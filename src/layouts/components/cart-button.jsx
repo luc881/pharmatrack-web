@@ -97,11 +97,22 @@ export function CartButton({ sx }) {
   const [error, setError] = useState('');
   const [delivery, setDelivery] = useState('pickup');
   const [phone, setPhone] = useState('');
+  const [shippingEnabled, setShippingEnabled] = useState(true);
 
   const signedIn = status === 'authenticated';
   const summary = buildSummary(items, total);
-  const isPickup = delivery === 'pickup';
+  // Con los envíos apagados sólo existe la entrega en CDMX
+  const isPickup = delivery === 'pickup' || !shippingEnabled;
   const phoneOk = phone.replace(/\D/g, '').length >= 10;
+
+  useEffect(() => {
+    fetch('/api/site-settings')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((site) => {
+        if (site) setShippingEnabled(site.shipping_enabled !== false);
+      })
+      .catch(() => {});
+  }, []);
 
   // Precargar el teléfono del perfil (si ya lo dio, no se le vuelve a pedir)
   useEffect(() => {
@@ -132,7 +143,7 @@ export function CartButton({ sx }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: items.map((i) => ({ key: i.key, qty: i.qty })),
-          delivery_method: delivery,
+          delivery_method: isPickup ? 'pickup' : 'shipping',
           contact_phone: phone || undefined,
         }),
       });
@@ -233,17 +244,19 @@ export function CartButton({ sx }) {
 
             {signedIn && (
               <>
-                <ToggleButtonGroup
-                  exclusive
-                  fullWidth
-                  size="small"
-                  value={delivery}
-                  onChange={(_, value) => value && setDelivery(value)}
-                  sx={{ mb: 1 }}
-                >
-                  <ToggleButton value="pickup">Entrega en CDMX</ToggleButton>
-                  <ToggleButton value="shipping">Envío</ToggleButton>
-                </ToggleButtonGroup>
+                {shippingEnabled && (
+                  <ToggleButtonGroup
+                    exclusive
+                    fullWidth
+                    size="small"
+                    value={delivery}
+                    onChange={(_, value) => value && setDelivery(value)}
+                    sx={{ mb: 1 }}
+                  >
+                    <ToggleButton value="pickup">Entrega en CDMX</ToggleButton>
+                    <ToggleButton value="shipping">Envío</ToggleButton>
+                  </ToggleButtonGroup>
+                )}
 
                 <Typography
                   variant="caption"
@@ -276,7 +289,9 @@ export function CartButton({ sx }) {
 
             {!signedIn && (
               <Typography variant="caption" sx={{ mb: 2, display: 'block', color: 'text.secondary' }}>
-                Entregamos en persona en CDMX o enviamos a todo el país.
+                {shippingEnabled
+                  ? 'Entregamos en persona en CDMX o enviamos a todo el país.'
+                  : 'Entregamos en persona en la Ciudad de México.'}
               </Typography>
             )}
 

@@ -38,6 +38,8 @@ export async function getAnimal(id) {
   }
 }
 
+const SITE_DEFAULTS = { show_category_browse: true, shipping_enabled: true };
+
 // Ajustes públicos del sitio (p. ej. show_category_browse). Si el API no
 // responde, defaults sensatos para no romper la home.
 export async function getSiteSettings() {
@@ -45,10 +47,10 @@ export async function getSiteSettings() {
     const res = await fetch(`${CONFIG.serverUrl}/api/v1/settings/site`, {
       next: { revalidate: 60 },
     });
-    if (!res.ok) return { show_category_browse: true };
+    if (!res.ok) return SITE_DEFAULTS;
     return await res.json();
   } catch {
-    return { show_category_browse: true };
+    return SITE_DEFAULTS;
   }
 }
 

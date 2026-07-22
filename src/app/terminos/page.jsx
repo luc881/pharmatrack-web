@@ -2,6 +2,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 import { MainLayout } from 'src/layouts/main';
+import { getSiteSettings } from 'src/lib/public-api';
 
 // ----------------------------------------------------------------------
 
@@ -20,12 +21,18 @@ const SECTIONS = [
     body: `Los pedidos con entrega personal se pagan en línea a través de Mercado Pago; el precio del catálogo es el total, sin cargos adicionales. Después del pago acordamos contigo por WhatsApp el punto y la hora de entrega, en lugares públicos dentro de la Ciudad de México.`,
   },
   {
+    shippingOnly: true,
     title: 'Envíos',
     body: `Para envíos a otras partes del país, primero cotizamos el costo según destino y especie, y te enviamos un link de pago por WhatsApp con el total final. Enviamos únicamente especies que toleran bien el transporte, con empaque adecuado a la temporada.`,
   },
   {
-    title: 'Animales vivos: garantía de llegada',
-    body: `Garantizamos que tu animal llega vivo. En envíos, si un ejemplar llega sin vida, avísanos el mismo día de la entrega con fotos o video del paquete sin abrir por completo, y lo reponemos o te reembolsamos. Por la naturaleza de los animales vivos, no hay devoluciones una vez entregado y aceptado el ejemplar: su bienestar depende de condiciones de manejo que ya no podemos supervisar.`,
+    shippingOnly: true,
+    title: 'Garantía de llegada viva',
+    body: `Garantizamos que tu animal llega vivo. Si un ejemplar llega sin vida, avísanos el mismo día de la entrega con fotos o video del paquete sin abrir por completo, y lo reponemos o te reembolsamos.`,
+  },
+  {
+    title: 'Animales vivos',
+    body: `Entregamos ejemplares sanos y activos; puedes revisarlo con nosotros en el momento de la entrega. Por la naturaleza de los animales vivos, no hay devoluciones una vez entregado y aceptado el ejemplar: su bienestar depende de condiciones de manejo que ya no podemos supervisar.`,
   },
   {
     title: 'Cancelaciones y reembolsos',
@@ -41,7 +48,11 @@ const SECTIONS = [
   },
 ];
 
-export default function Page() {
+export default async function Page() {
+  const site = await getSiteSettings();
+  const shipping = site.shipping_enabled !== false;
+  // Sin envíos activos, prometer condiciones de envío sería engañoso
+  const sections = SECTIONS.filter((s) => shipping || !s.shippingOnly);
   return (
     <MainLayout>
       <Container sx={{ mb: 10, mt: { xs: 1, md: 3 }, maxWidth: 720 }}>
@@ -49,7 +60,7 @@ export default function Page() {
           Términos y condiciones
         </Typography>
 
-        {SECTIONS.map((section) => (
+        {sections.map((section) => (
           <div key={section.title}>
             <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>
               {section.title}
