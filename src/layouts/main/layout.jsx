@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { varAlpha } from 'minimal-shared/utils';
 import { useBoolean } from 'minimal-shared/hooks';
 
@@ -25,6 +25,7 @@ import { CartButton } from '../components/cart-button';
 import { CloseCursor } from '../components/close-cursor';
 import { SearchDialog } from '../components/search-dialog';
 import { AccountButton } from '../components/account-button';
+import { useNavCategories } from '../nav-categories-context';
 import { FavoritesButton } from '../components/favorites-button';
 import { MainSection, LayoutSection, HeaderSection } from '../core';
 import { splitNav, buildNavData, navData as mainNavData } from '../nav-config-main';
@@ -99,21 +100,9 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onToggleSearch]);
 
-  // Categorías visibles del backend (proxy same-origin). Mientras carga usa el
-  // fallback fijo; al llegar, esconde los grupos marcados como no públicos.
-  const [categories, setCategories] = useState(null);
-  useEffect(() => {
-    let alive = true;
-    fetch('/api/nav-categories/')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (alive && Array.isArray(data)) setCategories(data);
-      })
-      .catch(() => {});
-    return () => {
-      alive = false;
-    };
-  }, []);
+  // Vienen resueltas del servidor (layout raíz): la barra sale correcta desde
+  // el primer render, sin el parpadeo de pintar la lista fija y corregirla.
+  const categories = useNavCategories();
 
   const dynamicNav = categories ? buildNavData(categories) : mainNavData;
   const { left: navLeft, right: navRight } = splitNav(dynamicNav);

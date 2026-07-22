@@ -6,6 +6,8 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
 import { CONFIG } from 'src/global-config';
+import { getNavCategories } from 'src/lib/public-api';
+import { NavCategoriesProvider } from 'src/layouts/nav-categories-context';
 import { themeConfig, ThemeProvider, primary as primaryColor } from 'src/theme';
 
 import { ProgressBar } from 'src/components/progress-bar';
@@ -54,7 +56,7 @@ async function getAppConfig() {
 }
 
 export default async function RootLayout({ children }) {
-  const appConfig = await getAppConfig();
+  const [appConfig, navCategories] = await Promise.all([getAppConfig(), getNavCategories()]);
 
   return (
     <html lang="es" dir={appConfig.dir} suppressHydrationWarning>
@@ -79,7 +81,9 @@ export default async function RootLayout({ children }) {
                 <ProgressBar />
                 <SessionProvider>
                   <AccountSync />
-                  {children}
+                  <NavCategoriesProvider categories={navCategories}>
+                    {children}
+                  </NavCategoriesProvider>
                 </SessionProvider>
               </MotionLazy>
             </ThemeProvider>

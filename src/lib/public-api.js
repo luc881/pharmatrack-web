@@ -30,6 +30,20 @@ export async function getGroups() {
   }
 }
 
+// Categorías del menú: raíces visibles y marcadas para la nav. Se resuelve en
+// el servidor para que la barra salga correcta en el primer render — pedirlas
+// desde el navegador hacía que parpadeara con la lista de respaldo.
+export async function getNavCategories() {
+  const { slugify } = await import('src/sections/catalog/utils');
+  const groups = await getGroups();
+  // Sin datos (API caída) devuelve null para que la barra use su lista fija en
+  // vez de quedarse sin categorías.
+  if (!groups.length) return null;
+  return groups
+    .filter((g) => g.parent_id == null && g.show_in_nav !== false)
+    .map((g) => ({ title: g.name, slug: slugify(g.name) }));
+}
+
 export async function getAnimal(id) {
   try {
     const res = await fetch(`${BASE}/${id}`, { next: { revalidate: 60 } });

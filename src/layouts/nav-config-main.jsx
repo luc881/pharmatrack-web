@@ -4,8 +4,8 @@ import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-// Categorías raíz por defecto (fallback SSR antes de que /api/nav-categories
-// responda con las visibles reales; se sincroniza con los grupos del backend)
+// Categorías raíz de respaldo: sólo se usan si el backend no responde. Lo
+// normal es que lleguen resueltas del servidor (getNavCategories).
 const CATEGORIES = [
   { title: 'Arácnidos', slug: 'aracnidos' },
   { title: 'Reptiles', slug: 'reptiles' },
