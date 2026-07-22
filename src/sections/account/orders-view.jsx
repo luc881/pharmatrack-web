@@ -56,7 +56,7 @@ function OrderCard({ order, onCancel }) {
   return (
     <Card sx={{ p: 3 }}>
       <Box sx={{ mb: 2, gap: 1.5, display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-        <Typography variant="subtitle1">Pedido #{order.id}</Typography>
+        <Typography variant="subtitle1">Pedido {order.code ?? `#${order.id}`}</Typography>
         <Label color={state.color}>{state.label}</Label>
         <Typography variant="caption" sx={{ ml: 'auto', color: 'text.secondary' }}>
           {fDate(order.created_at)}
@@ -127,7 +127,7 @@ function OrderCard({ order, onCancel }) {
               }}
             >
               <Typography variant="body2" sx={{ flexGrow: 1, color: 'error.darker' }}>
-                ¿Seguro que quieres cancelar el pedido #{order.id}?
+                ¿Seguro que quieres cancelar el pedido {order.code ?? `#${order.id}`}?
               </Typography>
               <Button size="small" color="inherit" disabled={cancelling} onClick={() => setConfirming(false)}>
                 Conservar
