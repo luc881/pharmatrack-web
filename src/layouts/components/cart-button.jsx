@@ -262,6 +262,15 @@ export function CartButton({ sx }) {
 
         {items.length > 0 && (
           <Box sx={{ p: 2.5, borderTop: (theme) => `solid 1px ${theme.vars.palette.divider}` }}>
+            {/* Sin envíos hay que decirlo antes de que pida: si no, el cliente
+                asume que le llega a su casa */}
+            {!shippingEnabled && (
+              <Alert severity="info" icon={false} sx={{ mb: 2, py: 0.5, typography: 'caption' }}>
+                <strong>Solo entrega en persona en CDMX.</strong> Por ahora no hacemos envíos
+                a domicilio.
+              </Alert>
+            )}
+
             <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
               {/* con entrega en CDMX el monto es el final; con envío falta cotizar */}
               <Typography variant="subtitle1">

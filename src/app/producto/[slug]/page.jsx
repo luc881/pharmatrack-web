@@ -2,7 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { MainLayout } from 'src/layouts/main';
-import { getProduct, getProducts } from 'src/lib/public-api';
+import { getProduct, getProducts , getSiteSettings } from 'src/lib/public-api';
 
 import { productSlug } from 'src/sections/catalog/product-card';
 import { ProductDetailsView } from 'src/sections/catalog/product-details-view';
@@ -47,9 +47,15 @@ export default async function Page({ params }) {
     .sort((a, b) => (b.category === product.category) - (a.category === product.category))
     .slice(0, 4);
 
+  const site = await getSiteSettings();
+
   return (
     <MainLayout>
-      <ProductDetailsView product={product} related={related} />
+      <ProductDetailsView
+        product={product}
+        related={related}
+        shippingEnabled={site.shipping_enabled !== false}
+      />
     </MainLayout>
   );
 }

@@ -80,7 +80,7 @@ function ShareButton({ title }) {
 
 // ----------------------------------------------------------------------
 
-export function SpeciesDetailsView({ item, category = null, related = [] }) {
+export function SpeciesDetailsView({ item, category = null, related = [], shippingEnabled = true }) {
   const { species, morph, key, slug, photos, morphs, sexes, minPrice, maxPrice, compareAt = null } = item;
 
   const { ids, toggle } = useFavorites();
@@ -268,6 +268,12 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
             >
               {added ? 'Agregado ✓' : 'Agregar a cotización'}
             </Button>
+
+            {!shippingEnabled && (
+              <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
+                📍 Solo entrega en persona en CDMX — por ahora no hacemos envíos.
+              </Typography>
+            )}
 
             <Box sx={{ gap: 1.5, display: 'flex', alignItems: 'center' }}>
               {CONFIG.whatsapp ? (

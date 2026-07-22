@@ -32,7 +32,7 @@ import { productSlug , ProductCard, isBulkWeight } from './product-card';
 // ----------------------------------------------------------------------
 
 
-export function ProductDetailsView({ product, related = [] }) {
+export function ProductDetailsView({ product, related = [], shippingEnabled = true }) {
   const cart = useCart();
   const [added, setAdded] = useState(false);
   const soldOut = product.tracks_batches && (product.stock ?? 0) <= 0;
@@ -166,6 +166,12 @@ export function ProductDetailsView({ product, related = [] }) {
               >
                 {added ? 'Agregado ✓' : 'Agregar a cotización'}
               </Button>
+            )}
+
+            {!shippingEnabled && (
+              <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
+                📍 Solo entrega en persona en CDMX — por ahora no hacemos envíos.
+              </Typography>
             )}
 
             {CONFIG.whatsapp && !soldOut && (

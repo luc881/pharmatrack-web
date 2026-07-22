@@ -2,7 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { MainLayout } from 'src/layouts/main';
-import { getAnimal, getGroups, getAnimals } from 'src/lib/public-api';
+import { getAnimal, getGroups, getAnimals , getSiteSettings } from 'src/lib/public-api';
 
 import { CatalogView } from 'src/sections/catalog/catalog-view';
 import { SpeciesDetailsView } from 'src/sections/catalog/species-details-view';
@@ -120,6 +120,7 @@ export default async function Page({ params }) {
       .filter((i) => i.key !== item.key && rootGroupOf(i.species, groups)?.id === root?.id)
       .slice(0, 8);
 
+    const site = await getSiteSettings();
     const jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'Product',
@@ -142,7 +143,12 @@ export default async function Page({ params }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <SpeciesDetailsView item={item} category={category} related={related} />
+        <SpeciesDetailsView
+          item={item}
+          category={category}
+          related={related}
+          shippingEnabled={site.shipping_enabled !== false}
+        />
       </MainLayout>
     );
   }
