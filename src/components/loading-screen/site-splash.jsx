@@ -23,6 +23,7 @@ import { Logo } from '../logo';
 // ----------------------------------------------------------------------
 
 const KEY = 'splash-shown';
+const MIN_MS = 1500; // en escritorio carga tan rápido que el splash ni se veía
 const MAX_MS = 2200;
 
 const fadeOut = keyframes`
@@ -48,16 +49,24 @@ export function SiteSplash() {
     }
     sessionStorage.setItem(KEY, '1');
 
-    const finish = () => setDone(true);
+    // No se va antes del mínimo aunque la página ya esté lista.
+    const start = Date.now();
+    let floor;
+    const finish = () => {
+      const left = MIN_MS - (Date.now() - start);
+      if (left > 0) floor = setTimeout(() => setDone(true), left);
+      else setDone(true);
+    };
     if (document.readyState === 'complete') {
       finish();
-      return undefined;
+    } else {
+      window.addEventListener('load', finish);
     }
-    window.addEventListener('load', finish);
-    const cap = setTimeout(finish, MAX_MS);
+    const cap = setTimeout(() => setDone(true), MAX_MS);
     return () => {
       window.removeEventListener('load', finish);
       clearTimeout(cap);
+      clearTimeout(floor);
     };
   }, []);
 
