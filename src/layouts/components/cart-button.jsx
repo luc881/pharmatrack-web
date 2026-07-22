@@ -13,6 +13,8 @@ import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -92,12 +94,15 @@ export function CartButton({ sx }) {
   const { status } = useSession();
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState('');
+  const [delivery, setDelivery] = useState('pickup');
 
   const signedIn = status === 'authenticated';
   const summary = buildSummary(items, total);
+  const isPickup = delivery === 'pickup';
 
-  // Guarda el pedido y sólo entonces abre WhatsApp con el folio. Si falla,
-  // el carrito se queda intacto para poder reintentar.
+  // Guarda el pedido y, según la entrega, manda a pagar (CDMX) o abre
+  // WhatsApp con el folio (envío: falta cotizar el envío antes de cobrar).
+  // Si algo falla, el carrito queda intacto para reintentar.
   const handleOrder = async () => {
     setPlacing(true);
     setError('');
@@ -105,16 +110,36 @@ export function CartButton({ sx }) {
       const res = await fetch('/api/shop/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: items.map((i) => ({ key: i.key, qty: i.qty })) }),
+        body: JSON.stringify({
+          items: items.map((i) => ({ key: i.key, qty: i.qty })),
+          delivery_method: delivery,
+        }),
       });
       const body = await res.json();
       if (!res.ok) {
         setError(body.detail ?? 'No se pudo enviar el pedido. Inténtalo de nuevo.');
         return;
       }
+
+      if (isPickup) {
+        const pay = await fetch(`/api/shop/orders/${body.id}/checkout`, { method: 'POST' });
+        const payBody = await pay.json();
+        if (!pay.ok) {
+          // el pedido ya quedó guardado: se vacía el carrito y se avisa
+          clear();
+          setError(
+            `${payBody.detail ?? 'No se pudo abrir el pago.'} Tu pedido ${body.code} quedó guardado; escríbenos por WhatsApp.`
+          );
+          return;
+        }
+        clear();
+        window.location.href = payBody.payment_url;
+        return;
+      }
+
       clear();
       drawer.onFalse();
-      const text = `Hola, acabo de hacer el pedido #${body.id} en la página:\n\n${summary}`;
+      const text = `Hola, acabo de hacer el pedido ${body.code ?? `#${body.id}`} en la página:\n\n${summary}`;
       window.open(
         `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`,
         '_blank',
@@ -182,9 +207,36 @@ export function CartButton({ sx }) {
               <Typography variant="subtitle1">{fCurrency(total)}</Typography>
             </Box>
 
-            <Typography variant="caption" sx={{ mb: 2, display: 'block', color: 'text.secondary' }}>
-              Sin pago en línea: nos mandas el resumen y confirmamos disponibilidad, envío y total.
-            </Typography>
+            {signedIn && (
+              <>
+                <ToggleButtonGroup
+                  exclusive
+                  fullWidth
+                  size="small"
+                  value={delivery}
+                  onChange={(_, value) => value && setDelivery(value)}
+                  sx={{ mb: 1 }}
+                >
+                  <ToggleButton value="pickup">Entrega en CDMX</ToggleButton>
+                  <ToggleButton value="shipping">Envío</ToggleButton>
+                </ToggleButtonGroup>
+
+                <Typography
+                  variant="caption"
+                  sx={{ mb: 2, display: 'block', color: 'text.secondary' }}
+                >
+                  {isPickup
+                    ? 'Pagas ahora en línea y acordamos por WhatsApp el punto y la hora de entrega. El precio mostrado es el total.'
+                    : 'Nos mandas el resumen y te cotizamos el envío; el link de pago te llega por WhatsApp con el total final.'}
+                </Typography>
+              </>
+            )}
+
+            {!signedIn && (
+              <Typography variant="caption" sx={{ mb: 2, display: 'block', color: 'text.secondary' }}>
+                Entregamos en persona en CDMX o enviamos a todo el país.
+              </Typography>
+            )}
 
             {error && (
               <Alert severity="error" sx={{ mb: 2, typography: 'caption' }}>
@@ -203,7 +255,7 @@ export function CartButton({ sx }) {
                     loading={placing}
                     onClick={handleOrder}
                   >
-                    Hacer pedido
+                    {isPickup ? `Pagar ${fCurrency(total)}` : 'Pedir cotización'}
                   </Button>
                   <Button
                     fullWidth

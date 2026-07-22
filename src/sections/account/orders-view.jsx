@@ -28,6 +28,7 @@ import { SignInPrompt } from './account-view';
 
 export const ORDER_STATUS = {
   pending: { label: 'Pendiente', color: 'warning' },
+  paid: { label: 'Pagado', color: 'success' },
   confirmed: { label: 'Confirmado', color: 'info' },
   completed: { label: 'Entregado', color: 'success' },
   cancelled: { label: 'Cancelado', color: 'error' },
@@ -91,6 +92,12 @@ function OrderCard({ order, onCancel }) {
         <Typography variant="subtitle2">Total estimado</Typography>
         <Typography variant="subtitle1">{fCurrency(order.total)}</Typography>
       </Box>
+
+      {order.status === 'paid' && (
+        <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
+          Pago recibido. Te escribimos por WhatsApp para acordar el punto y la hora de entrega.
+        </Typography>
+      )}
 
       {order.status === 'pending' && (
         <>
