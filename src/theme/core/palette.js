@@ -32,7 +32,9 @@ export const text = {
 export const background = {
   // Crema del logo de fondo; las tarjetas van un tono más claro para que se
   // despeguen sin volver al blanco puro.
-  light: createPaletteChannel({ paper: '#FFFEFB', default: '#FCF9F2', neutral: grey[200] }),
+  // Las tarjetas llevan un punto de gris tibio en lugar de blanco puro:
+  // sobre el crema el blanco saltaba demasiado.
+  light: createPaletteChannel({ paper: '#F8F5EC', default: '#FCF9F2', neutral: grey[200] }),
   dark: createPaletteChannel({ paper: grey[800], default: grey[900], neutral: '#28323D' }),
 };
 
