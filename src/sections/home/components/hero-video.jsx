@@ -54,7 +54,6 @@ export function HeroVideo({ overlay = 0.42 }) {
           height: 1,
           objectFit: 'cover',
           position: 'absolute',
-          filter: 'saturate(1.25) contrast(1.08)',
         }}
       />
 

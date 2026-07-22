@@ -29,9 +29,10 @@ const motionProps = {
 };
 
 export function HomeHero({ sx, ...other }) {
-  const scrollProgress = useScrollPercent();
-
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up(mdKey));
+
+  // El parallax sólo existe en escritorio; en móvil ni se calcula
+  const scrollProgress = useScrollPercent(mdUp);
 
   const distance = mdUp ? scrollProgress.percent : 0;
 
@@ -258,7 +259,13 @@ function useTransformY(value, distance) {
   return useSpring(useTransform(value, [0, 1], [0, distance]), physics);
 }
 
-function useScrollPercent() {
+// `enabled` es la clave del rendimiento: esto guarda el porcentaje en estado
+// de React, así que cada evento de scroll re-renderizaba el hero entero
+// (titular, textos, botones, video) — decenas de veces por segundo. En móvil
+// el parallax ni siquiera se usa, y ese trabajo en el hilo principal es lo que
+// hacía tironear al carrusel. Ahora sólo se actualiza si sirve para algo y si
+// el valor cambió de verdad.
+function useScrollPercent(enabled = true) {
   const elementRef = useRef(null);
 
   const { scrollY } = useScroll();
@@ -266,19 +273,13 @@ function useScrollPercent() {
   const [percent, setPercent] = useState(0);
 
   useMotionValueEvent(scrollY, 'change', (scrollHeight) => {
-    let heroHeight = 0;
+    if (!enabled) return;
 
-    if (elementRef.current) {
-      heroHeight = elementRef.current.offsetHeight;
-    }
+    const heroHeight = elementRef.current?.offsetHeight ?? 0;
+    if (!heroHeight) return;
 
-    const scrollPercent = Math.floor((scrollHeight / heroHeight) * 100);
-
-    if (scrollPercent >= 100) {
-      setPercent(100);
-    } else {
-      setPercent(Math.floor(scrollPercent));
-    }
+    const scrollPercent = Math.min(100, Math.floor((scrollHeight / heroHeight) * 100));
+    setPercent((current) => (current === scrollPercent ? current : scrollPercent));
   });
 
   return { elementRef, percent, scrollY };
