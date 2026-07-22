@@ -44,7 +44,7 @@ function Panel({ title, children, sx }) {
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      <Box component="span" sx={{ ...monoLabel, px: 2.5, pt: 2, display: 'block', color: 'text.disabled' }}>
+      <Box component="span" sx={{ ...monoLabel, px: 2.5, pt: 2, display: 'block', color: 'text.secondary' }}>
         {title}
       </Box>
       {children}
@@ -55,7 +55,7 @@ function Panel({ title, children, sx }) {
 function TaxonRow({ label, children, italic = false }) {
   return (
     <Box sx={{ px: 2.5, py: 1.25, gap: 2, display: 'flex', justifyContent: 'space-between' }}>
-      <Box component="span" sx={{ ...monoLabel, fontWeight: 400, color: 'text.disabled' }}>
+      <Box component="span" sx={{ ...monoLabel, fontWeight: 400, color: 'text.secondary' }}>
         {label}
       </Box>
       <Typography

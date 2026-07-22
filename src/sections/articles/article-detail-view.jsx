@@ -38,7 +38,7 @@ const mono = {
 function Panel({ title, children }) {
   return (
     <Box sx={(theme) => ({ borderRadius: 2, border: `solid 1px ${theme.vars.palette.divider}` })}>
-      <Box component="span" sx={{ ...mono, px: 2.5, pt: 2, display: 'block', color: 'text.disabled' }}>
+      <Box component="span" sx={{ ...mono, px: 2.5, pt: 2, display: 'block', color: 'text.secondary' }}>
         {title}
       </Box>
       {children}
@@ -82,7 +82,7 @@ function BodySection({ section }) {
         {section.caption && (
           <Typography
             component="figcaption"
-            sx={{ ...mono, mt: 1, fontWeight: 400, fontStyle: 'italic', color: 'text.disabled' }}
+            sx={{ ...mono, mt: 1, fontWeight: 400, fontStyle: 'italic', color: 'text.secondary' }}
           >
             {section.caption}
           </Typography>
@@ -233,7 +233,7 @@ export function ArticleDetailView({ article, related = [] }) {
                 <Stack divider={<Divider />} sx={{ pt: 1, pb: 0.5 }}>
                   {article.category && (
                     <Box sx={{ px: 2.5, py: 1.25, display: 'flex', justifyContent: 'space-between' }}>
-                      <Box component="span" sx={{ ...mono, fontWeight: 400, color: 'text.disabled' }}>
+                      <Box component="span" sx={{ ...mono, fontWeight: 400, color: 'text.secondary' }}>
                         Categoría
                       </Box>
                       <Typography component="span" variant="subtitle2" sx={{ color: TAXON_COLOR }}>
@@ -242,7 +242,7 @@ export function ArticleDetailView({ article, related = [] }) {
                     </Box>
                   )}
                   <Box sx={{ px: 2.5, py: 1.25, display: 'flex', justifyContent: 'space-between' }}>
-                    <Box component="span" sx={{ ...mono, fontWeight: 400, color: 'text.disabled' }}>
+                    <Box component="span" sx={{ ...mono, fontWeight: 400, color: 'text.secondary' }}>
                       Publicado
                     </Box>
                     <Typography component="span" variant="subtitle2">
@@ -250,7 +250,7 @@ export function ArticleDetailView({ article, related = [] }) {
                     </Typography>
                   </Box>
                   <Box sx={{ px: 2.5, py: 1.25, display: 'flex', justifyContent: 'space-between' }}>
-                    <Box component="span" sx={{ ...mono, fontWeight: 400, color: 'text.disabled' }}>
+                    <Box component="span" sx={{ ...mono, fontWeight: 400, color: 'text.secondary' }}>
                       Lectura
                     </Box>
                     <Typography component="span" variant="subtitle2">

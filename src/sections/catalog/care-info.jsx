@@ -5,15 +5,23 @@ import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-// Cada columna trae su color; el valor va sobre una franja más oscura del
-// mismo tono, como en las fichas de cuidados de las tiendas del ramo.
+// Cada columna alude a lo que mide: temperatura cálida, humedad azul, origen
+// verde-tierra, dificultad ámbar, rareza morada. Tonos pastel con tinta
+// oscura del mismo matiz — el texto blanco sobre color medio que había antes
+// se leía peor y competía con el resto de la página.
 const FIELDS = [
-  { key: 'origin', label: 'Origen', icon: 'care:origin', main: '#C2707C', dark: '#AB5C68' },
-  { key: 'temperature', label: 'Temp.', icon: 'care:temp', main: '#7C86C8', dark: '#6873B7' },
-  { key: 'humidity', label: 'Humedad', icon: 'care:humidity', main: '#C3A22C', dark: '#AC8E1E' },
-  { key: 'adult_size', label: 'Tamaño', icon: 'care:size', main: '#5FB0AC', dark: '#4C9D99' },
-  { key: 'difficulty', label: 'Dificultad', icon: 'care:difficulty', main: '#A89384', dark: '#957F6F' },
-  { key: 'rarity', label: 'Rareza', icon: 'care:rarity', main: '#7FA383', dark: '#6B9070' },
+  { key: 'origin', label: 'Origen', icon: 'care:origin',
+    main: '#E5EBD9', dark: '#D3DCC1', ink: '#3D5130' },
+  { key: 'temperature', label: 'Temp.', icon: 'care:temp',
+    main: '#F8DED7', dark: '#F1C8BE', ink: '#8B3B2C' },
+  { key: 'humidity', label: 'Humedad', icon: 'care:humidity',
+    main: '#D9E7F3', dark: '#C3D8EC', ink: '#22557F' },
+  { key: 'adult_size', label: 'Tamaño', icon: 'care:size',
+    main: '#E6E7E9', dark: '#D6D8DC', ink: '#3E464F' },
+  { key: 'difficulty', label: 'Dificultad', icon: 'care:difficulty',
+    main: '#F9E8CE', dark: '#F2D9B2', ink: '#845517' },
+  { key: 'rarity', label: 'Rareza', icon: 'care:rarity',
+    main: '#E8E0F0', dark: '#D9CBE7', ink: '#583D79' },
 ];
 
 export function CareInfo({ species, sx, ...other }) {
@@ -52,7 +60,7 @@ export function CareInfo({ species, sx, ...other }) {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 bgcolor: field.main,
-                color: 'common.white',
+                color: field.ink,
               }}
             >
               <Iconify icon={field.icon} width={34} />
@@ -72,7 +80,7 @@ export function CareInfo({ species, sx, ...other }) {
                 justifyContent: 'center',
                 minHeight: 76,
                 bgcolor: field.dark,
-                color: 'common.white',
+                color: field.ink,
                 textAlign: 'center',
                 typography: 'subtitle2',
                 textTransform: 'uppercase',
