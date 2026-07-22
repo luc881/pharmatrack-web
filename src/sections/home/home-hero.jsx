@@ -170,6 +170,15 @@ export function HomeHero({ sx, ...other }) {
         (theme) => ({
           overflow: 'hidden',
           position: 'relative',
+          // En móvil el hero no tenía alto propio: se ajustaba al texto y el
+          // video quedaba en una franja. svh evita el salto que da vh cuando
+          // la barra del navegador aparece y desaparece al hacer scroll.
+          display: 'flex',
+          minHeight: '78vh',
+          // svh no salta cuando la barra del navegador aparece al hacer
+          // scroll; @supports porque en un objeto JS la clave duplicada
+          // pisaría al respaldo en vez de convivir con él como en CSS.
+          '@supports (height: 100svh)': { minHeight: '78svh' },
           [theme.breakpoints.up(mdKey)]: {
             minHeight: 760,
             height: '100vh',
@@ -189,6 +198,7 @@ export function HomeHero({ sx, ...other }) {
         sx={[
           (theme) => ({
             width: 1,
+            flexGrow: 1,
             display: 'flex',
             position: 'relative',
             flexDirection: 'column',
@@ -208,9 +218,11 @@ export function HomeHero({ sx, ...other }) {
               py: 3,
               gap: 5,
               zIndex: 9,
+              flex: '1 1 auto',
               display: 'flex',
               alignItems: 'center',
               flexDirection: 'column',
+              justifyContent: 'center',
               [theme.breakpoints.up(mdKey)]: {
                 flex: '1 1 auto',
                 justifyContent: 'center',
