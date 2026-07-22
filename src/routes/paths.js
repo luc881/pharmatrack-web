@@ -12,6 +12,8 @@ export const paths = {
   // Cuenta de cliente (login con Google en el propio sitio)
   account: '/cuenta',
   orders: '/mis-pedidos',
+  privacy: '/privacidad',
+  terms: '/terminos',
   product: (slug) => `/producto/${slug}`,
   article: (slug) => `/articulos/${slug}`,
   // Dashboard de administración (proyecto aparte)

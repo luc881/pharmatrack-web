@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 import { signIn, useSession } from 'next-auth/react';
 
@@ -11,6 +11,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -95,15 +96,34 @@ export function CartButton({ sx }) {
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState('');
   const [delivery, setDelivery] = useState('pickup');
+  const [phone, setPhone] = useState('');
 
   const signedIn = status === 'authenticated';
   const summary = buildSummary(items, total);
   const isPickup = delivery === 'pickup';
+  const phoneOk = phone.replace(/\D/g, '').length >= 10;
+
+  // Precargar el teléfono del perfil (si ya lo dio, no se le vuelve a pedir)
+  useEffect(() => {
+    if (!signedIn) return;
+    fetch('/api/shop/me')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((me) => {
+        if (me?.phone) setPhone((current) => current || me.phone);
+      })
+      .catch(() => {});
+  }, [signedIn]);
 
   // Guarda el pedido y, según la entrega, manda a pagar (CDMX) o abre
   // WhatsApp con el folio (envío: falta cotizar el envío antes de cobrar).
   // Si algo falla, el carrito queda intacto para reintentar.
   const handleOrder = async () => {
+    // sin teléfono no hay entrega personal: evita el escenario de un pago
+    // acreditado sin forma de contactar al cliente (la API también lo exige)
+    if (isPickup && !phoneOk) {
+      setError('Escribe un teléfono con WhatsApp (10 dígitos) para coordinar la entrega.');
+      return;
+    }
     setPlacing(true);
     setError('');
     try {
@@ -113,6 +133,7 @@ export function CartButton({ sx }) {
         body: JSON.stringify({
           items: items.map((i) => ({ key: i.key, qty: i.qty })),
           delivery_method: delivery,
+          contact_phone: phone || undefined,
         }),
       });
       const body = await res.json();
@@ -226,12 +247,30 @@ export function CartButton({ sx }) {
 
                 <Typography
                   variant="caption"
-                  sx={{ mb: 2, display: 'block', color: 'text.secondary' }}
+                  sx={{ mb: 1.5, display: 'block', color: 'text.secondary' }}
                 >
                   {isPickup
                     ? 'Pagas ahora en línea y acordamos por WhatsApp el punto y la hora de entrega. El precio mostrado es el total.'
                     : 'Nos mandas el resumen y te cotizamos el envío; el link de pago te llega por WhatsApp con el total final.'}
                 </Typography>
+
+                <TextField
+                  fullWidth
+                  size="small"
+                  type="tel"
+                  label="Tu WhatsApp"
+                  placeholder="55 1234 5678"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required={isPickup}
+                  error={isPickup && phone.length > 0 && !phoneOk}
+                  helperText={
+                    isPickup
+                      ? 'Para coordinar la entrega. Queda guardado en tu cuenta.'
+                      : 'Opcional: para contactarte más rápido.'
+                  }
+                  sx={{ mb: 2 }}
+                />
               </>
             )}
 

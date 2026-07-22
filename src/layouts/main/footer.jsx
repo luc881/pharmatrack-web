@@ -28,6 +28,12 @@ export function Footer({ sx, ...other }) {
           <Link component={RouterLink} href={paths.catalog} color="inherit" variant="body2">
             Catálogo
           </Link>
+          <Link component={RouterLink} href={paths.terms} color="inherit" variant="body2">
+            Términos
+          </Link>
+          <Link component={RouterLink} href={paths.privacy} color="inherit" variant="body2">
+            Privacidad
+          </Link>
           <Link href={paths.appUrl} color="inherit" variant="body2">
             Acceso
           </Link>
