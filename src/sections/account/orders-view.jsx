@@ -35,6 +35,8 @@ export const ORDER_STATUS = {
   cancelled: { label: 'Cancelado', color: 'error' },
 };
 
+const totalLabel = (status) => (status === 'pending' ? 'Total estimado' : 'Total');
+
 function OrderCard({ order, onCancel }) {
   const state = ORDER_STATUS[order.status] ?? ORDER_STATUS.pending;
   const [confirming, setConfirming] = useState(false);
@@ -90,7 +92,11 @@ function OrderCard({ order, onCancel }) {
       <Divider sx={{ my: 2 }} />
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="subtitle2">Total estimado</Typography>
+        {/* "estimado" sólo mientras el monto pueda cambiar (falta cotizar
+            envío); con un pago registrado ya es definitivo */}
+        <Typography variant="subtitle2">
+          {order.payment_id ? 'Total pagado' : totalLabel(order.status)}
+        </Typography>
         <Typography variant="subtitle1">{fCurrency(order.total)}</Typography>
       </Box>
 

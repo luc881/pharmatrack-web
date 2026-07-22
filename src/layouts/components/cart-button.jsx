@@ -203,7 +203,10 @@ export function CartButton({ sx }) {
         {items.length > 0 && (
           <Box sx={{ p: 2.5, borderTop: (theme) => `solid 1px ${theme.vars.palette.divider}` }}>
             <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1">Total estimado</Typography>
+              {/* con entrega en CDMX el monto es el final; con envío falta cotizar */}
+              <Typography variant="subtitle1">
+                {signedIn && isPickup ? 'Total a pagar' : 'Total estimado'}
+              </Typography>
               <Typography variant="subtitle1">{fCurrency(total)}</Typography>
             </Box>
 
