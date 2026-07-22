@@ -94,8 +94,8 @@ export function HeroVideo({ overlay = 0.42 }) {
           background: `linear-gradient(180deg,
             rgba(18, 24, 16, ${overlay + 0.08}) 0%,
             rgba(18, 24, 16, ${overlay}) 55%,
-            rgba(18, 24, 16, ${overlay}) 72%,
-            ${varAlpha(theme.vars.palette.background.defaultChannel, 0.7)} 92%,
+            rgba(18, 24, 16, ${overlay}) 86%,
+            ${varAlpha(theme.vars.palette.background.defaultChannel, 0.7)} 96%,
             ${theme.vars.palette.background.default} 100%)`,
         })}
       />
