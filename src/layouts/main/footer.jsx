@@ -23,7 +23,7 @@ export function Footer({ sx, ...other }) {
     <FooterRoot sx={sx} {...other}>
       <Divider />
       <Container sx={{ py: 5, textAlign: 'center' }}>
-        <Logo sx={{ mx: 'auto' }} />
+        <Logo isSingle={false} sx={{ mx: 'auto', width: 200, height: 92 }} />
         <Box sx={{ mt: 2, gap: 3, display: 'flex', justifyContent: 'center' }}>
           <Link component={RouterLink} href={paths.catalog} color="inherit" variant="body2">
             Catálogo

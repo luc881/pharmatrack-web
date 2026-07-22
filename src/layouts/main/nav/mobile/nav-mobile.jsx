@@ -52,7 +52,7 @@ export function NavMobile({ data, open, onClose, slots, sx }) {
             display: 'flex',
           }}
         >
-          <Logo />
+          <Logo isSingle={false} sx={{ width: 170, height: 78 }} />
         </Box>
       )}
 

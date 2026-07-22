@@ -8,13 +8,10 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
-
-import { CONFIG } from 'src/global-config';
 
 import { Logo } from 'src/components/logo';
 import { Iconify } from 'src/components/iconify';
@@ -181,7 +178,16 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
           <NavMobile data={navData} open={open} onClose={onClose} />
 
           {/** @slot Logo (solo móvil: en desktop va centrado) */}
-          <Logo sx={(theme) => ({ [theme.breakpoints.up(layoutQuery)]: { display: 'none' } })} />
+          <Logo
+            sx={(theme) => ({
+              p: 0.5,
+              width: 44,
+              height: 44,
+              borderRadius: 1,
+              bgcolor: 'common.white',
+              [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
+            })}
+          />
 
           {/** @slot Búsqueda — abre el modal (⌘K en desktop); visible también en móvil */}
           <IconButton
@@ -209,21 +215,19 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
         >
           <NavColumn items={navLeft} />
 
-          <Link
-            component={RouterLink}
-            href="/"
-            underline="none"
-            sx={{ gap: 1.5, display: 'flex', alignItems: 'center', color: 'primary.main' }}
-          >
-            <Logo isSingle sx={{ width: 56, height: 56 }} />
-            <Typography
-              variant="h3"
-              component="span"
-              sx={{ whiteSpace: 'nowrap', fontWeight: 800, letterSpacing: '0.02em' }}
-            >
-              {CONFIG.appName}
-            </Typography>
-          </Link>
+          {/* Sólo el logo: ya trae el nombre. Va como emblema con fondo propio
+              porque la barra es oscura y el archivo tiene fondo crema. */}
+          <Logo
+            isSingle={false}
+            sx={{
+              px: 1.5,
+              py: 0.75,
+              width: 190,
+              height: 88,
+              borderRadius: 1.5,
+              bgcolor: 'common.white',
+            }}
+          />
 
           <NavColumn items={navRight} />
         </Box>
