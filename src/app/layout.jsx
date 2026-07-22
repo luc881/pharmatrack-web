@@ -9,6 +9,7 @@ import { CONFIG } from 'src/global-config';
 import { themeConfig, ThemeProvider, primary as primaryColor } from 'src/theme';
 
 import { ProgressBar } from 'src/components/progress-bar';
+import { SiteSplash } from 'src/components/loading-screen';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import { detectSettings } from 'src/components/settings/server';
 import { defaultSettings, SettingsProvider } from 'src/components/settings';
@@ -74,6 +75,7 @@ export default async function RootLayout({ children }) {
               defaultMode={themeConfig.defaultMode}
             >
               <MotionLazy>
+                <SiteSplash />
                 <ProgressBar />
                 <SessionProvider>
                   <AccountSync />
