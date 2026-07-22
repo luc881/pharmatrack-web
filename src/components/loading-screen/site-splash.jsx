@@ -106,7 +106,7 @@ export function SiteSplash() {
           // fade largo y suave: el contenido asoma detrás en vez de aparecer
           // de golpe. `visibility` va con delay para no cortar el fade.
           transition:
-            'opacity 800ms ease-out, visibility 0s linear 800ms',
+            'opacity 1200ms ease-out, visibility 0s linear 1200ms',
         }),
       }}
     >
