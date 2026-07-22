@@ -5,6 +5,7 @@ import { useBoolean } from 'minimal-shared/hooks';
 import { signIn, useSession } from 'next-auth/react';
 
 import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
 import Badge from '@mui/material/Badge';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
@@ -45,20 +46,41 @@ const buildSummary = (items, total) => {
   return `Hola, me gustaría cotizar este pedido:\n\n${lines.join('\n')}\n\nTotal estimado: ${fCurrency(total)}`;
 };
 
-function CartRow({ item, onQty, onRemove }) {
+function CartRow({ item, onQty, onRemove, onNavigate }) {
   // granel por gramos: pasos de 50; piezas: de 1 en 1
   const step = item.unit === 'g' ? 50 : 1;
+  // Los items guardados antes de esta versión no traen url: siguen sin link
+  const linkProps = item.url
+    ? { component: RouterLink, href: item.url, onClick: onNavigate, underline: 'hover' }
+    : {};
 
   return (
     <Box sx={{ py: 1.5, gap: 1.5, display: 'flex', alignItems: 'center' }}>
-      <Box sx={{ width: 48, height: 48, flexShrink: 0, borderRadius: 1, overflow: 'hidden', bgcolor: 'background.neutral' }}>
+      <Box
+        {...linkProps}
+        sx={{
+          width: 48,
+          height: 48,
+          flexShrink: 0,
+          borderRadius: 1,
+          overflow: 'hidden',
+          display: 'block',
+          bgcolor: 'background.neutral',
+        }}
+      >
         {item.image && <Image alt={item.title} src={item.image} ratio="1/1" />}
       </Box>
 
       <Box sx={{ minWidth: 0, flexGrow: 1 }}>
-        <Typography variant="subtitle2" noWrap>
+        <Link
+          {...linkProps}
+          color="inherit"
+          variant="subtitle2"
+          noWrap
+          sx={{ display: 'block', cursor: item.url ? 'pointer' : 'default' }}
+        >
           {item.title}
-        </Typography>
+        </Link>
         {item.detail && (
           <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }} noWrap>
             {item.detail}
@@ -226,7 +248,13 @@ export function CartButton({ sx }) {
           ) : (
             <Stack divider={<Divider sx={{ borderStyle: 'dashed' }} />}>
               {items.map((item) => (
-                <CartRow key={item.key} item={item} onQty={setQty} onRemove={remove} />
+                <CartRow
+                  key={item.key}
+                  item={item}
+                  onQty={setQty}
+                  onRemove={remove}
+                  onNavigate={drawer.onFalse}
+                />
               ))}
             </Stack>
           )}

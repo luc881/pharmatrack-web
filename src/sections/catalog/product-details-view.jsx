@@ -26,7 +26,8 @@ import { Iconify } from 'src/components/iconify';
 import { useCart } from './use-cart';
 import { SHOP_INFO } from './shop-info';
 import { TaxonomyBadge } from './scientific';
-import { ProductCard, isBulkWeight } from './product-card';
+import { productSlug , ProductCard, isBulkWeight } from './product-card';
+
 
 // ----------------------------------------------------------------------
 
@@ -157,6 +158,7 @@ export function ProductDetailsView({ product, related = [] }) {
                     qty: perWeight ? 100 : 1,
                     unit: perWeight ? product.unit_name : null,
                     image: product.image ?? null,
+                    url: paths.product(productSlug(product)),
                   });
                   setAdded(true);
                   setTimeout(() => setAdded(false), 2000);

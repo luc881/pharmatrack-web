@@ -81,7 +81,7 @@ function ShareButton({ title }) {
 // ----------------------------------------------------------------------
 
 export function SpeciesDetailsView({ item, category = null, related = [] }) {
-  const { species, morph, key, photos, morphs, sexes, minPrice, maxPrice, compareAt = null } = item;
+  const { species, morph, key, slug, photos, morphs, sexes, minPrice, maxPrice, compareAt = null } = item;
 
   const { ids, toggle } = useFavorites();
   const isFavorite = ids.includes(key);
@@ -260,6 +260,7 @@ export function SpeciesDetailsView({ item, category = null, related = [] }) {
                   price: selectedTier ? selectedTier.price : minPrice,
                   qty: 1,
                   image: photos[0] ?? null,
+                  url: paths.catalogSpecies(slug),
                 });
                 setAdded(true);
                 setTimeout(() => setAdded(false), 2000);
