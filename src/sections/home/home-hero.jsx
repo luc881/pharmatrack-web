@@ -82,10 +82,11 @@ export function HomeHero({ sx, ...other }) {
           }}
           sx={[
             (theme) => ({
-              // Degradado dentro del verde del logo: el ámbar que traía la
-              // plantilla se perdía sobre el fondo crema
+              // Colores de tuna (el fruto del nopal): magenta-rojo a naranja.
+              // El verde se perdía sobre el musgo del fondo; estos cálidos
+              // contrastan y siguen siendo del mismo mundo del logo.
               ...theme.mixins.textGradient(
-                `300deg, ${theme.vars.palette.primary.light} 0%, ${theme.vars.palette.primary.lighter} 25%, ${theme.vars.palette.primary.light} 50%, ${theme.vars.palette.primary.lighter} 75%, ${theme.vars.palette.primary.light} 100%`
+                `300deg, #E0384E 0%, #F26B3A 25%, #F59E42 50%, #F26B3A 75%, #E0384E 100%`
               ),
               backgroundSize: '400%',
               ml: { xs: 0.75, md: 1, xl: 1.5 },
