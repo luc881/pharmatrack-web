@@ -16,6 +16,7 @@ import { CONFIG } from 'src/global-config';
 import { Iconify } from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
 
+import { HeroVideo } from './components/hero-video';
 import { HeroBackground } from './components/hero-background';
 
 // ----------------------------------------------------------------------
@@ -65,7 +66,7 @@ export function HomeHero({ sx, ...other }) {
           }),
         ]}
       >
-        <Box component="span" sx={{ width: 1, opacity: 0.24 }}>
+        <Box component="span" sx={{ width: 1, color: 'text.primary', opacity: 0.72 }}>
           Animales exóticos
         </Box>
         de
@@ -104,7 +105,8 @@ export function HomeHero({ sx, ...other }) {
           (theme) => ({
             mx: 'auto',
             maxWidth: 480,
-            color: 'text.secondary',
+            fontWeight: 500,
+            color: 'text.primary',
             [theme.breakpoints.up(lgKey)]: { fontSize: 20, lineHeight: '36px', maxWidth: 640 },
           }),
         ]}
@@ -219,6 +221,7 @@ export function HomeHero({ sx, ...other }) {
           <m.div style={{ y: y3 }}>{renderButtons()}</m.div>
         </Container>
 
+        <HeroVideo />
         <HeroBackground />
       </Box>
     </Box>
