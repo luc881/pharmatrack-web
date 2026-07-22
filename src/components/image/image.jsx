@@ -4,6 +4,8 @@ import { useInView } from 'framer-motion';
 import { mergeRefs, mergeClasses } from 'minimal-shared/utils';
 import { useRef, useState, useCallback, startTransition } from 'react';
 
+import { cdnImage } from 'src/lib/cdn-image';
+
 import { imageClasses } from './classes';
 import { ImageImg, ImageRoot, ImageOverlay, ImagePlaceholder } from './styles';
 
@@ -21,6 +23,7 @@ export function Image({
   src,
   ref,
   ratio,
+  cdnWidth,
   onLoad,
   effect,
   alt = '',
@@ -70,7 +73,9 @@ export function Image({
       ),
     image: () => (
       <ImageImg
-        src={src}
+        src={cdnImage(src, cdnWidth)}
+        loading={visibleByDefault ? 'eager' : 'lazy'}
+        decoding="async"
         alt={alt}
         onLoad={handleImageLoad}
         className={imageClasses.img}

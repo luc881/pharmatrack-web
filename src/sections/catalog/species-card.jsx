@@ -131,6 +131,7 @@ export function SpeciesCard({ item, horizontal = false }) {
           <Link component={RouterLink} href={href} sx={{ display: 'block' }}>
             {photos[0] ? (
               <Image
+                cdnWidth={420}
                 alt={title}
                 src={photos[0]}
                 ratio="1/1"

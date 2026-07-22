@@ -70,6 +70,7 @@ export function AnimalGallery({ photos, alt }) {
                 alt={alt}
                 src={slide.src}
                 ratio="1/1"
+                cdnWidth={900}
                 onClick={() => lightbox.onOpen(slide.src)}
                 sx={{ cursor: 'zoom-in', minWidth: 320 }}
               />

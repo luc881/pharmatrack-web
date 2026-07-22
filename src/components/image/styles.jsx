@@ -1,11 +1,10 @@
+import { varAlpha } from 'minimal-shared/utils';
+
 import { styled } from '@mui/material/styles';
 
 import { imageClasses } from './classes';
 
 // ----------------------------------------------------------------------
-
-const placeholderImage =
-  'data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJhIiBjeD0iNTAlIiBjeT0iNDYuODAxMTAyJSIgcj0iOTUuNDk3MTEyJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIgLz4KICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzkxOWVhYiIgc3RvcC1vcGFjaXR5PSIuNDgiIC8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cGF0aCBkPSJtODggODZoNTEydjUxMmgtNTEyeiIgZmlsbD0idXJsKCNhKSIgZmlsbC1ydWxlPSJldmVub2RkIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtODggLTg2KSIgLz4KPC9zdmc+Cg==';
 
 const sharedStyles = {
   top: 0,
@@ -40,15 +39,16 @@ export const ImageOverlay = styled('span')({
   position: 'absolute',
 });
 
-export const ImagePlaceholder = styled('span')({
+// Marcador en los tonos de la marca: el de la plantilla era un gris azulado
+// que sobre el crema se veía como un hueco frío.
+export const ImagePlaceholder = styled('span')(({ theme }) => ({
   ...sharedStyles,
   content: '""',
   position: 'absolute',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-  backgroundImage: `url(${placeholderImage})`,
-});
+  backgroundImage: `linear-gradient(135deg,
+    ${theme.vars.palette.background.neutral} 0%,
+    ${varAlpha(theme.vars.palette.primary.lightChannel, 0.28)} 100%)`,
+}));
 
 // ----------------------------------------------------------------------
 

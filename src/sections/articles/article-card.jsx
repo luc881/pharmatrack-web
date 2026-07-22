@@ -47,6 +47,7 @@ export function ArticleCard({ article, index = 0 }) {
     >
       {article.cover_image ? (
         <Image
+          cdnWidth={480}
           alt={article.title}
           src={article.cover_image}
           className="art-img"
