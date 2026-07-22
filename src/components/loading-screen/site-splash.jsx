@@ -85,14 +85,11 @@ export function SiteSplash() {
       }}
     >
       <Logo
-        variant="badge"
+        variant="icon"
         disabled
         sx={{
           width: 104,
           height: 104,
-          borderRadius: '50%',
-          overflow: 'hidden',
-          bgcolor: '#F7F0E6',
           animation: `${pulse} 1.4s ease-in-out infinite`,
         }}
       />

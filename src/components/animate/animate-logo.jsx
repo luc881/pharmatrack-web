@@ -24,6 +24,7 @@ export function AnimateLogoZoom({ logo, slotProps, sx, ...other }) {
         {logo ?? (
           <Logo
             disabled
+            variant="icon"
             {...slotProps?.logo}
             sx={[
               { width: 64, height: 64 },
@@ -86,6 +87,7 @@ export function AnimateLogoRotate({ logo, sx, slotProps, ...other }) {
     <LogoRotateRoot sx={sx} {...other}>
       {logo ?? (
         <Logo
+          variant="icon"
           {...slotProps?.logo}
           sx={[
             { zIndex: 9, width: 40, height: 40 },

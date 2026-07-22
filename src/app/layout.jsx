@@ -34,7 +34,11 @@ export const metadata = {
   },
   description:
     'Tienda de animales exóticos: tarántulas, reptiles y más, con procedencia legal.',
-  icons: [{ rel: 'icon', url: `${CONFIG.assetsDir}/favicon.ico` }],
+  icons: [
+    { rel: 'icon', url: `${CONFIG.assetsDir}/logo/opuntia-favicon.png`, type: 'image/png' },
+    { rel: 'shortcut icon', url: `${CONFIG.assetsDir}/favicon.ico` },
+    { rel: 'apple-touch-icon', url: `${CONFIG.assetsDir}/logo/opuntia-favicon.png` },
+  ],
 };
 
 // ----------------------------------------------------------------------
