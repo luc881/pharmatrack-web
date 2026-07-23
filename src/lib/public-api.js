@@ -70,6 +70,23 @@ export async function getSiteSettings() {
   }
 }
 
+// Revisa el carrito contra el catálogo (disponibilidad, precio, tope). Público
+// (no requiere sesión): el carrito puede ser anónimo.
+export async function validateCart(items) {
+  try {
+    const res = await fetch(`${CONFIG.serverUrl}/api/v1/shop/cart/validate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items }),
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
 // ----------------------------------------------------------------------
 // Artículos de divulgación (solo publicados)
 

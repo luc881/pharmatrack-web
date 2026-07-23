@@ -49,6 +49,8 @@ const buildSummary = (items, total) => {
 function CartRow({ item, onQty, onRemove, onNavigate }) {
   // granel por gramos: pasos de 50; piezas: de 1 en 1
   const step = item.unit === 'g' ? 50 : 1;
+  // max = tope pedible hoy (de la reconciliación); null/undefined = sin tope
+  const atMax = item.max != null && item.qty >= item.max;
   // Los items guardados antes de esta versión no traen url: siguen sin link
   const linkProps = item.url
     ? { component: RouterLink, href: item.url, onClick: onNavigate, underline: 'hover' }
@@ -99,7 +101,11 @@ function CartRow({ item, onQty, onRemove, onNavigate }) {
           {item.qty}
           {item.unit ? ` ${item.unit}` : ''}
         </Typography>
-        <IconButton size="small" onClick={() => onQty(item.key, item.qty + step)}>
+        <IconButton
+          size="small"
+          disabled={atMax}
+          onClick={() => onQty(item.key, item.qty + step)}
+        >
           <Iconify icon="mingcute:add-line" width={18} />
         </IconButton>
       </Stack>
@@ -113,10 +119,11 @@ function CartRow({ item, onQty, onRemove, onNavigate }) {
 
 export function CartButton({ sx }) {
   const drawer = useBoolean();
-  const { items, count, total, setQty, remove, clear } = useCart();
+  const { items, count, total, setQty, remove, clear, replaceAll } = useCart();
   const { status } = useSession();
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [delivery, setDelivery] = useState('pickup');
   const [phone, setPhone] = useState('');
   const [shippingEnabled, setShippingEnabled] = useState(true);
@@ -146,6 +153,56 @@ export function CartButton({ sx }) {
       })
       .catch(() => {});
   }, [signedIn]);
+
+  // Al abrir el carrito, reconciliar contra el servidor: quita lo que ya no
+  // está (borrado/vendido), actualiza precios viejos y capa las cantidades a lo
+  // disponible. Corre una vez por apertura (no en cada cambio de cantidad).
+  useEffect(() => {
+    if (!drawer.value || items.length === 0) return undefined;
+    let cancelled = false;
+    fetch('/api/cart-validate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: items.map((i) => ({ key: i.key, qty: i.qty })) }),
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !data?.items) return;
+        const byKey = Object.fromEntries(data.items.map((r) => [r.key, r]));
+        const removed = [];
+        const adjusted = [];
+        const next = [];
+        items.forEach((it) => {
+          const r = byKey[it.key];
+          // sin tope (productos): max_qty = null; artículo caído: available false
+          const max = r?.max_qty;
+          if (!r || r.available === false || max === 0) {
+            removed.push(it.title);
+            return;
+          }
+          const qty = max != null ? Math.min(it.qty, max) : it.qty;
+          if (qty !== it.qty) adjusted.push(r.title ?? it.title);
+          next.push({
+            ...it,
+            title: r.title ?? it.title,
+            detail: r.detail ?? it.detail,
+            price: r.unit_price ?? it.price,
+            max,
+            qty,
+          });
+        });
+        replaceAll(next);
+        const msgs = [];
+        if (removed.length) msgs.push(`Quitamos lo que ya no está disponible: ${removed.join(', ')}.`);
+        if (adjusted.length) msgs.push(`Ajustamos la cantidad a lo disponible: ${adjusted.join(', ')}.`);
+        setNotice(msgs.join(' '));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drawer.value]);
 
   // Guarda el pedido y, según la entrega, manda a pagar (CDMX) o abre
   // WhatsApp con el folio (envío: falta cotizar el envío antes de cobrar).
@@ -237,6 +294,11 @@ export function CartButton({ sx }) {
         <Divider />
 
         <Box sx={{ px: 2.5, flexGrow: 1, overflowY: 'auto' }}>
+          {notice && (
+            <Alert severity="warning" sx={{ mt: 2, typography: 'caption' }} onClose={() => setNotice('')}>
+              {notice}
+            </Alert>
+          )}
           {items.length === 0 ? (
             <Stack spacing={1} sx={{ py: 10, alignItems: 'center', color: 'text.disabled' }}>
               <Iconify icon="solar:cart-plus-bold" width={40} />
