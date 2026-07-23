@@ -43,6 +43,7 @@
     "@mui/x-date-pickers": "^9.1.0",
     "@mui/x-tree-view": "^9.1.0",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.16.0",
     "dayjs": "^1.11.20",
