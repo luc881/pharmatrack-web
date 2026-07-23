@@ -29,6 +29,7 @@ export function HomeView({
   categories,
   featuredCategories = [],
   showCategoryBrowse = true,
+  shippingEnabled = true,
   articles = [],
 }) {
   const pageProgress = useScrollProgress();
@@ -69,7 +70,7 @@ export function HomeView({
 
         <HomeReviews />
 
-        <HomeFaq />
+        <HomeFaq shippingEnabled={shippingEnabled} />
 
         <HomeCTA />
       </Stack>

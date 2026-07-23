@@ -33,6 +33,20 @@ export function rootGroupOf(species, groups) {
   return group ?? null;
 }
 
+// Cadena de grupos desde la raíz hasta el grupo hoja del que cuelga la especie:
+// p. ej. Crustáceos → Isópodos. La usa el detalle para el breadcrumb completo y
+// para mostrar el subgrupo (último) en el chip, no solo la raíz.
+export function groupPathOf(species, groups) {
+  const byId = new Map(groups.map((g) => [g.id, g]));
+  const chain = [];
+  let group = byId.get(species?.genus?.group?.id);
+  while (group) {
+    chain.unshift({ id: group.id, name: group.name, slug: slugify(group.name) });
+    group = group.parent_id ? byId.get(group.parent_id) : null;
+  }
+  return chain;
+}
+
 // Un grupo (raíz o subgrupo) y todos sus descendientes, por id
 export function descendantGroupIds(groupId, groups) {
   const childrenOf = new Map();

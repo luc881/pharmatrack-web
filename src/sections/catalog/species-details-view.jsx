@@ -80,8 +80,13 @@ function ShareButton({ title }) {
 
 // ----------------------------------------------------------------------
 
-export function SpeciesDetailsView({ item, category = null, related = [], shippingEnabled = true }) {
+export function SpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true }) {
   const { species, morph, key, slug, photos, morphs, sexes, minPrice, maxPrice, compareAt = null } = item;
+
+  // Cadena raíz → hoja: el primero es el grupo raíz (Crustáceos), el último el
+  // subgrupo más específico (Isópodos).
+  const rootGroup = categoryPath[0] ?? null;
+  const leafGroup = categoryPath[categoryPath.length - 1] ?? null;
 
   const { ids, toggle } = useFavorites();
   const isFavorite = ids.includes(key);
@@ -113,16 +118,17 @@ export function SpeciesDetailsView({ item, category = null, related = [], shippi
         <Link component={RouterLink} href={paths.catalog} color="inherit" variant="body2">
           Catálogo
         </Link>
-        {category && (
+        {categoryPath.map((group) => (
           <Link
+            key={group.id}
             component={RouterLink}
-            href={paths.catalogCategory(category.slug)}
+            href={paths.catalogCategory(group.slug)}
             color="inherit"
             variant="body2"
           >
-            {category.name}
+            {group.name}
           </Link>
-        )}
+        ))}
         <Typography variant="body2" sx={{ color: 'text.primary' }}>
           {title}
         </Typography>
@@ -136,7 +142,7 @@ export function SpeciesDetailsView({ item, category = null, related = [], shippi
         <Grid size={{ xs: 12, md: 6, lg: 5 }}>
           <Stack spacing={2}>
             <Box>
-              {category && <TaxonomyBadge sx={{ mb: 1 }}>{category.name}</TaxonomyBadge>}
+              {leafGroup && <TaxonomyBadge sx={{ mb: 1 }}>{leafGroup.name}</TaxonomyBadge>}
               <Typography variant="h4" component="h1">
                 {title}
               </Typography>
@@ -152,7 +158,7 @@ export function SpeciesDetailsView({ item, category = null, related = [], shippi
             )}
 
             <Stack spacing={0.5}>
-              {category && <MetaRow label="Grupo">{category.name}</MetaRow>}
+              {leafGroup && <MetaRow label="Grupo">{leafGroup.name}</MetaRow>}
               <MetaRow label="Disponibilidad">
                 <Box component="span" sx={{ color: 'success.main', fontWeight: 600 }}>
                   Disponible
@@ -335,7 +341,7 @@ export function SpeciesDetailsView({ item, category = null, related = [], shippi
       {/* Ficha estilo museo: descripción + taxonomía/origen/etiquetas */}
       <SpeciesProfile
         species={species}
-        category={category}
+        category={rootGroup}
         morphs={morphs}
         description={item.description}
         sx={{ mt: { xs: 6, md: 10 } }}

@@ -8,7 +8,8 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
 import { CONFIG } from 'src/global-config';
-import { getNavCategories } from 'src/lib/public-api';
+import { getSiteSettings, getNavCategories } from 'src/lib/public-api';
+import { SiteSettingsProvider } from 'src/layouts/site-settings-context';
 import { NavCategoriesProvider } from 'src/layouts/nav-categories-context';
 import { themeConfig, ThemeProvider, primary as primaryColor } from 'src/theme';
 
@@ -62,7 +63,11 @@ async function getAppConfig() {
 }
 
 export default async function RootLayout({ children }) {
-  const [appConfig, navCategories] = await Promise.all([getAppConfig(), getNavCategories()]);
+  const [appConfig, navCategories, site] = await Promise.all([
+    getAppConfig(),
+    getNavCategories(),
+    getSiteSettings(),
+  ]);
 
   return (
     <html lang="es" dir={appConfig.dir} suppressHydrationWarning>
@@ -88,7 +93,9 @@ export default async function RootLayout({ children }) {
                 <SessionProvider>
                   <AccountSync />
                   <NavCategoriesProvider categories={navCategories}>
-                    {children}
+                    <SiteSettingsProvider site={site}>
+                      {children}
+                    </SiteSettingsProvider>
                   </NavCategoriesProvider>
                 </SessionProvider>
               </MotionLazy>

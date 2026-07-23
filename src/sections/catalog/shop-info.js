@@ -1,5 +1,9 @@
-// Barra de anuncio en la parte superior del sitio (vacío = no se muestra)
-export const ANNOUNCEMENT = 'Envíos a todo México — enviamos de lunes a miércoles';
+// Barra de anuncio en la parte superior del sitio. Cambia según si los envíos
+// están habilitados (con envíos apagados solo hay entrega en persona en CDMX).
+export const announcementFor = (shippingEnabled) =>
+  shippingEnabled
+    ? 'Envíos a todo México — enviamos de lunes a miércoles'
+    : 'Entrega en persona en CDMX — coordina por WhatsApp';
 
 // Redes sociales del header — pon las URLs reales cuando existan las cuentas
 export const SOCIALS = [

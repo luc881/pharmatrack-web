@@ -16,7 +16,7 @@ import { RouterLink } from 'src/routes/components';
 import { Logo } from 'src/components/logo';
 import { Iconify } from 'src/components/iconify';
 
-import { SOCIALS, ANNOUNCEMENT } from 'src/sections/catalog/shop-info';
+import { SOCIALS, announcementFor } from 'src/sections/catalog/shop-info';
 
 import { NavMobile } from './nav/mobile';
 import { Footer, HomeFooter } from './footer';
@@ -24,6 +24,7 @@ import { MenuButton } from '../components/menu-button';
 import { CartButton } from '../components/cart-button';
 import { CloseCursor } from '../components/close-cursor';
 import { SearchDialog } from '../components/search-dialog';
+import { useSiteSettings } from '../site-settings-context';
 import { AccountButton } from '../components/account-button';
 import { useNavCategories } from '../nav-categories-context';
 import { FavoritesButton } from '../components/favorites-button';
@@ -103,6 +104,8 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
   // Vienen resueltas del servidor (layout raíz): la barra sale correcta desde
   // el primer render, sin el parpadeo de pintar la lista fija y corregirla.
   const categories = useNavCategories();
+  const site = useSiteSettings();
+  const announcement = announcementFor(site?.shipping_enabled !== false);
 
   const dynamicNav = categories ? buildNavData(categories) : mainNavData;
   const { left: navLeft, right: navRight } = splitNav(dynamicNav);
@@ -113,7 +116,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
       /** @slot Anuncio + redes sociales (textos y links en shop-info.js) */
       topArea: (
         <>
-          {ANNOUNCEMENT && (
+          {announcement && (
             <Box
               sx={{
                 py: 0.75,
@@ -127,7 +130,7 @@ export function MainLayout({ sx, cssVars, children, slotProps, layoutQuery = 'md
                 textTransform: 'uppercase',
               }}
             >
-              {ANNOUNCEMENT}
+              {announcement}
             </Box>
           )}
 

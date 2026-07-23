@@ -7,9 +7,9 @@ import { getAnimal, getGroups, getAnimals , getSiteSettings } from 'src/lib/publ
 import { CatalogView } from 'src/sections/catalog/catalog-view';
 import { SpeciesDetailsView } from 'src/sections/catalog/species-details-view';
 import {
-  slugify,
   groupBySlug,
   rootGroupOf,
+  groupPathOf,
   listingSlug,
   buildListings,
   scientificName,
@@ -113,7 +113,9 @@ export default async function Page({ params }) {
     if (param !== item.slug) permanentRedirect(`/catalogo/${item.slug}`);
 
     const root = rootGroupOf(item.species, groups);
-    const category = root ? { name: root.name, slug: slugify(root.name) } : null;
+    // Cadena completa raíz → subgrupo (Crustáceos → Isópodos) para el breadcrumb
+    // y el chip del subgrupo en el detalle.
+    const categoryPath = groupPathOf(item.species, groups);
 
     // Relacionados: mismos listados de la categoría raíz, sin repetir el actual
     const related = listings
@@ -145,7 +147,7 @@ export default async function Page({ params }) {
         />
         <SpeciesDetailsView
           item={item}
-          category={category}
+          categoryPath={categoryPath}
           related={related}
           shippingEnabled={site.shipping_enabled !== false}
         />

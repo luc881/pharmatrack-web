@@ -4,7 +4,8 @@
 // shop-info.js; migrar al backend cuando haga falta editarlas sin deploy.
 // ----------------------------------------------------------------------
 
-export const FAQS = [
+// Las tres primeras preguntas dependen de si hay envíos; el resto es común.
+const FAQS_SHIPPING = [
   {
     question: '¿Cómo hago un pedido?',
     answer:
@@ -20,6 +21,27 @@ export const FAQS = [
     answer:
       'Sí, la garantía de llegada con vida aplica en envíos con entrega al día siguiente y en recolección local. Pedimos video de apertura del paquete sin cortes.',
   },
+];
+
+const FAQS_LOCAL = [
+  {
+    question: '¿Cómo hago un pedido?',
+    answer:
+      'Elige el animal en el catálogo y mándanos mensaje con el botón de WhatsApp de su página. Te confirmamos disponibilidad y formas de pago, y coordinamos la entrega en persona en CDMX.',
+  },
+  {
+    question: '¿Hacen envíos o solo entrega local?',
+    answer:
+      'Por ahora solo entregamos en persona en CDMX. Coordinamos día y punto de encuentro por WhatsApp; no hacemos envíos por paquetería.',
+  },
+  {
+    question: '¿Garantizan la llegada con vida?',
+    answer:
+      'Sí. Revisas el animal en el momento de la entrega y te lo damos sano y activo; si algo no está bien, lo resolvemos ahí mismo.',
+  },
+];
+
+const FAQS_COMMON = [
   {
     question: '¿Qué necesito antes de comprar?',
     answer:
@@ -37,13 +59,19 @@ export const FAQS = [
   },
 ];
 
+// FAQ según si los envíos están habilitados.
+export const faqsFor = (shippingEnabled) => [
+  ...(shippingEnabled ? FAQS_SHIPPING : FAQS_LOCAL),
+  ...FAQS_COMMON,
+];
+
 // Reseñas de muestra — REEMPLÁZALAS con reseñas reales de clientes.
 // species: texto del link (opcional), href: ruta de la especie (opcional).
 export const REVIEWS = [
   {
     name: 'Cliente de ejemplo',
     rating: 5,
-    text: 'Mi tarántula llegó al día siguiente, perfectamente empacada y muy activa. El vendedor me resolvió todas las dudas del terrario antes de comprar.',
+    text: 'Mi tarántula llegó perfectamente empacada y muy activa. El vendedor me resolvió todas las dudas del terrario antes de comprar.',
     species: null,
     href: null,
   },
@@ -57,7 +85,7 @@ export const REVIEWS = [
   {
     name: 'Cliente de ejemplo',
     rating: 4,
-    text: 'Buena atención por WhatsApp y envío rápido. El empaque térmico se nota que está bien pensado para el calor de mi ciudad.',
+    text: 'Buena atención por WhatsApp de principio a fin. El empaque térmico se nota bien pensado para proteger al animal.',
     species: null,
     href: null,
   },

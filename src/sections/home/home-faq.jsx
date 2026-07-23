@@ -12,25 +12,27 @@ import { varFade, varContainer, MotionViewport } from 'src/components/animate';
 
 import { SectionLabel } from 'src/sections/catalog/scientific';
 
-import { FAQS } from './home-content';
+import { faqsFor } from './home-content';
 
 // ----------------------------------------------------------------------
 
 const slowStagger = varContainer({ transitionIn: { staggerChildren: 0.18, delayChildren: 0.15 } });
 const slowFade = (dir) => varFade(dir, { distance: 40, transitionIn: { duration: 0.9 } });
 
-// Schema.org FAQPage: Google puede mostrar las preguntas en los resultados
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQS.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-  })),
-};
+export function HomeFaq({ shippingEnabled = true, sx, ...other }) {
+  const faqs = faqsFor(shippingEnabled);
 
-export function HomeFaq({ sx, ...other }) {
+  // Schema.org FAQPage: Google puede mostrar las preguntas en los resultados
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  };
+
   return (
     <Box
       component="section"
@@ -57,7 +59,7 @@ export function HomeFaq({ sx, ...other }) {
           </Typography>
         </m.div>
 
-        {FAQS.map((faq) => (
+        {faqs.map((faq) => (
           <Box key={faq.question} component={m.div} variants={slowFade('inUp')}>
             <Accordion
               disableGutters

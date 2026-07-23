@@ -41,6 +41,7 @@ export default async function Page() {
         categories={buildCategories(animals, groups)}
         featuredCategories={featuredCategories}
         showCategoryBrowse={site.show_category_browse !== false}
+        shippingEnabled={site.shipping_enabled !== false}
         articles={articles}
       />
     </MainLayout>
