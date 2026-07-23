@@ -33,3 +33,29 @@ export const SHOP_INFO = [
     color: 'warning.main',
   },
 ];
+
+// Mismos tres bloques, pero redactados para cuando los envíos están
+// deshabilitados y solo se entrega en persona en CDMX.
+export const SHOP_INFO_LOCAL = [
+  {
+    icon: 'solar:box-minimalistic-bold',
+    title: 'Entrega en persona en CDMX',
+    description: 'Coordinamos un punto de encuentro para entregarte el animal en mano.',
+    color: 'primary.main',
+  },
+  {
+    icon: 'solar:shield-check-bold',
+    title: 'Garantía de llegada con vida',
+    description: 'Recibes el animal sano y revisado en el momento de la entrega.',
+    color: 'text.primary',
+  },
+  {
+    icon: 'solar:danger-triangle-bold',
+    title: 'Entregas por cita',
+    description: 'Coordinamos día y punto de encuentro en CDMX por WhatsApp.',
+    color: 'warning.main',
+  },
+];
+
+// Elige la redacción según si los envíos están habilitados.
+export const shopInfoFor = (shippingEnabled) => (shippingEnabled ? SHOP_INFO : SHOP_INFO_LOCAL);

@@ -26,7 +26,7 @@ import { Iconify } from 'src/components/iconify';
 
 import { useCart } from './use-cart';
 import { CareInfo } from './care-info';
-import { SHOP_INFO } from './shop-info';
+import { shopInfoFor } from './shop-info';
 import { useFavorites } from './use-favorites';
 import { AnimalGallery } from './animal-gallery';
 import { RelatedSpecies } from './related-species';
@@ -312,7 +312,7 @@ export function SpeciesDetailsView({ item, category = null, related = [], shippi
 
             {/* Info de compra/envío — editable en shop-info.js */}
             <Stack spacing={2}>
-              {SHOP_INFO.map((info) => (
+              {shopInfoFor(shippingEnabled).map((info) => (
                 <Box key={info.title} sx={{ gap: 1.5, display: 'flex' }}>
                   <Iconify icon={info.icon} width={24} sx={{ color: info.color, flexShrink: 0 }} />
                   <Box>
