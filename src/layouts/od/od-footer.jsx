@@ -135,8 +135,32 @@ function Newsletter() {
 
 export function OdFooter({ newsletter = true }) {
   return (
-    <Box component="footer" sx={{ bgcolor: 'var(--color-neutral-100)', borderTop: '1px solid var(--color-divider)' }}>
-      <Box sx={{ maxWidth: 1280, mx: 'auto', px: { xs: '18px', md: '40px' }, py: { xs: 8, md: 12 } }}>
+    <Box
+      component="footer"
+      sx={{
+        // imagen de naturaleza de fondo; el contenido va en una tarjeta crema
+        // flotando encima (como la referencia). Velo cálido para suavizarla.
+        position: 'relative',
+        bgcolor: 'var(--color-neutral-900)',
+        backgroundImage:
+          'linear-gradient(rgba(233,227,216,0.28), rgba(233,227,216,0.28)), url(/assets/redesign/moss-forest-2.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        px: { xs: '10px', md: '32px' },
+        py: { xs: '10px', md: '32px' },
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: 1280,
+          mx: 'auto',
+          bgcolor: 'var(--color-neutral-100)',
+          borderRadius: { xs: '18px', md: '28px' },
+          boxShadow: 'var(--shadow-md)',
+          px: { xs: '18px', md: '56px' },
+          py: { xs: 6, md: 10 },
+        }}
+      >
         <Box
           sx={{
             display: 'grid',
@@ -215,19 +239,19 @@ export function OdFooter({ newsletter = true }) {
             ))}
           </Box>
         </Box>
-      </Box>
 
-      {/* Barra inferior */}
-      <Box sx={{ borderTop: '1px solid var(--color-divider)' }}>
+        {/* Barra inferior — fila redondeada dentro de la tarjeta */}
         <Box
           sx={{
-            maxWidth: 1280,
-            mx: 'auto',
-            px: { xs: '18px', md: '40px' },
-            py: 2.5,
+            mt: { xs: 5, md: 7 },
+            px: { xs: 2.5, md: 3.5 },
+            py: 2,
+            border: '1px solid var(--color-divider)',
+            borderRadius: '999px',
             display: 'flex',
             flexWrap: 'wrap',
             gap: 2,
+            rowGap: 1,
             alignItems: 'center',
             justifyContent: 'space-between',
             fontSize: 13,
