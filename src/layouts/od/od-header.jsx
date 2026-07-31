@@ -5,26 +5,41 @@ import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
-import { NavMobile } from 'src/layouts/main/nav/mobile';
-import { CartButton } from 'src/layouts/components/cart-button';
 import { SearchDialog } from 'src/layouts/components/search-dialog';
 import { AccountButton } from 'src/layouts/components/account-button';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { FavoritesButton } from 'src/layouts/components/favorites-button';
-import { buildNavData, navData as fallbackNav } from 'src/layouts/nav-config-main';
 
 import { Iconify } from 'src/components/iconify';
+
+import { useCart } from 'src/sections/catalog/use-cart';
+
+import { OdMegaMenu } from './od-mega-menu';
 
 // ----------------------------------------------------------------------
 // Barra del rediseño editorial: marquee oscuro + barra flotante en píldora.
 // Reutiliza tal cual los botones con lógica (carrito→Mercado Pago, favoritos,
 // cuenta con Google, búsqueda) — solo cambia la piel, no el comportamiento.
 // ----------------------------------------------------------------------
+
+// Ícono de carrito que lleva a la página /carrito (antes abría un drawer)
+function OdCartLink() {
+  const { count } = useCart();
+  return (
+    <IconButton component={RouterLink} href={paths.cart} aria-label="Cotización" sx={{ color: 'inherit' }}>
+      <Badge badgeContent={count} color="error" max={99}>
+        <Iconify icon="solar:cart-plus-bold" width={24} />
+      </Badge>
+    </IconButton>
+  );
+}
 
 const MARQUEE = [
   'Entrega en persona en CDMX',
@@ -90,7 +105,6 @@ export function OdHeader() {
   const { onToggle: onToggleSearch } = search;
 
   const categories = useNavCategories();
-  const navItems = categories ? buildNavData(categories) : fallbackNav;
 
   // ⌘K / Ctrl+K abre el buscador (mismo atajo que el layout original)
   useEffect(() => {
@@ -244,7 +258,7 @@ export function OdHeader() {
                 }}
               >
                 <FavoritesButton sx={{ color: 'inherit' }} />
-                <CartButton sx={{ color: 'inherit' }} />
+                <OdCartLink />
                 <AccountButton sx={{ color: 'inherit' }} />
               </Box>
             </Box>
@@ -252,7 +266,7 @@ export function OdHeader() {
         </Box>
       </Box>
 
-      <NavMobile data={navItems} open={nav.value} onClose={nav.onFalse} />
+      <OdMegaMenu open={nav.value} onClose={nav.onFalse} categories={categories} />
       <SearchDialog open={search.value} onClose={search.onFalse} />
     </>
   );

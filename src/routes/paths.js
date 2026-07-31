@@ -8,6 +8,7 @@ export const paths = {
   catalogCategory: (slug) => `/catalogo/${slug}`,
   catalogSpecies: (slug) => `/catalogo/${slug}`,
   favorites: '/favoritos',
+  cart: '/carrito',
   articles: '/articulos',
   // Cuenta de cliente (login con Google en el propio sitio)
   account: '/cuenta',
