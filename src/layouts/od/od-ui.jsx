@@ -4,8 +4,6 @@ import Box from '@mui/material/Box';
 
 import { RouterLink } from 'src/routes/components';
 
-import { Image } from 'src/components/image';
-
 // ----------------------------------------------------------------------
 // Primitivas del rediseño editorial (Opuntia Den). Comparten tokens de
 // global.css (var(--color-*), var(--shadow-*), var(--od-ease)) para que las
@@ -34,7 +32,13 @@ export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 1
         sx={{ width: 1, height: 1, transition: 'transform 1100ms var(--od-ease)' }}
       >
         {src ? (
-          <Image alt={alt} src={src} ratio={ratio} sx={{ width: 1, height: 1 }} />
+          <Box
+            component="img"
+            src={src}
+            alt={alt}
+            loading="lazy"
+            sx={{ width: 1, height: 1, display: 'block', objectFit: 'cover' }}
+          />
         ) : (
           <Box
             sx={{

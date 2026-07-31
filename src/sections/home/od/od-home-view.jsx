@@ -33,6 +33,18 @@ const HERO_L = [
 
 const pad2 = (n) => String(n).padStart(2, '0');
 
+// Imágenes de naturaleza (musgo, hojarasca, terrario, isópodos) de marcador de
+// posición — CC de Wikimedia en public/assets/redesign. Se reemplazan por
+// fotografía propia antes de publicar (ver Assets del handoff).
+const IMG = {
+  mossTall: '/assets/redesign/moss-forest-1.jpg',
+  leafLitter: '/assets/redesign/leaf-litter.jpg',
+  isopodZebra: '/assets/redesign/isopod-zebra.jpg',
+  terrarium: '/assets/redesign/terrarium.jpg',
+  isopodCubaris: '/assets/redesign/isopod-cubaris.jpg',
+  mossWide: '/assets/redesign/moss-forest-2.jpg',
+};
+
 export function OdHomeView({ species = [], articles = [] }) {
   const [heroC, setHeroC] = useState(0);
   const [art, setArt] = useState(0);
@@ -63,16 +75,20 @@ export function OdHomeView({ species = [], articles = [] }) {
 
   return (
     <>
-      {/* 2 · Hero a pantalla completa (placeholder de video) */}
+      {/* 2 · Hero a pantalla completa (video de musgo en bucle) */}
       <Box component="section" sx={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
-        <OdImage
-          label="Video a pantalla completa"
-          ratio="auto"
-          radius={0}
-          // placeholder oscuro para que el texto crema del hero se lea sin la
-          // foto/video real (que serán oscuros). Se reemplaza al subir el video.
-          sx={{ position: 'absolute', inset: 0, aspectRatio: 'auto', borderRadius: 0, bgcolor: 'var(--color-neutral-800)' }}
-        />
+        <Box
+          component="video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/video/hero-moss.jpg"
+          sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', bgcolor: 'var(--color-neutral-800)' }}
+        >
+          <source src="/video/hero-moss.webm" type="video/webm" />
+          <source src="/video/hero-moss.mp4" type="video/mp4" />
+        </Box>
         <Box
           sx={{
             position: 'absolute',
@@ -137,6 +153,8 @@ export function OdHomeView({ species = [], articles = [] }) {
           }}
         >
           <OdImage
+            src={IMG.mossTall}
+            alt="Musgo en el suelo del bosque"
             label="Ambiente principal"
             ratio="3 / 4"
             sx={{ gridRow: { md: '1 / span 2' } }}
@@ -174,7 +192,7 @@ export function OdHomeView({ species = [], articles = [] }) {
             </Box>
           </Box>
 
-          <OdImage label="Detalle del terrario" ratio="16 / 10" />
+          <OdImage src={IMG.leafLitter} alt="Hojarasca de bosque" label="Detalle del terrario" ratio="16 / 10" />
         </Box>
       </Box>
 
@@ -196,11 +214,11 @@ export function OdHomeView({ species = [], articles = [] }) {
           <Box sx={{ mt: '42px' }}>
             <Pill href={paths.catalog}>Ver el catálogo</Pill>
           </Box>
-          <OdImage label="Ejemplar en detalle" ratio="1 / 1" sx={{ mt: '90px', ml: '22%', width: '62%' }} />
+          <OdImage src={IMG.isopodZebra} alt="Isópodo cebra" label="Ejemplar en detalle" ratio="1 / 1" sx={{ mt: '90px', ml: '22%', width: '62%' }} />
         </Box>
 
         <Box sx={{ minWidth: 0, position: 'relative', mt: { md: '60px' } }}>
-          <OdImage label="Ambiente de cría" ratio="4 / 5" />
+          <OdImage src={IMG.terrarium} alt="Terrario bioactivo" label="Ambiente de cría" ratio="4 / 5" />
           <Box
             sx={{
               position: 'absolute',
@@ -214,7 +232,7 @@ export function OdHomeView({ species = [], articles = [] }) {
               display: { xs: 'none', sm: 'block' },
             }}
           >
-            <OdImage label="" ratio="1 / 1" radius={0} sx={{ width: 1, height: 1 }} />
+            <OdImage src={IMG.isopodCubaris} alt="Cubaris murina" ratio="1 / 1" radius={0} sx={{ width: 1, height: 1 }} />
           </Box>
         </Box>
       </Box>
@@ -277,6 +295,8 @@ export function OdHomeView({ species = [], articles = [] }) {
         }}
       >
         <OdImage
+          src={IMG.mossWide}
+          alt="Musgo del suelo del bosque"
           label="Foto ambiente del taller de cría"
           ratio="auto"
           radius={0}
