@@ -13,6 +13,11 @@
 @import '@fontsource/space-mono/400.css';
 @import '@fontsource/space-mono/700.css';
 
+/* display serif editorial del rediseño (rediseño Opuntia Den) */
+@import '@fontsource/playfair-display/400.css';
+@import '@fontsource/playfair-display/500.css';
+@import '@fontsource/playfair-display/600.css';
+
 /** **************************************
 * Fonts: options
 *************************************** */
@@ -85,4 +90,55 @@ input[type='number']::-webkit-outer-spin-button {
 input[type='number']::-webkit-inner-spin-button {
   margin: 0;
   -webkit-appearance: none;
+}
+
+/** **************************************
+* Rediseño Opuntia Den — tokens del sistema editorial
+* Escala cálida terracota/arena. Los usa la piel nueva (home, catálogo, ficha,
+* artículo) vía var(...) en sx. Definidos aquí, globales, para no repetirlos.
+*************************************** */
+:root {
+  --font-heading: 'Playfair Display', Georgia, serif;
+
+  --color-bg: #e9e3d8;
+  --color-surface: #ddd6c8;
+  --color-text: #3a322b;
+  --color-accent: #9c5a33;
+  --color-divider: rgba(58, 50, 43, 0.17);
+
+  --color-neutral-100: #fdfcf9;
+  --color-neutral-200: #f0ebe0;
+  --color-neutral-300: #ddd6c8;
+  --color-neutral-400: #c3b9a8;
+  --color-neutral-500: #a1968a;
+  --color-neutral-600: #7d7469;
+  --color-neutral-700: #5e574e;
+  --color-neutral-800: #453f38;
+  --color-neutral-900: #332d27;
+
+  --color-accent-100: #f7ece0;
+  --color-accent-200: #eed7bd;
+  --color-accent-300: #dfb587;
+  --color-accent-400: #cf9553;
+  --color-accent-500: #b87738;
+  --color-accent-600: #9c5a33;
+  --color-accent-700: #86482a;
+  --color-accent-800: #63341e;
+  --color-accent-900: #2f2620;
+
+  --shadow-sm: 0 1px 2px rgba(45, 43, 43, 0.14);
+  --shadow-md: 0 3px 10px rgba(45, 43, 43, 0.16);
+  --shadow-lg: 0 12px 32px rgba(45, 43, 43, 0.22);
+
+  --od-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes odFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes odMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes odSlide { from { opacity: 0; transform: translateX(56px); } to { opacity: 1; transform: none; } }
+
+/* accesibilidad: sin marquee ni deslizamientos si el usuario los desactiva */
+@media (prefers-reduced-motion: reduce) {
+  .od-marquee { animation: none !important; }
+  .od-slide { animation: none !important; }
 }

@@ -18,23 +18,23 @@ export const themeConfig = {
   /** **************************************
    * Typography
    *************************************** */
+  // Rediseño editorial: cuerpo DM Sans, títulos (h1–h3) Playfair Display serif
   fontFamily: {
-    primary: 'Public Sans Variable',
-    secondary: 'Barlow',
+    primary: 'DM Sans Variable',
+    secondary: 'Playfair Display',
   },
   /** **************************************
    * Palette
    *************************************** */
   palette: {
-    // Verde del cactus del logo. `light` es el tono exacto (#919569); `main`
-    // va más oscuro a propósito: sobre ese verde el texto blanco de los
-    // botones daría 2.9:1 de contraste (ilegible). Así queda en 4.8:1.
+    // Terracota del rediseño editorial (escala accent 100→900). `main` es
+    // accent-600 (#9c5a33); sobre él el texto blanco da 4.6:1 (legible).
     primary: {
-      lighter: '#EDEFE1',
-      light: '#919569',
-      main: '#6B7548',
-      dark: '#4C5432',
-      darker: '#2F3520',
+      lighter: '#F7ECE0',
+      light: '#CF9553',
+      main: '#9C5A33',
+      dark: '#63341E',
+      darker: '#2F2620',
       contrastText: '#FFFFFF',
     },
     secondary: {
