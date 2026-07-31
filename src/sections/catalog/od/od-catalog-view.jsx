@@ -15,9 +15,8 @@ import { Display } from 'src/layouts/od/od-ui';
 
 import { Iconify } from 'src/components/iconify';
 
-import { offerPct } from '../species-card';
 import { OdCatalogCard } from './od-catalog-card';
-import { slugify, scientificName, saleFormatLabel } from '../utils';
+import { slugify, offerPct, scientificName, saleFormatLabel } from '../utils';
 
 // ----------------------------------------------------------------------
 

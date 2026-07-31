@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import { RouterLink } from 'src/routes/components';
 
-import { MainLayout } from 'src/layouts/main';
+import { OdLayout } from 'src/layouts/od/od-layout';
 import { PageNotFoundIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
@@ -17,7 +17,7 @@ import { varBounce, MotionContainer } from 'src/components/animate';
 
 export function NotFoundView() {
   return (
-    <MainLayout>
+    <OdLayout offsetTop subscribe={false}>
       <Container component={MotionContainer} sx={{ py: { xs: 5, md: 10 }, textAlign: 'center' }}>
         <m.div variants={varBounce('in')}>
           <Typography variant="h3" sx={{ mb: 2 }}>
@@ -39,6 +39,6 @@ export function NotFoundView() {
           Volver al inicio
         </Button>
       </Container>
-    </MainLayout>
+    </OdLayout>
   );
 }

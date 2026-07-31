@@ -4,7 +4,7 @@ import { CONFIG } from 'src/global-config';
 import { OdLayout } from 'src/layouts/od/od-layout';
 import { getProduct, getProducts , getSiteSettings } from 'src/lib/public-api';
 
-import { productSlug } from 'src/sections/catalog/product-card';
+import { productSlug } from 'src/sections/catalog/utils';
 import { OdProductDetailsView } from 'src/sections/catalog/od/od-product-details-view';
 
 // ----------------------------------------------------------------------

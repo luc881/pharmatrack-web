@@ -2,8 +2,7 @@ import { CONFIG } from 'src/global-config';
 import { getGroups, getAnimals, getProducts, getArticles } from 'src/lib/public-api';
 
 import { articleSlug } from 'src/sections/articles/utils';
-import { productSlug } from 'src/sections/catalog/product-card';
-import { buildListings, buildCategories } from 'src/sections/catalog/utils';
+import { productSlug, buildListings, buildCategories } from 'src/sections/catalog/utils';
 
 // ----------------------------------------------------------------------
 

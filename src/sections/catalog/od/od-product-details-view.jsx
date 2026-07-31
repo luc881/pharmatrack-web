@@ -17,7 +17,7 @@ import { useCart } from '../use-cart';
 import { shopInfoFor } from '../shop-info';
 import { OdCatalogCard } from './od-catalog-card';
 import { productToCard } from './od-catalog-view';
-import { productSlug, isBulkWeight } from '../product-card';
+import { productSlug, isBulkWeight } from '../utils';
 
 // ----------------------------------------------------------------------
 // Detalle de producto (insumos) editorial. Reutiliza cart.add (misma llave

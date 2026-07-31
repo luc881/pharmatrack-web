@@ -108,6 +108,22 @@ export function saleFormatLabel(species) {
   return null;
 }
 
+// "-15%" cuando hay precio anterior (compareAt) por encima del actual
+export function offerPct(price, compareAt) {
+  if (!compareAt || compareAt <= price) return null;
+  return Math.round((1 - price / compareAt) * 100);
+}
+
+// Slug canónico del producto/insumo: "titulo-id"
+export function productSlug(product) {
+  return `${slugify(product.title)}-${product.id}`;
+}
+
+// Granel = el precio es por unidad de MEDIDA (se pesa/mide al vender)
+export function isBulkWeight(product) {
+  return ['g', 'kg', 'ml', 'l'].includes((product.unit_name ?? '').toLowerCase());
+}
+
 // ----------------------------------------------------------------------
 // Listados por MORPH: cada morph de una especie es su propia entrada del
 // catálogo (precio, fotos, descripción propia); la ficha de cuidados se
