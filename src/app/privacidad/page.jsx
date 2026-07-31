@@ -1,7 +1,7 @@
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { MainLayout } from 'src/layouts/main';
+import { OdLayout } from 'src/layouts/od/od-layout';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ const SECTIONS = [
 
 export default function Page() {
   return (
-    <MainLayout>
+    <OdLayout offsetTop subscribe={false}>
       <Container sx={{ mb: 10, mt: { xs: 1, md: 3 }, maxWidth: 720 }}>
         <Typography variant="h3" component="h1" sx={{ mb: { xs: 3, md: 5 } }}>
           Aviso de privacidad
@@ -58,6 +58,6 @@ export default function Page() {
           </div>
         ))}
       </Container>
-    </MainLayout>
+    </OdLayout>
   );
 }

@@ -1,7 +1,7 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
-import { MainLayout } from 'src/layouts/main';
+import { OdLayout } from 'src/layouts/od/od-layout';
 import { getProduct, getProducts , getSiteSettings } from 'src/lib/public-api';
 
 import { productSlug } from 'src/sections/catalog/product-card';
@@ -50,12 +50,12 @@ export default async function Page({ params }) {
   const site = await getSiteSettings();
 
   return (
-    <MainLayout>
+    <OdLayout offsetTop>
       <ProductDetailsView
         product={product}
         related={related}
         shippingEnabled={site.shipping_enabled !== false}
       />
-    </MainLayout>
+    </OdLayout>
   );
 }

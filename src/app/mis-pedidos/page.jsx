@@ -1,4 +1,4 @@
-import { MainLayout } from 'src/layouts/main';
+import { OdLayout } from 'src/layouts/od/od-layout';
 
 import { OrdersView } from 'src/sections/account/orders-view';
 
@@ -11,8 +11,8 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <MainLayout>
+    <OdLayout offsetTop subscribe={false}>
       <OrdersView />
-    </MainLayout>
+    </OdLayout>
   );
 }

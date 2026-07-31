@@ -1,8 +1,8 @@
-import { MainLayout } from 'src/layouts/main';
 import { getAnimals } from 'src/lib/public-api';
+import { OdLayout } from 'src/layouts/od/od-layout';
 
 import { buildListings } from 'src/sections/catalog/utils';
-import { FavoritesView } from 'src/sections/catalog/favorites-view';
+import { OdFavoritesView } from 'src/sections/catalog/od/od-favorites-view';
 
 // ----------------------------------------------------------------------
 
@@ -16,8 +16,8 @@ export default async function Page() {
   const { data: animals } = await getAnimals();
 
   return (
-    <MainLayout>
-      <FavoritesView items={buildListings(animals)} />
-    </MainLayout>
+    <OdLayout offsetTop>
+      <OdFavoritesView items={buildListings(animals)} />
+    </OdLayout>
   );
 }

@@ -1,7 +1,7 @@
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { MainLayout } from 'src/layouts/main';
+import { OdLayout } from 'src/layouts/od/od-layout';
 import { getSiteSettings } from 'src/lib/public-api';
 
 // ----------------------------------------------------------------------
@@ -54,7 +54,7 @@ export default async function Page() {
   // Sin envíos activos, prometer condiciones de envío sería engañoso
   const sections = SECTIONS.filter((s) => shipping || !s.shippingOnly);
   return (
-    <MainLayout>
+    <OdLayout offsetTop subscribe={false}>
       <Container sx={{ mb: 10, mt: { xs: 1, md: 3 }, maxWidth: 720 }}>
         <Typography variant="h3" component="h1" sx={{ mb: { xs: 3, md: 5 } }}>
           Términos y condiciones
@@ -71,6 +71,6 @@ export default async function Page() {
           </div>
         ))}
       </Container>
-    </MainLayout>
+    </OdLayout>
   );
 }
