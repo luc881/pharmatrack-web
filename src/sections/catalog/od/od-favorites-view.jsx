@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 
 import { paths } from 'src/routes/paths';
 
+import { OdReveal } from 'src/layouts/od/od-motion';
 import { Pill, Kicker, Display } from 'src/layouts/od/od-ui';
 
 import { useFavorites } from '../use-favorites';
@@ -19,15 +20,19 @@ export function OdFavoritesView({ items = [] }) {
 
   return (
     <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
-      <Kicker sx={{ mb: 2.5 }}>Tu selección</Kicker>
-      <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02, mb: { xs: 4, md: 6 } }}>
-        Favoritos
-      </Display>
+      <Box className="od-rise">
+        <Kicker sx={{ mb: 2.5 }}>Tu selección</Kicker>
+        <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02, mb: { xs: 4, md: 6 } }}>
+          Favoritos
+        </Display>
+      </Box>
 
       {favorites.length ? (
         <Box sx={{ display: 'grid', gap: '18px', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
-          {favorites.map((item) => (
-            <OdProductCard key={item.key} item={item} />
+          {favorites.map((item, i) => (
+            <OdReveal key={item.key} delay={Math.min(i, 8) * 0.06}>
+              <OdProductCard item={item} />
+            </OdReveal>
           ))}
         </Box>
       ) : (

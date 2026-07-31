@@ -11,6 +11,7 @@ import { RouterLink } from 'src/routes/components';
 import { fCurrency } from 'src/utils/format-number';
 
 import { CONFIG } from 'src/global-config';
+import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdImage, Display } from 'src/layouts/od/od-ui';
 
 import { useCart } from '../use-cart';
@@ -127,6 +128,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
       {/* Miga de pan */}
       <Box
         component="nav"
+        className="od-rise"
         sx={{
           px: { xs: '18px', md: '40px' },
           pt: { xs: 3, md: 4 },
@@ -171,7 +173,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
         }}
       >
         {/* Galería */}
-        <Box sx={{ minWidth: 0 }}>
+        <OdReveal sx={{ minWidth: 0 }}>
           <Box sx={{ position: 'relative' }}>
             <OdImage src={gallery[galIndex]} alt={title} label="Ejemplar adulto" ratio="4 / 5" />
             {gallery.length > 1 && (
@@ -219,7 +221,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               ))}
             </Box>
           )}
-        </Box>
+        </OdReveal>
 
         {/* Panel de compra (pegajoso en escritorio) */}
         <Box sx={{ minWidth: 0, position: { md: 'sticky' }, top: { md: 130 }, pb: { md: 5 } }}>
@@ -449,6 +451,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
       {/* Ficha de cuidados */}
       {careColumns.length > 0 && (
         <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '100px' } }}>
+          <OdReveal>
           <Display size="clamp(28px, 3.2vw, 44px)" weight={400} sx={{ mb: '30px' }}>
             Ficha de cuidados
           </Display>
@@ -479,6 +482,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               </Box>
             ))}
           </Box>
+          </OdReveal>
         </Box>
       )}
 
@@ -561,8 +565,10 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
             Suele ir con
           </Display>
           <Box sx={{ pt: '34px', display: 'grid', gap: '22px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
-            {related.slice(0, 4).map((rel) => (
-              <OdProductCard key={rel.key} item={rel} />
+            {related.slice(0, 4).map((rel, i) => (
+              <OdReveal key={rel.key} delay={i * 0.08}>
+                <OdProductCard item={rel} />
+              </OdReveal>
             ))}
           </Box>
         </Box>

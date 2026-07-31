@@ -2,6 +2,7 @@
 
 import Box from '@mui/material/Box';
 
+import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdImage, Display } from 'src/layouts/od/od-ui';
 
 import { OdArticleCard } from './od-article-card';
@@ -75,7 +76,7 @@ export function OdArticleDetailView({ article, related = [] }) {
   return (
     <article>
       {/* Encabezado centrado */}
-      <Box component="section" sx={{ maxWidth: 900, mx: 'auto', px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 8 }, pb: 4, textAlign: 'center' }}>
+      <Box component="section" className="od-rise" sx={{ maxWidth: 900, mx: 'auto', px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 8 }, pb: 4, textAlign: 'center' }}>
         <Box sx={{ mb: 2.5, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>
           ART-{String(article.id).padStart(3, '0')}
           {article.category ? ` · ${article.category}` : ''}
@@ -96,9 +97,9 @@ export function OdArticleDetailView({ article, related = [] }) {
       {/* Portada */}
       {article.cover_image && (
         <Box sx={{ px: { xs: '18px', md: '40px' } }}>
-          <Box sx={{ maxWidth: 1180, mx: 'auto' }}>
+          <OdReveal sx={{ maxWidth: 1180, mx: 'auto' }}>
             <OdImage src={article.cover_image} alt={article.title} ratio="16 / 9" />
-          </Box>
+          </OdReveal>
         </Box>
       )}
 
@@ -146,7 +147,7 @@ export function OdArticleDetailView({ article, related = [] }) {
           </Box>
         )}
 
-        <Box sx={{ maxWidth: '68ch' }}>
+        <OdReveal sx={{ maxWidth: '68ch' }}>
           {sections.map((section, index) => (
             <BodySection key={index} section={section} id={section.type === 'subheading' ? `sec-${index}` : undefined} />
           ))}
@@ -160,7 +161,7 @@ export function OdArticleDetailView({ article, related = [] }) {
               ))}
             </Box>
           )}
-        </Box>
+        </OdReveal>
       </Box>
 
       {/* Sigue leyendo */}
@@ -173,8 +174,10 @@ export function OdArticleDetailView({ article, related = [] }) {
             Sigue leyendo
           </Display>
           <Box sx={{ pt: '34px', display: 'grid', gap: '28px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
-            {related.map((item) => (
-              <OdArticleCard key={item.id} article={item} />
+            {related.map((item, i) => (
+              <OdReveal key={item.id} delay={i * 0.08}>
+                <OdArticleCard article={item} />
+              </OdReveal>
             ))}
           </Box>
         </Box>

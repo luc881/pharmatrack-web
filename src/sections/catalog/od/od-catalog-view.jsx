@@ -12,6 +12,7 @@ import { RouterLink } from 'src/routes/components';
 import { fCurrency } from 'src/utils/format-number';
 
 import { Display } from 'src/layouts/od/od-ui';
+import { OdReveal } from 'src/layouts/od/od-motion';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -125,6 +126,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
       {/* Cabecera */}
       <Box
         component="section"
+        className="od-rise"
         sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 8 }, pb: { xs: 4, md: 5 }, borderBottom: '1px solid var(--color-divider)' }}
       >
         <Box sx={{ mb: 2, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
@@ -290,8 +292,10 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                 gridTemplateColumns: { xs: view === 'list' ? '1fr' : 'repeat(auto-fill, minmax(160px, 1fr))', md: GRID_COLUMNS[view] },
               }}
             >
-              {cards.map((card) => (
-                <OdCatalogCard key={card.key} card={card} horizontal={view === 'list'} />
+              {cards.map((card, i) => (
+                <OdReveal key={card.key} delay={Math.min(i, 8) * 0.05}>
+                  <OdCatalogCard card={card} horizontal={view === 'list'} />
+                </OdReveal>
               ))}
             </Box>
           ) : (

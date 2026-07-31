@@ -11,6 +11,7 @@ import { RouterLink } from 'src/routes/components';
 import { fCurrency } from 'src/utils/format-number';
 
 import { CONFIG } from 'src/global-config';
+import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdImage, Display } from 'src/layouts/od/od-ui';
 
 import { useCart } from '../use-cart';
@@ -55,6 +56,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
       {/* Miga de pan */}
       <Box
         component="nav"
+        className="od-rise"
         sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 3, md: 4 }, display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}
       >
         <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
@@ -73,14 +75,14 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
         component="section"
         sx={{ display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'start', px: { xs: '18px', md: '40px' }, pt: { xs: 3, md: 4 }, gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.08fr) minmax(0, 1fr)' } }}
       >
-        <Box sx={{ minWidth: 0, position: 'relative' }}>
+        <OdReveal sx={{ minWidth: 0, position: 'relative' }}>
           <OdImage src={product.image} alt={product.title} label={product.title} ratio="1 / 1" />
           {soldOut && (
             <Box sx={{ position: 'absolute', top: 12, left: 12, px: '14px', py: '5px', fontSize: 12, borderRadius: '999px', bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)' }}>
               Agotado
             </Box>
           )}
-        </Box>
+        </OdReveal>
 
         <Box sx={{ minWidth: 0, position: { md: 'sticky' }, top: { md: 130 }, pb: { md: 5 } }}>
           {product.category && (
@@ -201,8 +203,10 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
             Productos similares
           </Display>
           <Box sx={{ pt: '34px', display: 'grid', gap: '44px 28px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
-            {related.slice(0, 4).map((p) => (
-              <OdCatalogCard key={p.id} card={productToCard(p)} />
+            {related.slice(0, 4).map((p, i) => (
+              <OdReveal key={p.id} delay={i * 0.08}>
+                <OdCatalogCard card={productToCard(p)} />
+              </OdReveal>
             ))}
           </Box>
         </Box>
