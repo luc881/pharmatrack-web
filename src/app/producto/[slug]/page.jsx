@@ -5,7 +5,7 @@ import { OdLayout } from 'src/layouts/od/od-layout';
 import { getProduct, getProducts , getSiteSettings } from 'src/lib/public-api';
 
 import { productSlug } from 'src/sections/catalog/product-card';
-import { ProductDetailsView } from 'src/sections/catalog/product-details-view';
+import { OdProductDetailsView } from 'src/sections/catalog/od/od-product-details-view';
 
 // ----------------------------------------------------------------------
 // "cueva-de-resina-1702": el id al final es el canónico; si el slug no
@@ -51,7 +51,7 @@ export default async function Page({ params }) {
 
   return (
     <OdLayout offsetTop>
-      <ProductDetailsView
+      <OdProductDetailsView
         product={product}
         related={related}
         shippingEnabled={site.shipping_enabled !== false}

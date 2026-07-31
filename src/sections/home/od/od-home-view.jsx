@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -11,6 +11,7 @@ import { RouterLink } from 'src/routes/components';
 import { Pill, Kicker, OdImage, Display, ArrowButton } from 'src/layouts/od/od-ui';
 
 import { articleSlug } from 'src/sections/articles/utils';
+import { OdArticleCard } from 'src/sections/articles/od/od-article-card';
 
 import { OdProductCard } from './od-product-card';
 
@@ -47,7 +48,6 @@ const IMG = {
 
 export function OdHomeView({ species = [], articles = [] }) {
   const [heroC, setHeroC] = useState(0);
-  const [art, setArt] = useState(0);
 
   const selection = species.slice(0, 4);
   // los ejemplares de id más alto son los recién llegados → badge "Nuevo"
@@ -55,21 +55,9 @@ export function OdHomeView({ species = [], articles = [] }) {
     [...species].sort((a, b) => b.latestId - a.latestId).slice(0, 2).map((s) => s.key)
   );
 
-  // artículos en páginas de 2 para el carrusel de divulgación
-  const artPages = [];
-  for (let i = 0; i < articles.length; i += 2) artPages.push(articles.slice(i, i + 2));
-  const artPage = artPages[art] ?? [];
-
-  // autoavance del carrusel de divulgación (5.2s), respetando reduce-motion
-  const artLen = artPages.length;
-  const artRef = useRef(art);
-  artRef.current = art;
-  useEffect(() => {
-    if (artLen <= 1) return undefined;
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const id = setInterval(() => setArt((artRef.current + 1) % artLen), 5200);
-    return () => clearInterval(id);
-  }, [artLen]);
+  // divulgación editorial: un artículo destacado (imagen grande) + los siguientes
+  const featuredArticle = articles[0] ?? null;
+  const moreArticles = articles.slice(1, 4);
 
   const heroSlide = HERO_L[heroC];
 
@@ -332,85 +320,51 @@ export function OdHomeView({ species = [], articles = [] }) {
         </Box>
       </Box>
 
-      {/* 8 · Carrusel de divulgación */}
-      {artPage.length > 0 && (
-        <Box
-          component="section"
-          id="divulgacion"
-          sx={{
-            px: '18px',
-            pt: '20px',
-            pb: { xs: '80px', md: '120px' },
-            display: 'grid',
-            gap: '40px',
-            gridTemplateColumns: { xs: '1fr', md: 'minmax(280px, 0.85fr) minmax(0, 1.15fr)' },
-          }}
-        >
-          <Box sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', pl: { md: '26px' } }}>
-            <Box>
-              <Box sx={{ display: 'flex', alignItems: 'baseline', gap: '22px' }}>
-                <Display size="clamp(32px, 3.8vw, 58px)" sx={{ lineHeight: 1.05 }}>
-                  Divulgación
-                </Display>
-                <Box component="span" sx={{ fontSize: 13, color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
-                  {pad2(art + 1)} / {pad2(artLen)}
-                </Box>
-              </Box>
-              <Box sx={{ my: '32px', fontSize: 15, lineHeight: 1.75, maxWidth: '46ch', opacity: 0.85 }}>
+      {/* 8 · Divulgación (feature editorial: texto + imagen destacada + 3 artículos) */}
+      {featuredArticle && (
+        <Box component="section" id="divulgacion" sx={{ px: '18px', pt: '20px', pb: { xs: '80px', md: '120px' } }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gap: { xs: 5, md: '56px' },
+              alignItems: 'center',
+              gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 0.9fr) minmax(0, 1.1fr)' },
+            }}
+          >
+            <Box sx={{ minWidth: 0, pl: { md: '26px' } }}>
+              <Display size="clamp(38px, 5vw, 72px)" sx={{ lineHeight: 1.05 }}>
+                Divulgación
+              </Display>
+              <Box sx={{ my: '28px', fontSize: 16, lineHeight: 1.8, maxWidth: '46ch', opacity: 0.85 }}>
                 Notas de cría, montaje de terrarios bioactivos y fichas de especie. Lo que aprendimos
                 manteniendo colonias, escrito para que no repitas nuestros errores.
               </Box>
-              <Pill href={paths.articles}>Ver todos</Pill>
+              <Pill href={paths.articles}>Ver divulgación</Pill>
             </Box>
-            {artLen > 1 && (
-              <Box sx={{ display: 'flex', gap: '12px', mt: '60px' }}>
-                <ArrowButton size={52} solid label="Anterior" onClick={() => setArt((art + artLen - 1) % artLen)}>
-                  ←
-                </ArrowButton>
-                <ArrowButton size={52} label="Siguiente" onClick={() => setArt((art + 1) % artLen)}>
-                  →
-                </ArrowButton>
+
+            <Link
+              component={RouterLink}
+              href={paths.article(articleSlug(featuredArticle))}
+              sx={{ display: 'block', color: 'inherit', textDecoration: 'none', '&:hover .od-img-zoom': { transform: 'scale(1.06)' } }}
+            >
+              <OdImage src={featuredArticle.cover_image} alt={featuredArticle.title} label={featuredArticle.title} ratio="4 / 5" />
+              <Kicker sx={{ mt: '16px', mb: '6px', fontSize: 11, letterSpacing: '0.18em', fontVariantNumeric: 'tabular-nums' }}>
+                ART-{String(featuredArticle.id).padStart(3, '0')}
+                {featuredArticle.category ? ` · ${featuredArticle.category}` : ''}
+              </Kicker>
+              <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 24, lineHeight: 1.2, maxWidth: '28ch' }}>
+                {featuredArticle.title}
               </Box>
-            )}
+            </Link>
           </Box>
 
-          <Box
-            key={art}
-            className="od-slide"
-            sx={{
-              minWidth: 0,
-              display: 'grid',
-              gap: '16px',
-              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-              animation: 'odSlide 0.6s var(--od-ease) both',
-            }}
-          >
-            {artPage.map((article) => (
-              <Link
-                key={article.id}
-                component={RouterLink}
-                href={paths.article(articleSlug(article))}
-                sx={{ color: 'inherit', textDecoration: 'none', display: 'block' }}
-              >
-                <OdImage src={article.cover_image} alt={article.title} label={article.title} ratio="4 / 5" />
-                <Kicker sx={{ mt: '16px', mb: '6px', fontSize: 11, letterSpacing: '0.18em', fontVariantNumeric: 'tabular-nums' }}>
-                  ART-{pad2(article.id)}
-                  {article.category ? ` · ${article.category}` : ''}
-                </Kicker>
-                <Box
-                  component="h3"
-                  sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 21, lineHeight: 1.24, maxWidth: '24ch' }}
-                >
-                  {article.title}
-                </Box>
-                {article.reading_minutes != null && (
-                  <Box sx={{ mt: '8px', fontSize: 13, color: 'var(--color-neutral-600)' }}>
-                    {article.reading_minutes} min
-                  </Box>
-                )}
-              </Link>
-            ))}
-          </Box>
+          {moreArticles.length > 0 && (
+            <Box sx={{ mt: { xs: 6, md: 9 }, display: 'grid', gap: '28px', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' } }}>
+              {moreArticles.map((article) => (
+                <OdArticleCard key={article.id} article={article} />
+              ))}
+            </Box>
+          )}
         </Box>
       )}
     </>

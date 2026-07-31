@@ -13,9 +13,25 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { Display } from 'src/layouts/od/od-ui';
 
+import { Iconify } from 'src/components/iconify';
+
 import { offerPct } from '../species-card';
 import { OdCatalogCard } from './od-catalog-card';
 import { slugify, scientificName, saleFormatLabel } from '../utils';
+
+// ----------------------------------------------------------------------
+
+const VIEWS = [
+  { key: 'grid', icon: 'mingcute:grid-fill', label: 'Cuadrícula' },
+  { key: 'two', icon: 'mingcute:layout-grid-fill', label: 'Dos columnas' },
+  { key: 'list', icon: 'ic:round-view-list', label: 'Filas' },
+];
+
+const GRID_COLUMNS = {
+  grid: 'repeat(auto-fill, minmax(240px, 1fr))',
+  two: 'repeat(2, 1fr)',
+  list: '1fr',
+};
 
 // ----------------------------------------------------------------------
 // Catálogo editorial: cabecera con miga de pan + título display, barra lateral
@@ -25,7 +41,7 @@ import { slugify, scientificName, saleFormatLabel } from '../utils';
 
 const pad2 = (n) => String(n).padStart(2, '0');
 
-const animalToCard = (i) => {
+export const animalToCard = (i) => {
   const pct = offerPct(i.minPrice, i.compareAt);
   const fmt = saleFormatLabel(i.species);
   return {
@@ -42,7 +58,7 @@ const animalToCard = (i) => {
   };
 };
 
-const productToCard = (p) => {
+export const productToCard = (p) => {
   const soldOut = p.tracks_batches && (p.stock ?? 0) <= 0;
   const pct = offerPct(p.price_retail, p.compare_at_price);
   const unit = p.unit_name && p.unit_name !== 'pieza' ? ` / ${p.unit_name}` : '';
@@ -85,6 +101,8 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
   );
   const [range, setRange] = useState([0, maxPrice]);
   const inRange = (v) => v >= range[0] && v <= range[1];
+
+  const [view, setView] = useState('grid');
 
   const groupId = seg.startsWith('g') ? Number(seg.slice(1)) : null;
   const showAnimals = seg === 'all' || groupId != null;
@@ -137,8 +155,8 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
         </Box>
       </Box>
 
-      {/* Cuerpo: barra lateral + rejilla */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' } }}>
+      {/* Cuerpo: barra lateral fija + rejilla */}
+      <Box sx={{ display: 'grid', alignItems: 'start', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' } }}>
         <Box
           component="aside"
           sx={{
@@ -146,6 +164,10 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             py: { xs: 4, md: 5 },
             borderRight: { md: '1px solid var(--color-divider)' },
             borderBottom: { xs: '1px solid var(--color-divider)', md: 'none' },
+            // se queda fija mientras la rejilla de productos hace scroll
+            position: { md: 'sticky' },
+            top: { md: 130 },
+            alignSelf: { md: 'start' },
           }}
         >
           <Box sx={{ mb: 2, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
@@ -228,20 +250,49 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             <Box sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {pad2(cards.length)} resultado{cards.length === 1 ? '' : 's'}
             </Box>
-            <Box>Recién llegados</Box>
+            {/* Toggle de vista: cuadrícula / dos columnas / filas */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box component="span" sx={{ display: { xs: 'none', sm: 'block' } }}>Ver</Box>
+              <Box sx={{ display: 'flex', border: '1px solid var(--color-divider)', borderRadius: '999px', overflow: 'hidden' }}>
+                {VIEWS.map((v) => (
+                  <Box
+                    key={v.key}
+                    component="button"
+                    type="button"
+                    onClick={() => setView(v.key)}
+                    aria-label={v.label}
+                    aria-pressed={view === v.key}
+                    sx={{
+                      border: 0,
+                      cursor: 'pointer',
+                      display: 'grid',
+                      placeItems: 'center',
+                      width: 40,
+                      height: 34,
+                      transition: 'background 250ms, color 250ms',
+                      ...(view === v.key
+                        ? { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' }
+                        : { bgcolor: 'transparent', color: 'var(--color-neutral-600)', '&:hover': { bgcolor: 'var(--color-accent-100)' } }),
+                    }}
+                  >
+                    <Iconify icon={v.icon} width={16} />
+                  </Box>
+                ))}
+              </Box>
+            </Box>
           </Box>
 
           {cards.length ? (
             <Box
               sx={{
-                pt: 5,
+                pt: view === 'list' ? 2 : 5,
                 display: 'grid',
-                gap: '44px 28px',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                gap: view === 'list' ? 0 : '44px 28px',
+                gridTemplateColumns: { xs: view === 'list' ? '1fr' : 'repeat(auto-fill, minmax(160px, 1fr))', md: GRID_COLUMNS[view] },
               }}
             >
               {cards.map((card) => (
-                <OdCatalogCard key={card.key} card={card} />
+                <OdCatalogCard key={card.key} card={card} horizontal={view === 'list'} />
               ))}
             </Box>
           ) : (
