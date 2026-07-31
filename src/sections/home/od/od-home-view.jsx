@@ -237,11 +237,28 @@ export function OdHomeView({ species = [], articles = [] }) {
         </Box>
       </Box>
 
-      {/* 5 · Póster a sangre */}
+      {/* 5 · Póster a sangre (musgo bajo velo cálido) */}
       <Box
         component="section"
-        sx={{ bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-200)', px: '32px', py: { xs: '90px', md: '130px' }, textAlign: 'center' }}
+        sx={{
+          position: 'relative',
+          isolation: 'isolate',
+          bgcolor: 'var(--color-accent-900)',
+          color: 'var(--color-neutral-200)',
+          px: '32px',
+          py: { xs: '90px', md: '130px' },
+          textAlign: 'center',
+        }}
       >
+        <OdImage
+          src={IMG.mossTall}
+          alt="Musgo del bosque"
+          ratio="auto"
+          radius={0}
+          sx={{ position: 'absolute', inset: 0, zIndex: -2, aspectRatio: 'auto', borderRadius: 0 }}
+        />
+        <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(47,38,32,0.66)' }} />
+
         <Display size="clamp(38px, 5.4vw, 84px)" sx={{ lineHeight: 1.08, maxWidth: '20ch', mx: 'auto', color: '#eae7e7' }}>
           Un ecosistema pequeño, vivo y hecho a tu medida
         </Display>
@@ -264,15 +281,13 @@ export function OdHomeView({ species = [], articles = [] }) {
           >
             Nuestra selección de isópodos
           </Display>
-          <Box
-            sx={{
-              display: 'grid',
-              gap: '18px',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-            }}
-          >
+          {/* flex centrado con ancho fijo: una sola tarjeta queda al centro sin
+              estirarse; con varias se acomodan centradas y envuelven en filas */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '18px', justifyContent: 'center' }}>
             {selection.map((item) => (
-              <OdProductCard key={item.key} item={item} isNew={newestIds.has(item.key)} />
+              <Box key={item.key} sx={{ width: 290, maxWidth: '100%' }}>
+                <OdProductCard item={item} isNew={newestIds.has(item.key)} />
+              </Box>
             ))}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: '46px' }}>
