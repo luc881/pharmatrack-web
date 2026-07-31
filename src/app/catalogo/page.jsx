@@ -1,27 +1,23 @@
-import { MainLayout } from 'src/layouts/main';
-import { getGroups, getAnimals, getProducts } from 'src/lib/public-api';
+import { OdLayout } from 'src/layouts/od/od-layout';
+import { getAnimals, getProducts } from 'src/lib/public-api';
 
-import { CatalogView } from 'src/sections/catalog/catalog-view';
-import { buildListings, buildCategories } from 'src/sections/catalog/utils';
+import { buildListings } from 'src/sections/catalog/utils';
+import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
   title: 'Catálogo',
   description:
-    'Animales exóticos en venta: arácnidos, reptiles, anfibios y más, con fotos, precios y procedencia legal.',
+    'Isópodos de colección, sustratos y accesorios en venta, con fotos y precios. Entrega en persona en CDMX.',
 };
 
 export default async function Page() {
-  const [{ data: animals }, groups, products] = await Promise.all([getAnimals(), getGroups(), getProducts()]);
+  const [{ data: animals }, products] = await Promise.all([getAnimals(), getProducts()]);
 
   return (
-    <MainLayout>
-      <CatalogView
-        items={buildListings(animals)}
-        categories={buildCategories(animals, groups)}
-        products={products}
-      />
-    </MainLayout>
+    <OdLayout offsetTop>
+      <OdCatalogView items={buildListings(animals)} products={products} />
+    </OdLayout>
   );
 }

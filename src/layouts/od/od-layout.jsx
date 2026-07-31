@@ -12,11 +12,16 @@ import { OdSubscribe } from './od-subscribe';
 // contenido empieza pegado arriba (el hero a pantalla completa queda debajo).
 // ----------------------------------------------------------------------
 
-export function OdLayout({ children, subscribe = true }) {
+export function OdLayout({ children, subscribe = true, offsetTop = false }) {
   return (
     <Box sx={{ bgcolor: 'var(--color-bg)', color: 'var(--color-text)', overflowX: 'hidden' }}>
       <OdHeader />
-      <Box component="main">{children}</Box>
+      {/* En el home el hero (100vh) va debajo de la barra fija; las demás
+          pantallas empiezan pegadas arriba, así que se compensa su alto.
+          ponytail: alto aproximado del marquee + píldora; ajustar si cambian */}
+      <Box component="main" sx={offsetTop ? { pt: { xs: '100px', md: '118px' } } : undefined}>
+        {children}
+      </Box>
       {subscribe && <OdSubscribe />}
       <OdFooter />
       <CloseCursor />

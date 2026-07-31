@@ -2,9 +2,10 @@ import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { MainLayout } from 'src/layouts/main';
+import { OdLayout } from 'src/layouts/od/od-layout';
 import { getAnimal, getGroups, getAnimals , getSiteSettings } from 'src/lib/public-api';
 
-import { CatalogView } from 'src/sections/catalog/catalog-view';
+import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
 import { SpeciesDetailsView } from 'src/sections/catalog/species-details-view';
 import {
   groupBySlug,
@@ -13,7 +14,6 @@ import {
   listingSlug,
   buildListings,
   scientificName,
-  buildCategories,
   saleFormatLabel,
   listingsInGroup,
   parseListingParam,
@@ -43,7 +43,6 @@ async function loadCatalog() {
   const [{ data: animals }, groups] = await Promise.all([getAnimals(), getGroups()]);
   return {
     groups,
-    categories: buildCategories(animals, groups),
     listings: buildListings(animals),
   };
 }
@@ -103,7 +102,7 @@ export default async function Page({ params }) {
     permanentRedirect(`/catalogo/${listingSlug(animal.species, animal.morphs?.[0] ?? null)}`);
   }
 
-  const { groups, categories, listings } = await loadCatalog();
+  const { groups, listings } = await loadCatalog();
   const parsed = parseListingParam(param);
 
   if (parsed) {
@@ -161,8 +160,8 @@ export default async function Page({ params }) {
   const filtered = listingsInGroup(listings, category, groups);
 
   return (
-    <MainLayout>
-      <CatalogView items={filtered} categories={categories} category={category} />
-    </MainLayout>
+    <OdLayout offsetTop>
+      <OdCatalogView items={filtered} category={category} />
+    </OdLayout>
   );
 }
