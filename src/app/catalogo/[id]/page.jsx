@@ -1,12 +1,11 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
-import { MainLayout } from 'src/layouts/main';
 import { OdLayout } from 'src/layouts/od/od-layout';
 import { getAnimal, getGroups, getAnimals , getSiteSettings } from 'src/lib/public-api';
 
 import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
-import { SpeciesDetailsView } from 'src/sections/catalog/species-details-view';
+import { OdSpeciesDetailsView } from 'src/sections/catalog/od/od-species-details-view';
 import {
   groupBySlug,
   rootGroupOf,
@@ -139,18 +138,18 @@ export default async function Page({ params }) {
     };
 
     return (
-      <MainLayout>
+      <OdLayout offsetTop>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <SpeciesDetailsView
+        <OdSpeciesDetailsView
           item={item}
           categoryPath={categoryPath}
           related={related}
           shippingEnabled={site.shipping_enabled !== false}
         />
-      </MainLayout>
+      </OdLayout>
     );
   }
 
