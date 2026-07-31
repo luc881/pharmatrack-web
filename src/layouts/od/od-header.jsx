@@ -194,11 +194,12 @@ export function OdHeader() {
               href={paths.root}
               sx={{
                 justifySelf: 'center',
+                px: 1,
                 color: 'inherit',
                 textDecoration: 'none',
                 fontFamily: 'var(--font-heading)',
-                fontSize: { xs: 15, sm: 18, md: 21 },
-                letterSpacing: { xs: '0.16em', md: '0.3em' },
+                fontSize: { xs: 14, sm: 18, md: 21 },
+                letterSpacing: { xs: '0.06em', sm: '0.16em', md: '0.3em' },
                 textTransform: 'uppercase',
                 whiteSpace: 'nowrap',
               }}
@@ -257,9 +258,11 @@ export function OdHeader() {
                   color: 'inherit',
                 }}
               >
-                <FavoritesButton sx={{ color: 'inherit' }} />
+                {/* favoritos: oculto en móvil (está en el menú y en la cuenta);
+                    ahorra ancho para que la marca no se encime */}
+                <FavoritesButton sx={{ color: 'inherit', display: { xs: 'none', sm: 'inline-flex' } }} />
                 <OdCartLink />
-                <AccountButton sx={{ color: 'inherit' }} />
+                <AccountButton sx={{ color: 'inherit', ml: { xs: 0.5, sm: 0 } }} />
               </Box>
             </Box>
           </Box>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
+import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -28,11 +29,21 @@ export function AccountButton({ sx, fullWidth, ...other }) {
         variant="outlined"
         fullWidth={fullWidth}
         onClick={() => signIn('google')}
+        aria-label="Entrar con Google"
         startIcon={<Iconify icon="logos:google-icon" width={16} />}
-        sx={sx}
+        // En móvil solo el ícono de Google (el texto "Entrar" ocupaba mucho y
+        // encimaba la marca); en sm+ vuelve el texto.
+        sx={[
+          fullWidth
+            ? {}
+            : { minWidth: 0, px: { xs: 1, sm: 2 }, '& .MuiButton-startIcon': { mr: { xs: 0, sm: 1 } } },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
         {...other}
       >
-        Entrar
+        <Box component="span" sx={fullWidth ? undefined : { display: { xs: 'none', sm: 'inline' } }}>
+          Entrar
+        </Box>
       </Button>
     );
   }
