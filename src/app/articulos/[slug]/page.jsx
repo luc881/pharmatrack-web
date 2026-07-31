@@ -1,11 +1,11 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
-import { MainLayout } from 'src/layouts/main';
+import { OdLayout } from 'src/layouts/od/od-layout';
 import { getArticle, getArticles } from 'src/lib/public-api';
 
 import { articleSlug } from 'src/sections/articles/utils';
-import { ArticleDetailView } from 'src/sections/articles/article-detail-view';
+import { OdArticleDetailView } from 'src/sections/articles/od/od-article-detail-view';
 
 // ----------------------------------------------------------------------
 // "guia-tarantulas-3": el id al final es el canónico; si el slug no
@@ -60,9 +60,9 @@ export default async function Page({ params }) {
   };
 
   return (
-    <MainLayout>
+    <OdLayout offsetTop>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ArticleDetailView article={article} related={related} />
-    </MainLayout>
+      <OdArticleDetailView article={article} related={related} />
+    </OdLayout>
   );
 }

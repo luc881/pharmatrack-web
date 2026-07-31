@@ -1,7 +1,7 @@
-import { MainLayout } from 'src/layouts/main';
 import { getArticles } from 'src/lib/public-api';
+import { OdLayout } from 'src/layouts/od/od-layout';
 
-import { ArticlesView } from 'src/sections/articles/articles-view';
+import { OdArticlesView } from 'src/sections/articles/od/od-articles-view';
 
 // ----------------------------------------------------------------------
 
@@ -14,8 +14,8 @@ export default async function Page() {
   const articles = await getArticles();
 
   return (
-    <MainLayout>
-      <ArticlesView articles={articles} />
-    </MainLayout>
+    <OdLayout offsetTop>
+      <OdArticlesView articles={articles} />
+    </OdLayout>
   );
 }
