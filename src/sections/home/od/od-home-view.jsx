@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { OdReveal } from 'src/layouts/od/od-motion';
 import { Pill, Kicker, OdImage, Display, ArrowButton } from 'src/layouts/od/od-ui';
 
 import { articleSlug } from 'src/sections/articles/utils';
@@ -87,6 +88,7 @@ export function OdHomeView({ species = [], articles = [] }) {
           }}
         />
         <Box
+          className="od-rise"
           sx={{
             position: 'absolute',
             inset: 0,
@@ -196,12 +198,14 @@ export function OdHomeView({ species = [], articles = [] }) {
         }}
       >
         <Box sx={{ minWidth: 0, pl: { md: '26px' } }}>
-          <Display size="clamp(32px, 3.6vw, 58px)" sx={{ lineHeight: 1.14, maxWidth: '15ch' }}>
-            Criamos invertebrados en la Ciudad de México, para terrarios domésticos y de colección.
-          </Display>
-          <Box sx={{ mt: '42px' }}>
-            <Pill href={paths.catalog}>Ver el catálogo</Pill>
-          </Box>
+          <OdReveal>
+            <Display size="clamp(32px, 3.6vw, 58px)" sx={{ lineHeight: 1.14, maxWidth: '15ch' }}>
+              Criamos invertebrados en la Ciudad de México, para terrarios domésticos y de colección.
+            </Display>
+            <Box sx={{ mt: '42px' }}>
+              <Pill href={paths.catalog}>Ver el catálogo</Pill>
+            </Box>
+          </OdReveal>
           <OdImage src={IMG.isopodZebra} alt="Isópodo cebra" label="Ejemplar en detalle" ratio="1 / 1" sx={{ mt: '90px', ml: '22%', width: '62%' }} />
         </Box>
 
@@ -247,35 +251,39 @@ export function OdHomeView({ species = [], articles = [] }) {
         />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(47,38,32,0.66)' }} />
 
-        <Display size="clamp(38px, 5.4vw, 84px)" sx={{ lineHeight: 1.08, maxWidth: '20ch', mx: 'auto', color: '#eae7e7' }}>
-          Un ecosistema pequeño, vivo y hecho a tu medida
-        </Display>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '14px', justifyContent: 'center', mt: '54px' }}>
-          <Pill variant="light" href={paths.catalogCategory('sustratos-y-accesorios')}>
-            Sustratos y accesorios
-          </Pill>
-          <Pill variant="outline" href={paths.catalog}>
-            Arma el tuyo
-          </Pill>
-        </Box>
+        <OdReveal>
+          <Display size="clamp(38px, 5.4vw, 84px)" sx={{ lineHeight: 1.08, maxWidth: '20ch', mx: 'auto', color: '#eae7e7' }}>
+            Un ecosistema pequeño, vivo y hecho a tu medida
+          </Display>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '14px', justifyContent: 'center', mt: '54px' }}>
+            <Pill variant="light" href={paths.catalogCategory('sustratos-y-accesorios')}>
+              Sustratos y accesorios
+            </Pill>
+            <Pill variant="outline" href={paths.catalog}>
+              Arma el tuyo
+            </Pill>
+          </Box>
+        </OdReveal>
       </Box>
 
       {/* 6 · Selección de isópodos */}
       {selection.length > 0 && (
         <Box component="section" id="catalogo" sx={{ px: '18px', py: { xs: '70px', md: '110px' } }}>
-          <Display
-            size="clamp(34px, 4.4vw, 66px)"
-            sx={{ textAlign: 'center', maxWidth: '16ch', mx: 'auto', mb: '64px' }}
-          >
-            Nuestra selección de isópodos
-          </Display>
+          <OdReveal>
+            <Display
+              size="clamp(34px, 4.4vw, 66px)"
+              sx={{ textAlign: 'center', maxWidth: '16ch', mx: 'auto', mb: '64px' }}
+            >
+              Nuestra selección de isópodos
+            </Display>
+          </OdReveal>
           {/* flex centrado con ancho fijo: una sola tarjeta queda al centro sin
               estirarse; con varias se acomodan centradas y envuelven en filas */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '18px', justifyContent: 'center' }}>
-            {selection.map((item) => (
-              <Box key={item.key} sx={{ width: 290, maxWidth: '100%' }}>
+            {selection.map((item, i) => (
+              <OdReveal key={item.key} delay={i * 0.08} sx={{ width: 290, maxWidth: '100%' }}>
                 <OdProductCard item={item} isNew={newestIds.has(item.key)} />
-              </Box>
+              </OdReveal>
             ))}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: '46px' }}>
@@ -306,7 +314,7 @@ export function OdHomeView({ species = [], articles = [] }) {
           sx={{ position: 'absolute', inset: 0, zIndex: -2, aspectRatio: 'auto', borderRadius: 0 }}
         />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.5)' }} />
-        <Box sx={{ px: '32px', py: '100px', maxWidth: 640, color: '#f6f4f1' }}>
+        <OdReveal sx={{ px: '32px', py: '100px', maxWidth: 640, color: '#f6f4f1' }}>
           <Display size="clamp(32px, 4.2vw, 58px)" sx={{ lineHeight: 1.08 }}>
             Pago con Mercado Pago o cierre por WhatsApp
           </Display>
@@ -317,7 +325,7 @@ export function OdHomeView({ species = [], articles = [] }) {
           <Pill variant="light" href={paths.catalog}>
             Ver catálogo
           </Pill>
-        </Box>
+        </OdReveal>
       </Box>
 
       {/* 8 · Divulgación (feature editorial: texto + imagen destacada + 3 artículos) */}
@@ -331,7 +339,7 @@ export function OdHomeView({ species = [], articles = [] }) {
               gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 0.9fr) minmax(0, 1.1fr)' },
             }}
           >
-            <Box sx={{ minWidth: 0, pl: { md: '26px' } }}>
+            <OdReveal sx={{ minWidth: 0, pl: { md: '26px' } }}>
               <Display size="clamp(38px, 5vw, 72px)" sx={{ lineHeight: 1.05 }}>
                 Divulgación
               </Display>
@@ -340,8 +348,9 @@ export function OdHomeView({ species = [], articles = [] }) {
                 manteniendo colonias, escrito para que no repitas nuestros errores.
               </Box>
               <Pill href={paths.articles}>Ver divulgación</Pill>
-            </Box>
+            </OdReveal>
 
+            <OdReveal delay={0.12} sx={{ minWidth: 0 }}>
             <Link
               component={RouterLink}
               href={paths.article(articleSlug(featuredArticle))}
@@ -356,12 +365,15 @@ export function OdHomeView({ species = [], articles = [] }) {
                 {featuredArticle.title}
               </Box>
             </Link>
+            </OdReveal>
           </Box>
 
           {moreArticles.length > 0 && (
             <Box sx={{ mt: { xs: 6, md: 9 }, display: 'grid', gap: '28px', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' } }}>
-              {moreArticles.map((article) => (
-                <OdArticleCard key={article.id} article={article} />
+              {moreArticles.map((article, i) => (
+                <OdReveal key={article.id} delay={i * 0.1}>
+                  <OdArticleCard article={article} />
+                </OdReveal>
               ))}
             </Box>
           )}
