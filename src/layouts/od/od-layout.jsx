@@ -4,6 +4,7 @@ import { CloseCursor } from 'src/layouts/components/close-cursor';
 
 import { OdHeader } from './od-header';
 import { OdFooter } from './od-footer';
+import { OdTopbar } from './od-topbar';
 import { OdTabBar } from './od-tab-bar';
 
 // ----------------------------------------------------------------------
@@ -14,19 +15,17 @@ import { OdTabBar } from './od-tab-bar';
 // position: sticky de las barras laterales interiores.
 // ----------------------------------------------------------------------
 
-// `subscribe` se acepta por compatibilidad con las páginas, pero ya no gobierna
-// nada: la suscripción vive en la sección "Novedades" del home.
-export function OdLayout({ children, offsetTop = false, homeMasthead = false }) {
+// `subscribe` y `offsetTop` se aceptan por compatibilidad con las páginas pero
+// ya no gobiernan nada: la barra flotante siempre aparece al hacer scroll, y el
+// tope lo da el masthead (home) o la barra estática OdTopbar (interiores).
+export function OdLayout({ children, homeMasthead = false }) {
   return (
     <Box sx={{ bgcolor: 'var(--color-bg)', color: 'var(--color-text)', overflowX: 'clip', pb: { xs: '66px', md: 0 } }}>
-      <OdHeader revealOnScroll={homeMasthead} />
-      {/* En el home el hero (100vh) va debajo de la barra fija; las demás
-          pantallas empiezan pegadas arriba, así que se compensa su alto.
-          ponytail: alto aproximado del marquee + píldora; ajustar si cambian.
+      {/* La barra flotante arranca oculta y aparece al bajar en todas las vistas.
           El pb del contenedor reserva 66px abajo en móvil por la barra de pestañas. */}
-      <Box component="main" sx={offsetTop ? { pt: { xs: '100px', md: '118px' } } : undefined}>
-        {children}
-      </Box>
+      <OdHeader revealOnScroll />
+      {!homeMasthead && <OdTopbar />}
+      <Box component="main">{children}</Box>
       <OdFooter />
       <OdTabBar />
       <CloseCursor />
