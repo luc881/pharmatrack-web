@@ -574,6 +574,41 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           </Box>
         </Box>
       )}
+
+      {/* Barra de "Añadir" fija en móvil (reemplaza la barra de pestañas en la ficha) */}
+      <Box
+        sx={{
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 95,
+          display: { xs: 'flex', md: 'none' },
+          alignItems: 'center',
+          gap: 1.75,
+          px: 2,
+          pt: 1.5,
+          pb: 'calc(12px + env(safe-area-inset-bottom))',
+          bgcolor: 'var(--color-bg)',
+          borderTop: '1px solid var(--color-divider)',
+          boxShadow: 'var(--shadow-md)',
+        }}
+      >
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {title}
+          </Box>
+          <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>{fCurrency(price)}</Box>
+        </Box>
+        <Box
+          component="button"
+          type="button"
+          onClick={handleAdd}
+          sx={{ height: 48, px: '26px', border: 0, cursor: 'pointer', font: 'inherit', fontSize: 13, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-neutral-100)', bgcolor: added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)', transition: 'background 300ms', '&:hover': { bgcolor: 'var(--color-accent-700)' } }}
+        >
+          {added ? 'Agregado ✓' : 'Añadir'}
+        </Box>
+      </Box>
     </>
   );
 }

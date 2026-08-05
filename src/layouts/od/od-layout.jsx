@@ -21,7 +21,9 @@ import { OdDivider3d } from './od-divider-3d';
 // tope lo da el masthead (home) o la barra estática OdTopbar (interiores).
 // `divider3d` muestra el divisor 3D (mesa de frascos) antes del pie; se apaga
 // en flujos utilitarios como el carrito.
-export function OdLayout({ children, homeMasthead = false, divider3d = true }) {
+// `hideTabBar` oculta la barra inferior de pestañas en móvil (la ficha pone su
+// propia barra de "Añadir" en su lugar).
+export function OdLayout({ children, homeMasthead = false, divider3d = true, hideTabBar = false }) {
   return (
     <Box sx={{ bgcolor: 'var(--color-bg)', color: 'var(--color-text)', overflowX: 'clip', pb: { xs: '66px', md: 0 } }}>
       {/* La barra flotante arranca oculta y aparece al bajar en todas las vistas.
@@ -31,7 +33,7 @@ export function OdLayout({ children, homeMasthead = false, divider3d = true }) {
       <Box component="main">{children}</Box>
       {!homeMasthead && divider3d && <OdDivider3d />}
       <OdFooter />
-      <OdTabBar />
+      {!hideTabBar && <OdTabBar />}
       <CloseCursor />
     </Box>
   );

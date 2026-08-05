@@ -281,7 +281,15 @@ export function OdHeader({ revealOnScroll = false }) {
         </Box>
       </Box>
 
-      <OdMegaMenu open={nav.value} onClose={nav.onFalse} categories={categories} />
+      <OdMegaMenu
+        open={nav.value}
+        onClose={nav.onFalse}
+        onSearch={() => {
+          nav.onFalse();
+          search.onTrue();
+        }}
+        categories={categories}
+      />
       <SearchDialog open={search.value} onClose={search.onFalse} />
     </>
   );

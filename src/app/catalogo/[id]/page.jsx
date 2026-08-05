@@ -138,7 +138,7 @@ export default async function Page({ params }) {
     };
 
     return (
-      <OdLayout offsetTop>
+      <OdLayout hideTabBar>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

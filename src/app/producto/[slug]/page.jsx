@@ -50,7 +50,7 @@ export default async function Page({ params }) {
   const site = await getSiteSettings();
 
   return (
-    <OdLayout offsetTop>
+    <OdLayout hideTabBar>
       <OdProductDetailsView
         product={product}
         related={related}
