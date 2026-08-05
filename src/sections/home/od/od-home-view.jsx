@@ -13,7 +13,6 @@ import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 
 import { articleSlug } from 'src/sections/articles/utils';
-import { OdArticleCard } from 'src/sections/articles/od/od-article-card';
 
 import { OdFaq } from './od-faq';
 import { OdNovedades } from './od-novedades';
@@ -115,9 +114,8 @@ export function OdHomeView({ species = [], articles = [] }) {
     [...species].sort((a, b) => b.latestId - a.latestId).slice(0, 2).map((s) => s.key)
   );
 
-  // divulgación editorial: un artículo destacado (imagen grande) + los siguientes
-  const featuredArticle = articles[0] ?? null;
-  const moreArticles = articles.slice(1, 4);
+  // divulgación editorial: filas de artículo (hasta 6)
+  const divArticles = articles.slice(0, 6);
 
   const catCards = (categories ?? []).map((c, i) => ({
     title: c.title,
@@ -428,57 +426,69 @@ export function OdHomeView({ species = [], articles = [] }) {
         </OdReveal>
       </Box>
 
-      {/* Divulgación (feature editorial: texto + imagen destacada + 3 artículos) */}
-      {featuredArticle && (
-        <Box component="section" id="divulgacion" sx={{ px: '18px', pt: { xs: '40px', md: '60px' }, pb: { xs: '80px', md: '120px' } }}>
+      {/* Divulgación (editorial: filas de artículo con contador Nota · 0N) */}
+      {divArticles.length > 0 && (
+        <Box component="section" id="divulgacion" sx={{ px: { xs: '18px', md: '32px' }, pt: { xs: '40px', md: '60px' }, pb: { xs: '80px', md: '120px' } }}>
           <OdReveal>
-            <Display size="clamp(48px, 11.4vw, 176px)" weight={400} sx={{ lineHeight: 1, letterSpacing: '-0.015em', textTransform: 'uppercase', mb: { xs: 4, md: 6 } }}>
+            <Display size="clamp(48px, 11.4vw, 176px)" weight={400} sx={{ lineHeight: 1, letterSpacing: '-0.015em', textTransform: 'uppercase', mb: 1.5 }}>
               Divulgación
             </Display>
           </OdReveal>
-          <Box
-            sx={{
-              display: 'grid',
-              gap: { xs: 5, md: '56px' },
-              alignItems: 'center',
-              gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 0.9fr) minmax(0, 1.1fr)' },
-            }}
-          >
-            <OdReveal sx={{ minWidth: 0, pl: { md: '26px' } }}>
-              <Box sx={{ mb: '28px', fontSize: 16, lineHeight: 1.8, maxWidth: '46ch', opacity: 0.85 }}>
-                Notas de cría, montaje de terrarios bioactivos y fichas de especie. Lo que aprendimos
-                manteniendo colonias, escrito para que no repitas nuestros errores.
-              </Box>
-              <Pill href={paths.articles}>Ver divulgación</Pill>
-            </OdReveal>
-
-            <OdReveal delay={0.12} sx={{ minWidth: 0 }}>
-              <Link
-                component={RouterLink}
-                href={paths.article(articleSlug(featuredArticle))}
-                sx={{ display: 'block', color: 'inherit', textDecoration: 'none', '&:hover .od-img-zoom': { transform: 'scale(1.06)' } }}
-              >
-                <OdImage src={featuredArticle.cover_image} alt={featuredArticle.title} label={featuredArticle.title} ratio="4 / 5" />
-                <Kicker sx={{ mt: '16px', mb: '6px', fontSize: 11, letterSpacing: '0.18em', fontVariantNumeric: 'tabular-nums' }}>
-                  ART-{String(featuredArticle.id).padStart(3, '0')}
-                  {featuredArticle.category ? ` · ${featuredArticle.category}` : ''}
-                </Kicker>
-                <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 24, lineHeight: 1.2, maxWidth: '28ch' }}>
-                  {featuredArticle.title}
-                </Box>
-              </Link>
-            </OdReveal>
+          <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3.75, flexWrap: 'wrap', mb: { xs: 5, md: 7 } }}>
+            <Box sx={{ fontSize: 15, lineHeight: 1.75, maxWidth: '52ch', color: 'var(--color-neutral-700)' }}>
+              Notas de cría, montaje de terrarios bioactivos y fichas de especie. Lo que aprendimos
+              manteniendo colonias, escrito para que no repitas nuestros errores.
+            </Box>
+            <Pill href={paths.articles}>Ver todos</Pill>
           </Box>
 
-          {moreArticles.length > 0 && (
-            <Box sx={{ mt: { xs: 6, md: 9 }, display: 'grid', gap: '28px', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' } }}>
-              {moreArticles.map((article, i) => (
-                <OdReveal key={article.id} delay={i * 0.1}>
-                  <OdArticleCard article={article} />
-                </OdReveal>
-              ))}
-            </Box>
-          )}
+          <Box sx={{ borderBottom: '1px solid var(--color-divider)' }}>
+            {divArticles.map((article, i) => (
+              <OdReveal key={article.id} delay={Math.min(i, 5) * 0.08}>
+                <Link
+                  component={RouterLink}
+                  href={paths.article(articleSlug(article))}
+                  sx={{
+                    display: 'grid',
+                    gap: { xs: 2, md: '40px' },
+                    alignItems: 'start',
+                    pt: '34px',
+                    borderTop: '1px solid var(--color-divider)',
+                    color: 'inherit',
+                    textDecoration: 'none',
+                    gridTemplateColumns: { xs: '1fr', md: 'minmax(90px, 0.5fr) minmax(240px, 1.5fr) minmax(280px, 2fr)' },
+                    transition: 'color 300ms',
+                    '&:hover': { color: 'var(--color-accent-700)' },
+                    '&:hover .od-img-zoom': { transform: 'scale(1.06)' },
+                  }}
+                >
+                  <Box sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
+                    Nota · {String(i + 1).padStart(2, '0')}
+                  </Box>
+                  <Box sx={{ pb: { md: '34px' } }}>
+                    <Kicker sx={{ mb: 1.5, fontSize: 11, letterSpacing: '0.18em', fontVariantNumeric: 'tabular-nums' }}>
+                      ART-{String(article.id).padStart(3, '0')}
+                      {article.category ? ` · ${article.category}` : ''}
+                    </Kicker>
+                    <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'clamp(22px, 2.1vw, 30px)', lineHeight: 1.2, maxWidth: '22ch', textWrap: 'pretty' }}>
+                      {article.title}
+                    </Box>
+                    {article.excerpt && (
+                      <Box sx={{ mt: 2, fontSize: 15, lineHeight: 1.75, maxWidth: '38ch', color: 'var(--color-neutral-700)' }}>
+                        {article.excerpt}
+                      </Box>
+                    )}
+                    {article.reading_minutes != null && (
+                      <Box sx={{ mt: 2.5, fontSize: 13, color: 'var(--color-neutral-600)' }}>{article.reading_minutes} min de lectura</Box>
+                    )}
+                  </Box>
+                  <Box sx={{ mb: { md: '34px' } }}>
+                    <OdImage src={article.cover_image} alt={article.title} label={article.title} ratio="16 / 10" radius={0} />
+                  </Box>
+                </Link>
+              </OdReveal>
+            ))}
+          </Box>
         </Box>
       )}
 
