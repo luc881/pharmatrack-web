@@ -5,21 +5,16 @@ import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import Badge from '@mui/material/Badge';
-import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { CONFIG } from 'src/global-config';
 import { SearchDialog } from 'src/layouts/components/search-dialog';
 import { AccountButton } from 'src/layouts/components/account-button';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
-import { FavoritesButton } from 'src/layouts/components/favorites-button';
-
-import { Iconify } from 'src/components/iconify';
 
 import { useCart } from 'src/sections/catalog/use-cart';
+import { useFavorites } from 'src/sections/catalog/use-favorites';
 
 import { OdMegaMenu } from './od-mega-menu';
 import { useNavTheme } from './use-nav-theme';
@@ -30,15 +25,29 @@ import { useNavTheme } from './use-nav-theme';
 // cuenta con Google, búsqueda) — solo cambia la piel, no el comportamiento.
 // ----------------------------------------------------------------------
 
-// Ícono de carrito que lleva a la página /carrito (antes abría un drawer)
-function OdCartLink() {
-  const { count } = useCart();
+// celda de texto de la barra (Buscar, ES·MXN, Favoritos, Carrito)
+const cellSx = {
+  color: 'inherit',
+  fontSize: 13,
+  whiteSpace: 'nowrap',
+  px: '14px',
+  py: '16px',
+  border: 0,
+  borderLeft: '1px solid var(--od-nav-bd)',
+  bgcolor: 'transparent',
+  font: 'inherit',
+  cursor: 'pointer',
+  textDecoration: 'none',
+  transition: 'color 350ms',
+  '&:hover': { color: 'var(--color-accent-700)' },
+};
+
+// píldora circular con el contador (favoritos / carrito); invierte con la barra
+function CountPill({ n, pill }) {
   return (
-    <IconButton component={RouterLink} href={paths.cart} aria-label="Cotización" sx={{ color: 'inherit' }}>
-      <Badge badgeContent={count} color="error" max={99}>
-        <Iconify icon="solar:cart-plus-bold" width={24} />
-      </Badge>
-    </IconButton>
+    <Box component="span" sx={{ display: 'inline-grid', placeItems: 'center', width: 22, height: 22, borderRadius: '999px', bgcolor: pill.bg, color: pill.fg, fontSize: 11, fontVariantNumeric: 'tabular-nums' }}>
+      {n}
+    </Box>
   );
 }
 
@@ -118,11 +127,18 @@ export function OdHeader({ revealOnScroll = false }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, [revealOnScroll]);
 
+  const { count: cartCount } = useCart();
+  const { ids: favIds } = useFavorites();
+
   // Inversión de la barra según la sección de fondo (ver useNavTheme).
   const onDark = useNavTheme();
   const nt = onDark
     ? { bg: 'color-mix(in srgb, var(--color-bg) 94%, transparent)', fg: 'var(--color-text)', bd: 'var(--color-divider)' }
     : { bg: 'rgba(28,26,24,0.9)', fg: 'var(--color-neutral-100)', bd: 'rgba(240,235,224,0.24)' };
+  // píldora de contador: contrasta con el fondo de la barra
+  const navPill = onDark
+    ? { bg: 'var(--color-neutral-900)', fg: 'var(--color-neutral-100)' }
+    : { bg: 'var(--color-neutral-100)', fg: 'var(--color-neutral-900)' };
 
   // ⌘K / Ctrl+K abre el buscador (mismo atajo que el layout original)
   useEffect(() => {
@@ -207,12 +223,11 @@ export function OdHeader({ revealOnScroll = false }) {
               </Box>
 
               <Link
-                href={`https://wa.me/${CONFIG.whatsapp}`}
-                target="_blank"
-                rel="noopener"
+                component={RouterLink}
+                href={paths.breeding}
                 sx={{ ...linkSx, display: { xs: 'none', md: 'block' } }}
               >
-                Mayoreo
+                El criadero
               </Link>
               <Link
                 component={RouterLink}
@@ -242,63 +257,25 @@ export function OdHeader({ revealOnScroll = false }) {
               Opuntia Den
             </Link>
 
-            {/* Derecha: buscar · moneda · favoritos · carrito · cuenta */}
+            {/* Derecha: Buscar · ES·MXN · Favoritos [N] · Carrito [N] · cuenta */}
             <Box sx={{ display: 'flex', alignItems: 'center', justifySelf: 'end', minWidth: 0 }}>
-              <Box
-                component="button"
-                type="button"
-                onClick={search.onTrue}
-                aria-label="Buscar en el catálogo"
-                sx={{
-                  border: 0,
-                  bgcolor: 'transparent',
-                  cursor: 'pointer',
-                  color: 'inherit',
-                  display: { xs: 'none', sm: 'grid' },
-                  placeItems: 'center',
-                  px: '14px',
-                  py: '14px',
-                  borderLeft: '1px solid var(--od-nav-bd)',
-                  transition: 'color 350ms',
-                  '&:hover': { color: 'var(--color-accent-700)' },
-                }}
-              >
-                <Iconify icon="ri:search-line" width={20} />
+              <Box component="button" type="button" onClick={search.onTrue} aria-label="Buscar en el catálogo" sx={{ ...cellSx, display: { xs: 'none', sm: 'block' } }}>
+                Buscar
               </Box>
 
-              <Box
-                component="span"
-                sx={{
-                  display: { xs: 'none', md: 'block' },
-                  fontSize: 13,
-                  whiteSpace: 'nowrap',
-                  px: '14px',
-                  py: '16px',
-                  borderLeft: '1px solid var(--od-nav-bd)',
-                  color: 'inherit',
-                }}
-              >
-                ES{' '}
-                <Box component="span" sx={{ opacity: 0.6 }}>
-                  · MXN
-                </Box>
+              <Box component="span" sx={{ ...cellSx, display: { xs: 'none', md: 'block' }, cursor: 'default', '&:hover': {} }}>
+                ES <Box component="span" sx={{ opacity: 0.6 }}>· MXN</Box>
               </Box>
 
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  pl: { xs: 0.5, sm: '6px' },
-                  borderLeft: { sm: '1px solid var(--od-nav-bd)' },
-                  color: 'inherit',
-                }}
-              >
-                {/* favoritos: oculto en móvil (está en el menú y en la cuenta);
-                    ahorra ancho para que la marca no se encime */}
-                <FavoritesButton sx={{ color: 'inherit', display: { xs: 'none', sm: 'inline-flex' } }} />
-                <OdCartLink />
-                <AccountButton sx={{ color: 'inherit', ml: { xs: 0.5, sm: 0 } }} />
-              </Box>
+              <Link component={RouterLink} href={paths.favorites} sx={{ ...cellSx, display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 1 }}>
+                Favoritos <CountPill n={favIds.length} pill={navPill} />
+              </Link>
+
+              <Link component={RouterLink} href={paths.cart} aria-label="Cotización" sx={{ ...cellSx, display: 'inline-flex', alignItems: 'center', gap: 1 }}>
+                Carrito <CountPill n={cartCount} pill={navPill} />
+              </Link>
+
+              <AccountButton sx={{ color: 'inherit', ml: { xs: 0.5, sm: 1 } }} />
             </Box>
           </Box>
         </Box>
