@@ -8,6 +8,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdReveal } from 'src/layouts/od/od-motion';
+import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 
@@ -124,6 +125,9 @@ export function OdHomeView({ species = [], articles = [] }) {
 
   return (
     <>
+      {/* Masthead editorial (solo en el home; la barra flotante aparece al bajar) */}
+      <OdMasthead />
+
       {/* Hero (video de musgo en bucle) */}
       <Box component="section" data-dark="1" sx={{ position: 'relative', height: '78vh', overflow: 'hidden' }}>
         <Box
@@ -190,6 +194,16 @@ export function OdHomeView({ species = [], articles = [] }) {
         >
           Desliza
         </Box>
+      </Box>
+
+      {/* Tira de estado: apartados abiertos + teléfono */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.75, px: { xs: '18px', md: '32px' }, pt: '14px', fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
+        <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, whiteSpace: 'nowrap' }}>
+          <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-accent-500)' }} />
+          Apartados abiertos
+        </Box>
+        <Box component="span" sx={{ flex: 1, height: '1px', bgcolor: 'var(--color-divider)' }} />
+        <Box component="span" sx={{ whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>55 1234 5678</Box>
       </Box>
 
       {/* Banda "El criadero": marquesina de nombres + cifras (fondo terracota) */}

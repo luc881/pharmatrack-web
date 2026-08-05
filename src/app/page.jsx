@@ -12,7 +12,7 @@ export default async function Page() {
   const listings = buildListings(animals);
 
   return (
-    <OdLayout>
+    <OdLayout homeMasthead>
       <OdHomeView species={listings} articles={articles} />
     </OdLayout>
   );

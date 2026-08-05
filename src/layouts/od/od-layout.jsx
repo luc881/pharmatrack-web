@@ -14,10 +14,10 @@ import { OdTabBar } from './od-tab-bar';
 // position: sticky de las barras laterales interiores.
 // ----------------------------------------------------------------------
 
-export function OdLayout({ children, subscribe = true, offsetTop = false }) {
+export function OdLayout({ children, subscribe = true, offsetTop = false, homeMasthead = false }) {
   return (
     <Box sx={{ bgcolor: 'var(--color-bg)', color: 'var(--color-text)', overflowX: 'clip', pb: { xs: '66px', md: 0 } }}>
-      <OdHeader />
+      <OdHeader revealOnScroll={homeMasthead} />
       {/* En el home el hero (100vh) va debajo de la barra fija; las demás
           pantallas empiezan pegadas arriba, así que se compensa su alto.
           ponytail: alto aproximado del marquee + píldora; ajustar si cambian.

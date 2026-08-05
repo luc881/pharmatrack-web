@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
@@ -100,12 +100,23 @@ function Marquee() {
 
 // ----------------------------------------------------------------------
 
-export function OdHeader() {
+export function OdHeader({ revealOnScroll = false }) {
   const nav = useBoolean();
   const search = useBoolean();
   const { onToggle: onToggleSearch } = search;
 
   const categories = useNavCategories();
+
+  // En el home la barra flotante arranca oculta (el masthead ocupa el tope) y
+  // aparece al bajar; en el resto de páginas está visible desde el inicio.
+  const [revealed, setRevealed] = useState(!revealOnScroll);
+  useEffect(() => {
+    if (!revealOnScroll) return undefined;
+    const onScroll = () => setRevealed(window.scrollY > 320);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [revealOnScroll]);
 
   // Inversión de la barra según la sección de fondo (ver useNavTheme).
   const onDark = useNavTheme();
@@ -128,7 +139,19 @@ export function OdHeader() {
   return (
     <>
       {/* fija arriba: marquee y píldora viajan juntos al hacer scroll */}
-      <Box sx={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 70 }}>
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 70,
+          transform: revealed ? 'translateY(0)' : 'translateY(-110%)',
+          opacity: revealed ? 1 : 0,
+          pointerEvents: revealed ? 'auto' : 'none',
+          transition: 'transform 500ms var(--od-ease), opacity 400ms var(--od-ease)',
+        }}
+      >
         <Marquee />
 
         <Box sx={{ px: '18px', pt: '14px' }}>
