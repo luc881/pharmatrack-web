@@ -8,7 +8,8 @@ import { OdReveal } from 'src/layouts/od/od-motion';
 import { Pill, Kicker, Display } from 'src/layouts/od/od-ui';
 
 import { useFavorites } from '../use-favorites';
-import { OdProductCard } from '../../home/od/od-product-card';
+import { animalToCard } from './od-catalog-view';
+import { OdCatalogCard } from './od-catalog-card';
 
 // ----------------------------------------------------------------------
 // Favoritos: mini-catálogo con la piel editorial (localStorage vía useFavorites).
@@ -28,10 +29,10 @@ export function OdFavoritesView({ items = [] }) {
       </Box>
 
       {favorites.length ? (
-        <Box sx={{ display: 'grid', gap: '18px', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+        <Box sx={{ display: 'grid', gap: '44px 28px', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
           {favorites.map((item, i) => (
             <OdReveal key={item.key} delay={Math.min(i, 8) * 0.06}>
-              <OdProductCard item={item} />
+              <OdCatalogCard card={animalToCard(item)} index={i} />
             </OdReveal>
           ))}
         </Box>

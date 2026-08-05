@@ -17,8 +17,9 @@ import { OdImage, Display } from 'src/layouts/od/od-ui';
 import { useCart } from '../use-cart';
 import { shopInfoFor } from '../shop-info';
 import { useFavorites } from '../use-favorites';
+import { animalToCard } from './od-catalog-view';
+import { OdCatalogCard } from './od-catalog-card';
 import { scientificName, saleFormatLabel } from '../utils';
-import { OdProductCard } from '../../home/od/od-product-card';
 
 // ----------------------------------------------------------------------
 // Ficha de producto editorial. Reutiliza la lógica de carrito (cart.add, misma
@@ -567,7 +568,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           <Box sx={{ pt: '34px', display: 'grid', gap: '22px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
             {related.slice(0, 4).map((rel, i) => (
               <OdReveal key={rel.key} delay={i * 0.08}>
-                <OdProductCard item={rel} />
+                <OdCatalogCard card={animalToCard(rel)} index={i} />
               </OdReveal>
             ))}
           </Box>

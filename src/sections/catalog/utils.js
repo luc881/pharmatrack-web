@@ -175,12 +175,14 @@ export function buildListings(animals) {
         maxPrice: animal.price,
         compareAt: animal.compare_at_price ?? null,
         latestId: animal.id,
+        count: 0,
         photos: [],
         morphs: morph ? [morph] : [],
         sexes: [],
       };
       map.set(key, entry);
     }
+    entry.count += 1;
     if (animal.price < entry.minPrice) {
       entry.minPrice = animal.price;
       entry.compareAt = animal.compare_at_price ?? null;

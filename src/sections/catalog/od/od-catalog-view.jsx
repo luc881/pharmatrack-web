@@ -45,24 +45,47 @@ const pad2 = (n) => String(n).padStart(2, '0');
 const PAGE = 8;
 const STEP = 6;
 
-export const animalToCard = (i) => {
+// prefijo tipo SKU a partir del nombre de la categoría (Isópodos → ISO)
+const skuPrefix = (name) =>
+  (name ?? '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-zA-Z]/g, '')
+    .slice(0, 3)
+    .toUpperCase() || 'OD';
+
+export const animalToCard = (i, isNew = false) => {
   const pct = offerPct(i.minPrice, i.compareAt);
-  const fmt = saleFormatLabel(i.species);
+  const category = i.species?.genus?.group?.name ?? 'Isópodos';
+  const soldOut = i.count === 0;
+  const badge = isNew
+    ? 'Nuevo'
+    : soldOut
+      ? 'Agotado'
+      : i.count > 0 && i.count <= 6
+        ? `Últimos ${i.count}`
+        : pct
+          ? `-${pct}%`
+          : null;
   return {
     key: i.key,
     href: paths.catalogSpecies(i.slug),
     image: i.photos?.[0],
+    image2: i.photos?.[1] ?? i.photos?.[0],
+    codePrefix: skuPrefix(category),
+    category,
+    scientific: scientificName(i.species),
+    saleFormat: saleFormatLabel(i.species),
     title: i.title,
-    subtitle: scientificName(i.species),
-    subtitleItalic: true,
-    tag: pct ? `-${pct}%` : fmt,
-    tagVariant: pct ? 'accent' : 'neutral',
+    badge,
+    badgeVariant: soldOut ? 'outline' : isNew || pct ? 'accent' : 'neutral',
+    addLabel: soldOut ? 'Avísame' : 'Añadir · 12–15 individuos',
     price: i.minPrice !== i.maxPrice ? `Desde ${fCurrency(i.minPrice)}` : `${fCurrency(i.minPrice)} MXN`,
     favKey: i.key,
     // campos numéricos ocultos para ordenar (no se pintan)
     _price: i.minPrice,
     _new: i.latestId,
-    _avail: 1,
+    _avail: soldOut ? 0 : 1,
   };
 };
 
@@ -74,11 +97,13 @@ export const productToCard = (p) => {
     key: `pr-${p.id}`,
     href: paths.product(`${slugify(p.title)}-${p.id}`),
     image: p.image,
+    image2: p.image,
+    codePrefix: null,
+    category: p.category ?? 'Producto',
     title: p.title,
-    subtitle: p.category ?? null,
-    subtitleItalic: false,
-    tag: soldOut ? 'Agotado' : pct ? `-${pct}%` : null,
-    tagVariant: soldOut ? 'outline' : 'accent',
+    badge: soldOut ? 'Agotado' : pct ? `-${pct}%` : null,
+    badgeVariant: soldOut ? 'outline' : 'accent',
+    addLabel: soldOut ? 'Avísame' : 'Añadir al carrito',
     price: `${fCurrency(p.price_retail)}${unit} MXN`,
     favKey: null,
     _price: p.price_retail,
@@ -145,7 +170,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             inRange(i.minPrice)
         )
         .sort((a, b) => b.latestId - a.latestId)
-        .map(animalToCard)
+        .map((i) => animalToCard(i))
     : [];
   const productCards = showProducts
     ? products.filter((p) => inRange(p.price_retail)).map(productToCard)
@@ -467,7 +492,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
               >
                 {visible.map((card, i) => (
                   <OdReveal key={card.key} delay={Math.min(i, 8) * 0.05}>
-                    <OdCatalogCard card={card} horizontal={view === 'list'} />
+                    <OdCatalogCard card={card} index={i} horizontal={view === 'list'} />
                   </OdReveal>
                 ))}
               </Box>

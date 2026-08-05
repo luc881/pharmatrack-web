@@ -12,10 +12,12 @@ import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 
+import { animalToCard } from 'src/sections/catalog/od/od-catalog-view';
+import { OdCatalogCard } from 'src/sections/catalog/od/od-catalog-card';
+
 import { OdFaq } from './od-faq';
 import { OdNovedades } from './od-novedades';
 import { OdDivulgacion } from './od-divulgacion';
-import { OdProductCard } from './od-product-card';
 
 // ----------------------------------------------------------------------
 // Home del rediseño editorial. Estructura del handoff nuevo: hero, banda "El
@@ -288,10 +290,10 @@ export function OdHomeView({ species = [], articles = [] }) {
           </OdReveal>
           {/* flex centrado con ancho fijo: una sola tarjeta queda al centro sin
               estirarse; con varias se acomodan centradas y envuelven en filas */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '18px', justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '28px 18px', justifyContent: 'center' }}>
             {selection.map((item, i) => (
-              <OdReveal key={item.key} delay={i * 0.08} sx={{ width: 290, maxWidth: '100%' }}>
-                <OdProductCard item={item} isNew={newestIds.has(item.key)} />
+              <OdReveal key={item.key} delay={i * 0.08} sx={{ width: 280, maxWidth: '100%' }}>
+                <OdCatalogCard card={animalToCard(item, newestIds.has(item.key))} index={i} />
               </OdReveal>
             ))}
           </Box>
