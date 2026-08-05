@@ -35,6 +35,15 @@ const COLUMNS = [
     ],
   },
   {
+    title: 'El estudio',
+    links: [
+      { label: 'El criadero', href: paths.breeding },
+      { label: 'Envíos y entregas', href: paths.shipping },
+      { label: 'Asesoría', href: paths.advisory },
+      { label: 'Contacto', href: paths.contact },
+    ],
+  },
+  {
     title: 'Cuenta y ayuda',
     links: [
       { label: 'Mis pedidos', href: paths.orders },
@@ -170,7 +179,7 @@ export function OdFooter({ newsletter = true }) {
           }}
         >
           {/* Columnas de enlaces */}
-          <Box sx={{ display: 'grid', gap: { xs: 5, sm: 6 }, gridTemplateColumns: 'repeat(2, 1fr)' }}>
+          <Box sx={{ display: 'grid', gap: { xs: 5, sm: 6 }, gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' } }}>
             {COLUMNS.map((col) => (
               <Box key={col.title}>
                 <Box sx={{ mb: 2, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>

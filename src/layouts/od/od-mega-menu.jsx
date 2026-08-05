@@ -159,14 +159,12 @@ export function OdMegaMenu({ open, onClose, categories }) {
           </Box>
 
           <Box>
-            <Box sx={colTitleSx}>Divulgación</Box>
-            <Box sx={{ mb: 3, fontSize: 15, lineHeight: 1.75, color: 'var(--color-neutral-700)', maxWidth: '30ch' }}>
-              Notas de cría, montaje de terrarios bioactivos y fichas de especie — para que no
-              repitas nuestros errores.
-            </Box>
-            <Pill href={paths.articles} onClick={onClose}>
-              Ver divulgación
-            </Pill>
+            <Box sx={colTitleSx}>El estudio</Box>
+            <MenuLink onClose={onClose} href={paths.breeding} label="El criadero" />
+            <MenuLink onClose={onClose} href={paths.articles} label="Divulgación" />
+            <MenuLink onClose={onClose} href={paths.shipping} label="Envíos y entregas" />
+            <MenuLink onClose={onClose} href={paths.advisory} label="Asesoría" />
+            <MenuLink onClose={onClose} href={paths.contact} label="Contacto" />
           </Box>
 
           <Box>

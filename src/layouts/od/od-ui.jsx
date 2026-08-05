@@ -192,6 +192,36 @@ export function Kicker({ children, color = 'var(--color-accent-700)', size = 13,
   );
 }
 
+// Cabecera de página interior: kicker + H1 display + bajada. Reúne el patrón que
+// comparten las páginas de contenido (criadero, envíos, asesoría, contacto). El
+// header entra con la animación de carga `od-rise` (definida en global.css).
+export function OdPageHead({ kicker, title, intro, introWidth = '62ch' }) {
+  return (
+    <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 } }}>
+      <Box className="od-rise" sx={{ maxWidth: 1180 }}>
+        <Kicker sx={{ mb: 1.75 }}>{kicker}</Kicker>
+        <Display component="h1" size="clamp(34px, 4.6vw, 68px)" sx={{ lineHeight: 1.05 }}>
+          {title}
+        </Display>
+        {intro && (
+          <Box
+            sx={{
+              mt: 3,
+              maxWidth: introWidth,
+              fontSize: 16,
+              lineHeight: 1.8,
+              color: 'var(--color-neutral-700)',
+              textWrap: 'pretty',
+            }}
+          >
+            {intro}
+          </Box>
+        )}
+      </Box>
+    </Box>
+  );
+}
+
 // Título serif display del rediseño (Playfair). `size` es un clamp() completo.
 export function Display({ children, component = 'h2', size, weight = 300, sx }) {
   return (

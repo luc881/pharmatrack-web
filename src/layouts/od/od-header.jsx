@@ -181,7 +181,7 @@ export function OdHeader() {
               </Link>
               <Link
                 component={RouterLink}
-                href={paths.articles}
+                href={paths.advisory}
                 sx={{ ...linkSx, display: { xs: 'none', md: 'block' } }}
               >
                 Asesoría

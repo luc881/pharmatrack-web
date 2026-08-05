@@ -13,6 +13,10 @@ export const paths = {
   // Cuenta de cliente (login con Google en el propio sitio)
   account: '/cuenta',
   orders: '/mis-pedidos',
+  breeding: '/criadero',
+  shipping: '/envios',
+  advisory: '/asesoria',
+  contact: '/contacto',
   privacy: '/privacidad',
   terms: '/terminos',
   product: (slug) => `/producto/${slug}`,
