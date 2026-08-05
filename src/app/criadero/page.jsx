@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 
 import { paths } from 'src/routes/paths';
 
+import { OdScene } from 'src/layouts/od/od-scene';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdLayout } from 'src/layouts/od/od-layout';
 import { Pill, OdImage, OdPageHead } from 'src/layouts/od/od-ui';
@@ -48,6 +49,30 @@ export default function Page() {
             {PHOTOS.map((p) => (
               <OdImage key={p.label} src={p.src} alt={p.label} ratio="4 / 5" radius={0} />
             ))}
+          </Box>
+        </Box>
+      </OdReveal>
+
+      <OdReveal>
+        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: 9 }, display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(280px, 0.8fr) minmax(0, 1fr)' } }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <OdScene
+              scene="log"
+              fallbackSrc="/assets/redesign/moss-forest-1.jpg"
+              fallbackLabel="Tronco con musgo del taller"
+              ratio="4 / 5"
+              sx={{ maxWidth: 420 }}
+            />
+          </Box>
+          <Box>
+            <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(28px, 3.4vw, 48px)', lineHeight: 1.12 }}>
+              Corteza, musgo y hojarasca: el mismo montaje que va en cada frasco.
+            </Box>
+            <Box sx={{ mt: 2.5, maxWidth: '52ch', fontSize: 16, lineHeight: 1.8, color: 'var(--color-neutral-700)', textWrap: 'pretty' }}>
+              Reproducimos el suelo de bosque en miniatura —madera blanda en descomposición, colonias
+              de musgo y hoja curada— para que las colonias tengan refugio, humedad y comida sin
+              intervención diaria.
+            </Box>
           </Box>
         </Box>
       </OdReveal>

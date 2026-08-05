@@ -1,0 +1,154 @@
+/* Opuntia Den — tokens de diseño.
+   Única fuente de color, tipografía, espaciado, radios, sombras y movimiento.
+   Importar en el layout raíz. Nunca hardcodear un hex fuera de este archivo. */
+
+:root {
+  /* Tipografía: cargar con next/font y exponer estas variables */
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+
+  /* Roles */
+  --color-bg: #e9e3d8;
+  --color-surface: #ddd6c8;
+  --color-text: #3a322b;
+  --color-accent: #9c5a33;
+  --color-divider: rgba(58, 50, 43, 0.17);
+
+  /* Neutrales 100 → 900 */
+  --color-neutral-100: #fdfcf9;
+  --color-neutral-200: #f0ebe0;
+  --color-neutral-300: #ddd6c8;
+  --color-neutral-400: #c3b9a8;
+  --color-neutral-500: #a1968a;
+  --color-neutral-600: #7d7469;
+  --color-neutral-700: #5e574e;
+  --color-neutral-800: #453f38;
+  --color-neutral-900: #332d27;
+
+  /* Acento 100 → 900 */
+  --color-accent-100: #f7ece0;
+  --color-accent-200: #eed7bd;
+  --color-accent-300: #dfb587;
+  --color-accent-400: #cf9553;
+  --color-accent-500: #b87738;
+  --color-accent-600: #9c5a33;
+  --color-accent-700: #86482a;
+  --color-accent-800: #63341e;
+  --color-accent-900: #23201d;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(45, 43, 43, 0.14);
+  --shadow-md: 0 3px 10px rgba(45, 43, 43, 0.16);
+  --shadow-lg: 0 12px 32px rgba(45, 43, 43, 0.22);
+
+  /* Radios — escala cerrada */
+  --radius-control: 14px;
+  --radius-card: 16px;
+  --radius-strip: 18px;
+  --radius-nav: 20px;
+  --radius-pill: 999px;
+
+  /* Movimiento */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-color: 350ms;
+  --dur-lift: 450ms;
+  --dur-pill: 400ms;
+  --dur-slide: 600ms;
+  --dur-zoom: 1100ms;
+  --dur-sheet: 360ms;
+
+  /* Espaciado vertical de sección y márgenes laterales */
+  --pad-section: 90px;
+  --pad-section-lg: 130px;
+  --gutter-home: 18px;
+  --gutter-inner: 40px;
+
+  /* Chrome */
+  --nav-h: 62px;
+  --tabbar-h: 66px;
+}
+
+html {
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0 auto;
+  max-width: 1760px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 400;
+}
+
+a {
+  color: var(--color-accent-700);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent-600);
+}
+
+::selection {
+  background: var(--color-accent-200);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+[id] {
+  scroll-margin-top: 130px;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Movimiento del prototipo */
+@keyframes odMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes odSlide { from { transform: translateX(56px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes odFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes odSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes odSlideL { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes odShimmer { from { background-position: -300px 0; } to { background-position: 300px 0; } }
+
+.od-skeleton {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-neutral-200) 40%,
+    var(--color-neutral-300) 50%,
+    var(--color-neutral-200) 60%
+  );
+  background-size: 600px 100%;
+  animation: odShimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --pad-section: 56px;
+    --pad-section-lg: 72px;
+    --gutter-inner: 18px;
+  }
+  body { padding-bottom: var(--tabbar-h); }
+  [id] { scroll-margin-top: 92px; }
+}

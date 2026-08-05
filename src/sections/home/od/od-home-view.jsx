@@ -6,6 +6,7 @@ import Link from '@mui/material/Link';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { OdScene } from 'src/layouts/od/od-scene';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
@@ -328,11 +329,15 @@ export function OdHomeView({ species = [], articles = [] }) {
             ))}
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2.25 }}>
-            {/* ponytail: placeholder del frasco 3D; se sustituye por la escena
-                three.js en la fase de 3D (jar-scene del handoff) */}
-            <Box sx={{ width: 1, maxWidth: 380 }}>
-              <OdImage src={IMG.terrarium} alt="Frasco de cultivo Opuntia Den" ratio="3 / 4" radius={0} />
-            </Box>
+            {/* Escena 3D del frasco (jar-scene); en móvil/motion reducido cae a
+                la imagen de respaldo */}
+            <OdScene
+              scene="jar"
+              fallbackSrc={IMG.terrarium}
+              fallbackLabel="Frasco de cultivo Opuntia Den"
+              ratio="3 / 4"
+              sx={{ maxWidth: 380 }}
+            />
             <Box sx={{ fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
               Cultivo Opuntia Den · 1 L
             </Box>
