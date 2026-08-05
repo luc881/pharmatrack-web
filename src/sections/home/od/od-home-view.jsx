@@ -12,8 +12,8 @@ import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 
-import { animalToCard } from 'src/sections/catalog/od/od-catalog-view';
 import { OdCatalogCard } from 'src/sections/catalog/od/od-catalog-card';
+import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
 
 import { OdFaq } from './od-faq';
 import { OdNovedades } from './od-novedades';
@@ -58,17 +58,6 @@ const INGREDIENTS = [
   { n: '06', title: 'Colémbolos', body: 'El copiloto invisible: consumen el moho antes de que llegue a la camada.', img: IMG.mossWide },
 ];
 
-// Insumos para la banda "Todo para tu terrario" (fotografía ilustrativa; sin
-// precio, llevan a la categoría de sustratos y accesorios).
-const SUPPLIES = [
-  { label: 'Roble seco', img: IMG.leafLitter },
-  { label: 'Sustrato de coco', img: IMG.terrarium },
-  { label: 'Musgo vivo', img: IMG.mossTall },
-  { label: 'Corcho', img: IMG.isopodCubaris },
-  { label: 'Calcio', img: IMG.mossWide },
-  { label: 'Colémbolos', img: IMG.isopodZebra },
-];
-
 const CAT_IMAGES = [IMG.isopodCubaris, IMG.mossTall, IMG.leafLitter, IMG.terrarium, IMG.isopodZebra, IMG.mossWide];
 
 // Ingrediente del frasco: número, título, glosa y miniatura de 68px.
@@ -106,10 +95,16 @@ function Ingredient({ item, align = 'right' }) {
   );
 }
 
-export function OdHomeView({ species = [], articles = [] }) {
+const firstLine = (text) => (text ?? '').split('\n').filter(Boolean)[0] ?? '';
+
+export function OdHomeView({ species = [], products = [], articles = [] }) {
   const categories = useNavCategories();
 
   const selection = species.slice(0, 4);
+
+  // insumos para "Todo para tu terrario": productos reales + sus categorías
+  const terrario = products.slice(0, 10).map((p) => ({ ...productToCard(p), description: firstLine(p.description) }));
+  const terrarioCats = [...new Set(products.map((p) => p.category).filter(Boolean))];
   // los ejemplares de id más alto son los recién llegados → badge "Nuevo"
   const newestIds = new Set(
     [...species].sort((a, b) => b.latestId - a.latestId).slice(0, 2).map((s) => s.key)
@@ -368,32 +363,53 @@ export function OdHomeView({ species = [], articles = [] }) {
         </Box>
       </Box>
 
-      {/* Todo para tu terrario (banda de insumos con autoavance, pausa al hover) */}
-      <Box component="section" sx={{ pt: { xs: '48px', md: '60px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
-        <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: '40px', pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
-          <Display size="clamp(26px, 3vw, 40px)" weight={300} sx={{ lineHeight: 1.1 }}>
-            Todo para tu terrario
-          </Display>
-          <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
-            Ver todos los insumos →
-          </Link>
-        </Box>
-        <Box sx={{ overflow: 'hidden' }}>
-          <Box className="od-band" sx={{ display: 'flex', gap: '18px', width: 'max-content', animation: 'odMarquee 70s linear infinite' }}>
-            {[...SUPPLIES, ...SUPPLIES].map((s, i) => (
-              <Link
-                key={`${s.label}-${i}`}
-                component={RouterLink}
-                href={paths.catalogCategory('sustratos-y-accesorios')}
-                sx={{ flex: '0 0 300px', maxWidth: '80vw', color: 'inherit', textDecoration: 'none' }}
-              >
-                <OdImage src={s.img} alt={s.label} ratio="1 / 1" radius={0} />
-                <Box sx={{ mt: 1.5, fontFamily: 'var(--font-heading)', fontSize: 18 }}>{s.label}</Box>
-              </Link>
-            ))}
+      {/* Todo para tu terrario (banda de productos con autoavance, pausa al hover) */}
+      {terrario.length > 0 && (
+        <Box component="section" sx={{ pt: { xs: '48px', md: '60px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
+          <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: '40px' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
+            <Display size="clamp(26px, 3vw, 40px)" weight={300} sx={{ lineHeight: 1.1 }}>
+              Todo para tu terrario
+            </Display>
+            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+              Ver todos los insumos →
+            </Link>
           </Box>
+
+          {/* banda de tarjetas */}
+          <Box sx={{ overflow: 'hidden' }}>
+            <Box className="od-band" sx={{ display: 'flex', gap: '18px', width: 'max-content', animation: `odMarquee ${Math.max(40, terrario.length * 9)}s linear infinite` }}>
+              {[...terrario, ...terrario].map((c, i) => (
+                <Link
+                  key={`${c.key}-${i}`}
+                  component={RouterLink}
+                  href={c.href}
+                  sx={{ flex: '0 0 300px', maxWidth: '80vw', color: 'inherit', textDecoration: 'none', '&:hover .od-img-zoom': { transform: 'scale(1.06)' } }}
+                >
+                  <OdImage src={c.image} alt={c.title} label={c.title} ratio="4 / 3" radius={0} />
+                  <Box sx={{ mt: 1.75, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>{c.category}</Box>
+                  <Box sx={{ mt: 0.5, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 2 }}>
+                    <Box component="span" sx={{ fontFamily: 'var(--font-heading)', fontSize: 18 }}>{c.title}</Box>
+                    <Box component="span" sx={{ fontSize: 14, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{c.price}</Box>
+                  </Box>
+                  {c.description && (
+                    <Box sx={{ mt: 0.75, fontSize: 13, lineHeight: 1.55, color: 'var(--color-neutral-600)', maxWidth: '34ch' }}>{c.description}</Box>
+                  )}
+                </Link>
+              ))}
+            </Box>
+          </Box>
+
+          {/* marquesina de categorías */}
+          {terrarioCats.length > 0 && (
+            <Box sx={{ mt: { xs: '40px', md: '56px' }, py: 3, borderTop: '1px solid var(--color-divider)', borderBottom: '1px solid var(--color-divider)', overflow: 'hidden' }}>
+              <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 4.6vw, 72px)', lineHeight: 1.1, textTransform: 'uppercase', color: 'var(--color-neutral-300)', animation: 'odMarqueeR 60s linear infinite' }}>
+                <Box component="span">{`${terrarioCats.join(' · ')} · `.repeat(3)}</Box>
+                <Box component="span">{`${terrarioCats.join(' · ')} · `.repeat(3)}</Box>
+              </Box>
+            </Box>
+          )}
         </Box>
-      </Box>
+      )}
 
       {/* Divisor de pago (a sangre) */}
       <Box
