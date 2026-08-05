@@ -160,9 +160,59 @@ export function buildLog(THREE, { scene }) {
   };
 }
 
+// Mesa de frascos apilados (divisor 3D de las vistas interiores).
+// Cámara: PerspectiveCamera(30) en (0, 3.4, 17), fondo 0xd8d9d6.
+export function buildStack(THREE, { scene }) {
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xb9b7b0, 1.0));
+  const key = new THREE.DirectionalLight(0xfff6e6, 2.0);
+  key.position.set(4, 7, 5);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.5);
+  fill.position.set(-5, 2, 4);
+  scene.add(fill);
+
+  const g = new THREE.Group();
+  const pale = new THREE.MeshStandardMaterial({ color: 0xe8e7e3, roughness: 0.55 });
+  const plinth = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 1.9, 3.2, 48), pale);
+  plinth.position.y = -3.1;
+  g.add(plinth);
+  const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(3.1, 3.1, 0.18, 56), pale);
+  tableTop.position.y = -1.42;
+  g.add(tableTop);
+  const tray = new THREE.Mesh(new THREE.CylinderGeometry(2.0, 2.0, 0.5, 48), new THREE.MeshStandardMaterial({ color: 0xcfcdc8, roughness: 0.6 }));
+  tray.position.y = -1.05;
+  g.add(tray);
+  const disc = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 0.12, 56), pale);
+  disc.position.y = -0.74;
+  g.add(disc);
+
+  const palette = [0xc9603a, 0xd9a13c, 0x8fa8b8, 0x2f2c29, 0xe8e7e3, 0x7d9576, 0xb8724a, 0xd8d2c4];
+  const rows = [7, 5, 3, 1];
+  let y = -0.42;
+  rows.forEach((count, ri) => {
+    const radius = ri === rows.length - 1 ? 0 : (0.42 * (count - 1)) / 2 + 0.28;
+    for (let i = 0; i < count; i += 1) {
+      const a = (i / count) * Math.PI * 2 + ri * 0.5;
+      const jar = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.72, 28), new THREE.MeshStandardMaterial({ color: palette[(ri * 3 + i) % palette.length], roughness: 0.42 }));
+      jar.position.set(Math.cos(a) * radius, y + 0.36, Math.sin(a) * radius);
+      g.add(jar);
+      const lid = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.07, 28), pale);
+      lid.position.set(jar.position.x, y + 0.75, jar.position.z);
+      g.add(lid);
+    }
+    y += 0.78;
+  });
+  scene.add(g);
+
+  return () => {
+    g.rotation.y += 0.004;
+  };
+}
+
 // Registro por clave: OdScene recibe un string serializable (para poder usarse
 // desde páginas server component) y aquí se resuelve la función + la cámara.
 export const SCENES = {
   jar: { build: buildJar, opts: { fov: 32, position: [0, 0.5, 10.5] } },
   log: { build: buildLog, opts: { fov: 32, position: [0, 0.2, 7.4], lookAt: [0, 0, 0] } },
+  stack: { build: buildStack, opts: { fov: 30, position: [0, 3.4, 17], lookAt: [0, -0.6, 0], background: 0xd8d9d6 } },
 };

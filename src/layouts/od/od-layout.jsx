@@ -6,6 +6,7 @@ import { OdHeader } from './od-header';
 import { OdFooter } from './od-footer';
 import { OdTopbar } from './od-topbar';
 import { OdTabBar } from './od-tab-bar';
+import { OdDivider3d } from './od-divider-3d';
 
 // ----------------------------------------------------------------------
 // Shell del rediseño editorial. Envuelve cada pantalla nueva con la barra
@@ -18,7 +19,9 @@ import { OdTabBar } from './od-tab-bar';
 // `subscribe` y `offsetTop` se aceptan por compatibilidad con las páginas pero
 // ya no gobiernan nada: la barra flotante siempre aparece al hacer scroll, y el
 // tope lo da el masthead (home) o la barra estática OdTopbar (interiores).
-export function OdLayout({ children, homeMasthead = false }) {
+// `divider3d` muestra el divisor 3D (mesa de frascos) antes del pie; se apaga
+// en flujos utilitarios como el carrito.
+export function OdLayout({ children, homeMasthead = false, divider3d = true }) {
   return (
     <Box sx={{ bgcolor: 'var(--color-bg)', color: 'var(--color-text)', overflowX: 'clip', pb: { xs: '66px', md: 0 } }}>
       {/* La barra flotante arranca oculta y aparece al bajar en todas las vistas.
@@ -26,6 +29,7 @@ export function OdLayout({ children, homeMasthead = false }) {
       <OdHeader revealOnScroll />
       {!homeMasthead && <OdTopbar />}
       <Box component="main">{children}</Box>
+      {!homeMasthead && divider3d && <OdDivider3d />}
       <OdFooter />
       <OdTabBar />
       <CloseCursor />
