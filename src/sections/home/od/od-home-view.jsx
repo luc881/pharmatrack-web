@@ -15,6 +15,8 @@ import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 import { articleSlug } from 'src/sections/articles/utils';
 import { OdArticleCard } from 'src/sections/articles/od/od-article-card';
 
+import { OdFaq } from './od-faq';
+import { OdNovedades } from './od-novedades';
 import { OdProductCard } from './od-product-card';
 
 // ----------------------------------------------------------------------
@@ -479,6 +481,12 @@ export function OdHomeView({ species = [], articles = [] }) {
           )}
         </Box>
       )}
+
+      {/* Preguntas frecuentes (ancla #preguntas del masthead) */}
+      <OdFaq />
+
+      {/* Novedades / suscripción */}
+      <OdNovedades />
     </>
   );
 }

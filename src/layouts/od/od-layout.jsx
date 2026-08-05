@@ -14,7 +14,9 @@ import { OdTabBar } from './od-tab-bar';
 // position: sticky de las barras laterales interiores.
 // ----------------------------------------------------------------------
 
-export function OdLayout({ children, subscribe = true, offsetTop = false, homeMasthead = false }) {
+// `subscribe` se acepta por compatibilidad con las páginas, pero ya no gobierna
+// nada: la suscripción vive en la sección "Novedades" del home.
+export function OdLayout({ children, offsetTop = false, homeMasthead = false }) {
   return (
     <Box sx={{ bgcolor: 'var(--color-bg)', color: 'var(--color-text)', overflowX: 'clip', pb: { xs: '66px', md: 0 } }}>
       <OdHeader revealOnScroll={homeMasthead} />
@@ -25,7 +27,7 @@ export function OdLayout({ children, subscribe = true, offsetTop = false, homeMa
       <Box component="main" sx={offsetTop ? { pt: { xs: '100px', md: '118px' } } : undefined}>
         {children}
       </Box>
-      <OdFooter newsletter={subscribe} />
+      <OdFooter />
       <OdTabBar />
       <CloseCursor />
     </Box>
