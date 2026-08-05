@@ -124,7 +124,7 @@ export function OdHomeView({ species = [], articles = [] }) {
   return (
     <>
       {/* Hero (video de musgo en bucle) */}
-      <Box component="section" sx={{ position: 'relative', height: '78vh', overflow: 'hidden' }}>
+      <Box component="section" data-dark="1" sx={{ position: 'relative', height: '78vh', overflow: 'hidden' }}>
         <Box
           component="video"
           autoPlay

@@ -22,6 +22,7 @@ import { Iconify } from 'src/components/iconify';
 import { useCart } from 'src/sections/catalog/use-cart';
 
 import { OdMegaMenu } from './od-mega-menu';
+import { useNavTheme } from './use-nav-theme';
 
 // ----------------------------------------------------------------------
 // Barra del rediseño editorial: marquee oscuro + barra flotante en píldora.
@@ -55,7 +56,7 @@ const linkSx = {
   whiteSpace: 'nowrap',
   px: '16px',
   py: '16px',
-  borderLeft: '1px solid var(--color-divider)',
+  borderLeft: '1px solid var(--od-nav-bd)',
   textDecoration: 'none',
   backgroundImage: 'linear-gradient(currentColor, currentColor)',
   backgroundRepeat: 'no-repeat',
@@ -106,6 +107,12 @@ export function OdHeader() {
 
   const categories = useNavCategories();
 
+  // Inversión de la barra según la sección de fondo (ver useNavTheme).
+  const onDark = useNavTheme();
+  const nt = onDark
+    ? { bg: 'color-mix(in srgb, var(--color-bg) 94%, transparent)', fg: 'var(--color-text)', bd: 'var(--color-divider)' }
+    : { bg: 'rgba(28,26,24,0.9)', fg: 'var(--color-neutral-100)', bd: 'rgba(240,235,224,0.24)' };
+
   // ⌘K / Ctrl+K abre el buscador (mismo atajo que el layout original)
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -132,10 +139,15 @@ export function OdHeader() {
               alignItems: 'center',
               overflow: 'hidden',
               borderRadius: '14px',
-              border: '1px solid var(--color-divider)',
+              border: '1px solid',
               boxShadow: 'var(--shadow-sm)',
               backdropFilter: 'blur(10px)',
-              bgcolor: 'color-mix(in srgb, var(--color-bg) 94%, transparent)',
+              // inversión suave según la sección de fondo
+              '--od-nav-bd': nt.bd,
+              bgcolor: nt.bg,
+              color: nt.fg,
+              borderColor: nt.bd,
+              transition: 'background-color 450ms var(--od-ease), color 450ms var(--od-ease), border-color 450ms var(--od-ease)',
             }}
           >
             {/* Izquierda: menú + enlaces (ocultos en móvil por espacio) */}
@@ -223,7 +235,7 @@ export function OdHeader() {
                   placeItems: 'center',
                   px: '14px',
                   py: '14px',
-                  borderLeft: '1px solid var(--color-divider)',
+                  borderLeft: '1px solid var(--od-nav-bd)',
                   transition: 'color 350ms',
                   '&:hover': { color: 'var(--color-accent-700)' },
                 }}
@@ -239,14 +251,14 @@ export function OdHeader() {
                   whiteSpace: 'nowrap',
                   px: '14px',
                   py: '16px',
-                  borderLeft: '1px solid var(--color-divider)',
-                  color: 'var(--color-neutral-600)',
+                  borderLeft: '1px solid var(--od-nav-bd)',
+                  color: 'inherit',
                 }}
               >
-                <Box component="span" sx={{ color: 'var(--color-text)' }}>
-                  ES
-                </Box>{' '}
-                · MXN
+                ES{' '}
+                <Box component="span" sx={{ opacity: 0.6 }}>
+                  · MXN
+                </Box>
               </Box>
 
               <Box
@@ -254,7 +266,7 @@ export function OdHeader() {
                   display: 'flex',
                   alignItems: 'center',
                   pl: { xs: 0.5, sm: '6px' },
-                  borderLeft: { sm: '1px solid var(--color-divider)' },
+                  borderLeft: { sm: '1px solid var(--od-nav-bd)' },
                   color: 'inherit',
                 }}
               >
