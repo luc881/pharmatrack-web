@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -41,6 +41,10 @@ const GRID_COLUMNS = {
 
 const pad2 = (n) => String(n).padStart(2, '0');
 
+// Paginación "Cargar más": 8 iniciales, +6 por clic.
+const PAGE = 8;
+const STEP = 6;
+
 export const animalToCard = (i) => {
   const pct = offerPct(i.minPrice, i.compareAt);
   const fmt = saleFormatLabel(i.species);
@@ -55,6 +59,10 @@ export const animalToCard = (i) => {
     tagVariant: pct ? 'accent' : 'neutral',
     price: i.minPrice !== i.maxPrice ? `Desde ${fCurrency(i.minPrice)}` : `${fCurrency(i.minPrice)} MXN`,
     favKey: i.key,
+    // campos numéricos ocultos para ordenar (no se pintan)
+    _price: i.minPrice,
+    _new: i.latestId,
+    _avail: 1,
   };
 };
 
@@ -73,6 +81,9 @@ export const productToCard = (p) => {
     tagVariant: soldOut ? 'outline' : 'accent',
     price: `${fCurrency(p.price_retail)}${unit} MXN`,
     favKey: null,
+    _price: p.price_retail,
+    _new: p.id,
+    _avail: soldOut ? 0 : 1,
   };
 };
 
@@ -104,20 +115,64 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
 
   const [view, setView] = useState('grid');
 
+  // Niveles de dificultad presentes en el inventario real (se adapta a la data;
+  // si ninguna especie trae dificultad, el filtro no se muestra).
+  const levels = useMemo(() => {
+    const set = new Set();
+    items.forEach((i) => i.species?.difficulty && set.add(i.species.difficulty));
+    return [...set];
+  }, [items]);
+  const [level, setLevel] = useState('all');
+
+  // Orden: recién llegados (fuente) · precio ↑ · precio ↓ · disponibilidad
+  const [sort, setSort] = useState('rel');
+
+  // "Cargar más" se reinicia al cambiar cualquier filtro/orden
+  const [shown, setShown] = useState(PAGE);
+  useEffect(() => setShown(PAGE), [seg, level, sort, range]);
+
   const groupId = seg.startsWith('g') ? Number(seg.slice(1)) : null;
   const showAnimals = seg === 'all' || groupId != null;
-  const showProducts = seg === 'all' || seg === 'prod';
+  // los productos no tienen nivel: al filtrar por nivel se ocultan
+  const showProducts = (seg === 'all' || seg === 'prod') && level === 'all';
 
   const animalCards = showAnimals
     ? [...items]
-        .filter((i) => (!groupId || i.species?.genus?.group?.id === groupId) && inRange(i.minPrice))
+        .filter(
+          (i) =>
+            (!groupId || i.species?.genus?.group?.id === groupId) &&
+            (level === 'all' || i.species?.difficulty === level) &&
+            inRange(i.minPrice)
+        )
         .sort((a, b) => b.latestId - a.latestId)
         .map(animalToCard)
     : [];
   const productCards = showProducts
     ? products.filter((p) => inRange(p.price_retail)).map(productToCard)
     : [];
-  const cards = [...animalCards, ...productCards];
+
+  const SORTERS = {
+    asc: (a, b) => a._price - b._price,
+    desc: (a, b) => b._price - a._price,
+    stock: (a, b) => b._avail - a._avail || b._new - a._new,
+  };
+  const allCards = [...animalCards, ...productCards];
+  const cards = SORTERS[sort] ? [...allCards].sort(SORTERS[sort]) : allCards;
+  const visible = cards.slice(0, shown);
+
+  // Chips activos: cada uno limpia su propio filtro
+  const priceFull = range[0] === 0 && range[1] === maxPrice;
+  const chips = [
+    seg !== 'all' && { label: segments.find((s) => s.key === seg)?.label, clear: () => setSeg('all') },
+    level !== 'all' && { label: level, clear: () => setLevel('all') },
+    !priceFull && { label: `${fCurrency(range[0])} – ${fCurrency(range[1])}`, clear: () => setRange([0, maxPrice]) },
+  ].filter(Boolean);
+  const clearAll = () => {
+    setSeg('all');
+    setLevel('all');
+    setRange([0, maxPrice]);
+    setSort('rel');
+  };
 
   const title = category ? category.name : 'Catálogo';
 
@@ -217,6 +272,55 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             })}
           </Box>
 
+          {levels.length > 0 && (
+            <>
+              <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+                Nivel
+              </Box>
+              <Box role="radiogroup" aria-label="Nivel" sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' }, flexDirection: { md: 'column' }, gap: { xs: '8px', md: '10px' }, fontSize: 13 }}>
+                {[{ v: 'all', label: 'Cualquiera' }, ...levels.map((l) => ({ v: l, label: l }))].map((opt) => {
+                  const active = level === opt.v;
+                  return (
+                    <Box
+                      key={opt.v}
+                      component="button"
+                      type="button"
+                      onClick={() => setLevel(opt.v)}
+                      aria-pressed={active}
+                      sx={{
+                        cursor: 'pointer',
+                        font: 'inherit',
+                        fontSize: 13,
+                        textAlign: 'left',
+                        px: { xs: '12px', md: 0 },
+                        py: { xs: '7px', md: 0 },
+                        border: { xs: '1px solid var(--color-divider)', md: 0 },
+                        borderRadius: { xs: '999px', md: 0 },
+                        bgcolor: 'transparent',
+                        transition: 'color 250ms',
+                        color: active ? 'var(--color-accent-700)' : 'inherit',
+                        '&:hover': { color: 'var(--color-accent-700)' },
+                        '&::before': {
+                          content: '""',
+                          display: { xs: 'none', md: 'inline-block' },
+                          width: 8,
+                          height: 8,
+                          mr: 1.25,
+                          borderRadius: '999px',
+                          verticalAlign: 'middle',
+                          bgcolor: active ? 'var(--color-accent)' : 'transparent',
+                          boxShadow: active ? 'none' : 'inset 0 0 0 1px var(--color-neutral-500)',
+                        },
+                      }}
+                    >
+                      {opt.label}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </>
+          )}
+
           <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
             Precio
           </Box>
@@ -251,8 +355,33 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             <Box sx={{ fontVariantNumeric: 'tabular-nums' }}>
               {pad2(cards.length)} resultado{cards.length === 1 ? '' : 's'}
             </Box>
-            {/* Toggle de vista: cuadrícula / dos columnas / filas */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2.5 } }}>
+              {/* Orden */}
+              <Box
+                component="select"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                aria-label="Ordenar"
+                sx={{
+                  font: 'inherit',
+                  fontSize: 12,
+                  letterSpacing: '0.04em',
+                  textTransform: 'none',
+                  color: 'inherit',
+                  bgcolor: 'transparent',
+                  border: '1px solid var(--color-divider)',
+                  borderRadius: '999px',
+                  px: 1.5,
+                  py: 0.75,
+                  cursor: 'pointer',
+                }}
+              >
+                <option value="rel">Recién llegados</option>
+                <option value="asc">Precio: menor a mayor</option>
+                <option value="desc">Precio: mayor a menor</option>
+                <option value="stock">Disponibilidad</option>
+              </Box>
+              {/* Toggle de vista: cuadrícula / dos columnas / filas */}
               <Box component="span" sx={{ display: { xs: 'none', sm: 'block' } }}>Ver</Box>
               <Box sx={{ display: 'flex', border: '1px solid var(--color-divider)', borderRadius: '999px', overflow: 'hidden' }}>
                 {VIEWS.map((v) => (
@@ -283,24 +412,107 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             </Box>
           </Box>
 
-          {cards.length ? (
-            <Box
-              sx={{
-                pt: view === 'list' ? 2 : 5,
-                display: 'grid',
-                gap: view === 'list' ? 0 : '44px 28px',
-                gridTemplateColumns: { xs: view === 'list' ? '1fr' : 'repeat(auto-fill, minmax(160px, 1fr))', md: GRID_COLUMNS[view] },
-              }}
-            >
-              {cards.map((card, i) => (
-                <OdReveal key={card.key} delay={Math.min(i, 8) * 0.05}>
-                  <OdCatalogCard card={card} horizontal={view === 'list'} />
-                </OdReveal>
+          {/* Chips activos */}
+          {chips.length > 0 && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexWrap: 'wrap', pt: 2.5 }}>
+              <Box component="span" sx={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+                Filtros
+              </Box>
+              {chips.map((c) => (
+                <Box
+                  key={c.label}
+                  component="button"
+                  type="button"
+                  onClick={c.clear}
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 1,
+                    cursor: 'pointer',
+                    font: 'inherit',
+                    fontSize: 12,
+                    px: 1.75,
+                    py: 0.875,
+                    border: '1px solid var(--color-divider)',
+                    borderRadius: '999px',
+                    bgcolor: 'transparent',
+                    color: 'inherit',
+                    transition: 'border-color 250ms, color 250ms',
+                    '&:hover': { borderColor: 'var(--color-accent)', color: 'var(--color-accent-700)' },
+                  }}
+                >
+                  {c.label} ✕
+                </Box>
               ))}
+              <Box
+                component="button"
+                type="button"
+                onClick={clearAll}
+                sx={{ border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', '&:hover': { color: 'var(--color-accent-700)' } }}
+              >
+                Limpiar todo
+              </Box>
             </Box>
+          )}
+
+          {cards.length ? (
+            <>
+              <Box
+                sx={{
+                  pt: view === 'list' ? 2 : 5,
+                  display: 'grid',
+                  gap: view === 'list' ? 0 : '44px 28px',
+                  gridTemplateColumns: { xs: view === 'list' ? '1fr' : 'repeat(auto-fill, minmax(160px, 1fr))', md: GRID_COLUMNS[view] },
+                }}
+              >
+                {visible.map((card, i) => (
+                  <OdReveal key={card.key} delay={Math.min(i, 8) * 0.05}>
+                    <OdCatalogCard card={card} horizontal={view === 'list'} />
+                  </OdReveal>
+                ))}
+              </Box>
+
+              {cards.length > shown && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: 6, md: 8 } }}>
+                  <Box
+                    component="button"
+                    type="button"
+                    onClick={() => setShown((n) => n + STEP)}
+                    sx={{
+                      cursor: 'pointer',
+                      font: 'inherit',
+                      fontSize: 13,
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      px: '34px',
+                      py: '15px',
+                      border: '1px solid var(--color-text)',
+                      bgcolor: 'transparent',
+                      color: 'inherit',
+                      transition: 'background 350ms, color 350ms',
+                      '&:hover': { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' },
+                    }}
+                  >
+                    Cargar más ({cards.length - shown})
+                  </Box>
+                </Box>
+              )}
+            </>
           ) : (
             <Box sx={{ py: 12, textAlign: 'center', color: 'var(--color-neutral-500)' }}>
               No hay resultados con estos filtros.
+              {chips.length > 0 && (
+                <Box sx={{ mt: 3 }}>
+                  <Box
+                    component="button"
+                    type="button"
+                    onClick={clearAll}
+                    sx={{ cursor: 'pointer', font: 'inherit', fontSize: 13, px: '30px', py: '14px', border: 0, bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', '&:hover': { bgcolor: 'var(--color-accent-700)' } }}
+                  >
+                    Limpiar filtros
+                  </Box>
+                </Box>
+              )}
             </Box>
           )}
         </Box>
