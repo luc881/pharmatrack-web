@@ -174,7 +174,9 @@ export function OdHeader({ revealOnScroll = false }) {
           <Box
             sx={{
               display: 'grid',
-              gridTemplateColumns: 'minmax(0, auto) minmax(0, 1fr) minmax(0, auto)',
+              // columnas laterales iguales para que la marca quede SIEMPRE al
+              // centro real, sin importar el ancho de cada lado (avatar, etc.)
+              gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)',
               alignItems: 'center',
               overflow: 'hidden',
               borderRadius: '14px',
