@@ -54,7 +54,25 @@ export async function getAnimal(id) {
   }
 }
 
-const SITE_DEFAULTS = { show_category_browse: true, shipping_enabled: true };
+// Respaldo si el API no responde. Son las mismas URLs sembradas en Cloudinary
+// que usa SITE_DEFAULTS del backend: aqui no hay archivos locales que servir.
+const SITE_MEDIA_DEFAULTS = {
+  hero_video_mp4: 'https://res.cloudinary.com/dnxavfqhj/video/upload/v1787115691/pukyu6z7wfkpqaifzmor.mp4',
+  hero_video_webm: 'https://res.cloudinary.com/dnxavfqhj/video/upload/v1787115692/jjzcsbb3u6nccqmydh9z.webm',
+  hero_poster: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115694/bbrlmcwkgjngvme9thzu.jpg',
+  moss_tall: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115695/bfqjr7t2tu5vrl0mdkhr.jpg',
+  moss_wide: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115697/no2ujblgtav0rjemgpix.jpg',
+  leaf_litter: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115698/rmkknlujheewmo2isf8l.jpg',
+  terrarium: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115699/acknugtzwqg7iecawvbu.jpg',
+  isopod_zebra: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115701/gjcseewc5tclvmflhkpt.png',
+  isopod_cubaris: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115702/ko1qxvsltrlgb2d6ltjd.png',
+};
+
+const SITE_DEFAULTS = {
+  show_category_browse: true,
+  shipping_enabled: true,
+  media: SITE_MEDIA_DEFAULTS,
+};
 
 // Ajustes públicos del sitio (p. ej. show_category_browse). Si el API no
 // responde, defaults sensatos para no romper la home.

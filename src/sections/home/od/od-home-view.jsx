@@ -27,16 +27,16 @@ import { OdDivulgacion } from './od-divulgacion';
 // el cliente sube su fotografía después (ver Assets del handoff).
 // ----------------------------------------------------------------------
 
-// Imágenes de naturaleza (musgo, hojarasca, terrario, isópodos) de marcador de
-// posición — CC de Wikimedia en public/assets/redesign.
-const IMG = {
-  mossTall: '/assets/redesign/moss-forest-1.jpg',
-  leafLitter: '/assets/redesign/leaf-litter.jpg',
-  isopodZebra: '/assets/redesign/isopod-zebra.jpg',
-  terrarium: '/assets/redesign/terrarium.jpg',
-  isopodCubaris: '/assets/redesign/isopod-cubaris.jpg',
-  mossWide: '/assets/redesign/moss-forest-2.jpg',
-};
+// Las seis imagenes decorativas ya no son archivos del repo: llegan del blob
+// de ajustes (Dashboard -> Sitio web -> Media).
+const buildImg = (media) => ({
+  mossTall: media.moss_tall,
+  leafLitter: media.leaf_litter,
+  isopodZebra: media.isopod_zebra,
+  terrarium: media.terrarium,
+  isopodCubaris: media.isopod_cubaris,
+  mossWide: media.moss_wide,
+});
 
 // Nombres que corren en la marquesina de la banda de marca.
 const NAME_MARQUEE = 'Isópodos · Colémbolos · Cubaris · Porcellio · Armadillidium · ';
@@ -47,18 +47,6 @@ const STATS = [
   { n: 'Mismo día', label: 'Entrega en persona dentro de la CDMX.' },
   { n: 'Ficha propia', label: 'Cada ejemplar sale con sus parámetros de origen.' },
 ];
-
-// Los 6 elementos del bloque oscuro "Seis cosas dentro del frasco".
-const INGREDIENTS = [
-  { n: '01', title: 'Sustrato húmedo', body: 'Coco, tierra y carbón: sostienen el gradiente de humedad sin encharcarse.', img: IMG.mossTall },
-  { n: '02', title: 'Hojarasca curada', body: 'Roble y magnolia secos: alimento base y refugio donde mudan tranquilos.', img: IMG.leafLitter },
-  { n: '03', title: 'Madera blanda', body: 'Piezas en descomposición que aportan celulosa y estructura al montaje.', img: IMG.terrarium },
-  { n: '04', title: 'Calcio', body: 'Sepia molida o cáscara: sin ella la muda falla y la colonia deja de crecer.', img: IMG.isopodCubaris },
-  { n: '05', title: 'Proteína', body: 'Una pizca cada dos semanas. Más que eso y aparecen ácaros.', img: IMG.isopodZebra },
-  { n: '06', title: 'Colémbolos', body: 'El copiloto invisible: consumen el moho antes de que llegue a la camada.', img: IMG.mossWide },
-];
-
-const CAT_IMAGES = [IMG.isopodCubaris, IMG.mossTall, IMG.leafLitter, IMG.terrarium, IMG.isopodZebra, IMG.mossWide];
 
 // Ingrediente del frasco: número, título, glosa y miniatura de 68px.
 function Ingredient({ item, align = 'right' }) {
@@ -97,8 +85,21 @@ function Ingredient({ item, align = 'right' }) {
 
 const firstLine = (text) => (text ?? '').split('\n').filter(Boolean)[0] ?? '';
 
-export function OdHomeView({ species = [], products = [], articles = [] }) {
+export function OdHomeView({ species = [], products = [], articles = [], media }) {
   const categories = useNavCategories();
+  const IMG = buildImg(media);
+
+  // Los 6 elementos del bloque oscuro "Seis cosas dentro del frasco".
+  const INGREDIENTS = [
+    { n: '01', title: 'Sustrato húmedo', body: 'Coco, tierra y carbón: sostienen el gradiente de humedad sin encharcarse.', img: IMG.mossTall },
+    { n: '02', title: 'Hojarasca curada', body: 'Roble y magnolia secos: alimento base y refugio donde mudan tranquilos.', img: IMG.leafLitter },
+    { n: '03', title: 'Madera blanda', body: 'Piezas en descomposición que aportan celulosa y estructura al montaje.', img: IMG.terrarium },
+    { n: '04', title: 'Calcio', body: 'Sepia molida o cáscara: sin ella la muda falla y la colonia deja de crecer.', img: IMG.isopodCubaris },
+    { n: '05', title: 'Proteína', body: 'Una pizca cada dos semanas. Más que eso y aparecen ácaros.', img: IMG.isopodZebra },
+    { n: '06', title: 'Colémbolos', body: 'El copiloto invisible: consumen el moho antes de que llegue a la camada.', img: IMG.mossWide },
+  ];
+
+  const CAT_IMAGES = [IMG.isopodCubaris, IMG.mossTall, IMG.leafLitter, IMG.terrarium, IMG.isopodZebra, IMG.mossWide];
 
   const selection = species.slice(0, 4);
 
@@ -129,11 +130,11 @@ export function OdHomeView({ species = [], products = [], articles = [] }) {
           muted
           loop
           playsInline
-          poster="/video/hero-moss.jpg"
+          poster={media.hero_poster}
           sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', bgcolor: 'var(--color-neutral-800)' }}
         >
-          <source src="/video/hero-moss.webm" type="video/webm" />
-          <source src="/video/hero-moss.mp4" type="video/mp4" />
+          <source src={media.hero_video_webm} type="video/webm" />
+          <source src={media.hero_video_mp4} type="video/mp4" />
         </Box>
         <Box
           sx={{
