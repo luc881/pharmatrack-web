@@ -27,17 +27,17 @@ function Ticker({ reverse = false }) {
   );
 }
 
-export function OdDivider3d() {
+export function OdDivider3d({ media }) {
   return (
     <>
       <Ticker />
       <Box component="section" data-dark="1" sx={{ position: 'relative', display: 'grid', placeItems: 'center', px: '40px', py: { xs: '64px', md: '96px' }, overflow: 'hidden', isolation: 'isolate' }}>
-        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: 'url(/assets/redesign/moss-forest-1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${media.moss_tall})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.22)' }} />
         <Box sx={{ display: 'grid', gap: '26px', justifyItems: 'center' }}>
           <OdScene
             scene="stack"
-            fallbackSrc="/assets/redesign/terrarium.jpg"
+            fallbackSrc={media.terrarium}
             fallbackLabel="Cultivos por especie"
             ratio="1 / 1"
             sx={{ width: 'min(460px, 74vw)' }}

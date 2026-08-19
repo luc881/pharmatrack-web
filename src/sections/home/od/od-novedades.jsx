@@ -28,7 +28,7 @@ function Ticker({ reverse = false }) {
   );
 }
 
-export function OdNovedades() {
+export function OdNovedades({ mossWide }) {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
 
@@ -36,7 +36,7 @@ export function OdNovedades() {
     <>
       <Ticker />
       <Box component="section" data-dark="1" sx={{ position: 'relative', px: { xs: '18px', md: '40px' }, py: { xs: '40px', md: '54px' }, overflow: 'hidden', isolation: 'isolate' }}>
-        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: 'url(/assets/redesign/moss-forest-2.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${mossWide})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.28)' }} />
         <Box sx={{ maxWidth: 1040, mx: 'auto', bgcolor: 'var(--color-neutral-100)', color: 'var(--color-text)', p: { xs: '28px 22px', md: '38px 46px 36px' }, boxShadow: 'var(--shadow-md)' }}>
           <Box sx={{ mb: 1.5, fontSize: 10, letterSpacing: '0.26em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>Novedades</Box>

@@ -26,11 +26,6 @@ const KEY = 'splash-shown';
 const MIN_MS = 1500; // en escritorio carga tan rápido que el splash ni se veía
 const MAX_MS = 4500; // techo de seguridad: nunca deja a nadie esperando de más
 
-// Imagen dominante de la primera pantalla. La pinta un componente cliente DESPUÉS
-// de hidratar, así que no está en el HTML inicial y `window.load` no la espera:
-// por eso el splash se iba y el fondo del hero aparecía de golpe justo después.
-const HERO_IMG = '/video/hero-moss.jpg';
-
 const fadeOut = keyframes`
   0%, 70% { opacity: 1; visibility: visible; }
   100% { opacity: 0; visibility: hidden; }
@@ -41,7 +36,10 @@ const pulse = keyframes`
   50% { transform: scale(1.06); }
 `;
 
-export function SiteSplash() {
+// Imagen dominante de la primera pantalla. La pinta un componente cliente DESPUÉS
+// de hidratar, así que no está en el HTML inicial y `window.load` no la espera:
+// por eso el splash se iba y el fondo del hero aparecía de golpe justo después.
+export function SiteSplash({ heroPoster }) {
   // En el servidor se rinde visible a propósito: si arrancara oculto se vería
   // el contenido antes de taparlo, que es justo el parpadeo que se quiere evitar.
   const [done, setDone] = useState(false);
@@ -74,7 +72,7 @@ export function SiteSplash() {
       const img = new Image();
       img.onload = res;
       img.onerror = res; // si falla, no bloqueamos el splash
-      img.src = HERO_IMG;
+      img.src = heroPoster;
     });
 
     Promise.all([pageLoaded, heroReady]).then(reveal);
@@ -83,6 +81,9 @@ export function SiteSplash() {
       clearTimeout(cap);
       clearTimeout(floor);
     };
+    // ponytail: se corre una sola vez por montaje (una vez por sesión); heroPoster
+    // no cambia entre renders del cliente, así que omitirlo del arreglo es intencional.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (skip) return null;

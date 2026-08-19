@@ -5,6 +5,7 @@ import { paths } from 'src/routes/paths';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdLayout } from 'src/layouts/od/od-layout';
+import { getSiteSettings } from 'src/lib/public-api';
 import { Pill, OdImage, OdPageHead } from 'src/layouts/od/od-ui';
 
 // ----------------------------------------------------------------------
@@ -15,12 +16,6 @@ export const metadata = {
     'Criamos invertebrados en la Ciudad de México desde 2019: colonias con registro propio, nunca capturados.',
 };
 
-const PHOTOS = [
-  { src: '/assets/redesign/terrarium.jpg', label: 'Estantería de colonias' },
-  { src: '/assets/redesign/moss-forest-1.jpg', label: 'Montaje de un frasco' },
-  { src: '/assets/redesign/leaf-litter.jpg', label: 'Hojarasca curada' },
-];
-
 const STATS = [
   { n: '38', label: 'colonias activas con registro propio' },
   { n: '14', label: 'especies disponibles todo el año' },
@@ -28,7 +23,15 @@ const STATS = [
   { n: '72 h', label: 'de apartado mientras coordinamos' },
 ];
 
-export default function Page() {
+export default async function Page() {
+  const { media } = await getSiteSettings();
+
+  const PHOTOS = [
+    { src: media.terrarium, label: 'Estantería de colonias' },
+    { src: media.moss_tall, label: 'Montaje de un frasco' },
+    { src: media.leaf_litter, label: 'Hojarasca curada' },
+  ];
+
   return (
     <OdLayout offsetTop>
       <OdPageHead
@@ -58,7 +61,7 @@ export default function Page() {
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <OdScene
               scene="log"
-              fallbackSrc="/assets/redesign/moss-forest-1.jpg"
+              fallbackSrc={media.moss_tall}
               fallbackLabel="Tronco con musgo del taller"
               ratio="4 / 5"
               sx={{ maxWidth: 420 }}

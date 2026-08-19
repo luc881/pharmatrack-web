@@ -26,7 +26,7 @@ const FAQS = [
 
 const NAMES = 'Preguntas frecuentes · ';
 
-export function OdFaq() {
+export function OdFaq({ mossTall }) {
   const [open, setOpen] = useState(0);
 
   return (
@@ -52,7 +52,7 @@ export function OdFaq() {
           </Box>
           <Box sx={{ mt: 'auto', pt: { xs: '40px', md: '80px' } }}>
             <Box sx={{ display: { xs: 'none', md: 'block' }, maxWidth: 300 }}>
-              <OdScene scene="log" fallbackSrc="/assets/redesign/moss-forest-1.jpg" fallbackLabel="Tronco con musgo" ratio="3 / 5" />
+              <OdScene scene="log" fallbackSrc={mossTall} fallbackLabel="Tronco con musgo" ratio="3 / 5" />
             </Box>
             <Box sx={{ mt: { xs: 0, md: '34px' }, fontFamily: 'var(--font-heading)', fontSize: 27, lineHeight: 1.25, color: 'var(--color-neutral-500)' }}>
               ¿Te quedó una duda?

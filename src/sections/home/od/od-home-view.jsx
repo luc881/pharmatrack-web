@@ -445,10 +445,10 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       <OdDivulgacion articles={articles} />
 
       {/* Preguntas frecuentes (ancla #preguntas del masthead) */}
-      <OdFaq />
+      <OdFaq mossTall={IMG.mossTall} />
 
       {/* Novedades / suscripción */}
-      <OdNovedades />
+      <OdNovedades mossWide={IMG.mossWide} />
     </>
   );
 }

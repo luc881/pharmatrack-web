@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 
 import { RouterLink } from 'src/routes/components';
 
-import { OdLayout } from 'src/layouts/od/od-layout';
 import { PageNotFoundIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
@@ -17,28 +16,26 @@ import { varBounce, MotionContainer } from 'src/components/animate';
 
 export function NotFoundView() {
   return (
-    <OdLayout offsetTop subscribe={false}>
-      <Container component={MotionContainer} sx={{ py: { xs: 5, md: 10 }, textAlign: 'center' }}>
-        <m.div variants={varBounce('in')}>
-          <Typography variant="h3" sx={{ mb: 2 }}>
-            Página no encontrada
-          </Typography>
-        </m.div>
+    <Container component={MotionContainer} sx={{ py: { xs: 5, md: 10 }, textAlign: 'center' }}>
+      <m.div variants={varBounce('in')}>
+        <Typography variant="h3" sx={{ mb: 2 }}>
+          Página no encontrada
+        </Typography>
+      </m.div>
 
-        <m.div variants={varBounce('in')}>
-          <Typography sx={{ color: 'text.secondary' }}>
-            No encontramos la página que buscas. Revisa la dirección o vuelve al inicio.
-          </Typography>
-        </m.div>
+      <m.div variants={varBounce('in')}>
+        <Typography sx={{ color: 'text.secondary' }}>
+          No encontramos la página que buscas. Revisa la dirección o vuelve al inicio.
+        </Typography>
+      </m.div>
 
-        <m.div variants={varBounce('in')}>
-          <PageNotFoundIllustration sx={{ my: { xs: 5, sm: 10 } }} />
-        </m.div>
+      <m.div variants={varBounce('in')}>
+        <PageNotFoundIllustration sx={{ my: { xs: 5, sm: 10 } }} />
+      </m.div>
 
-        <Button component={RouterLink} href="/" size="large" variant="contained">
-          Volver al inicio
-        </Button>
-      </Container>
-    </OdLayout>
+      <Button component={RouterLink} href="/" size="large" variant="contained">
+        Volver al inicio
+      </Button>
+    </Container>
   );
 }
