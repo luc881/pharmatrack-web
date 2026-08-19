@@ -16,7 +16,7 @@ export default async function Page() {
   const { data: animals } = await getAnimals();
 
   return (
-    <OdLayout offsetTop>
+    <OdLayout>
       <OdFavoritesView items={buildListings(animals)} />
     </OdLayout>
   );

@@ -33,7 +33,7 @@ export default async function Page() {
   ];
 
   return (
-    <OdLayout offsetTop>
+    <OdLayout>
       <OdPageHead
         kicker="El criadero"
         title="Criamos invertebrados en la Ciudad de México desde 2019."

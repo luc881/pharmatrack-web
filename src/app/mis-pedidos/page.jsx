@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <OdLayout offsetTop subscribe={false}>
+    <OdLayout>
       <OrdersView />
     </OdLayout>
   );

@@ -38,7 +38,7 @@ const numSx = { ...cellSx, fontVariantNumeric: 'tabular-nums' };
 
 export default function Page() {
   return (
-    <OdLayout offsetTop>
+    <OdLayout>
       <OdPageHead
         kicker="Envíos y entregas"
         title="Cómo llega tu pedido"

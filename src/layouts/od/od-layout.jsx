@@ -17,9 +17,8 @@ import { OdDivider3d } from './od-divider-3d';
 // position: sticky de las barras laterales interiores.
 // ----------------------------------------------------------------------
 
-// `subscribe` y `offsetTop` se aceptan por compatibilidad con las páginas pero
-// ya no gobiernan nada: la barra flotante siempre aparece al hacer scroll, y el
-// tope lo da el masthead (home) o la barra estática OdTopbar (interiores).
+// La barra flotante siempre aparece al hacer scroll, y el tope lo da el
+// masthead (home) o la barra estática OdTopbar (interiores).
 // `divider3d` muestra el divisor 3D (mesa de frascos) antes del pie; se apaga
 // en flujos utilitarios como el carrito.
 // `hideTabBar` oculta la barra inferior de pestañas en móvil (la ficha pone su

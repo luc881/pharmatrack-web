@@ -16,7 +16,7 @@ export default async function Page() {
   const [{ data: animals }, products] = await Promise.all([getAnimals(), getProducts()]);
 
   return (
-    <OdLayout offsetTop>
+    <OdLayout>
       <OdCatalogView items={buildListings(animals)} products={products} />
     </OdLayout>
   );

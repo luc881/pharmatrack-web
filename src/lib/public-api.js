@@ -1,5 +1,7 @@
 import { CONFIG } from 'src/global-config';
 
+import { cdnImage } from './cdn-image';
+
 // ----------------------------------------------------------------------
 
 const BASE = `${CONFIG.serverUrl}/api/v1/public/animals`;
@@ -74,6 +76,13 @@ const SITE_DEFAULTS = {
   media: SITE_MEDIA_DEFAULTS,
 };
 
+// Pasa las 9 URLs de media por la optimización de Cloudinary (f_auto, q_auto,
+// dpr_auto). cdn-image.js ya solo toca /image/upload/, así que los 2 slots de
+// video pasan intactos sin trato especial aquí.
+function withCdnMedia(site) {
+  return { ...site, media: Object.fromEntries(Object.entries(site.media).map(([k, v]) => [k, cdnImage(v)])) };
+}
+
 // Ajustes públicos del sitio (p. ej. show_category_browse). Si el API no
 // responde, defaults sensatos para no romper la home.
 export async function getSiteSettings() {
@@ -81,10 +90,15 @@ export async function getSiteSettings() {
     const res = await fetch(`${CONFIG.serverUrl}/api/v1/settings/site`, {
       next: { revalidate: 60 },
     });
-    if (!res.ok) return SITE_DEFAULTS;
-    return await res.json();
+    if (!res.ok) return withCdnMedia(SITE_DEFAULTS);
+    const site = await res.json();
+    // Un 200 con forma inesperada (p. ej. tras un rollback a una versión sin
+    // `media`) también se mezcla sobre los defaults: layout.jsx hace
+    // site.media.hero_poster en el layout raíz, y un TypeError ahí tumba
+    // TODAS las rutas, incluida la 404.
+    return withCdnMedia({ ...SITE_DEFAULTS, ...site, media: { ...SITE_MEDIA_DEFAULTS, ...site.media } });
   } catch {
-    return SITE_DEFAULTS;
+    return withCdnMedia(SITE_DEFAULTS);
   }
 }
 

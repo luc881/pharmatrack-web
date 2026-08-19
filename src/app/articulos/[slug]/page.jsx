@@ -60,7 +60,7 @@ export default async function Page({ params }) {
   };
 
   return (
-    <OdLayout offsetTop>
+    <OdLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <OdArticleDetailView article={article} related={related} />
     </OdLayout>

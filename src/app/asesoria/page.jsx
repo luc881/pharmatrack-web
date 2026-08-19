@@ -32,7 +32,7 @@ const STEPS = [
 
 export default function Page() {
   return (
-    <OdLayout offsetTop>
+    <OdLayout>
       <OdPageHead
         kicker="Asesoría"
         title="Te ayudamos a montar el terrario antes de comprar el animal"

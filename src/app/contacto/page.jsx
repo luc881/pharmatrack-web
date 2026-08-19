@@ -37,7 +37,7 @@ const valueSx = { m: 0, fontSize: 17, color: 'inherit', textDecoration: 'none', 
 
 export default function Page() {
   return (
-    <OdLayout offsetTop>
+    <OdLayout>
       <OdPageHead
         kicker="Contacto"
         title="Escríbenos y coordinamos la entrega"

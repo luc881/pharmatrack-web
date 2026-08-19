@@ -14,7 +14,7 @@ export default async function Page() {
   const articles = await getArticles();
 
   return (
-    <OdLayout offsetTop>
+    <OdLayout>
       <OdArticlesView articles={articles} />
     </OdLayout>
   );

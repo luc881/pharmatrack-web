@@ -41,7 +41,7 @@ const SECTIONS = [
 
 export default function Page() {
   return (
-    <OdLayout offsetTop subscribe={false}>
+    <OdLayout>
       <Container sx={{ mb: 10, mt: { xs: 1, md: 3 }, maxWidth: 720 }}>
         <Typography variant="h3" component="h1" sx={{ mb: { xs: 3, md: 5 } }}>
           Aviso de privacidad

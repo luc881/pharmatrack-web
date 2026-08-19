@@ -54,7 +54,7 @@ export default async function Page() {
   // Sin envíos activos, prometer condiciones de envío sería engañoso
   const sections = SECTIONS.filter((s) => shipping || !s.shippingOnly);
   return (
-    <OdLayout offsetTop subscribe={false}>
+    <OdLayout>
       <Container sx={{ mb: 10, mt: { xs: 1, md: 3 }, maxWidth: 720 }}>
         <Typography variant="h3" component="h1" sx={{ mb: { xs: 3, md: 5 } }}>
           Términos y condiciones
