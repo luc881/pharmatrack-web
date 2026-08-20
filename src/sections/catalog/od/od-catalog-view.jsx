@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -188,19 +188,30 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
   // Sentinela que reemplaza al botón "Cargar más": solo se observa mientras
   // queden tarjetas por mostrar, para no dejar un observer disparando
   // setShown indefinidamente sobre una lista ya completa.
+  //
+  // Ref de callback en vez de useRef+useEffect: la sentinela se renderiza
+  // condicionalmente, así que un useEffect corriendo antes del montaje vería
+  // sentinelRef.current === null y nunca observaría nada. El callback ref
+  // dispara re-render con el nodo real en cuanto React lo monta.
+  //
+  // El efecto depende también de `shown`: IntersectionObserver solo notifica
+  // *cambios* de intersección, así que si la sentinela sigue visible tras
+  // cargar una tanda (siguiente `shown` con el mismo nodo en el viewport) un
+  // observer que no se recrea no vuelve a disparar. Al recrearlo en cada
+  // cambio de `shown`, el nuevo observer evalúa la intersección actual de
+  // inmediato (garantía del spec) y sigue encadenando tandas mientras la
+  // sentinela siga a la vista.
   const hasMore = cards.length > shown;
-  const sentinelRef = useRef(null);
+  const [sentinelNode, setSentinelNode] = useState(null);
   useEffect(() => {
-    if (!hasMore) return undefined;
-    const node = sentinelRef.current;
-    if (!node) return undefined;
+    if (!hasMore || !sentinelNode) return undefined;
     const observer = new IntersectionObserver(
       ([entry]) => entry.isIntersecting && setShown((n) => n + STEP),
       { rootMargin: '200px 0px' }
     );
-    observer.observe(node);
+    observer.observe(sentinelNode);
     return () => observer.disconnect();
-  }, [hasMore]);
+  }, [hasMore, shown, sentinelNode]);
 
   // Chips activos: cada uno limpia su propio filtro
   const priceFull = range[0] === 0 && range[1] === maxPrice;
@@ -516,7 +527,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
 
               {hasMore && (
                 <Box
-                  ref={sentinelRef}
+                  ref={setSentinelNode}
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
