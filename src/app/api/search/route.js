@@ -1,4 +1,4 @@
-import { getAnimals, getProducts, getArticles } from 'src/lib/public-api';
+import { getAnimals, getProducts, getArticles, getSpeciesCatalog } from 'src/lib/public-api';
 
 import { articleSlug } from 'src/sections/articles/utils';
 import { slugify, buildListings, scientificName } from 'src/sections/catalog/utils';
@@ -7,18 +7,19 @@ import { slugify, buildListings, scientificName } from 'src/sections/catalog/uti
 // no a www.* — así el buscador del cliente pega same-origin y sin CORS.
 // Indexa todo lo público: especies, productos/paquetes y artículos.
 export async function GET() {
-  const [{ data: animals }, products, articles] = await Promise.all([
+  const [{ data: animals }, taxa, products, articles] = await Promise.all([
     getAnimals(),
+    getSpeciesCatalog(),
     getProducts(),
     getArticles(),
   ]);
 
-  const species = buildListings(animals).map((item) => ({
+  const species = buildListings(animals, taxa).map((item) => ({
     type: 'species',
     id: item.key,
     title: item.title,
     sub: scientificName(item.species),
-    photo: item.photos[0] ?? null,
+    photo: item.photos[0] ?? item.taxonPhoto ?? null,
     price: item.minPrice,
     url: `/catalogo/${item.slug}`,
   }));

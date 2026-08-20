@@ -49,6 +49,20 @@ export async function getNavCategories() {
     .map((g) => ({ title: g.name, slug: slugify(g.name) }));
 }
 
+// Taxones visibles del catalogo. Complementa a getAnimals(): una especie sin
+// ejemplares no aparece alli, pero debe salir en el sitio como agotada.
+export async function getSpeciesCatalog() {
+  try {
+    const res = await fetch(`${CONFIG.serverUrl}/api/v1/public/species`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
 export async function getAnimal(id) {
   try {
     const res = await fetch(`${BASE}/${id}`, { next: { revalidate: 60 } });

@@ -154,35 +154,55 @@ export function parseListingParam(param) {
   return null;
 }
 
-export function buildListings(animals) {
+// Antes esta funcion nacia de los ejemplares, asi que una especie sin ninguno
+// no producia tarjeta. Ahora nace de los taxones visibles y les adjunta sus
+// ejemplares: los que no tengan quedan con count 0, que es exactamente el
+// camino "Agotado" que animalToCard ya implementa.
+export function buildListings(animals, taxa = []) {
   const map = new Map();
+
+  const seed = (species, morph) => {
+    const key = listingKey(species, morph);
+    let entry = map.get(key);
+    if (entry) return entry;
+    entry = {
+      key,
+      species,
+      morph,
+      title: listingTitle(species, morph),
+      slug: listingSlug(species, morph),
+      description: morph?.description ?? species.description ?? null,
+      minPrice: null,
+      maxPrice: null,
+      compareAt: null,
+      lastPrice: null,
+      latestId: 0,
+      count: 0,
+      photos: [],
+      // Respaldo si ningun ejemplar trae foto propia: la del morph, si no la
+      // de la especie. animalToCard usa photos[0] ?? taxonPhoto, para que una
+      // foto real de ejemplar siempre le gane a la del taxon.
+      taxonPhoto: morph?.image ?? species.image ?? null,
+      morphs: morph ? [morph] : [],
+      sexes: [],
+    };
+    map.set(key, entry);
+    return entry;
+  };
+
+  // 1) Una entrada por cada taxon visible: la especie base y cada morph.
+  taxa.forEach((species) => {
+    seed(species, null);
+    (species.morphs ?? []).forEach((morph) => seed(species, morph));
+  });
+
+  // 2) Adjuntar los ejemplares a su entrada (creandola si el taxon no vino).
   animals.forEach((animal) => {
     if (!animal.species) return;
     // ponytail: agrupa por el primer morph del ejemplar (un ejemplar suele
     // tener un solo morph); sin morph, agrupa por especie
     const morph = animal.morphs?.[0] ?? null;
-    const key = listingKey(animal.species, morph);
-    let entry = map.get(key);
-    if (!entry) {
-      entry = {
-        key,
-        species: animal.species,
-        morph,
-        title: listingTitle(animal.species, morph),
-        slug: listingSlug(animal.species, morph),
-        description: morph?.description ?? animal.species.description ?? null,
-        minPrice: null,
-        maxPrice: null,
-        compareAt: null,
-        lastPrice: animal.price, // ponytail: precio a mostrar si nada queda disponible
-        latestId: animal.id,
-        count: 0,
-        photos: [],
-        morphs: morph ? [morph] : [],
-        sexes: [],
-      };
-      map.set(key, entry);
-    }
+    const entry = seed(animal.species, morph);
     entry.lastPrice = animal.price;
     // El listado existe por CUALQUIER ejemplar (así aparece "agotado" cuando
     // ya no queda ninguno disponible), pero count/min/maxPrice solo cuentan

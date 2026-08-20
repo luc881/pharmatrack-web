@@ -1,5 +1,5 @@
 import { OdLayout } from 'src/layouts/od/od-layout';
-import { getAnimals, getProducts } from 'src/lib/public-api';
+import { getAnimals, getProducts, getSpeciesCatalog } from 'src/lib/public-api';
 
 import { buildListings } from 'src/sections/catalog/utils';
 import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
@@ -13,11 +13,15 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const [{ data: animals }, products] = await Promise.all([getAnimals(), getProducts()]);
+  const [{ data: animals }, taxa, products] = await Promise.all([
+    getAnimals(),
+    getSpeciesCatalog(),
+    getProducts(),
+  ]);
 
   return (
     <OdLayout>
-      <OdCatalogView items={buildListings(animals)} products={products} />
+      <OdCatalogView items={buildListings(animals, taxa)} products={products} />
     </OdLayout>
   );
 }

@@ -1,5 +1,5 @@
 import { CONFIG } from 'src/global-config';
-import { getGroups, getAnimals, getProducts, getArticles } from 'src/lib/public-api';
+import { getGroups, getAnimals, getProducts, getArticles, getSpeciesCatalog } from 'src/lib/public-api';
 
 import { articleSlug } from 'src/sections/articles/utils';
 import { productSlug, buildListings, buildCategories } from 'src/sections/catalog/utils';
@@ -7,7 +7,13 @@ import { productSlug, buildListings, buildCategories } from 'src/sections/catalo
 // ----------------------------------------------------------------------
 
 export default async function sitemap() {
-  const [{ data: animals }, groups, articles, products] = await Promise.all([getAnimals(), getGroups(), getArticles(), getProducts()]);
+  const [{ data: animals }, groups, articles, products, taxa] = await Promise.all([
+    getAnimals(),
+    getGroups(),
+    getArticles(),
+    getProducts(),
+    getSpeciesCatalog(),
+  ]);
 
   return [
     { url: CONFIG.siteUrl, changeFrequency: 'daily' },
@@ -16,7 +22,7 @@ export default async function sitemap() {
       url: `${CONFIG.siteUrl}/catalogo/${category.slug}`,
       changeFrequency: 'daily',
     })),
-    ...buildListings(animals).map((item) => ({
+    ...buildListings(animals, taxa).map((item) => ({
       url: `${CONFIG.siteUrl}/catalogo/${item.slug}`,
       changeFrequency: 'daily',
     })),

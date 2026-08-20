@@ -2,7 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { OdLayout } from 'src/layouts/od/od-layout';
-import { getAnimal, getGroups, getAnimals , getSiteSettings } from 'src/lib/public-api';
+import { getAnimal, getGroups, getAnimals, getSiteSettings, getSpeciesCatalog } from 'src/lib/public-api';
 
 import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
 import { OdSpeciesDetailsView } from 'src/sections/catalog/od/od-species-details-view';
@@ -39,10 +39,10 @@ const findListing = (listings, parsed) => {
 };
 
 async function loadCatalog() {
-  const [{ data: animals }, groups] = await Promise.all([getAnimals(), getGroups()]);
+  const [{ data: animals }, groups, taxa] = await Promise.all([getAnimals(), getGroups(), getSpeciesCatalog()]);
   return {
     groups,
-    listings: buildListings(animals),
+    listings: buildListings(animals, taxa),
   };
 }
 
