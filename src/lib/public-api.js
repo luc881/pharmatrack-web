@@ -8,8 +8,11 @@ const BASE = `${CONFIG.serverUrl}/api/v1/public/animals`;
 
 // ponytail: fetch nativo con revalidate de 60s; si el API no responde,
 // catálogo vacío en lugar de tirar el build/página
+// include_unavailable=true trae también reservados/vendidos: cada superficie
+// que llama getAnimals() (catálogo, home, ficha, sitemap, buscador,
+// favoritos) ya sabe representar "Agotado" en vez de esconder la especie.
 export async function getAnimals(params = {}) {
-  const qs = new URLSearchParams({ page: 1, page_size: 100, ...params });
+  const qs = new URLSearchParams({ page: 1, page_size: 100, include_unavailable: true, ...params });
   try {
     const res = await fetch(`${BASE}?${qs}`, { next: { revalidate: 60 } });
     if (!res.ok) return { data: [], total: 0 };
