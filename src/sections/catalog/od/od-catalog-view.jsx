@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -41,7 +41,7 @@ const GRID_COLUMNS = {
 
 const pad2 = (n) => String(n).padStart(2, '0');
 
-// Paginación "Cargar más": 8 iniciales, +6 por clic.
+// Paginación por scroll infinito: 8 iniciales, +6 al acercarse al final.
 const PAGE = 8;
 const STEP = 6;
 
@@ -152,7 +152,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
   // Orden: recién llegados (fuente) · precio ↑ · precio ↓ · disponibilidad
   const [sort, setSort] = useState('rel');
 
-  // "Cargar más" se reinicia al cambiar cualquier filtro/orden
+  // La paginación se reinicia al cambiar cualquier filtro/orden
   const [shown, setShown] = useState(PAGE);
   useEffect(() => setShown(PAGE), [seg, level, sort, range]);
 
@@ -184,6 +184,23 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
   const allCards = [...animalCards, ...productCards];
   const cards = SORTERS[sort] ? [...allCards].sort(SORTERS[sort]) : allCards;
   const visible = cards.slice(0, shown);
+
+  // Sentinela que reemplaza al botón "Cargar más": solo se observa mientras
+  // queden tarjetas por mostrar, para no dejar un observer disparando
+  // setShown indefinidamente sobre una lista ya completa.
+  const hasMore = cards.length > shown;
+  const sentinelRef = useRef(null);
+  useEffect(() => {
+    if (!hasMore) return undefined;
+    const node = sentinelRef.current;
+    if (!node) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setShown((n) => n + STEP),
+      { rootMargin: '200px 0px' }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasMore]);
 
   // Chips activos: cada uno limpia su propio filtro
   const priceFull = range[0] === 0 && range[1] === maxPrice;
@@ -497,29 +514,20 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                 ))}
               </Box>
 
-              {cards.length > shown && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: 6, md: 8 } }}>
-                  <Box
-                    component="button"
-                    type="button"
-                    onClick={() => setShown((n) => n + STEP)}
-                    sx={{
-                      cursor: 'pointer',
-                      font: 'inherit',
-                      fontSize: 13,
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      px: '34px',
-                      py: '15px',
-                      border: '1px solid var(--color-text)',
-                      bgcolor: 'transparent',
-                      color: 'inherit',
-                      transition: 'background 350ms, color 350ms',
-                      '&:hover': { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' },
-                    }}
-                  >
-                    Cargar más ({cards.length - shown})
-                  </Box>
+              {hasMore && (
+                <Box
+                  ref={sentinelRef}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    mt: { xs: 6, md: 8 },
+                    fontSize: 11,
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    color: 'var(--color-neutral-500)',
+                  }}
+                >
+                  Cargando más…
                 </Box>
               )}
             </>
