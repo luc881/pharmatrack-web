@@ -171,9 +171,10 @@ export function buildListings(animals) {
         title: listingTitle(animal.species, morph),
         slug: listingSlug(animal.species, morph),
         description: morph?.description ?? animal.species.description ?? null,
-        minPrice: animal.price,
-        maxPrice: animal.price,
-        compareAt: animal.compare_at_price ?? null,
+        minPrice: null,
+        maxPrice: null,
+        compareAt: null,
+        lastPrice: animal.price, // ponytail: precio a mostrar si nada queda disponible
         latestId: animal.id,
         count: 0,
         photos: [],
@@ -182,12 +183,18 @@ export function buildListings(animals) {
       };
       map.set(key, entry);
     }
-    entry.count += 1;
-    if (animal.price < entry.minPrice) {
-      entry.minPrice = animal.price;
-      entry.compareAt = animal.compare_at_price ?? null;
+    entry.lastPrice = animal.price;
+    // El listado existe por CUALQUIER ejemplar (así aparece "agotado" cuando
+    // ya no queda ninguno disponible), pero count/min/maxPrice solo cuentan
+    // los disponibles: son los únicos comprables hoy.
+    if (animal.status === 'available') {
+      entry.count += 1;
+      if (entry.minPrice === null || animal.price < entry.minPrice) {
+        entry.minPrice = animal.price;
+        entry.compareAt = animal.compare_at_price ?? null;
+      }
+      entry.maxPrice = entry.maxPrice === null ? animal.price : Math.max(entry.maxPrice, animal.price);
     }
-    entry.maxPrice = Math.max(entry.maxPrice, animal.price);
     entry.latestId = Math.max(entry.latestId, animal.id);
     if (!entry.sexes.includes(animal.sex)) entry.sexes.push(animal.sex);
     [animal.image, ...(animal.photos ?? [])].filter(Boolean).forEach((url) => {
@@ -200,6 +207,12 @@ export function buildListings(animals) {
       const prices = tiers.map((t) => t.price);
       return { ...entry, minPrice: Math.min(...prices), maxPrice: Math.max(...prices), compareAt: null };
     }
+    // Agotado y sin escalas de precio: no hay disponible que cotizar, se
+    // muestra el último precio conocido (informativo; el botón de compra
+    // queda deshabilitado en la ficha por count === 0).
+    if (entry.minPrice === null) {
+      return { ...entry, minPrice: entry.lastPrice, maxPrice: entry.lastPrice };
+    }
     return entry;
   });
 }
@@ -211,7 +224,7 @@ export function listingsInGroup(listings, group, groups) {
 }
 
 // El público ve especies, no folios individuales: agrupa los animales
-// disponibles por especie con precio (rango), fotos y morphs combinados.
+// por especie con precio (rango), fotos y morphs combinados.
 export function buildSpeciesList(animals) {
   const map = new Map();
   animals.forEach((animal) => {
@@ -221,22 +234,31 @@ export function buildSpeciesList(animals) {
       entry = {
         species: animal.species,
         slug: speciesSlug(animal.species),
-        minPrice: animal.price,
-        maxPrice: animal.price,
+        minPrice: null,
+        maxPrice: null,
         // precio anterior (tachado) del ejemplar más barato — la oferta visible
-        compareAt: animal.compare_at_price ?? null,
+        compareAt: null,
+        lastPrice: animal.price, // ponytail: precio a mostrar si nada queda disponible
         latestId: animal.id,
+        count: 0,
         photos: [],
         morphs: [],
         sexes: [],
       };
       map.set(animal.species.id, entry);
     }
-    if (animal.price < entry.minPrice) {
-      entry.minPrice = animal.price;
-      entry.compareAt = animal.compare_at_price ?? null;
+    entry.lastPrice = animal.price;
+    // La entrada existe por CUALQUIER ejemplar (así aparece "agotado" cuando
+    // ya no queda ninguno disponible), pero count/min/maxPrice solo cuentan
+    // los disponibles: son los únicos comprables hoy.
+    if (animal.status === 'available') {
+      entry.count += 1;
+      if (entry.minPrice === null || animal.price < entry.minPrice) {
+        entry.minPrice = animal.price;
+        entry.compareAt = animal.compare_at_price ?? null;
+      }
+      entry.maxPrice = entry.maxPrice === null ? animal.price : Math.max(entry.maxPrice, animal.price);
     }
-    entry.maxPrice = Math.max(entry.maxPrice, animal.price);
     entry.latestId = Math.max(entry.latestId, animal.id);
     if (!entry.sexes.includes(animal.sex)) entry.sexes.push(animal.sex);
     [animal.image, ...(animal.photos ?? [])].filter(Boolean).forEach((url) => {
@@ -253,6 +275,9 @@ export function buildSpeciesList(animals) {
       const prices = tiers.map((t) => t.price);
       // con escalas de precio la oferta por ejemplar no aplica
       return { ...entry, minPrice: Math.min(...prices), maxPrice: Math.max(...prices), compareAt: null };
+    }
+    if (entry.minPrice === null) {
+      return { ...entry, minPrice: entry.lastPrice, maxPrice: entry.lastPrice };
     }
     return entry;
   });

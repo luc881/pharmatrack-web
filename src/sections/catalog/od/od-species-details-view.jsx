@@ -61,7 +61,12 @@ function Panel({ title, children }) {
 }
 
 export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true }) {
-  const { species, key, slug, photos, morphs, minPrice, maxPrice, compareAt = null } = item;
+  const { species, key, slug, photos, morphs, minPrice, maxPrice, compareAt = null, count = null } = item;
+
+  // Agotado: el listado existe (fotos/descripción de la especie) pero no
+  // queda ningún ejemplar disponible para cotizar hoy — mismo criterio que
+  // el badge "Agotado" de las tarjetas (animalToCard, count === 0).
+  const soldOut = count === 0;
 
   const rootGroup = categoryPath[0] ?? null;
   const leafGroup = categoryPath[categoryPath.length - 1] ?? null;
@@ -78,6 +83,10 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
   const tiers = species.price_tiers ?? [];
   const [tierIndex, setTierIndex] = useState(0);
   const selectedTier = tiers[tierIndex];
+
+  // Con paquetes/colonias (tiers) el conteo de ejemplares no es 1:1 con
+  // paquetes comprables, así que ahí se conserva el tope fijo de 9.
+  const maxQty = tiers.length ? 9 : Math.max(1, Math.min(9, count ?? 9));
 
   const [qty, setQty] = useState(1);
   const [gal, setGal] = useState(0);
@@ -275,7 +284,9 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               </>
             )}
             <Box component="dt" sx={{ color: 'var(--color-neutral-600)' }}>Disponibilidad</Box>
-            <Box component="dd" sx={{ m: 0, color: 'var(--color-accent-700)' }}>Disponible</Box>
+            <Box component="dd" sx={{ m: 0, color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-accent-700)' }}>
+              {soldOut ? 'Agotado' : 'Disponible'}
+            </Box>
             <Box component="dt" sx={{ color: 'var(--color-neutral-600)' }}>Formato</Box>
             <Box component="dd" sx={{ m: 0 }}>
               {formatLabel
@@ -331,32 +342,35 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
 
           {/* Cantidad + agregar */}
           <Box sx={{ mt: '26px', display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
-            <Box sx={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--color-divider)', borderRadius: '999px' }}>
-              <Box
-                component="button"
-                type="button"
-                onClick={() => setQty((q) => Math.max(1, q - 1))}
-                aria-label="Quitar uno"
-                sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '999px 0 0 999px', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}
-              >
-                –
+            {!soldOut && (
+              <Box sx={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--color-divider)', borderRadius: '999px' }}>
+                <Box
+                  component="button"
+                  type="button"
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  aria-label="Quitar uno"
+                  sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '999px 0 0 999px', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}
+                >
+                  –
+                </Box>
+                <Box component="span" sx={{ minWidth: 30, textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}>{qty}</Box>
+                <Box
+                  component="button"
+                  type="button"
+                  onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
+                  aria-label="Agregar uno"
+                  sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '0 999px 999px 0', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}
+                >
+                  +
+                </Box>
               </Box>
-              <Box component="span" sx={{ minWidth: 30, textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}>{qty}</Box>
-              <Box
-                component="button"
-                type="button"
-                onClick={() => setQty((q) => Math.min(9, q + 1))}
-                aria-label="Agregar uno"
-                sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '0 999px 999px 0', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}
-              >
-                +
-              </Box>
-            </Box>
+            )}
 
             <Box
               component="button"
               type="button"
-              onClick={handleAdd}
+              onClick={soldOut ? undefined : handleAdd}
+              disabled={soldOut}
               sx={{
                 flex: 1,
                 minWidth: 220,
@@ -364,16 +378,16 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                 px: '32px',
                 border: 0,
                 borderRadius: '999px',
-                cursor: 'pointer',
+                cursor: soldOut ? 'not-allowed' : 'pointer',
                 font: 'inherit',
                 fontSize: 14,
-                bgcolor: 'var(--color-neutral-900)',
-                color: 'var(--color-neutral-100)',
+                bgcolor: soldOut ? 'var(--color-neutral-300)' : 'var(--color-neutral-900)',
+                color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
                 transition: 'background 350ms, transform 350ms',
-                '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-2px)' },
+                ...(!soldOut && { '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-2px)' } }),
               }}
             >
-              {added ? 'Agregado ✓' : 'Agregar a cotización'}
+              {soldOut ? 'Avísame' : added ? 'Agregado ✓' : 'Agregar a cotización'}
             </Box>
           </Box>
 
@@ -603,10 +617,24 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
         <Box
           component="button"
           type="button"
-          onClick={handleAdd}
-          sx={{ height: 48, px: '26px', border: 0, cursor: 'pointer', font: 'inherit', fontSize: 13, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-neutral-100)', bgcolor: added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)', transition: 'background 300ms', '&:hover': { bgcolor: 'var(--color-accent-700)' } }}
+          onClick={soldOut ? undefined : handleAdd}
+          disabled={soldOut}
+          sx={{
+            height: 48,
+            px: '26px',
+            border: 0,
+            cursor: soldOut ? 'not-allowed' : 'pointer',
+            font: 'inherit',
+            fontSize: 13,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
+            bgcolor: soldOut ? 'var(--color-neutral-300)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)',
+            transition: 'background 300ms',
+            ...(!soldOut && { '&:hover': { bgcolor: 'var(--color-accent-700)' } }),
+          }}
         >
-          {added ? 'Agregado ✓' : 'Añadir'}
+          {soldOut ? 'Avísame' : added ? 'Agregado ✓' : 'Añadir'}
         </Box>
       </Box>
     </>

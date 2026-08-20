@@ -132,7 +132,7 @@ export default async function Page({ params }) {
         lowPrice: item.minPrice,
         highPrice: item.maxPrice,
         priceCurrency: 'MXN',
-        availability: 'https://schema.org/InStock',
+        availability: item.count > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
         url: `${CONFIG.siteUrl}/catalogo/${item.slug}`,
       },
     };
