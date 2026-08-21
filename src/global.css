@@ -143,10 +143,19 @@ input[type='number']::-webkit-inner-spin-button {
 /* fade + subida al cargar (hero): CSS puro para que siempre dispare */
 .od-rise { animation: odRise 1.1s var(--od-ease) 0.35s both; }
 
-/* accesibilidad: sin marquee ni deslizamientos si el usuario los desactiva */
+/* Accesibilidad: si el usuario pidio menos movimiento, se lo damos en TODO.
+   Antes esto era una lista de cuatro clases, que dejaba fuera odFade (el menu)
+   y cualquier transicion escrita inline en un `sx` — un selector por clase no
+   alcanza esas. La regla general si. Se usa una duracion minima en vez de
+   `none` para que las animaciones con `both` terminen en su estado final y
+   nada se quede invisible. */
 @media (prefers-reduced-motion: reduce) {
-  .od-marquee { animation: none !important; }
-  .od-slide { animation: none !important; }
-  .od-rise { animation: none !important; }
-  .od-wipe { animation: none !important; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

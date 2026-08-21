@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -42,14 +42,51 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
   const { ids } = useFavorites();
   const { count } = useCart();
 
+  const panelRef = useRef(null);
+  const closeRef = useRef(null);
+
   useEffect(() => {
     if (!open) return undefined;
-    const onKey = (e) => e.key === 'Escape' && onClose();
+
+    // Al abrir, el foco entra al panel; al cerrar, vuelve a donde estaba (el
+    // hamburguesa). Sin esto, quien navega con teclado abria el menu y seguia
+    // tabulando por la pagina de atras, que esta tapada pero sigue enfocable:
+    // aria-modal se lo dice al lector de pantalla, no al navegador.
+    const prevFocus = document.activeElement;
+    closeRef.current?.focus();
+
+    // Elementos enfocables VISIBLES: varios enlaces estan en display:none en
+    // movil, y enfocar uno de esos rompe el ciclo.
+    const focusables = () =>
+      Array.from(panelRef.current?.querySelectorAll('a[href], button:not([disabled])') ?? []).filter(
+        (el) => el.offsetParent !== null
+      );
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const items = focusables();
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
     window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
+      prevFocus?.focus?.();
     };
   }, [open, onClose]);
 
@@ -59,6 +96,7 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
 
   return (
     <Box
+      ref={panelRef}
       role="dialog"
       aria-modal="true"
       aria-label="Menú"
@@ -77,6 +115,7 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
       {/* Columna izquierda: cerrar + enlaces grandes */}
       <Box sx={{ display: 'flex', flexDirection: 'column', p: { xs: '28px 22px', md: '40px 46px' } }}>
         <Box
+          ref={closeRef}
           component="button"
           type="button"
           onClick={onClose}

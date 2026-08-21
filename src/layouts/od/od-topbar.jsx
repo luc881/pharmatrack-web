@@ -9,6 +9,7 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { SearchDialog } from 'src/layouts/components/search-dialog';
+import { AccountButton } from 'src/layouts/components/account-button';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 
 import { useCart } from 'src/sections/catalog/use-cart';
@@ -105,9 +106,15 @@ export function OdTopbar() {
           <Link component={RouterLink} href={paths.favorites} sx={{ ...linkSx, whiteSpace: 'nowrap', display: { xs: 'none', sm: 'inline' } }}>
             Favoritos ({ids.length})
           </Link>
-          <Link component={RouterLink} href={paths.cart} sx={{ ...linkSx, whiteSpace: 'nowrap' }}>
+          {/* En movil el carrito ya esta en la barra inferior ("Cotizacion");
+              aqui solo seria la cuarta copia y le quita el aire a la marca. */}
+          <Link component={RouterLink} href={paths.cart} sx={{ ...linkSx, whiteSpace: 'nowrap', display: { xs: 'none', sm: 'inline' } }}>
             Carrito ({count})
           </Link>
+
+          {/* La cuenta SI vive aqui en movil: la barra inferior no la lleva y,
+              al ocultar la pildora flotante, este quedo como su unico acceso. */}
+          <AccountButton sx={{ color: 'inherit', minHeight: { xs: 44, md: 'auto' } }} />
         </Box>
       </Box>
     </Box>

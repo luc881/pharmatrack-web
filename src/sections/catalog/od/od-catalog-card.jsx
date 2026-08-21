@@ -107,8 +107,10 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
             right: 12,
             display: 'grid',
             placeItems: 'center',
-            width: 38,
-            height: 38,
+            // 44x44 en movil (aqui siempre esta visible); en escritorio solo
+            // aparece al hover y se apunta con el raton.
+            width: { xs: 44, md: 38 },
+            height: { xs: 44, md: 38 },
             border: 0,
             borderRadius: '50%',
             cursor: 'pointer',

@@ -58,7 +58,10 @@ function CartRow({ item, onQty, onRemove }) {
   const atMax = item.max != null && item.qty >= item.max;
 
   return (
-    <Box sx={{ py: { xs: 3, md: 4 }, borderBottom: '1px solid var(--color-divider)', display: 'flex', gap: { xs: 2, md: 3 }, alignItems: 'flex-start' }}>
+    // En movil los controles de cantidad bajan a su propio renglon: entre la
+    // miniatura y ese bloque se llevaban 266px fijos, y en un telefono de 360px
+    // al titulo le quedaban ~60px, poco mas que una palabra.
+    <Box sx={{ py: { xs: 3, md: 4 }, borderBottom: '1px solid var(--color-divider)', display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' }, gap: { xs: 2, md: 3 }, alignItems: 'flex-start' }}>
       <Box
         {...(item.url ? { component: RouterLink, href: item.url } : {})}
         sx={{ width: { xs: 96, md: 116 }, flexShrink: 0, aspectRatio: '1 / 1', borderRadius: '12px', overflow: 'hidden', display: 'block', bgcolor: 'var(--color-neutral-200)' }}
@@ -87,7 +90,17 @@ function CartRow({ item, onQty, onRemove }) {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          flexShrink: 0,
+          // alineado bajo la columna de texto (miniatura 96 + gap 16)
+          width: { xs: '100%', md: 'auto' },
+          pl: { xs: '112px', md: 0 },
+        }}
+      >
         <Box component="button" type="button" aria-label="Quitar" onClick={() => onQty(item.key, item.qty - step)} sx={circleBtn}>–</Box>
         <Box component="span" sx={{ minWidth: 34, textAlign: 'center', fontSize: 15, fontVariantNumeric: 'tabular-nums' }}>
           {item.qty}{item.unit ? ` ${item.unit}` : ''}

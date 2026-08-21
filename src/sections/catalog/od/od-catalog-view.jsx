@@ -414,6 +414,11 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             // sin barra de scroll visible, pero el gesto de scroll sigue activo
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': { display: 'none' },
+            // El ultimo chip visible se cortaba a media palabra y parecia un
+            // error de maquetado. Con el degradado se lee como lo que es:
+            // hay mas categorias, deslizalas.
+            maskImage: 'linear-gradient(to right, #000 calc(100% - 28px), transparent)',
+            WebkitMaskImage: 'linear-gradient(to right, #000 calc(100% - 28px), transparent)',
           }}
         >
           {segments.map((s) => {
@@ -697,8 +702,10 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                       cursor: 'pointer',
                       display: 'grid',
                       placeItems: 'center',
-                      width: 40,
-                      height: 34,
+                      // 44x44 en movil: con el dedo, 40x34 se falla seguido.
+                      // En escritorio se apunta con el raton y cabe mas chico.
+                      width: { xs: 44, md: 40 },
+                      height: { xs: 44, md: 34 },
                       transition: 'background 250ms, color 250ms',
                       ...(view === v.key
                         ? { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' }
