@@ -250,24 +250,26 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
       <Box
         component="section"
         className="od-rise"
+        data-dark="1"
         sx={{
           px: { xs: '18px', md: '40px' },
           pt: { xs: 5, md: 8 },
           pb: { xs: 4, md: 5 },
-          // banda mas profunda que el fondo de la pagina: separa la portada del
-          // cuerpo sin necesidad de una linea
-          bgcolor: 'var(--color-surface)',
-          borderBottom: '1px solid var(--color-divider)',
+          // Banda oscura, el mismo tratamiento que el pie y las preguntas.
+          // data-dark hace que la barra de navegacion se aclare mientras esta
+          // seccion cruza por debajo (use-nav-theme.js).
+          bgcolor: 'var(--color-accent-900)',
+          color: 'var(--color-neutral-200)',
         }}
       >
-        <Box sx={{ mb: 2, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
-          <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+        <Box sx={{ mb: 2, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-400)' }}>
+          <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-300)' } }}>
             Inicio
           </Link>
           {' / '}
           {category ? (
             <>
-              <Link component={RouterLink} href={paths.catalog} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+              <Link component={RouterLink} href={paths.catalog} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-300)' } }}>
                 Catálogo
               </Link>
               {` / ${category.name}`}
@@ -294,7 +296,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             dejaria el panel cortado a media pagina. */}
         <Box
           sx={{
-            bgcolor: 'var(--color-neutral-100)',
+            bgcolor: 'var(--color-surface)',
             borderRight: { md: '1px solid var(--color-divider)' },
             borderBottom: { xs: '1px solid var(--color-divider)', md: 'none' },
           }}
