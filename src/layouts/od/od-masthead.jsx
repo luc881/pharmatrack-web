@@ -6,6 +6,8 @@ import Link from '@mui/material/Link';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { AccountButton } from 'src/layouts/components/account-button';
+
 // ----------------------------------------------------------------------
 // Masthead editorial del home (solo en la portada): barra de enlaces simple +
 // wordmark gigante "OPUNTIA" + línea de tags y ubicación. Es estático: al hacer
@@ -31,8 +33,8 @@ const navLinkSx = {
 export function OdMasthead() {
   return (
     <Box component="header" sx={{ px: { xs: '18px', md: '32px' }, pt: '18px' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 2.5, md: '34px' } }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: { xs: 1.5, md: 3 }, flexWrap: { xs: 'nowrap', md: 'wrap' } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0, gap: { xs: 2.5, md: '34px' } }}>
           <Box
             component={RouterLink}
             href={paths.root}
@@ -41,7 +43,24 @@ export function OdMasthead() {
           >
             ✳
           </Box>
-          <Box component="nav" sx={{ display: 'flex', gap: { xs: 2, md: '30px' }, flexWrap: 'wrap' }}>
+          {/* En movil los cinco enlaces se envolvian en dos renglones y se
+              encimaban con el logo. Aqui corren en una sola linea que se
+              desliza, con el borde desvanecido para que se note que hay mas. */}
+          <Box
+            component="nav"
+            sx={{
+              display: 'flex',
+              gap: { xs: 2, md: '30px' },
+              flexWrap: { xs: 'nowrap', md: 'wrap' },
+              minWidth: 0,
+              overflowX: { xs: 'auto', md: 'visible' },
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
+              '& a': { whiteSpace: 'nowrap' },
+              maskImage: { xs: 'linear-gradient(to right, #000 calc(100% - 24px), transparent)', md: 'none' },
+              WebkitMaskImage: { xs: 'linear-gradient(to right, #000 calc(100% - 24px), transparent)', md: 'none' },
+            }}
+          >
             {NAV.map((l) =>
               l.anchor ? (
                 <Link key={l.label} href={l.href} sx={navLinkSx}>
@@ -55,16 +74,22 @@ export function OdMasthead() {
             )}
           </Box>
         </Box>
-        <Link
-          component={RouterLink}
-          href={paths.contact}
-          sx={{ display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 2, color: 'inherit', fontSize: 15, textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}
-        >
-          Apartar ejemplar
-          <Box component="span" sx={{ flexShrink: 0, display: 'inline-grid', placeItems: 'center', width: 30, height: 30, border: '1px solid var(--color-text)', borderRadius: '4px' }}>
-            →
-          </Box>
-        </Link>
+        <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+          <Link
+            component={RouterLink}
+            href={paths.contact}
+            sx={{ display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 2, color: 'inherit', fontSize: 15, textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}
+          >
+            Apartar ejemplar
+            <Box component="span" sx={{ flexShrink: 0, display: 'inline-grid', placeItems: 'center', width: 30, height: 30, border: '1px solid var(--color-text)', borderRadius: '4px' }}>
+              →
+            </Box>
+          </Link>
+
+          {/* La portada no lleva la barra estatica, asi que sin esto la cuenta
+              no tiene ningun acceso en movil. */}
+          <AccountButton sx={{ color: 'inherit', ml: { xs: 0, sm: 1.5 }, minHeight: { xs: 44, md: 'auto' } }} />
+        </Box>
       </Box>
 
       <Box sx={{ textAlign: 'center', mt: '26px' }}>

@@ -223,7 +223,9 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               width: 'max-content',
               whiteSpace: 'nowrap',
               fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(48px, 9.4vw, 148px)',
+              // El piso de 48px era para escritorio: en un telefono solo cabian
+              // dos palabras y se leia como texto cortado, no como marquesina.
+              fontSize: { xs: 'clamp(24px, 7vw, 40px)', md: 'clamp(48px, 9.4vw, 148px)' },
               lineHeight: 1.06,
               letterSpacing: '-0.01em',
               textTransform: 'uppercase',
@@ -235,13 +237,22 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           </Box>
         </Box>
 
-        <Box sx={{ px: '32px', display: 'grid', gap: '40px', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
+        {/* En movil minmax(220px) no cabia dos veces en 360px, asi que las
+            cuatro cifras se apilaban y ocupaban pantalla y media. */}
+        <Box
+          sx={{
+            px: { xs: '18px', md: '32px' },
+            display: 'grid',
+            gap: { xs: '28px 18px', md: '40px' },
+            gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(auto-fit, minmax(220px, 1fr))' },
+          }}
+        >
           {STATS.map((s) => (
             <Box key={s.label}>
-              <Box sx={{ mb: 1.5, fontFamily: 'var(--font-heading)', fontSize: 40, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+              <Box sx={{ mb: 1.5, fontFamily: 'var(--font-heading)', fontSize: { xs: 28, md: 40 }, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums' }}>
                 {s.n}
               </Box>
-              <Box sx={{ fontSize: 15, lineHeight: 1.6, color: 'var(--color-neutral-400)' }}>{s.label}</Box>
+              <Box sx={{ fontSize: { xs: 13, md: 15 }, lineHeight: 1.55, color: 'var(--color-neutral-400)' }}>{s.label}</Box>
             </Box>
           ))}
         </Box>
