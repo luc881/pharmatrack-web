@@ -46,7 +46,7 @@ export function OdDivulgacion({ articles = [] }) {
 
   return (
     <Box component="section" id="divulgacion" sx={{ px: { xs: '18px', md: '32px' }, pt: { xs: '40px', md: '60px' }, pb: { xs: '80px', md: '120px' } }}>
-      <Display size="clamp(48px, 11.4vw, 176px)" weight={400} sx={{ lineHeight: 1, letterSpacing: '-0.015em', textTransform: 'uppercase', mb: 1.5 }}>
+      <Display size="clamp(34px, 11.4vw, 176px)" weight={400} sx={{ lineHeight: 1, letterSpacing: '-0.015em', textTransform: 'uppercase', mb: 1.5 }}>
         Divulgación
       </Display>
       <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3.75, flexWrap: 'wrap', mb: { xs: 5, md: 7 } }}>
@@ -56,15 +56,38 @@ export function OdDivulgacion({ articles = [] }) {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
           {pages.length > 1 && (
-            <Box sx={{ display: 'flex', gap: 1 }}>
+            <Box sx={{ display: 'flex', gap: { xs: 0, md: 1 } }}>
               {pages.map((_, i) => (
+                // El punto sigue midiendo 9px, pero el boton que lo contiene
+                // llega a 44x44 en movil: con el dedo, un blanco de 9px se
+                // falla casi siempre. Nada de margenes negativos para
+                // recuperar el espacio: encimarian las areas tactiles y el
+                // toque se lo llevaria el punto de al lado.
                 <Box
                   key={i}
                   component="button"
                   type="button"
                   aria-label={`Grupo ${i + 1}`}
                   onClick={() => setPage(i)}
-                  sx={{ width: 9, height: 9, p: 0, borderRadius: '50%', cursor: 'pointer', border: '1px solid var(--color-neutral-500)', bgcolor: i === page ? 'var(--color-accent)' : 'transparent', transition: 'background 300ms' }}
+                  sx={{
+                    display: 'grid',
+                    placeItems: 'center',
+                    width: { xs: 44, md: 9 },
+                    height: { xs: 44, md: 9 },
+                    p: 0,
+                    border: 0,
+                    bgcolor: 'transparent',
+                    cursor: 'pointer',
+                    '&::before': {
+                      content: '""',
+                      width: 9,
+                      height: 9,
+                      borderRadius: '50%',
+                      border: '1px solid var(--color-neutral-500)',
+                      bgcolor: i === page ? 'var(--color-accent)' : 'transparent',
+                      transition: 'background 300ms',
+                    },
+                  }}
                 />
               ))}
             </Box>

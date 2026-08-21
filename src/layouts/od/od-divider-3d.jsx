@@ -31,7 +31,7 @@ export function OdDivider3d({ media }) {
   return (
     <>
       <Ticker />
-      <Box component="section" data-dark="1" sx={{ position: 'relative', display: 'grid', placeItems: 'center', px: '40px', py: { xs: '64px', md: '96px' }, overflow: 'hidden', isolation: 'isolate' }}>
+      <Box component="section" data-dark="1" sx={{ position: 'relative', display: 'grid', placeItems: 'center', px: { xs: '18px', md: '40px' }, py: { xs: '64px', md: '96px' }, overflow: 'hidden', isolation: 'isolate' }}>
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${media.moss_tall})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.22)' }} />
         <Box sx={{ display: 'grid', gap: '26px', justifyItems: 'center' }}>

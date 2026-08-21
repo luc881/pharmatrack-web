@@ -31,13 +31,13 @@ export function OdFaq({ mossTall }) {
 
   return (
     <Box component="section" id="preguntas" data-dark="1" sx={{ bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-200)', pt: { xs: '56px', md: '72px' }, pb: { xs: '72px', md: '110px' }, overflow: 'hidden' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: '40px', pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: '40px' }, pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
         <Box component="span">(Preguntas frecuentes)</Box>
         <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 respuestas</Box>
       </Box>
 
       <Box sx={{ py: 3.25, borderTop: '1px solid rgba(240,235,224,0.18)', borderBottom: '1px solid rgba(240,235,224,0.18)', overflow: 'hidden' }}>
-        <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: 'clamp(46px, 7.6vw, 118px)', lineHeight: 1.06, letterSpacing: '-0.01em', textTransform: 'uppercase', color: 'var(--color-neutral-100)', animation: 'odMarqueeR 70s linear infinite' }}>
+        <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: { xs: 'clamp(24px, 7vw, 40px)', md: 'clamp(46px, 7.6vw, 118px)' }, lineHeight: 1.06, letterSpacing: '-0.01em', textTransform: 'uppercase', color: 'var(--color-neutral-100)', animation: 'odMarqueeR 70s linear infinite' }}>
           <Box component="span">{NAMES.repeat(6)}</Box>
           <Box component="span">{NAMES.repeat(6)}</Box>
         </Box>

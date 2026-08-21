@@ -194,7 +194,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       </Box>
 
       {/* Tira de estado: apartados abiertos + teléfono */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.75, px: { xs: '18px', md: '32px' }, pt: '14px', fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, md: 2.75 }, px: { xs: '18px', md: '32px' }, pt: '14px', fontSize: { xs: 11, md: 12 }, letterSpacing: { xs: '0.1em', md: '0.16em' }, textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
         <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, whiteSpace: 'nowrap' }}>
           <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-accent-500)' }} />
           Apartados abiertos
@@ -279,7 +279,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               centro sin estirarse; con varias se acomodan centradas y envuelven */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '18px', pt: '34px', px: 1, justifyContent: 'center' }}>
             {catCards.map((c, i) => (
-              <OdReveal key={c.title} delay={Math.min(i, 6) * 0.06} sx={{ width: 220, maxWidth: '100%' }}>
+              <OdReveal key={c.title} delay={Math.min(i, 6) * 0.06} sx={{ width: { xs: 'calc(50% - 9px)', md: 220 }, maxWidth: '100%' }}>
                 <Link component={RouterLink} href={c.href} sx={{ display: 'block', color: 'inherit', textDecoration: 'none' }}>
                   <OdImage src={c.img} alt={c.title} ratio="1 / 1" radius={0} />
                   <Box sx={{ mt: 1.75, fontFamily: 'var(--font-heading)', fontSize: 20 }}>{c.title}</Box>
@@ -302,7 +302,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               estirarse; con varias se acomodan centradas y envuelven en filas */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '28px 18px', justifyContent: 'center' }}>
             {selection.map((item, i) => (
-              <OdReveal key={item.key} delay={i * 0.08} sx={{ width: 280, maxWidth: '100%' }}>
+              <OdReveal key={item.key} delay={i * 0.08} sx={{ width: { xs: 'calc(50% - 9px)', md: 280 }, maxWidth: '100%' }}>
                 <OdCatalogCard card={animalToCard(item, newestIds.has(item.key))} index={i} />
               </OdReveal>
             ))}
@@ -316,7 +316,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {/* Bloque oscuro del frasco: marquesina + "Seis cosas dentro del frasco" +
           6 ingredientes con el frasco 3D al centro (placeholder por ahora) */}
       <Box component="section" data-dark="1" sx={{ bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-200)', py: { xs: '64px', md: '96px' }, overflow: 'hidden' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: '40px', pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: '40px' }, pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
           <Box component="span">(Qué necesita una colonia)</Box>
           <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
         </Box>
@@ -327,7 +327,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               width: 'max-content',
               whiteSpace: 'nowrap',
               fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(40px, 6.6vw, 104px)',
+              fontSize: { xs: 'clamp(22px, 6.6vw, 36px)', md: 'clamp(40px, 6.6vw, 104px)' },
               lineHeight: 1.06,
               letterSpacing: '-0.01em',
               textTransform: 'uppercase',
