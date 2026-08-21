@@ -57,7 +57,17 @@ export default async function Page() {
       </OdReveal>
 
       <OdReveal>
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: 9 }, display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(280px, 0.8fr) minmax(0, 1fr)' } }}>
+        <Box
+          component="section"
+          sx={{
+            px: { xs: '18px', md: '40px' },
+            pt: { xs: 7, md: 9 },
+            display: 'grid',
+            gap: { xs: 4, md: '48px' },
+            alignItems: 'center',
+            gridTemplateColumns: { xs: '1fr', md: 'minmax(280px, 0.8fr) minmax(0, 1fr)' },
+          }}
+        >
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <OdScene
               scene="log"
@@ -68,20 +78,41 @@ export default async function Page() {
             />
           </Box>
           <Box>
-            <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(28px, 3.4vw, 48px)', lineHeight: 1.12 }}>
+            <Box
+              component="h2"
+              sx={{
+                m: 0,
+                fontFamily: 'var(--font-heading)',
+                fontWeight: 300,
+                fontSize: 'clamp(28px, 3.4vw, 48px)',
+                lineHeight: 1.12,
+              }}
+            >
               Corteza, musgo y hojarasca: el mismo montaje que va en cada frasco.
             </Box>
-            <Box sx={{ mt: 2.5, maxWidth: '52ch', fontSize: 16, lineHeight: 1.8, color: 'var(--color-neutral-700)', textWrap: 'pretty' }}>
-              Reproducimos el suelo de bosque en miniatura —madera blanda en descomposición, colonias
-              de musgo y hoja curada— para que las colonias tengan refugio, humedad y comida sin
-              intervención diaria.
+            <Box
+              sx={{
+                mt: 2.5,
+                maxWidth: '52ch',
+                fontSize: 16,
+                lineHeight: 1.8,
+                color: 'var(--color-neutral-700)',
+                textWrap: 'pretty',
+              }}
+            >
+              Reproducimos el suelo de bosque en miniatura —madera blanda en descomposición,
+              colonias de musgo y hoja curada— para que las colonias tengan refugio, humedad y
+              comida sin intervención diaria.
             </Box>
           </Box>
         </Box>
       </OdReveal>
 
       <OdReveal>
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: 9 }, pb: { xs: 10, md: 15 } }}>
+        <Box
+          component="section"
+          sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: 9 }, pb: { xs: 10, md: 15 } }}
+        >
           <Box
             sx={{
               display: 'grid',
@@ -93,17 +124,29 @@ export default async function Page() {
           >
             {STATS.map((s) => (
               <Box key={s.label}>
-                <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 44, fontVariantNumeric: 'tabular-nums' }}>
+                <Box
+                  sx={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 44,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
                   {s.n}
                 </Box>
-                <Box sx={{ mt: 0.75, fontSize: 14, color: 'var(--color-neutral-700)' }}>{s.label}</Box>
+                <Box sx={{ mt: 0.75, fontSize: 14, color: 'var(--color-neutral-700)' }}>
+                  {s.label}
+                </Box>
               </Box>
             ))}
           </Box>
 
           <Box sx={{ mt: { xs: 6, md: 8 }, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             <Pill href={paths.catalog}>Ver el catálogo</Pill>
-            <Pill variant="light" href={paths.shipping} sx={{ border: '1px solid var(--color-divider)' }}>
+            <Pill
+              variant="light"
+              href={paths.shipping}
+              sx={{ border: '1px solid var(--color-divider)' }}
+            >
               Cómo es la entrega
             </Pill>
           </Box>

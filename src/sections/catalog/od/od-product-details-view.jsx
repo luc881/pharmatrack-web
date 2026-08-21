@@ -57,28 +57,75 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
       <Box
         component="nav"
         className="od-rise"
-        sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 3, md: 4 }, display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}
+        sx={{
+          px: { xs: '18px', md: '40px' },
+          pt: { xs: 3, md: 4 },
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '10px',
+          fontSize: 12,
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          color: 'var(--color-neutral-600)',
+        }}
       >
-        <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+        <Link
+          component={RouterLink}
+          href={paths.root}
+          sx={{
+            color: 'inherit',
+            textDecoration: 'none',
+            '&:hover': { color: 'var(--color-accent-700)' },
+          }}
+        >
           Inicio
         </Link>
         <span>/</span>
-        <Link component={RouterLink} href={paths.catalog} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+        <Link
+          component={RouterLink}
+          href={paths.catalog}
+          sx={{
+            color: 'inherit',
+            textDecoration: 'none',
+            '&:hover': { color: 'var(--color-accent-700)' },
+          }}
+        >
           Catálogo
         </Link>
         <span>/</span>
-        <Box component="span" sx={{ color: 'var(--color-text)' }}>{product.title}</Box>
+        <Box component="span" sx={{ color: 'var(--color-text)' }}>
+          {product.title}
+        </Box>
       </Box>
 
       {/* Imagen + panel de compra */}
       <Box
         component="section"
-        sx={{ display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'start', px: { xs: '18px', md: '40px' }, pt: { xs: 3, md: 4 }, gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.08fr) minmax(0, 1fr)' } }}
+        sx={{
+          display: 'grid',
+          gap: { xs: 4, md: '48px' },
+          alignItems: 'start',
+          px: { xs: '18px', md: '40px' },
+          pt: { xs: 3, md: 4 },
+          gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.08fr) minmax(0, 1fr)' },
+        }}
       >
         <OdReveal sx={{ minWidth: 0, position: 'relative' }}>
           <OdImage src={product.image} alt={product.title} label={product.title} ratio="1 / 1" />
           {soldOut && (
-            <Box sx={{ position: 'absolute', top: 12, left: 12, px: '14px', py: '5px', fontSize: 12, borderRadius: '999px', bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)' }}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 12,
+                left: 12,
+                px: '14px',
+                py: '5px',
+                fontSize: 12,
+                borderRadius: '999px',
+                bgcolor: 'rgba(243,242,242,0.92)',
+                color: 'var(--color-neutral-900)',
+              }}
+            >
               Agotado
             </Box>
           )}
@@ -86,31 +133,81 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
         <Box sx={{ minWidth: 0, position: { md: 'sticky' }, top: { md: 130 }, pb: { md: 5 } }}>
           {product.category && (
-            <Box component="span" sx={{ display: 'inline-block', px: '14px', py: '5px', borderRadius: '999px', border: '1px solid var(--color-divider)', fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
+            <Box
+              component="span"
+              sx={{
+                display: 'inline-block',
+                px: '14px',
+                py: '5px',
+                borderRadius: '999px',
+                border: '1px solid var(--color-divider)',
+                fontSize: 12,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'var(--color-neutral-700)',
+              }}
+            >
               {product.category}
             </Box>
           )}
 
-          <Display component="h1" size="clamp(34px, 4.2vw, 58px)" sx={{ mt: '20px', lineHeight: 1.06 }}>
+          <Display
+            component="h1"
+            size="clamp(34px, 4.2vw, 58px)"
+            sx={{ mt: '20px', lineHeight: 1.06 }}
+          >
             {product.title}
           </Display>
 
           {paragraphs[0] && (
-            <Box sx={{ mt: '22px', fontSize: 15, lineHeight: 1.8, maxWidth: '48ch' }}>{paragraphs[0]}</Box>
+            <Box sx={{ mt: '22px', fontSize: 15, lineHeight: 1.8, maxWidth: '48ch' }}>
+              {paragraphs[0]}
+            </Box>
           )}
 
-          <Box sx={{ mt: '28px', fontFamily: 'var(--font-heading)', fontSize: 38, fontVariantNumeric: 'tabular-nums' }}>
+          <Box
+            sx={{
+              mt: '28px',
+              fontFamily: 'var(--font-heading)',
+              fontSize: 38,
+              fontVariantNumeric: 'tabular-nums',
+            }}
+          >
             {product.compare_at_price > product.price_retail && (
-              <Box component="span" sx={{ mr: 1.5, fontSize: 22, color: 'var(--color-neutral-500)', textDecoration: 'line-through' }}>
+              <Box
+                component="span"
+                sx={{
+                  mr: 1.5,
+                  fontSize: 22,
+                  color: 'var(--color-neutral-500)',
+                  textDecoration: 'line-through',
+                }}
+              >
                 {fCurrency(product.compare_at_price)}
               </Box>
             )}
             {fCurrency(product.price_retail)}
             {unitSuffix && (
-              <Box component="span" sx={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--color-neutral-600)' }}> / {unitSuffix}</Box>
+              <Box
+                component="span"
+                sx={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 16,
+                  color: 'var(--color-neutral-600)',
+                }}
+              >
+                {' '}
+                / {unitSuffix}
+              </Box>
             )}
           </Box>
-          <Box sx={{ mt: 1, fontSize: 13, color: soldOut ? 'var(--color-neutral-500)' : 'var(--color-accent-700)' }}>
+          <Box
+            sx={{
+              mt: 1,
+              fontSize: 13,
+              color: soldOut ? 'var(--color-neutral-500)' : 'var(--color-accent-700)',
+            }}
+          >
             {perWeight
               ? `Venta a granel: se pesa y se cobra por ${product.unit_name}.`
               : soldOut
@@ -122,18 +219,90 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
           {/* Cantidad (piezas) + agregar */}
           {!soldOut && (
-            <Box sx={{ mt: '26px', display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
+            <Box
+              sx={{
+                mt: '26px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '12px',
+                alignItems: 'center',
+              }}
+            >
               {!perWeight && (
-                <Box sx={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--color-divider)', borderRadius: '999px' }}>
-                  <Box component="button" type="button" aria-label="Quitar uno" onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '999px 0 0 999px', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}>–</Box>
-                  <Box component="span" sx={{ minWidth: 30, textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}>{qty}</Box>
-                  <Box component="button" type="button" aria-label="Agregar uno" onClick={() => setQty((q) => Math.min(9, q + 1))}
-                    sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '0 999px 999px 0', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}>+</Box>
+                <Box
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    border: '1px solid var(--color-divider)',
+                    borderRadius: '999px',
+                  }}
+                >
+                  <Box
+                    component="button"
+                    type="button"
+                    aria-label="Quitar uno"
+                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+                    sx={{
+                      width: 44,
+                      height: 52,
+                      border: 0,
+                      bgcolor: 'transparent',
+                      cursor: 'pointer',
+                      fontSize: 18,
+                      color: 'inherit',
+                      borderRadius: '999px 0 0 999px',
+                      '&:hover': { bgcolor: 'var(--color-neutral-200)' },
+                    }}
+                  >
+                    –
+                  </Box>
+                  <Box
+                    component="span"
+                    sx={{ minWidth: 30, textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}
+                  >
+                    {qty}
+                  </Box>
+                  <Box
+                    component="button"
+                    type="button"
+                    aria-label="Agregar uno"
+                    onClick={() => setQty((q) => Math.min(9, q + 1))}
+                    sx={{
+                      width: 44,
+                      height: 52,
+                      border: 0,
+                      bgcolor: 'transparent',
+                      cursor: 'pointer',
+                      fontSize: 18,
+                      color: 'inherit',
+                      borderRadius: '0 999px 999px 0',
+                      '&:hover': { bgcolor: 'var(--color-neutral-200)' },
+                    }}
+                  >
+                    +
+                  </Box>
                 </Box>
               )}
-              <Box component="button" type="button" onClick={handleAdd}
-                sx={{ flex: 1, minWidth: 220, height: 52, px: '32px', border: 0, borderRadius: '999px', cursor: 'pointer', font: 'inherit', fontSize: 14, bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', transition: 'background 350ms, transform 350ms', '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-2px)' } }}>
+              <Box
+                component="button"
+                type="button"
+                onClick={handleAdd}
+                sx={{
+                  flex: 1,
+                  minWidth: 220,
+                  height: 52,
+                  px: '32px',
+                  border: 0,
+                  borderRadius: '999px',
+                  cursor: 'pointer',
+                  font: 'inherit',
+                  fontSize: 14,
+                  bgcolor: 'var(--color-neutral-900)',
+                  color: 'var(--color-neutral-100)',
+                  transition: 'background 350ms, transform 350ms',
+                  '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-2px)' },
+                }}
+              >
                 {added ? 'Agregado ✓' : 'Agregar a cotización'}
               </Box>
             </Box>
@@ -147,8 +316,27 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
           {CONFIG.whatsapp && (
             <Box sx={{ mt: '18px' }}>
-              <Link href={`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(whatsappText)}`} target="_blank" rel="noopener"
-                sx={{ display: 'inline-flex', alignItems: 'center', height: 50, px: '28px', borderRadius: '999px', border: '1px solid var(--color-divider)', color: 'inherit', fontSize: 14, textDecoration: 'none', transition: 'border-color 350ms, background 350ms', '&:hover': { borderColor: 'var(--color-accent)', bgcolor: 'var(--color-accent-100)' } }}>
+              <Link
+                href={`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(whatsappText)}`}
+                target="_blank"
+                rel="noopener"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  height: 50,
+                  px: '28px',
+                  borderRadius: '999px',
+                  border: '1px solid var(--color-divider)',
+                  color: 'inherit',
+                  fontSize: 14,
+                  textDecoration: 'none',
+                  transition: 'border-color 350ms, background 350ms',
+                  '&:hover': {
+                    borderColor: 'var(--color-accent)',
+                    bgcolor: 'var(--color-accent-100)',
+                  },
+                }}
+              >
                 Preguntar por WhatsApp
               </Link>
             </Box>
@@ -156,9 +344,18 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
           <Box sx={{ mt: '34px' }}>
             {shopInfoFor(shippingEnabled).map((info, i, arr) => (
-              <Box key={info.title} sx={{ py: '20px', borderTop: '1px solid var(--color-divider)', borderBottom: i === arr.length - 1 ? '1px solid var(--color-divider)' : 'none' }}>
+              <Box
+                key={info.title}
+                sx={{
+                  py: '20px',
+                  borderTop: '1px solid var(--color-divider)',
+                  borderBottom: i === arr.length - 1 ? '1px solid var(--color-divider)' : 'none',
+                }}
+              >
                 <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 19 }}>{info.title}</Box>
-                <Box sx={{ mt: '6px', fontSize: 14, color: 'var(--color-neutral-700)' }}>{info.description}</Box>
+                <Box sx={{ mt: '6px', fontSize: 14, color: 'var(--color-neutral-700)' }}>
+                  {info.description}
+                </Box>
               </Box>
             ))}
           </Box>
@@ -171,11 +368,43 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
           <Display size="clamp(24px, 3vw, 40px)" weight={400} sx={{ mb: '24px' }}>
             Este paquete incluye
           </Display>
-          <Box sx={{ maxWidth: 560, border: '1px solid var(--color-divider)', borderRadius: '16px', overflow: 'hidden' }}>
+          <Box
+            sx={{
+              maxWidth: 560,
+              border: '1px solid var(--color-divider)',
+              borderRadius: '16px',
+              overflow: 'hidden',
+            }}
+          >
             {product.components.map((c, i) => (
-              <Box key={c.product_id} sx={{ p: 2, gap: 2, display: 'flex', alignItems: 'center', borderTop: i === 0 ? 'none' : '1px solid var(--color-divider)' }}>
-                <Box sx={{ width: 48, height: 48, flexShrink: 0, borderRadius: '10px', overflow: 'hidden', bgcolor: 'var(--color-neutral-200)' }}>
-                  {c.image && <Box component="img" src={c.image} alt={c.title} sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />}
+              <Box
+                key={c.product_id}
+                sx={{
+                  p: 2,
+                  gap: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  borderTop: i === 0 ? 'none' : '1px solid var(--color-divider)',
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 48,
+                    height: 48,
+                    flexShrink: 0,
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                    bgcolor: 'var(--color-neutral-200)',
+                  }}
+                >
+                  {c.image && (
+                    <Box
+                      component="img"
+                      src={c.image}
+                      alt={c.title}
+                      sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }}
+                    />
+                  )}
                 </Box>
                 <Box sx={{ flexGrow: 1, fontSize: 15 }}>{c.title}</Box>
                 <Box sx={{ fontSize: 14, color: 'var(--color-neutral-600)' }}>× {c.quantity}</Box>
@@ -190,7 +419,9 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
         <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 6, md: '70px' } }}>
           <Box sx={{ maxWidth: '68ch' }}>
             {paragraphs.slice(1).map((p, i) => (
-              <Box component="p" key={i} sx={{ m: 0, mb: '18px', fontSize: 16, lineHeight: 1.85 }}>{p}</Box>
+              <Box component="p" key={i} sx={{ m: 0, mb: '18px', fontSize: 16, lineHeight: 1.85 }}>
+                {p}
+              </Box>
             ))}
           </Box>
         </Box>
@@ -198,11 +429,25 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
       {/* Productos similares */}
       {related.length > 0 && (
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '80px' }, pb: { xs: 8, md: 12 } }}>
-          <Display size="clamp(26px, 3vw, 40px)" weight={400} sx={{ pb: '22px', borderBottom: '1px solid var(--color-divider)' }}>
+        <Box
+          component="section"
+          sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '80px' }, pb: { xs: 8, md: 12 } }}
+        >
+          <Display
+            size="clamp(26px, 3vw, 40px)"
+            weight={400}
+            sx={{ pb: '22px', borderBottom: '1px solid var(--color-divider)' }}
+          >
             Productos similares
           </Display>
-          <Box sx={{ pt: '34px', display: 'grid', gap: '44px 28px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
+          <Box
+            sx={{
+              pt: '34px',
+              display: 'grid',
+              gap: '44px 28px',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            }}
+          >
             {related.slice(0, 4).map((p, i) => (
               <OdReveal key={p.id} delay={i * 0.08}>
                 <OdCatalogCard card={productToCard(p)} />
@@ -232,17 +477,46 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
         }}
       >
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <Box
+            sx={{
+              fontSize: 12,
+              color: 'var(--color-neutral-600)',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {product.title}
           </Box>
-          <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>{fCurrency(product.price_retail)}</Box>
+          <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>
+            {fCurrency(product.price_retail)}
+          </Box>
         </Box>
         <Box
           component="button"
           type="button"
           onClick={soldOut ? undefined : handleAdd}
           disabled={soldOut}
-          sx={{ height: 48, px: '26px', border: 0, cursor: soldOut ? 'default' : 'pointer', font: 'inherit', fontSize: 13, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-neutral-100)', bgcolor: soldOut ? 'var(--color-neutral-500)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)', transition: 'background 300ms', '&:hover': { bgcolor: soldOut ? 'var(--color-neutral-500)' : 'var(--color-accent-700)' } }}
+          sx={{
+            height: 48,
+            px: '26px',
+            border: 0,
+            cursor: soldOut ? 'default' : 'pointer',
+            font: 'inherit',
+            fontSize: 13,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color: 'var(--color-neutral-100)',
+            bgcolor: soldOut
+              ? 'var(--color-neutral-500)'
+              : added
+                ? 'var(--color-accent-700)'
+                : 'var(--color-neutral-900)',
+            transition: 'background 300ms',
+            '&:hover': {
+              bgcolor: soldOut ? 'var(--color-neutral-500)' : 'var(--color-accent-700)',
+            },
+          }}
         >
           {soldOut ? 'Agotado' : added ? 'Agregado ✓' : 'Añadir'}
         </Box>

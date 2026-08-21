@@ -137,7 +137,12 @@ function OrderCard({ order, onCancel, onPay }) {
                   ? 'Este pedido sigue pendiente de pago. Al pagarlo acordamos por WhatsApp el punto y la hora de entrega.'
                   : 'Te confirmamos disponibilidad, envío y total. Todavía no se cobra nada. ¿Te equivocaste? Cancela y vuelve a hacer el pedido desde el carrito.'}
               </Typography>
-              <Button size="small" color="error" disabled={paying} onClick={() => setConfirming(true)}>
+              <Button
+                size="small"
+                color="error"
+                disabled={paying}
+                onClick={() => setConfirming(true)}
+              >
                 Cancelar
               </Button>
               {isPickup && (
@@ -164,7 +169,12 @@ function OrderCard({ order, onCancel, onPay }) {
               <Typography variant="body2" sx={{ flexGrow: 1, color: 'error.darker' }}>
                 ¿Seguro que quieres cancelar el pedido {order.code ?? `#${order.id}`}?
               </Typography>
-              <Button size="small" color="inherit" disabled={cancelling} onClick={() => setConfirming(false)}>
+              <Button
+                size="small"
+                color="inherit"
+                disabled={cancelling}
+                onClick={() => setConfirming(false)}
+              >
                 Conservar
               </Button>
               <Button
@@ -286,7 +296,12 @@ export function OrdersView() {
               title="Todavía no tienes pedidos"
               description="Cuando mandes una cotización desde el carrito, aparecerá aquí."
               action={
-                <Button component={RouterLink} href={paths.catalog} variant="contained" sx={{ mt: 3 }}>
+                <Button
+                  component={RouterLink}
+                  href={paths.catalog}
+                  variant="contained"
+                  sx={{ mt: 3 }}
+                >
                   Ver catálogo
                 </Button>
               }

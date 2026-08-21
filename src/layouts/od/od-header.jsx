@@ -45,7 +45,20 @@ const cellSx = {
 // píldora circular con el contador (favoritos / carrito); invierte con la barra
 function CountPill({ n, pill }) {
   return (
-    <Box component="span" sx={{ display: 'inline-grid', placeItems: 'center', width: 22, height: 22, borderRadius: '999px', bgcolor: pill.bg, color: pill.fg, fontSize: 11, fontVariantNumeric: 'tabular-nums' }}>
+    <Box
+      component="span"
+      sx={{
+        display: 'inline-grid',
+        placeItems: 'center',
+        width: 22,
+        height: 22,
+        borderRadius: '999px',
+        bgcolor: pill.bg,
+        color: pill.fg,
+        fontSize: 11,
+        fontVariantNumeric: 'tabular-nums',
+      }}
+    >
       {n}
     </Box>
   );
@@ -133,7 +146,11 @@ export function OdHeader({ revealOnScroll = false }) {
   // Inversión de la barra según la sección de fondo (ver useNavTheme).
   const onDark = useNavTheme();
   const nt = onDark
-    ? { bg: 'color-mix(in srgb, var(--color-bg) 94%, transparent)', fg: 'var(--color-text)', bd: 'var(--color-divider)' }
+    ? {
+        bg: 'color-mix(in srgb, var(--color-bg) 94%, transparent)',
+        fg: 'var(--color-text)',
+        bd: 'var(--color-divider)',
+      }
     : { bg: 'rgba(28,26,24,0.9)', fg: 'var(--color-neutral-100)', bd: 'rgba(240,235,224,0.24)' };
   // píldora de contador: contrasta con el fondo de la barra
   const navPill = onDark
@@ -188,7 +205,8 @@ export function OdHeader({ revealOnScroll = false }) {
               bgcolor: nt.bg,
               color: nt.fg,
               borderColor: nt.bd,
-              transition: 'background-color 450ms var(--od-ease), color 450ms var(--od-ease), border-color 450ms var(--od-ease)',
+              transition:
+                'background-color 450ms var(--od-ease), color 450ms var(--od-ease), border-color 450ms var(--od-ease)',
             }}
           >
             {/* Izquierda: menú + enlaces (ocultos en móvil por espacio) */}
@@ -261,19 +279,50 @@ export function OdHeader({ revealOnScroll = false }) {
 
             {/* Derecha: Buscar · ES·MXN · Favoritos [N] · Carrito [N] · cuenta */}
             <Box sx={{ display: 'flex', alignItems: 'center', justifySelf: 'end', minWidth: 0 }}>
-              <Box component="button" type="button" onClick={search.onTrue} aria-label="Buscar en el catálogo" sx={{ ...cellSx, display: { xs: 'none', sm: 'block' } }}>
+              <Box
+                component="button"
+                type="button"
+                onClick={search.onTrue}
+                aria-label="Buscar en el catálogo"
+                sx={{ ...cellSx, display: { xs: 'none', sm: 'block' } }}
+              >
                 Buscar
               </Box>
 
-              <Box component="span" sx={{ ...cellSx, display: { xs: 'none', md: 'block' }, cursor: 'default', '&:hover': {} }}>
-                ES <Box component="span" sx={{ opacity: 0.6 }}>· MXN</Box>
+              <Box
+                component="span"
+                sx={{
+                  ...cellSx,
+                  display: { xs: 'none', md: 'block' },
+                  cursor: 'default',
+                  '&:hover': {},
+                }}
+              >
+                ES{' '}
+                <Box component="span" sx={{ opacity: 0.6 }}>
+                  · MXN
+                </Box>
               </Box>
 
-              <Link component={RouterLink} href={paths.favorites} sx={{ ...cellSx, display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 1 }}>
+              <Link
+                component={RouterLink}
+                href={paths.favorites}
+                sx={{
+                  ...cellSx,
+                  display: { xs: 'none', sm: 'inline-flex' },
+                  alignItems: 'center',
+                  gap: 1,
+                }}
+              >
                 Favoritos <CountPill n={favIds.length} pill={navPill} />
               </Link>
 
-              <Link component={RouterLink} href={paths.cart} aria-label="Cotización" sx={{ ...cellSx, display: 'inline-flex', alignItems: 'center', gap: 1 }}>
+              <Link
+                component={RouterLink}
+                href={paths.cart}
+                aria-label="Cotización"
+                sx={{ ...cellSx, display: 'inline-flex', alignItems: 'center', gap: 1 }}
+              >
                 Carrito <CountPill n={cartCount} pill={navPill} />
               </Link>
 

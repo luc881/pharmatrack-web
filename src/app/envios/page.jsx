@@ -49,7 +49,10 @@ export default function Page() {
       <OdReveal>
         <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 7 } }}>
           <Box sx={{ maxWidth: 1180, overflowX: 'auto' }}>
-            <Box component="table" sx={{ width: '100%', minWidth: 520, borderCollapse: 'collapse', textAlign: 'left' }}>
+            <Box
+              component="table"
+              sx={{ width: '100%', minWidth: 520, borderCollapse: 'collapse', textAlign: 'left' }}
+            >
               <Box component="thead">
                 <Box component="tr">
                   {['Zona', 'Modo', 'Tiempo', 'Costo'].map((h) => (
@@ -110,10 +113,21 @@ export default function Page() {
         >
           {POINTS.map((p) => (
             <Box key={p.title}>
-              <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 26 }}>
+              <Box
+                component="h2"
+                sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 26 }}
+              >
                 {p.title}
               </Box>
-              <Box sx={{ mt: 1.25, fontSize: 16, lineHeight: 1.8, color: 'var(--color-neutral-700)', textWrap: 'pretty' }}>
+              <Box
+                sx={{
+                  mt: 1.25,
+                  fontSize: 16,
+                  lineHeight: 1.8,
+                  color: 'var(--color-neutral-700)',
+                  textWrap: 'pretty',
+                }}
+              >
                 {p.body}
               </Box>
             </Box>

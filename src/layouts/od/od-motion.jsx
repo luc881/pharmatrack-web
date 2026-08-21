@@ -12,7 +12,15 @@ import Box from '@mui/material/Box';
 
 const EASE = [0.22, 1, 0.36, 1];
 
-export function OdReveal({ children, y = 26, delay = 0, duration = 0.85, once = true, sx, ...other }) {
+export function OdReveal({
+  children,
+  y = 26,
+  delay = 0,
+  duration = 0.85,
+  once = true,
+  sx,
+  ...other
+}) {
   const reduce = useReducedMotion();
 
   if (reduce) {

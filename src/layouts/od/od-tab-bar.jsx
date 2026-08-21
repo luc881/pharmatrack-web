@@ -79,7 +79,14 @@ export function OdTabBar() {
           const icon = <Iconify icon={t.icon} width={22} />;
           if (t.key === 'search') {
             return (
-              <Box key={t.key} component="button" type="button" onClick={search.onTrue} aria-label="Buscar" sx={itemSx(false)}>
+              <Box
+                key={t.key}
+                component="button"
+                type="button"
+                onClick={search.onTrue}
+                aria-label="Buscar"
+                sx={itemSx(false)}
+              >
                 {icon}
                 {t.label}
               </Box>

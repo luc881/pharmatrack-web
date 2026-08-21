@@ -213,7 +213,8 @@ export function buildListings(animals, taxa = []) {
         entry.minPrice = animal.price;
         entry.compareAt = animal.compare_at_price ?? null;
       }
-      entry.maxPrice = entry.maxPrice === null ? animal.price : Math.max(entry.maxPrice, animal.price);
+      entry.maxPrice =
+        entry.maxPrice === null ? animal.price : Math.max(entry.maxPrice, animal.price);
     }
     entry.latestId = Math.max(entry.latestId, animal.id);
     if (!entry.sexes.includes(animal.sex)) entry.sexes.push(animal.sex);
@@ -225,7 +226,12 @@ export function buildListings(animals, taxa = []) {
     const tiers = entry.species.price_tiers;
     if (tiers?.length) {
       const prices = tiers.map((t) => t.price);
-      return { ...entry, minPrice: Math.min(...prices), maxPrice: Math.max(...prices), compareAt: null };
+      return {
+        ...entry,
+        minPrice: Math.min(...prices),
+        maxPrice: Math.max(...prices),
+        compareAt: null,
+      };
     }
     // Agotado y sin escalas de precio: no hay disponible que cotizar, se
     // muestra el último precio conocido (informativo; el botón de compra
@@ -277,7 +283,8 @@ export function buildSpeciesList(animals) {
         entry.minPrice = animal.price;
         entry.compareAt = animal.compare_at_price ?? null;
       }
-      entry.maxPrice = entry.maxPrice === null ? animal.price : Math.max(entry.maxPrice, animal.price);
+      entry.maxPrice =
+        entry.maxPrice === null ? animal.price : Math.max(entry.maxPrice, animal.price);
     }
     entry.latestId = Math.max(entry.latestId, animal.id);
     if (!entry.sexes.includes(animal.sex)) entry.sexes.push(animal.sex);
@@ -294,7 +301,12 @@ export function buildSpeciesList(animals) {
     if (tiers?.length) {
       const prices = tiers.map((t) => t.price);
       // con escalas de precio la oferta por ejemplar no aplica
-      return { ...entry, minPrice: Math.min(...prices), maxPrice: Math.max(...prices), compareAt: null };
+      return {
+        ...entry,
+        minPrice: Math.min(...prices),
+        maxPrice: Math.max(...prices),
+        compareAt: null,
+      };
     }
     if (entry.minPrice === null) {
       return { ...entry, minPrice: entry.lastPrice, maxPrice: entry.lastPrice };

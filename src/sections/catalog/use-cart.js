@@ -68,10 +68,7 @@ export function useCart() {
   // Reemplaza todo el carrito de una (lo usa la reconciliación contra el servidor)
   const replaceAll = useCallback((next) => write(next), []);
 
-  const total = useMemo(
-    () => items.reduce((sum, i) => sum + i.price * i.qty, 0),
-    [items]
-  );
+  const total = useMemo(() => items.reduce((sum, i) => sum + i.price * i.qty, 0), [items]);
 
   return { items, count: items.length, total, add, setQty, remove, clear, replaceAll };
 }

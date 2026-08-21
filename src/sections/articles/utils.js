@@ -42,7 +42,10 @@ export function parseArticleBody(body) {
       sections.push({ type: 'quote', content: line.slice(2).trim() });
     } else if (line.startsWith('img:')) {
       flush();
-      const [src, caption] = line.slice(4).split('|').map((part) => part.trim());
+      const [src, caption] = line
+        .slice(4)
+        .split('|')
+        .map((part) => part.trim());
       if (src) sections.push({ type: 'image', src, caption: caption ?? '' });
     } else {
       paragraph.push(line);

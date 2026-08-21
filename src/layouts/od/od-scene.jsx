@@ -19,10 +19,21 @@ export function OdScene({ scene, fallbackSrc, fallbackLabel = '', ratio = '3 / 4
   const { ref, mounted } = useThreeScene(build, opts);
 
   return (
-    <Box sx={[{ position: 'relative', width: 1, aspectRatio: ratio }, ...(Array.isArray(sx) ? sx : [sx])]}>
+    <Box
+      sx={[
+        { position: 'relative', width: 1, aspectRatio: ratio },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
       {!mounted && (
         <Box sx={{ position: 'absolute', inset: 0 }}>
-          <OdImage src={fallbackSrc} label={fallbackLabel} ratio={ratio} radius={0} sx={{ width: 1, height: 1 }} />
+          <OdImage
+            src={fallbackSrc}
+            label={fallbackLabel}
+            ratio={ratio}
+            radius={0}
+            sx={{ width: 1, height: 1 }}
+          />
         </Box>
       )}
       <Box ref={ref} sx={{ position: 'absolute', inset: 0 }} />

@@ -15,7 +15,15 @@ import { cdnImage } from 'src/lib/cdn-image';
 // Hueco de imagen: caja con relación de aspecto + zoom al hover recortado por
 // overflow. Con `src` pinta la foto real; sin ella, un placeholder rotulado
 // (el cliente sube su fotografía después — ver Assets del handoff).
-export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 16, width = 800, sx }) {
+export function OdImage({
+  src,
+  alt = '',
+  label = '',
+  ratio = '1 / 1',
+  radius = 16,
+  width = 800,
+  sx,
+}) {
   return (
     <Box
       sx={[
@@ -70,12 +78,20 @@ const PILL_VARIANTS = {
   dark: {
     bgcolor: 'var(--color-neutral-900)',
     color: 'var(--color-neutral-100)',
-    '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-3px)', color: 'var(--color-neutral-100)' },
+    '&:hover': {
+      bgcolor: 'var(--color-accent-700)',
+      transform: 'translateY(-3px)',
+      color: 'var(--color-neutral-100)',
+    },
   },
   light: {
     bgcolor: 'rgba(246,244,241,0.95)',
     color: 'var(--color-neutral-900)',
-    '&:hover': { bgcolor: '#ffffff', transform: 'translateY(-3px)', color: 'var(--color-neutral-900)' },
+    '&:hover': {
+      bgcolor: '#ffffff',
+      transform: 'translateY(-3px)',
+      color: 'var(--color-neutral-900)',
+    },
   },
   outline: {
     color: '#eae7e7',
