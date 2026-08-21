@@ -57,7 +57,11 @@ export async function getSpeciesCatalog() {
       next: { revalidate: 60 },
     });
     if (!res.ok) return [];
-    return await res.json();
+    const json = await res.json();
+    // Hoy es una lista pelada; si algún día se pagina como sus seis hermanos
+    // ({data, total}), buildListings sigue recibiendo un array en vez de
+    // tirar 500 en todo el catálogo.
+    return Array.isArray(json) ? json : (json?.data ?? []);
   } catch {
     return [];
   }

@@ -127,14 +127,21 @@ export default async function Page({ params }) {
       name: item.title,
       description: item.description ?? `${scientificName(item.species)} en venta en ${CONFIG.appName}.`,
       ...(item.photos.length ? { image: item.photos } : item.taxonPhoto ? { image: [item.taxonPhoto] } : {}),
-      offers: {
-        '@type': 'AggregateOffer',
-        lowPrice: item.minPrice,
-        highPrice: item.maxPrice,
-        priceCurrency: 'MXN',
-        availability: item.count > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-        url: `${CONFIG.siteUrl}/catalogo/${item.slug}`,
-      },
+      // AggregateOffer exige lowPrice/highPrice: sin ejemplares (minPrice
+      // null) el bloque completo se omite en vez de publicar un dato
+      // estructurado inválido.
+      ...(item.minPrice == null
+        ? {}
+        : {
+            offers: {
+              '@type': 'AggregateOffer',
+              lowPrice: item.minPrice,
+              highPrice: item.maxPrice,
+              priceCurrency: 'MXN',
+              availability: item.count > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+              url: `${CONFIG.siteUrl}/catalogo/${item.slug}`,
+            },
+          }),
     };
 
     return (

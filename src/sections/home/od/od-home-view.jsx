@@ -101,7 +101,10 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
   const CAT_IMAGES = [IMG.isopodCubaris, IMG.mossTall, IMG.leafLitter, IMG.terrarium, IMG.isopodZebra, IMG.mossWide];
 
-  const selection = species.slice(0, 4);
+  // buildListings siembra el Map con `taxa` (orden alfabético del backend),
+  // ya no con `animals` (Animal.id desc): sin reordenar, la home abriría con
+  // la primera especie del alfabeto en vez de lo más nuevo con existencias.
+  const selection = [...species].sort((a, b) => b.count - a.count || b.latestId - a.latestId).slice(0, 4);
 
   // insumos para "Todo para tu terrario": productos reales + sus categorías
   const terrario = products.slice(0, 10).map((p) => ({ ...productToCard(p), description: firstLine(p.description) }));

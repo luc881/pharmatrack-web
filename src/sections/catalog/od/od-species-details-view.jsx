@@ -61,7 +61,7 @@ function Panel({ title, children }) {
 }
 
 export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true }) {
-  const { species, key, slug, morph, photos, morphs, minPrice, maxPrice, compareAt = null, count = null } = item;
+  const { species, key, slug, morph, photos, morphs, minPrice, maxPrice, compareAt = null, count = null, taxonPhoto = null } = item;
 
   // Agotado: el listado existe (fotos/descripción de la especie) pero no
   // queda ningún ejemplar disponible para cotizar hoy — mismo criterio que
@@ -90,7 +90,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
 
   const [qty, setQty] = useState(1);
   const [gal, setGal] = useState(0);
-  const gallery = photos.length ? photos : [null];
+  const gallery = photos.length ? photos : taxonPhoto ? [taxonPhoto] : [null];
   const galIndex = Math.min(gal, gallery.length - 1);
 
   const whatsappText = `Hola, me interesa ${title} (${sci})${selectedTier ? ` — paquete de ${selectedTier.quantity}` : ''}`;
@@ -126,7 +126,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
       detail: selectedTier ? `Paquete de ${selectedTier.quantity}` : sci,
       price,
       qty,
-      image: photos[0] ?? null,
+      image: photos[0] ?? taxonPhoto,
       url: paths.catalogSpecies(slug),
     });
     setAdded(true);
@@ -348,15 +348,21 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           )}
 
           <Box sx={{ mt: '30px', fontFamily: 'var(--font-heading)', fontSize: 40, fontVariantNumeric: 'tabular-nums' }}>
-            {!selectedTier && minPrice !== maxPrice && (
-              <Box component="span" sx={{ fontSize: 17, color: 'var(--color-neutral-600)', mr: 1 }}>Desde</Box>
+            {price == null ? (
+              'Consultar'
+            ) : (
+              <>
+                {!selectedTier && minPrice !== maxPrice && (
+                  <Box component="span" sx={{ fontSize: 17, color: 'var(--color-neutral-600)', mr: 1 }}>Desde</Box>
+                )}
+                {!selectedTier && compareAt > minPrice && (
+                  <Box component="span" sx={{ mr: 1.5, fontSize: 22, color: 'var(--color-neutral-500)', textDecoration: 'line-through' }}>
+                    {fCurrency(compareAt)}
+                  </Box>
+                )}
+                {fCurrency(price)} <Box component="span" sx={{ fontFamily: 'var(--font-body)', fontSize: 17, color: 'var(--color-neutral-600)' }}>MXN</Box>
+              </>
             )}
-            {!selectedTier && compareAt > minPrice && (
-              <Box component="span" sx={{ mr: 1.5, fontSize: 22, color: 'var(--color-neutral-500)', textDecoration: 'line-through' }}>
-                {fCurrency(compareAt)}
-              </Box>
-            )}
-            {fCurrency(price)} <Box component="span" sx={{ fontFamily: 'var(--font-body)', fontSize: 17, color: 'var(--color-neutral-600)' }}>MXN</Box>
           </Box>
 
           {/* Cantidad + agregar */}
@@ -631,7 +637,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {title}
           </Box>
-          <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>{fCurrency(price)}</Box>
+          <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>{price == null ? 'Consultar' : fCurrency(price)}</Box>
         </Box>
         <Box
           component="button"

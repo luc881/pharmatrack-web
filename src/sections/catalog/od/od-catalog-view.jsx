@@ -86,7 +86,12 @@ export const animalToCard = (i, isNew = false) => {
     badge,
     badgeVariant: isNew || pct ? 'accent' : 'neutral',
     addLabel: soldOut ? 'Avísame' : 'Añadir · 12–15 individuos',
-    price: i.minPrice !== i.maxPrice ? `Desde ${fCurrency(i.minPrice)}` : `${fCurrency(i.minPrice)} MXN`,
+    price:
+      i.minPrice == null
+        ? 'Consultar'
+        : i.minPrice !== i.maxPrice
+          ? `Desde ${fCurrency(i.minPrice)}`
+          : `${fCurrency(i.minPrice)} MXN`,
     favKey: i.key,
     // campos numéricos ocultos para ordenar (no se pintan)
     _price: i.minPrice,
@@ -108,8 +113,11 @@ export const productToCard = (p) => {
     category: p.category ?? 'Producto',
     title: p.title,
     soldOut,
-    badge: soldOut ? 'Agotado' : pct ? `-${pct}%` : null,
-    badgeVariant: soldOut ? 'outline' : 'accent',
+    // El chip ya no lleva "Agotado": la banda roja avisa la disponibilidad
+    // (mismo criterio que animalToCard). El badge se queda solo con el
+    // descuento, para que un producto agotado con descuento muestre ambos.
+    badge: pct ? `-${pct}%` : null,
+    badgeVariant: 'accent',
     addLabel: soldOut ? 'Avísame' : 'Añadir al carrito',
     price: `${fCurrency(p.price_retail)}${unit} MXN`,
     favKey: null,

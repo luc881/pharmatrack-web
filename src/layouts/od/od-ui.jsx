@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 
 import { RouterLink } from 'src/routes/components';
 
+import { cdnImage } from 'src/lib/cdn-image';
+
 // ----------------------------------------------------------------------
 // Primitivas del rediseño editorial (Opuntia Den). Comparten tokens de
 // global.css (var(--color-*), var(--shadow-*), var(--od-ease)) para que las
@@ -13,7 +15,7 @@ import { RouterLink } from 'src/routes/components';
 // Hueco de imagen: caja con relación de aspecto + zoom al hover recortado por
 // overflow. Con `src` pinta la foto real; sin ella, un placeholder rotulado
 // (el cliente sube su fotografía después — ver Assets del handoff).
-export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 16, sx }) {
+export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 16, width = 800, sx }) {
   return (
     <Box
       sx={[
@@ -34,7 +36,7 @@ export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 1
         {src ? (
           <Box
             component="img"
-            src={src}
+            src={cdnImage(src, width)}
             alt={alt}
             loading="lazy"
             sx={{ width: 1, height: 1, display: 'block', objectFit: 'cover' }}
