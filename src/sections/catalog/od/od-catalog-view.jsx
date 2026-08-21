@@ -1,10 +1,12 @@
 'use client';
 
+import { useBoolean } from 'minimal-shared/hooks';
 import { useMemo, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Slider from '@mui/material/Slider';
+import Drawer from '@mui/material/Drawer';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -32,6 +34,13 @@ const GRID_COLUMNS = {
   two: 'repeat(2, 1fr)',
   list: '1fr',
 };
+
+const SORT_OPTIONS = [
+  { v: 'rel', label: 'Recién llegados' },
+  { v: 'asc', label: 'Precio: menor a mayor' },
+  { v: 'desc', label: 'Precio: mayor a menor' },
+  { v: 'stock', label: 'Disponibilidad' },
+];
 
 // ----------------------------------------------------------------------
 // Catálogo editorial: cabecera con miga de pan + título display, barra lateral
@@ -127,6 +136,83 @@ export const productToCard = (p) => {
   };
 };
 
+// Nivel y Precio: se pintan tal cual en la columna lateral (md) y en la hoja
+// inferior de filtros (xs). Viven aparte para no duplicar el JSX ni el estado
+// — ambos lugares reciben/escriben las mismas props de OdCatalogView.
+function LevelFilter({ levels, level, setLevel }) {
+  if (!levels.length) return null;
+  return (
+    <>
+      <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+        Nivel
+      </Box>
+      <Box role="radiogroup" aria-label="Nivel" sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' }, flexDirection: { md: 'column' }, gap: { xs: '8px', md: '10px' }, fontSize: 13 }}>
+        {[{ v: 'all', label: 'Cualquiera' }, ...levels.map((l) => ({ v: l, label: l }))].map((opt) => {
+          const active = level === opt.v;
+          return (
+            <Box
+              key={opt.v}
+              component="button"
+              type="button"
+              onClick={() => setLevel(opt.v)}
+              aria-pressed={active}
+              sx={{
+                cursor: 'pointer',
+                font: 'inherit',
+                fontSize: 13,
+                textAlign: 'left',
+                px: { xs: '12px', md: 0 },
+                py: { xs: '7px', md: 0 },
+                border: { xs: '1px solid var(--color-divider)', md: 0 },
+                borderRadius: { xs: '999px', md: 0 },
+                bgcolor: 'transparent',
+                transition: 'color 250ms',
+                color: active ? 'var(--color-accent-700)' : 'inherit',
+                '&:hover': { color: 'var(--color-accent-700)' },
+                '&::before': {
+                  content: '""',
+                  display: { xs: 'none', md: 'inline-block' },
+                  width: 8,
+                  height: 8,
+                  mr: 1.25,
+                  borderRadius: '999px',
+                  verticalAlign: 'middle',
+                  bgcolor: active ? 'var(--color-accent)' : 'transparent',
+                  boxShadow: active ? 'none' : 'inset 0 0 0 1px var(--color-neutral-500)',
+                },
+              }}
+            >
+              {opt.label}
+            </Box>
+          );
+        })}
+      </Box>
+    </>
+  );
+}
+
+function PriceFilter({ range, setRange, maxPrice }) {
+  return (
+    <>
+      <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+        Precio
+      </Box>
+      <Slider
+        size="small"
+        value={range}
+        min={0}
+        max={maxPrice}
+        onChange={(_, v) => setRange(v)}
+        valueLabelDisplay="off"
+        sx={{ color: 'var(--color-accent)', maxWidth: { xs: 260, md: '100%' } }}
+      />
+      <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
+        {fCurrency(range[0])} – {fCurrency(range[1])} MXN
+      </Box>
+    </>
+  );
+}
+
 export function OdCatalogView({ items = [], products = [], category = null }) {
   // Grupos inmediatos presentes en los listados (p. ej. Isópodos) para el
   // control segmentado — refleja el inventario real, no solo las raíces.
@@ -154,6 +240,9 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
   const inRange = (v) => v >= range[0] && v <= range[1];
 
   const [view, setView] = useState('grid');
+
+  // Hoja inferior de filtros (solo xs) — botón "Filtros" de la barra pegajosa.
+  const sheet = useBoolean();
 
   // Niveles de dificultad presentes en el inventario real (se adapta a la data;
   // si ninguna especie trae dificultad, el filtro no se muestra).
@@ -235,6 +324,9 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
     level !== 'all' && { label: level, clear: () => setLevel('all') },
     !priceFull && { label: `${fCurrency(range[0])} – ${fCurrency(range[1])}`, clear: () => setRange([0, maxPrice]) },
   ].filter(Boolean);
+  // Cuenta para el botón "Filtros" de la barra móvil: la categoría ya tiene
+  // su propia fila de chips, así que no se cuenta aquí.
+  const extraFilterCount = (level !== 'all' ? 1 : 0) + (!priceFull ? 1 : 0);
   const clearAll = () => {
     setSeg('all');
     setLevel('all');
@@ -289,6 +381,184 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
         </Box>
       </Box>
 
+      {/* Barra de filtros pegajosa (solo xs): sustituye a la columna lateral,
+          que no cabe arriba del pliegue en móvil. Chips de categoría con
+          scroll horizontal + botón "Filtros" fijo que abre la hoja inferior.
+          top:130 reutiliza el mismo despeje que ya usa el <aside> sticky de
+          escritorio (más abajo) para la píldora flotante del header — esa
+          píldora es fixed/zIndex:70 y aparece pasados 320px de scroll, así
+          que 130 dejaba margen de sobra ahí y sirve igual aquí. zIndex:40 la
+          mantiene por debajo de esa píldora y de la barra de pestañas móvil
+          (ambas fixed/zIndex:70, no deben taparse) pero por encima de la
+          rejilla de tarjetas que scrollea debajo. */}
+      <Box
+        sx={{
+          display: { xs: 'flex', md: 'none' },
+          alignItems: 'center',
+          gap: 1,
+          position: 'sticky',
+          top: 130,
+          zIndex: 40,
+          px: '18px',
+          py: '10px',
+          bgcolor: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-divider)',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            gap: '8px',
+            flex: 1,
+            minWidth: 0,
+            overflowX: 'auto',
+            // sin barra de scroll visible, pero el gesto de scroll sigue activo
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
+          }}
+        >
+          {segments.map((s) => {
+            const active = seg === s.key;
+            return (
+              <Box
+                key={s.key}
+                component="button"
+                type="button"
+                onClick={() => setSeg(s.key)}
+                sx={{
+                  flexShrink: 0,
+                  cursor: 'pointer',
+                  font: 'inherit',
+                  fontSize: 12,
+                  letterSpacing: '0.04em',
+                  whiteSpace: 'nowrap',
+                  minHeight: 44,
+                  px: '14px',
+                  border: '1px solid var(--color-divider)',
+                  borderRadius: '999px',
+                  transition: 'background 250ms, color 250ms',
+                  ...(active
+                    ? { bgcolor: 'var(--color-accent-600)', color: '#fff', borderColor: 'var(--color-accent-600)' }
+                    : { bgcolor: 'transparent', color: 'inherit' }),
+                }}
+              >
+                {s.label}
+              </Box>
+            );
+          })}
+        </Box>
+
+        <Box
+          component="button"
+          type="button"
+          onClick={sheet.onTrue}
+          sx={{
+            flexShrink: 0,
+            cursor: 'pointer',
+            font: 'inherit',
+            fontSize: 12,
+            letterSpacing: '0.04em',
+            whiteSpace: 'nowrap',
+            minHeight: 44,
+            px: '16px',
+            border: '1px solid var(--color-divider)',
+            borderRadius: '999px',
+            bgcolor: 'var(--color-neutral-900)',
+            color: 'var(--color-neutral-100)',
+          }}
+        >
+          Filtros{extraFilterCount > 0 ? ` · ${extraFilterCount}` : ''}
+        </Box>
+      </Box>
+
+      {/* Hoja inferior de filtros (solo xs, se abre desde el botón de arriba):
+          Nivel, Precio y Orden sobre el mismo estado que la columna lateral.
+          MUI la monta con su zIndex de modal (1300 por defecto), muy por
+          encima de las barras fixed (70) de header/pestañas, así que no hace
+          falta fijarlo a mano; el propio Drawer se encarga de no bloquear el
+          scroll del body al cerrarse. */}
+      <Drawer
+        anchor="bottom"
+        open={sheet.value}
+        onClose={sheet.onFalse}
+        slotProps={{
+          paper: {
+            sx: {
+              display: { xs: 'block', md: 'none' },
+              borderRadius: '18px 18px 0 0',
+              maxHeight: '85vh',
+              px: '18px',
+              pt: 3,
+              pb: 'calc(18px + env(safe-area-inset-bottom))',
+            },
+          },
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+          <Box sx={{ fontSize: 14, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Filtros</Box>
+          <Box
+            component="button"
+            type="button"
+            onClick={sheet.onFalse}
+            aria-label="Cerrar filtros"
+            sx={{ minWidth: 44, minHeight: 44, display: 'grid', placeItems: 'center', border: 0, bgcolor: 'transparent', cursor: 'pointer', color: 'inherit' }}
+          >
+            <Iconify icon="mingcute:close-line" width={20} />
+          </Box>
+        </Box>
+
+        <LevelFilter levels={levels} level={level} setLevel={setLevel} />
+        <PriceFilter range={range} setRange={setRange} maxPrice={maxPrice} />
+
+        <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+          Orden
+        </Box>
+        <Box
+          component="select"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          aria-label="Ordenar"
+          sx={{
+            display: 'block',
+            width: '100%',
+            minHeight: 44,
+            font: 'inherit',
+            fontSize: 13,
+            color: 'inherit',
+            bgcolor: 'transparent',
+            border: '1px solid var(--color-divider)',
+            borderRadius: '10px',
+            px: 1.5,
+            cursor: 'pointer',
+          }}
+        >
+          {SORT_OPTIONS.map((o) => (
+            <option key={o.v} value={o.v}>
+              {o.label}
+            </option>
+          ))}
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, mt: 4, pt: 3, borderTop: '1px solid var(--color-divider)' }}>
+          <Box
+            component="button"
+            type="button"
+            onClick={clearAll}
+            sx={{ minHeight: 44, px: 1, border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}
+          >
+            Limpiar todo
+          </Box>
+          <Box
+            component="button"
+            type="button"
+            onClick={sheet.onFalse}
+            sx={{ flex: 1, minHeight: 44, cursor: 'pointer', font: 'inherit', fontSize: 13, border: 0, borderRadius: '999px', bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' }}
+          >
+            Ver {cards.length} resultado{cards.length === 1 ? '' : 's'}
+          </Box>
+        </Box>
+      </Drawer>
+
       {/* Cuerpo: barra lateral fija + rejilla */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' } }}>
         {/* El color va en la celda de la rejilla, no en el <aside>: el aside es
@@ -296,6 +566,9 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             dejaria el panel cortado a media pagina. */}
         <Box
           sx={{
+            // La columna lateral se sustituye por la barra pegajosa + hoja
+            // inferior en xs (no cabe: ver comentario de esa barra más abajo).
+            display: { xs: 'none', md: 'block' },
             bgcolor: 'var(--color-surface)',
             borderRight: { md: '1px solid var(--color-divider)' },
             borderBottom: { xs: '1px solid var(--color-divider)', md: 'none' },
@@ -357,70 +630,8 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             })}
           </Box>
 
-          {levels.length > 0 && (
-            <>
-              <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
-                Nivel
-              </Box>
-              <Box role="radiogroup" aria-label="Nivel" sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' }, flexDirection: { md: 'column' }, gap: { xs: '8px', md: '10px' }, fontSize: 13 }}>
-                {[{ v: 'all', label: 'Cualquiera' }, ...levels.map((l) => ({ v: l, label: l }))].map((opt) => {
-                  const active = level === opt.v;
-                  return (
-                    <Box
-                      key={opt.v}
-                      component="button"
-                      type="button"
-                      onClick={() => setLevel(opt.v)}
-                      aria-pressed={active}
-                      sx={{
-                        cursor: 'pointer',
-                        font: 'inherit',
-                        fontSize: 13,
-                        textAlign: 'left',
-                        px: { xs: '12px', md: 0 },
-                        py: { xs: '7px', md: 0 },
-                        border: { xs: '1px solid var(--color-divider)', md: 0 },
-                        borderRadius: { xs: '999px', md: 0 },
-                        bgcolor: 'transparent',
-                        transition: 'color 250ms',
-                        color: active ? 'var(--color-accent-700)' : 'inherit',
-                        '&:hover': { color: 'var(--color-accent-700)' },
-                        '&::before': {
-                          content: '""',
-                          display: { xs: 'none', md: 'inline-block' },
-                          width: 8,
-                          height: 8,
-                          mr: 1.25,
-                          borderRadius: '999px',
-                          verticalAlign: 'middle',
-                          bgcolor: active ? 'var(--color-accent)' : 'transparent',
-                          boxShadow: active ? 'none' : 'inset 0 0 0 1px var(--color-neutral-500)',
-                        },
-                      }}
-                    >
-                      {opt.label}
-                    </Box>
-                  );
-                })}
-              </Box>
-            </>
-          )}
-
-          <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
-            Precio
-          </Box>
-          <Slider
-            size="small"
-            value={range}
-            min={0}
-            max={maxPrice}
-            onChange={(_, v) => setRange(v)}
-            valueLabelDisplay="off"
-            sx={{ color: 'var(--color-accent)', maxWidth: { xs: 260, md: '100%' } }}
-          />
-          <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
-            {fCurrency(range[0])} – {fCurrency(range[1])} MXN
-          </Box>
+          <LevelFilter levels={levels} level={level} setLevel={setLevel} />
+          <PriceFilter range={range} setRange={setRange} maxPrice={maxPrice} />
           </Box>
         </Box>
 
@@ -442,13 +653,16 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
               {pad2(cards.length)} resultado{cards.length === 1 ? '' : 's'}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2.5 } }}>
-              {/* Orden */}
+              {/* Orden: en xs vive en la hoja inferior de filtros (evita
+                  duplicar el control en la barra de resultados, que ya
+                  aprieta en móvil) */}
               <Box
                 component="select"
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
                 aria-label="Ordenar"
                 sx={{
+                  display: { xs: 'none', md: 'inline-block' },
                   font: 'inherit',
                   fontSize: 12,
                   letterSpacing: '0.04em',
@@ -462,10 +676,11 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                   cursor: 'pointer',
                 }}
               >
-                <option value="rel">Recién llegados</option>
-                <option value="asc">Precio: menor a mayor</option>
-                <option value="desc">Precio: mayor a menor</option>
-                <option value="stock">Disponibilidad</option>
+                {SORT_OPTIONS.map((o) => (
+                  <option key={o.v} value={o.v}>
+                    {o.label}
+                  </option>
+                ))}
               </Box>
               {/* Toggle de vista: cuadrícula / dos columnas / filas */}
               <Box component="span" sx={{ display: { xs: 'none', sm: 'block' } }}>Ver</Box>
@@ -552,7 +767,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                 }}
               >
                 {visible.map((card, i) => (
-                  <OdReveal key={card.key} delay={Math.min(i, 8) * 0.05}>
+                  <OdReveal key={card.key} delay={Math.min(i, 8) * 0.05} sx={{ minWidth: 0 }}>
                     <OdCatalogCard card={card} index={i} horizontal={view === 'list'} />
                   </OdReveal>
                 ))}
