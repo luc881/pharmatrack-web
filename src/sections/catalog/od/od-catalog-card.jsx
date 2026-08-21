@@ -62,6 +62,29 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
         </Box>
       )}
 
+      {soldOut && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 18,
+            right: -34,
+            width: 140,
+            transform: 'rotate(45deg)',
+            bgcolor: '#b3261e',
+            color: '#fff',
+            textAlign: 'center',
+            py: '5px',
+            fontSize: 11,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            pointerEvents: 'none',
+            zIndex: 2,
+          }}
+        >
+          Agotado
+        </Box>
+      )}
+
       {card.favKey && (
         <Box
           component="button"
@@ -74,7 +97,10 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
           }}
           sx={{
             position: 'absolute',
-            top: 12,
+            // La banda de "Agotado" ocupa la esquina superior derecha y tapa
+            // el corazón ahí; en tarjetas agotadas se recorre hacia abajo
+            // para quedar debajo de la banda (verificado en vivo).
+            top: soldOut ? 64 : 12,
             right: 12,
             display: 'grid',
             placeItems: 'center',
@@ -130,6 +156,9 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
       <Box sx={{ mb: '10px', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
         {code && <Box component="span" sx={{ color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>{code}&nbsp;&nbsp;|&nbsp;&nbsp;</Box>}
         <Box component="span" sx={{ color: 'var(--color-neutral-600)' }}>{card.category}</Box>
+        {card.taxonLabel && (
+          <Box component="span" sx={{ opacity: 0.7 }}> · {card.taxonLabel}</Box>
+        )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '14px' }}>
         <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: horizontal ? 22 : 20 }}>

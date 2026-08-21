@@ -70,13 +70,17 @@ export const animalToCard = (i, isNew = false) => {
   return {
     key: i.key,
     href: paths.catalogSpecies(i.slug),
-    image: i.photos?.[0],
-    image2: i.photos?.[1] ?? i.photos?.[0],
+    image: i.photos?.[0] ?? i.taxonPhoto,
+    image2: i.photos?.[1] ?? i.photos?.[0] ?? i.taxonPhoto,
     codePrefix: skuPrefix(category),
     category,
     scientific: scientificName(i.species),
     saleFormat: saleFormatLabel(i.species),
     title: i.title,
+    // "Nominal" distingue la forma base de sus variantes. Va como campo aparte
+    // y NO dentro de title: listingSlug deriva del titulo, asi que meterlo ahi
+    // cambiaria la URL de todas las especies y romperia los enlaces existentes.
+    taxonLabel: i.morph ? null : 'Nominal',
     badge,
     badgeVariant: soldOut ? 'outline' : isNew || pct ? 'accent' : 'neutral',
     addLabel: soldOut ? 'Avísame' : 'Añadir · 12–15 individuos',

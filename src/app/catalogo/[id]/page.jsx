@@ -77,7 +77,7 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title,
         description,
-        ...(item.photos[0] ? { images: [item.photos[0]] } : {}),
+        ...(item.photos[0] ?? item.taxonPhoto ? { images: [item.photos[0] ?? item.taxonPhoto] } : {}),
       },
     };
   }
@@ -126,7 +126,7 @@ export default async function Page({ params }) {
       '@type': 'Product',
       name: item.title,
       description: item.description ?? `${scientificName(item.species)} en venta en ${CONFIG.appName}.`,
-      ...(item.photos.length ? { image: item.photos } : {}),
+      ...(item.photos.length ? { image: item.photos } : item.taxonPhoto ? { image: [item.taxonPhoto] } : {}),
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: item.minPrice,

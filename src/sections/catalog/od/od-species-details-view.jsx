@@ -61,7 +61,7 @@ function Panel({ title, children }) {
 }
 
 export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true }) {
-  const { species, key, slug, photos, morphs, minPrice, maxPrice, compareAt = null, count = null } = item;
+  const { species, key, slug, morph, photos, morphs, minPrice, maxPrice, compareAt = null, count = null } = item;
 
   // Agotado: el listado existe (fotos/descripción de la especie) pero no
   // queda ningún ejemplar disponible para cotizar hoy — mismo criterio que
@@ -254,9 +254,28 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
             </Box>
           )}
 
-          <Display component="h1" size="clamp(36px, 4.4vw, 62px)" sx={{ mt: '20px', lineHeight: 1.04 }}>
-            {title}
-          </Display>
+          <Box sx={{ mt: '20px', display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: '14px' }}>
+            <Display component="h1" size="clamp(36px, 4.4vw, 62px)" sx={{ lineHeight: 1.04 }}>
+              {title}
+            </Display>
+            {!morph && (
+              <Box
+                component="span"
+                sx={{
+                  px: '12px',
+                  py: '4px',
+                  borderRadius: '999px',
+                  border: '1px solid var(--color-divider)',
+                  fontSize: 11,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-neutral-600)',
+                }}
+              >
+                Nominal
+              </Box>
+            )}
+          </Box>
 
           <Box sx={{ mt: '10px', fontSize: 17, fontStyle: 'italic', color: 'var(--color-neutral-600)' }}>
             {sci}
