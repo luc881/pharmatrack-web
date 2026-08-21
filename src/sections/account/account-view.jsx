@@ -191,70 +191,62 @@ export function AccountView() {
             {/* Sin envíos activos la dirección no sirve para nada: se oculta */}
             {shippingEnabled && (
               <>
-                <Divider sx={{ borderStyle: 'dashed' }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                    Dirección de envío
-                  </Typography>
-                </Divider>
+            <Divider sx={{ borderStyle: 'dashed' }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                Dirección de envío
+              </Typography>
+            </Divider>
 
-                <Typography variant="caption" sx={{ mt: -1, color: 'text.secondary' }}>
-                  Sólo si quieres que te enviemos a domicilio. Para entregas en persona en CDMX no
-                  hace falta.
-                </Typography>
+            <Typography variant="caption" sx={{ mt: -1, color: 'text.secondary' }}>
+              Sólo si quieres que te enviemos a domicilio. Para entregas en persona en CDMX
+              no hace falta.
+            </Typography>
 
-                <Box sx={{ gap: 2, display: 'grid', gridTemplateColumns: '2fr 1fr 1fr' }}>
-                  <TextField label="Calle" value={form.street} onChange={set('street')} />
-                  <TextField
-                    label="Núm. ext."
-                    value={form.ext_number}
-                    onChange={set('ext_number')}
-                  />
-                  <TextField
-                    label="Núm. int."
-                    value={form.int_number}
-                    onChange={set('int_number')}
-                  />
-                </Box>
+            <Box sx={{ gap: 2, display: 'grid', gridTemplateColumns: '2fr 1fr 1fr' }}>
+              <TextField label="Calle" value={form.street} onChange={set('street')} />
+              <TextField label="Núm. ext." value={form.ext_number} onChange={set('ext_number')} />
+              <TextField label="Núm. int." value={form.int_number} onChange={set('int_number')} />
+            </Box>
 
-                <TextField
-                  label="Colonia"
-                  value={form.neighborhood}
-                  onChange={set('neighborhood')}
-                />
+            <TextField
+              label="Colonia"
+              value={form.neighborhood}
+              onChange={set('neighborhood')}
+            />
 
-                <Box sx={{ gap: 2, display: 'grid', gridTemplateColumns: '1fr 2fr' }}>
-                  <TextField
-                    label="Código postal"
-                    value={form.zip_code}
-                    onChange={set('zip_code')}
-                    error={!zipOk}
-                    slotProps={{ htmlInput: { inputMode: 'numeric', maxLength: 5 } }}
-                    helperText={zipOk ? 'Completa el estado solo' : '5 dígitos'}
-                  />
-                  <TextField
-                    label="Municipio o alcaldía"
-                    value={form.city}
-                    onChange={set('city')}
-                  />
-                </Box>
+            <Box sx={{ gap: 2, display: 'grid', gridTemplateColumns: '1fr 2fr' }}>
+              <TextField
+                label="Código postal"
+                value={form.zip_code}
+                onChange={set('zip_code')}
+                error={!zipOk}
+                slotProps={{ htmlInput: { inputMode: 'numeric', maxLength: 5 } }}
+                helperText={zipOk ? 'Completa el estado solo' : '5 dígitos'}
+              />
+              <TextField
+                label="Municipio o alcaldía"
+                value={form.city}
+                onChange={set('city')}
+              />
+            </Box>
 
-                <TextField select label="Estado" value={form.state} onChange={set('state')}>
-                  {states.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </TextField>
+            <TextField select label="Estado" value={form.state} onChange={set('state')}>
+              {states.map((name) => (
+                <MenuItem key={name} value={name}>
+                  {name}
+                </MenuItem>
+              ))}
+            </TextField>
 
-                <TextField
-                  label="Referencias"
-                  value={form.address_notes}
-                  onChange={set('address_notes')}
-                  multiline
-                  rows={2}
-                  placeholder="Portón negro, entre Av. Juárez y Morelos"
-                  helperText="Lo que le ayude a la paquetería a encontrarte."
-                />
+            <TextField
+              label="Referencias"
+              value={form.address_notes}
+              onChange={set('address_notes')}
+              multiline
+              rows={2}
+              placeholder="Portón negro, entre Av. Juárez y Morelos"
+              helperText="Lo que le ayude a la paquetería a encontrarte."
+            />
               </>
             )}
 
@@ -273,12 +265,7 @@ export function AccountView() {
                   Guardado ✓
                 </Typography>
               )}
-              <Button
-                component={RouterLink}
-                href={paths.orders}
-                color="inherit"
-                sx={{ ml: 'auto' }}
-              >
+              <Button component={RouterLink} href={paths.orders} color="inherit" sx={{ ml: 'auto' }}>
                 Mis pedidos
               </Button>
             </Box>

@@ -16,7 +16,12 @@ export function FavoritesButton({ sx }) {
   const { ids } = useFavorites();
 
   return (
-    <IconButton component={RouterLink} href={paths.favorites} aria-label="Favoritos" sx={sx}>
+    <IconButton
+      component={RouterLink}
+      href={paths.favorites}
+      aria-label="Favoritos"
+      sx={sx}
+    >
       <Badge badgeContent={ids.length} color="error">
         <Iconify icon="solar:heart-bold" />
       </Badge>

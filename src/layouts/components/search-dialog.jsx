@@ -182,11 +182,7 @@ export function SearchDialog({ open, onClose }) {
                   {item.sub}
                 </ScientificName>
               ) : (
-                <Typography
-                  variant="caption"
-                  sx={{ display: 'block', color: 'text.secondary' }}
-                  noWrap
-                >
+                <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }} noWrap>
                   {item.sub}
                 </Typography>
               )}

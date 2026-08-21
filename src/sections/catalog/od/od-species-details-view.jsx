@@ -52,15 +52,7 @@ const paraSx = { m: 0, mb: '20px', fontSize: 16, lineHeight: 1.85 };
 function Panel({ title, children }) {
   return (
     <Box sx={{ border: '1px solid var(--color-divider)', borderRadius: '16px', p: '22px 24px' }}>
-      <Box
-        sx={{
-          mb: 2,
-          fontSize: 10,
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-          color: 'var(--color-neutral-600)',
-        }}
-      >
+      <Box sx={{ mb: 2, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
         {title}
       </Box>
       {children}
@@ -68,25 +60,8 @@ function Panel({ title, children }) {
   );
 }
 
-export function OdSpeciesDetailsView({
-  item,
-  categoryPath = [],
-  related = [],
-  shippingEnabled = true,
-}) {
-  const {
-    species,
-    key,
-    slug,
-    morph,
-    photos,
-    morphs,
-    minPrice,
-    maxPrice,
-    compareAt = null,
-    count = null,
-    taxonPhoto = null,
-  } = item;
+export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true }) {
+  const { species, key, slug, morph, photos, morphs, minPrice, maxPrice, compareAt = null, count = null, taxonPhoto = null } = item;
 
   // Agotado: el listado existe (fotos/descripción de la especie) pero no
   // queda ningún ejemplar disponible para cotizar hoy — mismo criterio que
@@ -142,12 +117,7 @@ export function OdSpeciesDetailsView({
     { label: 'Nombre común', value: species.common_name },
   ].filter((r) => r.value);
 
-  const tags = [
-    formatLabel,
-    species.difficulty,
-    species.rarity,
-    ...morphs.map((m) => m.name),
-  ].filter(Boolean);
+  const tags = [formatLabel, species.difficulty, species.rarity, ...morphs.map((m) => m.name)].filter(Boolean);
 
   const handleAdd = () => {
     cart.add({
@@ -181,49 +151,23 @@ export function OdSpeciesDetailsView({
           color: 'var(--color-neutral-600)',
         }}
       >
-        <Link
-          component={RouterLink}
-          href={paths.root}
-          sx={{
-            color: 'inherit',
-            textDecoration: 'none',
-            '&:hover': { color: 'var(--color-accent-700)' },
-          }}
-        >
+        <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
           Inicio
         </Link>
         <span>/</span>
-        <Link
-          component={RouterLink}
-          href={paths.catalog}
-          sx={{
-            color: 'inherit',
-            textDecoration: 'none',
-            '&:hover': { color: 'var(--color-accent-700)' },
-          }}
-        >
+        <Link component={RouterLink} href={paths.catalog} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
           Catálogo
         </Link>
         {categoryPath.map((g) => (
           <Box key={g.id} component="span" sx={{ display: 'inline-flex', gap: '10px' }}>
             <span>/</span>
-            <Link
-              component={RouterLink}
-              href={paths.catalogCategory(g.slug)}
-              sx={{
-                color: 'inherit',
-                textDecoration: 'none',
-                '&:hover': { color: 'var(--color-accent-700)' },
-              }}
-            >
+            <Link component={RouterLink} href={paths.catalogCategory(g.slug)} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               {g.name}
             </Link>
           </Box>
         ))}
         <span>/</span>
-        <Box component="span" sx={{ color: 'var(--color-text)' }}>
-          {title}
-        </Box>
+        <Box component="span" sx={{ color: 'var(--color-text)' }}>{title}</Box>
       </Box>
 
       {/* Galería + panel de compra */}
@@ -263,14 +207,7 @@ export function OdSpeciesDetailsView({
           </Box>
 
           {gallery.length > 1 && (
-            <Box
-              sx={{
-                mt: '10px',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '10px',
-              }}
-            >
+            <Box sx={{ mt: '10px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
               {gallery.slice(0, 6).map((photo, i) => (
                 <Box
                   key={i}
@@ -284,10 +221,7 @@ export function OdSpeciesDetailsView({
                     borderRadius: '16px',
                     overflow: 'hidden',
                     bgcolor: 'transparent',
-                    border:
-                      i === galIndex
-                        ? '1px solid var(--color-accent)'
-                        : '1px solid var(--color-divider)',
+                    border: i === galIndex ? '1px solid var(--color-accent)' : '1px solid var(--color-divider)',
                     transition: 'border-color 300ms',
                     '&:hover': { borderColor: 'var(--color-accent)' },
                   }}
@@ -320,15 +254,7 @@ export function OdSpeciesDetailsView({
             </Box>
           )}
 
-          <Box
-            sx={{
-              mt: '20px',
-              display: 'flex',
-              alignItems: 'baseline',
-              flexWrap: 'wrap',
-              gap: '14px',
-            }}
-          >
+          <Box sx={{ mt: '20px', display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: '14px' }}>
             <Display component="h1" size="clamp(36px, 4.4vw, 62px)" sx={{ lineHeight: 1.04 }}>
               {title}
             </Display>
@@ -351,21 +277,12 @@ export function OdSpeciesDetailsView({
             )}
           </Box>
 
-          <Box
-            sx={{
-              mt: '10px',
-              fontSize: 17,
-              fontStyle: 'italic',
-              color: 'var(--color-neutral-600)',
-            }}
-          >
+          <Box sx={{ mt: '10px', fontSize: 17, fontStyle: 'italic', color: 'var(--color-neutral-600)' }}>
             {sci}
           </Box>
 
           {excerpt && (
-            <Box sx={{ mt: '26px', fontSize: 15, lineHeight: 1.8, maxWidth: '48ch' }}>
-              {excerpt}
-            </Box>
+            <Box sx={{ mt: '26px', fontSize: 15, lineHeight: 1.8, maxWidth: '48ch' }}>{excerpt}</Box>
           )}
 
           <Box
@@ -381,26 +298,15 @@ export function OdSpeciesDetailsView({
           >
             {leafGroup && (
               <>
-                <Box component="dt" sx={{ color: 'var(--color-neutral-600)' }}>
-                  Grupo
-                </Box>
-                <Box component="dd" sx={{ m: 0 }}>
-                  {leafGroup.name}
-                </Box>
+                <Box component="dt" sx={{ color: 'var(--color-neutral-600)' }}>Grupo</Box>
+                <Box component="dd" sx={{ m: 0 }}>{leafGroup.name}</Box>
               </>
             )}
-            <Box component="dt" sx={{ color: 'var(--color-neutral-600)' }}>
-              Disponibilidad
-            </Box>
-            <Box
-              component="dd"
-              sx={{ m: 0, color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-accent-700)' }}
-            >
+            <Box component="dt" sx={{ color: 'var(--color-neutral-600)' }}>Disponibilidad</Box>
+            <Box component="dd" sx={{ m: 0, color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-accent-700)' }}>
               {soldOut ? 'Agotado' : 'Disponible'}
             </Box>
-            <Box component="dt" sx={{ color: 'var(--color-neutral-600)' }}>
-              Formato
-            </Box>
+            <Box component="dt" sx={{ color: 'var(--color-neutral-600)' }}>Formato</Box>
             <Box component="dd" sx={{ m: 0 }}>
               {formatLabel
                 ? species.sale_format === 'package'
@@ -412,9 +318,7 @@ export function OdSpeciesDetailsView({
 
           {tiers.length > 0 && (
             <Box sx={{ mt: '26px' }}>
-              <Box sx={{ mb: 1.5, fontSize: 13, color: 'var(--color-neutral-600)' }}>
-                Cantidad por paquete
-              </Box>
+              <Box sx={{ mb: 1.5, fontSize: 13, color: 'var(--color-neutral-600)' }}>Cantidad por paquete</Box>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                 {tiers.map((tier, index) => (
                   <Box
@@ -432,17 +336,8 @@ export function OdSpeciesDetailsView({
                       fontVariantNumeric: 'tabular-nums',
                       transition: 'background 300ms, color 300ms, border-color 300ms',
                       ...(index === tierIndex
-                        ? {
-                            bgcolor: 'var(--color-neutral-900)',
-                            color: 'var(--color-neutral-100)',
-                            border: '1px solid var(--color-neutral-900)',
-                          }
-                        : {
-                            bgcolor: 'transparent',
-                            color: 'inherit',
-                            border: '1px solid var(--color-divider)',
-                            '&:hover': { borderColor: 'var(--color-accent)' },
-                          }),
+                        ? { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', border: '1px solid var(--color-neutral-900)' }
+                        : { bgcolor: 'transparent', color: 'inherit', border: '1px solid var(--color-divider)', '&:hover': { borderColor: 'var(--color-accent)' } }),
                     }}
                   >
                     {tier.quantity}
@@ -452,114 +347,44 @@ export function OdSpeciesDetailsView({
             </Box>
           )}
 
-          <Box
-            sx={{
-              mt: '30px',
-              fontFamily: 'var(--font-heading)',
-              fontSize: 40,
-              fontVariantNumeric: 'tabular-nums',
-            }}
-          >
+          <Box sx={{ mt: '30px', fontFamily: 'var(--font-heading)', fontSize: 40, fontVariantNumeric: 'tabular-nums' }}>
             {price == null ? (
               'Consultar'
             ) : (
               <>
                 {!selectedTier && minPrice !== maxPrice && (
-                  <Box
-                    component="span"
-                    sx={{ fontSize: 17, color: 'var(--color-neutral-600)', mr: 1 }}
-                  >
-                    Desde
-                  </Box>
+                  <Box component="span" sx={{ fontSize: 17, color: 'var(--color-neutral-600)', mr: 1 }}>Desde</Box>
                 )}
                 {!selectedTier && compareAt > minPrice && (
-                  <Box
-                    component="span"
-                    sx={{
-                      mr: 1.5,
-                      fontSize: 22,
-                      color: 'var(--color-neutral-500)',
-                      textDecoration: 'line-through',
-                    }}
-                  >
+                  <Box component="span" sx={{ mr: 1.5, fontSize: 22, color: 'var(--color-neutral-500)', textDecoration: 'line-through' }}>
                     {fCurrency(compareAt)}
                   </Box>
                 )}
-                {fCurrency(price)}{' '}
-                <Box
-                  component="span"
-                  sx={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 17,
-                    color: 'var(--color-neutral-600)',
-                  }}
-                >
-                  MXN
-                </Box>
+                {fCurrency(price)} <Box component="span" sx={{ fontFamily: 'var(--font-body)', fontSize: 17, color: 'var(--color-neutral-600)' }}>MXN</Box>
               </>
             )}
           </Box>
 
           {/* Cantidad + agregar */}
-          <Box
-            sx={{
-              mt: '26px',
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '12px',
-              alignItems: 'center',
-            }}
-          >
+          <Box sx={{ mt: '26px', display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
             {!soldOut && (
-              <Box
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  border: '1px solid var(--color-divider)',
-                  borderRadius: '999px',
-                }}
-              >
+              <Box sx={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--color-divider)', borderRadius: '999px' }}>
                 <Box
                   component="button"
                   type="button"
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
                   aria-label="Quitar uno"
-                  sx={{
-                    width: 44,
-                    height: 52,
-                    border: 0,
-                    bgcolor: 'transparent',
-                    cursor: 'pointer',
-                    fontSize: 18,
-                    color: 'inherit',
-                    borderRadius: '999px 0 0 999px',
-                    '&:hover': { bgcolor: 'var(--color-neutral-200)' },
-                  }}
+                  sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '999px 0 0 999px', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}
                 >
                   –
                 </Box>
-                <Box
-                  component="span"
-                  sx={{ minWidth: 30, textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}
-                >
-                  {qty}
-                </Box>
+                <Box component="span" sx={{ minWidth: 30, textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}>{qty}</Box>
                 <Box
                   component="button"
                   type="button"
                   onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
                   aria-label="Agregar uno"
-                  sx={{
-                    width: 44,
-                    height: 52,
-                    border: 0,
-                    bgcolor: 'transparent',
-                    cursor: 'pointer',
-                    fontSize: 18,
-                    color: 'inherit',
-                    borderRadius: '0 999px 999px 0',
-                    '&:hover': { bgcolor: 'var(--color-neutral-200)' },
-                  }}
+                  sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '0 999px 999px 0', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}
                 >
                   +
                 </Box>
@@ -584,9 +409,7 @@ export function OdSpeciesDetailsView({
                 bgcolor: soldOut ? 'var(--color-neutral-300)' : 'var(--color-neutral-900)',
                 color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
                 transition: 'background 350ms, transform 350ms',
-                ...(!soldOut && {
-                  '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-2px)' },
-                }),
+                ...(!soldOut && { '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-2px)' } }),
               }}
             >
               {soldOut ? 'Avísame' : added ? 'Agregado ✓' : 'Agregar a cotización'}
@@ -599,15 +422,7 @@ export function OdSpeciesDetailsView({
             </Box>
           )}
 
-          <Box
-            sx={{
-              mt: '18px',
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '12px',
-              alignItems: 'center',
-            }}
-          >
+          <Box sx={{ mt: '18px', display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
             {CONFIG.whatsapp && (
               <Link
                 href={`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(whatsappText)}`}
@@ -624,10 +439,7 @@ export function OdSpeciesDetailsView({
                   fontSize: 14,
                   textDecoration: 'none',
                   transition: 'border-color 350ms, background 350ms',
-                  '&:hover': {
-                    borderColor: 'var(--color-accent)',
-                    bgcolor: 'var(--color-accent-100)',
-                  },
+                  '&:hover': { borderColor: 'var(--color-accent)', bgcolor: 'var(--color-accent-100)' },
                 }}
               >
                 Preguntar por WhatsApp
@@ -669,9 +481,7 @@ export function OdSpeciesDetailsView({
                 }}
               >
                 <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 19 }}>{info.title}</Box>
-                <Box sx={{ mt: '6px', fontSize: 14, color: 'var(--color-neutral-700)' }}>
-                  {info.description}
-                </Box>
+                <Box sx={{ mt: '6px', fontSize: 14, color: 'var(--color-neutral-700)' }}>{info.description}</Box>
               </Box>
             ))}
           </Box>
@@ -680,53 +490,38 @@ export function OdSpeciesDetailsView({
 
       {/* Ficha de cuidados */}
       {careColumns.length > 0 && (
-        <Box
-          component="section"
-          sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '100px' } }}
-        >
+        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '100px' } }}>
           <OdReveal>
-            <Display size="clamp(28px, 3.2vw, 44px)" weight={400} sx={{ mb: '30px' }}>
-              Ficha de cuidados
-            </Display>
-            <Box
-              sx={{
-                display: 'grid',
-                border: '1px solid var(--color-divider)',
-                borderRadius: '18px',
-                overflow: 'hidden',
-                gridTemplateColumns: {
-                  xs: 'repeat(2, 1fr)',
-                  sm: 'repeat(3, 1fr)',
-                  md: `repeat(${careColumns.length}, 1fr)`,
-                },
-              }}
-            >
-              {careColumns.map((field, i) => (
-                <Box
-                  key={field.key}
-                  sx={{
-                    p: '26px 20px',
-                    borderRight: '1px solid var(--color-divider)',
-                    bgcolor: i % 2 === 0 ? 'var(--color-neutral-200)' : 'var(--color-accent-100)',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      mb: '14px',
-                      fontSize: 10,
-                      letterSpacing: '0.2em',
-                      textTransform: 'uppercase',
-                      color: 'var(--color-neutral-600)',
-                    }}
-                  >
-                    {field.label}
-                  </Box>
-                  <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 22, lineHeight: 1.15 }}>
-                    {species[field.key]}
-                  </Box>
+          <Display size="clamp(28px, 3.2vw, 44px)" weight={400} sx={{ mb: '30px' }}>
+            Ficha de cuidados
+          </Display>
+          <Box
+            sx={{
+              display: 'grid',
+              border: '1px solid var(--color-divider)',
+              borderRadius: '18px',
+              overflow: 'hidden',
+              gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: `repeat(${careColumns.length}, 1fr)` },
+            }}
+          >
+            {careColumns.map((field, i) => (
+              <Box
+                key={field.key}
+                sx={{
+                  p: '26px 20px',
+                  borderRight: '1px solid var(--color-divider)',
+                  bgcolor: i % 2 === 0 ? 'var(--color-neutral-200)' : 'var(--color-accent-100)',
+                }}
+              >
+                <Box sx={{ mb: '14px', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+                  {field.label}
                 </Box>
-              ))}
-            </Box>
+                <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 22, lineHeight: 1.15 }}>
+                  {species[field.key]}
+                </Box>
+              </Box>
+            ))}
+          </Box>
           </OdReveal>
         </Box>
       )}
@@ -749,68 +544,32 @@ export function OdSpeciesDetailsView({
             {sections.length > 0 ? (
               sections.map((section) => (
                 <Box key={section.title} sx={{ mb: '48px', '&:last-of-type': { mb: 0 } }}>
-                  <Box component="p" sx={kickerSx}>
-                    {section.title}
-                  </Box>
-                  {section.text
-                    .split('\n')
-                    .filter(Boolean)
-                    .map((p, idx) => (
-                      <Box component="p" key={idx} sx={paraSx}>
-                        {p}
-                      </Box>
-                    ))}
+                  <Box component="p" sx={kickerSx}>{section.title}</Box>
+                  {section.text.split('\n').filter(Boolean).map((p, idx) => (
+                    <Box component="p" key={idx} sx={paraSx}>{p}</Box>
+                  ))}
                 </Box>
               ))
             ) : (
               <>
-                <Box component="p" sx={kickerSx}>
-                  Descripción general
-                </Box>
+                <Box component="p" sx={kickerSx}>Descripción general</Box>
                 <Box sx={{ fontSize: 15, color: 'var(--color-neutral-600)' }}>
-                  Pronto agregaremos la descripción de esta especie. Pregúntanos por WhatsApp
-                  cualquier duda sobre su cuidado.
+                  Pronto agregaremos la descripción de esta especie. Pregúntanos por WhatsApp cualquier
+                  duda sobre su cuidado.
                 </Box>
               </>
             )}
           </Box>
 
-          <Box
-            component="aside"
-            sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}
-          >
+          <Box component="aside" sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {taxonomy.length > 0 && (
               <Panel title="Taxonomía">
                 {taxonomy.map((row) => (
-                  <Box
-                    key={row.label}
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      gap: 2,
-                      py: '10px',
-                      borderTop: '1px solid var(--color-divider)',
-                    }}
-                  >
-                    <Box
-                      component="span"
-                      sx={{
-                        fontSize: 12,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        color: 'var(--color-neutral-600)',
-                      }}
-                    >
+                  <Box key={row.label} sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, py: '10px', borderTop: '1px solid var(--color-divider)' }}>
+                    <Box component="span" sx={{ fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
                       {row.label}
                     </Box>
-                    <Box
-                      component="span"
-                      sx={{
-                        textAlign: 'right',
-                        fontSize: 14,
-                        fontStyle: row.italic ? 'italic' : 'normal',
-                      }}
-                    >
+                    <Box component="span" sx={{ textAlign: 'right', fontSize: 14, fontStyle: row.italic ? 'italic' : 'normal' }}>
                       {row.value}
                     </Box>
                   </Box>
@@ -828,16 +587,7 @@ export function OdSpeciesDetailsView({
               <Panel title="Etiquetas">
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {tags.map((tag) => (
-                    <Box
-                      key={tag}
-                      sx={{
-                        px: '14px',
-                        py: '5px',
-                        borderRadius: '999px',
-                        fontSize: 13,
-                        bgcolor: 'var(--color-neutral-200)',
-                      }}
-                    >
+                    <Box key={tag} sx={{ px: '14px', py: '5px', borderRadius: '999px', fontSize: 13, bgcolor: 'var(--color-neutral-200)' }}>
                       {tag}
                     </Box>
                   ))}
@@ -850,25 +600,11 @@ export function OdSpeciesDetailsView({
 
       {/* Suele ir con */}
       {related.length > 0 && (
-        <Box
-          component="section"
-          sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 6 }, pb: { xs: 8, md: 12 } }}
-        >
-          <Display
-            size="clamp(26px, 3vw, 40px)"
-            weight={400}
-            sx={{ pb: '22px', borderBottom: '1px solid var(--color-divider)' }}
-          >
+        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 6 }, pb: { xs: 8, md: 12 } }}>
+          <Display size="clamp(26px, 3vw, 40px)" weight={400} sx={{ pb: '22px', borderBottom: '1px solid var(--color-divider)' }}>
             Suele ir con
           </Display>
-          <Box
-            sx={{
-              pt: '34px',
-              display: 'grid',
-              gap: '22px',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-            }}
-          >
+          <Box sx={{ pt: '34px', display: 'grid', gap: '22px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
             {related.slice(0, 4).map((rel, i) => (
               <OdReveal key={rel.key} delay={i * 0.08}>
                 <OdCatalogCard card={animalToCard(rel)} index={i} />
@@ -898,20 +634,10 @@ export function OdSpeciesDetailsView({
         }}
       >
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Box
-            sx={{
-              fontSize: 12,
-              color: 'var(--color-neutral-600)',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
+          <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {title}
           </Box>
-          <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>
-            {price == null ? 'Consultar' : fCurrency(price)}
-          </Box>
+          <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>{price == null ? 'Consultar' : fCurrency(price)}</Box>
         </Box>
         <Box
           component="button"
@@ -928,11 +654,7 @@ export function OdSpeciesDetailsView({
             letterSpacing: '0.06em',
             textTransform: 'uppercase',
             color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
-            bgcolor: soldOut
-              ? 'var(--color-neutral-300)'
-              : added
-                ? 'var(--color-accent-700)'
-                : 'var(--color-neutral-900)',
+            bgcolor: soldOut ? 'var(--color-neutral-300)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)',
             transition: 'background 300ms',
             ...(!soldOut && { '&:hover': { bgcolor: 'var(--color-accent-700)' } }),
           }}

@@ -80,24 +80,15 @@ export async function getAnimal(id) {
 // Respaldo si el API no responde. Son las mismas URLs sembradas en Cloudinary
 // que usa SITE_DEFAULTS del backend: aqui no hay archivos locales que servir.
 const SITE_MEDIA_DEFAULTS = {
-  hero_video_mp4:
-    'https://res.cloudinary.com/dnxavfqhj/video/upload/v1787115691/pukyu6z7wfkpqaifzmor.mp4',
-  hero_video_webm:
-    'https://res.cloudinary.com/dnxavfqhj/video/upload/v1787115692/jjzcsbb3u6nccqmydh9z.webm',
-  hero_poster:
-    'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115694/bbrlmcwkgjngvme9thzu.jpg',
-  moss_tall:
-    'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115695/bfqjr7t2tu5vrl0mdkhr.jpg',
-  moss_wide:
-    'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115697/no2ujblgtav0rjemgpix.jpg',
-  leaf_litter:
-    'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115698/rmkknlujheewmo2isf8l.jpg',
-  terrarium:
-    'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115699/acknugtzwqg7iecawvbu.jpg',
-  isopod_zebra:
-    'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115701/gjcseewc5tclvmflhkpt.png',
-  isopod_cubaris:
-    'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115702/ko1qxvsltrlgb2d6ltjd.png',
+  hero_video_mp4: 'https://res.cloudinary.com/dnxavfqhj/video/upload/v1787115691/pukyu6z7wfkpqaifzmor.mp4',
+  hero_video_webm: 'https://res.cloudinary.com/dnxavfqhj/video/upload/v1787115692/jjzcsbb3u6nccqmydh9z.webm',
+  hero_poster: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115694/bbrlmcwkgjngvme9thzu.jpg',
+  moss_tall: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115695/bfqjr7t2tu5vrl0mdkhr.jpg',
+  moss_wide: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115697/no2ujblgtav0rjemgpix.jpg',
+  leaf_litter: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115698/rmkknlujheewmo2isf8l.jpg',
+  terrarium: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115699/acknugtzwqg7iecawvbu.jpg',
+  isopod_zebra: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115701/gjcseewc5tclvmflhkpt.png',
+  isopod_cubaris: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115702/ko1qxvsltrlgb2d6ltjd.png',
 };
 
 const SITE_DEFAULTS = {
@@ -110,10 +101,7 @@ const SITE_DEFAULTS = {
 // dpr_auto). cdn-image.js ya solo toca /image/upload/, así que los 2 slots de
 // video pasan intactos sin trato especial aquí.
 function withCdnMedia(site) {
-  return {
-    ...site,
-    media: Object.fromEntries(Object.entries(site.media).map(([k, v]) => [k, cdnImage(v)])),
-  };
+  return { ...site, media: Object.fromEntries(Object.entries(site.media).map(([k, v]) => [k, cdnImage(v)])) };
 }
 
 // Ajustes públicos del sitio (p. ej. show_category_browse). Si el API no
@@ -129,11 +117,7 @@ export async function getSiteSettings() {
     // `media`) también se mezcla sobre los defaults: layout.jsx hace
     // site.media.hero_poster en el layout raíz, y un TypeError ahí tumba
     // TODAS las rutas, incluida la 404.
-    return withCdnMedia({
-      ...SITE_DEFAULTS,
-      ...site,
-      media: { ...SITE_MEDIA_DEFAULTS, ...site.media },
-    });
+    return withCdnMedia({ ...SITE_DEFAULTS, ...site, media: { ...SITE_MEDIA_DEFAULTS, ...site.media } });
   } catch {
     return withCdnMedia(SITE_DEFAULTS);
   }
@@ -184,9 +168,7 @@ export async function getArticle(id) {
 // Productos con show_online (insumos de terrario, granel, etc.)
 export async function getProducts() {
   try {
-    const res = await fetch(`${CONFIG.serverUrl}/api/v1/public/products`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(`${CONFIG.serverUrl}/api/v1/public/products`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     return await res.json();
   } catch {
@@ -196,9 +178,7 @@ export async function getProducts() {
 
 export async function getProduct(id) {
   try {
-    const res = await fetch(`${CONFIG.serverUrl}/api/v1/public/products/${id}`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(`${CONFIG.serverUrl}/api/v1/public/products/${id}`, { next: { revalidate: 60 } });
     if (!res.ok) return null;
     return await res.json();
   } catch {

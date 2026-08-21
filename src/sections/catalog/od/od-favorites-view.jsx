@@ -20,29 +20,16 @@ export function OdFavoritesView({ items = [] }) {
   const favorites = items.filter((item) => ids.includes(item.key));
 
   return (
-    <Box
-      component="section"
-      sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}
-    >
+    <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
       <Box className="od-rise">
         <Kicker sx={{ mb: 2.5 }}>Tu selección</Kicker>
-        <Display
-          component="h1"
-          size="clamp(40px, 5.4vw, 76px)"
-          sx={{ lineHeight: 1.02, mb: { xs: 4, md: 6 } }}
-        >
+        <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02, mb: { xs: 4, md: 6 } }}>
           Favoritos
         </Display>
       </Box>
 
       {favorites.length ? (
-        <Box
-          sx={{
-            display: 'grid',
-            gap: '44px 28px',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-          }}
-        >
+        <Box sx={{ display: 'grid', gap: '44px 28px', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
           {favorites.map((item, i) => (
             <OdReveal key={item.key} delay={Math.min(i, 8) * 0.06}>
               <OdCatalogCard card={animalToCard(item)} index={i} />
@@ -51,9 +38,7 @@ export function OdFavoritesView({ items = [] }) {
         </Box>
       ) : (
         <Box sx={{ py: 10, textAlign: 'center' }}>
-          <Box sx={{ mb: 1, fontFamily: 'var(--font-heading)', fontSize: 24 }}>
-            Aún no tienes favoritos
-          </Box>
+          <Box sx={{ mb: 1, fontFamily: 'var(--font-heading)', fontSize: 24 }}>Aún no tienes favoritos</Box>
           <Box sx={{ mb: 4, fontSize: 15, color: 'var(--color-neutral-600)' }}>
             Toca el corazón de cualquier especie del catálogo para guardarla aquí.
           </Box>

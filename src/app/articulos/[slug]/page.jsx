@@ -54,15 +54,14 @@ export default async function Page({ params }) {
     description: article.excerpt ?? undefined,
     image: article.cover_image ?? undefined,
     datePublished: article.published_at,
-    author: article.author_name ? { '@type': 'Person', name: article.author_name } : undefined,
+    author: article.author_name
+      ? { '@type': 'Person', name: article.author_name }
+      : undefined,
   };
 
   return (
     <OdLayout>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <OdArticleDetailView article={article} related={related} />
     </OdLayout>
   );

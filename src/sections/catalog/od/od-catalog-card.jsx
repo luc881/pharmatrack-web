@@ -19,11 +19,7 @@ import { useFavorites } from '../use-favorites';
 const BADGE_VARIANTS = {
   accent: { bgcolor: 'var(--color-accent-400)', color: 'var(--color-accent-900)' },
   neutral: { bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)' },
-  outline: {
-    bgcolor: 'rgba(243,242,242,0.92)',
-    color: 'var(--color-neutral-900)',
-    border: '1px solid var(--color-divider)',
-  },
+  outline: { bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)', border: '1px solid var(--color-divider)' },
 };
 
 const pad3 = (n) => String(n).padStart(3, '0');
@@ -39,25 +35,9 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
   const code = card.codePrefix ? `${card.codePrefix}-${pad3(index + 1)}` : null;
 
   const media = (
-    <Box
-      sx={{
-        position: 'relative',
-        flexShrink: 0,
-        width: horizontal ? { xs: 130, sm: 200 } : '100%',
-        aspectRatio: '1 / 1',
-        overflow: 'hidden',
-        bgcolor: 'var(--color-neutral-200)',
-      }}
-    >
+    <Box sx={{ position: 'relative', flexShrink: 0, width: horizontal ? { xs: 130, sm: 200 } : '100%', aspectRatio: '1 / 1', overflow: 'hidden', bgcolor: 'var(--color-neutral-200)' }}>
       <Box sx={{ position: 'absolute', inset: 0, opacity: soldOut ? 0.55 : 1 }}>
-        <OdImage
-          src={card.image}
-          alt={card.title}
-          label={card.title}
-          ratio="1 / 1"
-          radius={0}
-          sx={{ width: 1, height: 1 }}
-        />
+        <OdImage src={card.image} alt={card.title} label={card.title} ratio="1 / 1" radius={0} sx={{ width: 1, height: 1 }} />
       </Box>
 
       {/* Cortina: segunda foto que baja desde arriba al hover */}
@@ -80,19 +60,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
       )}
 
       {card.badge && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 12,
-            left: 12,
-            px: '12px',
-            py: '5px',
-            fontSize: 11,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            ...BADGE_VARIANTS[card.badgeVariant ?? 'neutral'],
-          }}
-        >
+        <Box sx={{ position: 'absolute', top: 12, left: 12, px: '12px', py: '5px', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', ...BADGE_VARIANTS[card.badgeVariant ?? 'neutral'] }}>
           {card.badge}
         </Box>
       )}
@@ -189,46 +157,17 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
   const info = (
     <Box sx={horizontal ? { minWidth: 0, alignSelf: 'center' } : { mt: '16px' }}>
       <Box sx={{ mb: '10px', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
-        {code && (
-          <Box
-            component="span"
-            sx={{ color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}
-          >
-            {code}&nbsp;&nbsp;|&nbsp;&nbsp;
-          </Box>
-        )}
-        <Box component="span" sx={{ color: 'var(--color-neutral-600)' }}>
-          {card.category}
-        </Box>
+        {code && <Box component="span" sx={{ color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>{code}&nbsp;&nbsp;|&nbsp;&nbsp;</Box>}
+        <Box component="span" sx={{ color: 'var(--color-neutral-600)' }}>{card.category}</Box>
         {card.taxonLabel && (
-          <Box component="span" sx={{ opacity: 0.7 }}>
-            {' '}
-            · {card.taxonLabel}
-          </Box>
+          <Box component="span" sx={{ opacity: 0.7 }}> · {card.taxonLabel}</Box>
         )}
       </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-          gap: '14px',
-        }}
-      >
-        <Box
-          component="h3"
-          sx={{
-            m: 0,
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 500,
-            fontSize: horizontal ? 22 : 20,
-          }}
-        >
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '14px' }}>
+        <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: horizontal ? 22 : 20 }}>
           {card.title}
         </Box>
-        <Box sx={{ fontSize: 14, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>
-          {card.price}
-        </Box>
+        <Box sx={{ fontSize: 14, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{card.price}</Box>
       </Box>
     </Box>
   );
@@ -246,11 +185,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
         '--od-h': 0,
         '&:hover': { '--od-h': 1 },
         '&:hover .od-img-zoom': { transform: 'scale(1.06)' },
-        ...(horizontal && {
-          alignItems: 'stretch',
-          py: 2.5,
-          borderBottom: '1px solid var(--color-divider)',
-        }),
+        ...(horizontal && { alignItems: 'stretch', py: 2.5, borderBottom: '1px solid var(--color-divider)' }),
       }}
     >
       {media}

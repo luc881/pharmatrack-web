@@ -75,48 +75,21 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
       }}
     >
       {/* Columna izquierda: cerrar + enlaces grandes */}
-      <Box
-        sx={{ display: 'flex', flexDirection: 'column', p: { xs: '28px 22px', md: '40px 46px' } }}
-      >
+      <Box sx={{ display: 'flex', flexDirection: 'column', p: { xs: '28px 22px', md: '40px 46px' } }}>
         <Box
           component="button"
           type="button"
           onClick={onClose}
           aria-label="Cerrar menú"
-          sx={{
-            alignSelf: 'flex-start',
-            border: 0,
-            bgcolor: 'transparent',
-            cursor: 'pointer',
-            font: 'inherit',
-            color: 'inherit',
-            fontSize: 12,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            transition: 'color 300ms',
-            '&:hover': { color: 'var(--color-accent-300)' },
-          }}
+          sx={{ alignSelf: 'flex-start', border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', color: 'inherit', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', transition: 'color 300ms', '&:hover': { color: 'var(--color-accent-300)' } }}
         >
           Cerrar ✕
         </Box>
 
         <Box sx={{ mt: 'auto', pt: { xs: 5, md: 5 } }}>
           <Box sx={{ borderBottom: '1px solid rgba(240,235,224,0.16)' }}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 1.5,
-                py: 1.5,
-              }}
-            >
-              <Link
-                component={RouterLink}
-                href={paths.catalog}
-                onClick={onClose}
-                sx={{ ...bigLinkSx, flex: 1, borderBottom: 0, py: 0 }}
-              >
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1.5, py: 1.5 }}>
+              <Link component={RouterLink} href={paths.catalog} onClick={onClose} sx={{ ...bigLinkSx, flex: 1, borderBottom: 0, py: 0 }}>
                 Catálogo
               </Link>
               {subcats.length > 0 && (
@@ -126,45 +99,16 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
                   onClick={() => setSubOpen((v) => !v)}
                   aria-expanded={subOpen}
                   aria-label="Mostrar categorías"
-                  sx={{
-                    border: 0,
-                    bgcolor: 'transparent',
-                    cursor: 'pointer',
-                    color: 'inherit',
-                    fontSize: 20,
-                    p: 1.25,
-                    transform: subOpen ? 'rotate(180deg)' : 'none',
-                    transition: 'transform 300ms',
-                  }}
+                  sx={{ border: 0, bgcolor: 'transparent', cursor: 'pointer', color: 'inherit', fontSize: 20, p: 1.25, transform: subOpen ? 'rotate(180deg)' : 'none', transition: 'transform 300ms' }}
                 >
                   ⌄
                 </Box>
               )}
             </Box>
             {subOpen && subcats.length > 0 && (
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  pb: 2,
-                  pl: 0.75,
-                  animation: 'odFade 0.3s ease both',
-                }}
-              >
+              <Box sx={{ display: 'flex', flexDirection: 'column', pb: 2, pl: 0.75, animation: 'odFade 0.3s ease both' }}>
                 {subcats.map((c) => (
-                  <Link
-                    key={c.slug}
-                    component={RouterLink}
-                    href={paths.catalogCategory(c.slug)}
-                    onClick={onClose}
-                    sx={{
-                      py: 1.25,
-                      fontSize: 16,
-                      color: 'var(--color-neutral-300)',
-                      textDecoration: 'none',
-                      '&:hover': { color: 'var(--color-neutral-100)' },
-                    }}
-                  >
+                  <Link key={c.slug} component={RouterLink} href={paths.catalogCategory(c.slug)} onClick={onClose} sx={{ py: 1.25, fontSize: 16, color: 'var(--color-neutral-300)', textDecoration: 'none', '&:hover': { color: 'var(--color-neutral-100)' } }}>
                     {c.title}
                   </Link>
                 ))}
@@ -185,16 +129,7 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
       </Box>
 
       {/* Columna derecha: enlaces secundarios + buscar */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          gap: 3.25,
-          p: { xs: '28px 22px 40px', md: '40px 46px' },
-          borderLeft: { md: '1px solid rgba(240,235,224,0.16)' },
-        }}
-      >
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 3.25, p: { xs: '28px 22px 40px', md: '40px 46px' }, borderLeft: { md: '1px solid rgba(240,235,224,0.16)' } }}>
         <Box sx={{ display: 'grid', gap: 1.75, fontSize: 15 }}>
           <Link component={RouterLink} href={paths.breeding} onClick={onClose} sx={smallLinkSx}>
             El criadero
@@ -212,32 +147,12 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
             Términos y privacidad
           </Link>
           {onSearch && (
-            <Box
-              component="button"
-              type="button"
-              onClick={onSearch}
-              sx={{
-                justifySelf: 'start',
-                border: 0,
-                bgcolor: 'transparent',
-                p: 0,
-                cursor: 'pointer',
-                font: 'inherit',
-                ...smallLinkSx,
-              }}
-            >
+            <Box component="button" type="button" onClick={onSearch} sx={{ justifySelf: 'start', border: 0, bgcolor: 'transparent', p: 0, cursor: 'pointer', font: 'inherit', ...smallLinkSx }}>
               Buscar
             </Box>
           )}
         </Box>
-        <Box
-          sx={{
-            fontSize: 12,
-            letterSpacing: '0.16em',
-            textTransform: 'uppercase',
-            color: 'var(--color-neutral-500)',
-          }}
-        >
+        <Box sx={{ fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
           Ciudad de México · Entrega en persona
         </Box>
       </Box>

@@ -24,13 +24,7 @@ function BodySection({ section, id }) {
       <Box
         component="h2"
         id={id}
-        sx={{
-          m: '46px 0 16px',
-          fontFamily: 'var(--font-heading)',
-          fontWeight: 400,
-          fontSize: 30,
-          scrollMarginTop: '130px',
-        }}
+        sx={{ m: '46px 0 16px', fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 30, scrollMarginTop: '130px' }}
       >
         {section.content}
       </Box>
@@ -57,28 +51,16 @@ function BodySection({ section, id }) {
   if (section.type === 'image') {
     return (
       <Box component="figure" sx={{ m: '30px 0' }}>
-        <OdImage
-          src={section.src}
-          alt={section.caption || ''}
-          label={section.caption || ''}
-          ratio="16 / 9"
-        />
+        <OdImage src={section.src} alt={section.caption || ''} label={section.caption || ''} ratio="16 / 9" />
         {section.caption && (
-          <Box
-            component="figcaption"
-            sx={{ mt: 1, fontSize: 12, fontStyle: 'italic', color: 'var(--color-neutral-600)' }}
-          >
+          <Box component="figcaption" sx={{ mt: 1, fontSize: 12, fontStyle: 'italic', color: 'var(--color-neutral-600)' }}>
             {section.caption}
           </Box>
         )}
       </Box>
     );
   }
-  return (
-    <Box component="p" sx={paraSx}>
-      {section.content}
-    </Box>
-  );
+  return <Box component="p" sx={paraSx}>{section.content}</Box>;
 }
 
 export function OdArticleDetailView({ article, related = [] }) {
@@ -89,37 +71,13 @@ export function OdArticleDetailView({ article, related = [] }) {
     .map((section, index) => ({ section, index }))
     .filter(({ section }) => section.type === 'subheading');
 
-  const metaBits = [
-    'Opuntia Den',
-    fArticleDate(article.published_at),
-    article.reading_minutes != null ? `${article.reading_minutes} min` : null,
-  ].filter(Boolean);
+  const metaBits = ['Opuntia Den', fArticleDate(article.published_at), article.reading_minutes != null ? `${article.reading_minutes} min` : null].filter(Boolean);
 
   return (
     <article>
       {/* Encabezado centrado */}
-      <Box
-        component="section"
-        className="od-rise"
-        sx={{
-          maxWidth: 900,
-          mx: 'auto',
-          px: { xs: '18px', md: '40px' },
-          pt: { xs: 5, md: 8 },
-          pb: 4,
-          textAlign: 'center',
-        }}
-      >
-        <Box
-          sx={{
-            mb: 2.5,
-            fontSize: 11,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--color-accent-700)',
-            fontVariantNumeric: 'tabular-nums',
-          }}
-        >
+      <Box component="section" className="od-rise" sx={{ maxWidth: 900, mx: 'auto', px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 8 }, pb: 4, textAlign: 'center' }}>
+        <Box sx={{ mb: 2.5, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>
           ART-{String(article.id).padStart(3, '0')}
           {article.category ? ` · ${article.category}` : ''}
         </Box>
@@ -127,28 +85,11 @@ export function OdArticleDetailView({ article, related = [] }) {
           {article.title}
         </Display>
         {article.excerpt && (
-          <Box
-            sx={{
-              mt: '26px',
-              mx: 'auto',
-              maxWidth: '54ch',
-              fontSize: 17,
-              lineHeight: 1.7,
-              opacity: 0.78,
-            }}
-          >
+          <Box sx={{ mt: '26px', mx: 'auto', maxWidth: '54ch', fontSize: 17, lineHeight: 1.7, opacity: 0.78 }}>
             {article.excerpt}
           </Box>
         )}
-        <Box
-          sx={{
-            mt: '28px',
-            fontSize: 12,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: 'var(--color-neutral-600)',
-          }}
-        >
+        <Box sx={{ mt: '28px', fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
           {metaBits.join(' · ')}
         </Box>
       </Box>
@@ -197,11 +138,7 @@ export function OdArticleDetailView({ article, related = [] }) {
                   key={index}
                   component="a"
                   href={`#sec-${index}`}
-                  sx={{
-                    color: 'inherit',
-                    textDecoration: 'none',
-                    '&:hover': { color: 'var(--color-accent-700)' },
-                  }}
+                  sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}
                 >
                   {pad2(i + 1)} {section.content}
                 </Box>
@@ -212,35 +149,13 @@ export function OdArticleDetailView({ article, related = [] }) {
 
         <OdReveal sx={{ maxWidth: '68ch' }}>
           {sections.map((section, index) => (
-            <BodySection
-              key={index}
-              section={section}
-              id={section.type === 'subheading' ? `sec-${index}` : undefined}
-            />
+            <BodySection key={index} section={section} id={section.type === 'subheading' ? `sec-${index}` : undefined} />
           ))}
 
           {(article.tags ?? []).length > 0 && (
-            <Box
-              sx={{
-                mt: '40px',
-                pt: '24px',
-                borderTop: '1px solid var(--color-divider)',
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '8px',
-              }}
-            >
+            <Box sx={{ mt: '40px', pt: '24px', borderTop: '1px solid var(--color-divider)', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               {article.tags.map((tag) => (
-                <Box
-                  key={tag}
-                  sx={{
-                    px: '14px',
-                    py: '5px',
-                    borderRadius: '999px',
-                    fontSize: 13,
-                    bgcolor: 'var(--color-neutral-200)',
-                  }}
-                >
+                <Box key={tag} sx={{ px: '14px', py: '5px', borderRadius: '999px', fontSize: 13, bgcolor: 'var(--color-neutral-200)' }}>
                   {tag}
                 </Box>
               ))}
@@ -253,31 +168,12 @@ export function OdArticleDetailView({ article, related = [] }) {
       {related.length > 0 && (
         <Box
           component="section"
-          sx={{
-            maxWidth: 1180,
-            mx: 'auto',
-            mt: { xs: 4, md: 5 },
-            px: { xs: '18px', md: '40px' },
-            pt: { xs: 7, md: '70px' },
-            pb: { xs: 8, md: 12 },
-            borderTop: '1px solid var(--color-divider)',
-          }}
+          sx={{ maxWidth: 1180, mx: 'auto', mt: { xs: 4, md: 5 }, px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '70px' }, pb: { xs: 8, md: 12 }, borderTop: '1px solid var(--color-divider)' }}
         >
-          <Display
-            size="clamp(26px, 3vw, 40px)"
-            weight={400}
-            sx={{ pb: '22px', borderBottom: '1px solid var(--color-divider)' }}
-          >
+          <Display size="clamp(26px, 3vw, 40px)" weight={400} sx={{ pb: '22px', borderBottom: '1px solid var(--color-divider)' }}>
             Sigue leyendo
           </Display>
-          <Box
-            sx={{
-              pt: '34px',
-              display: 'grid',
-              gap: '28px',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-            }}
-          >
+          <Box sx={{ pt: '34px', display: 'grid', gap: '28px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
             {related.map((item, i) => (
               <OdReveal key={item.id} delay={i * 0.08}>
                 <OdArticleCard article={item} />

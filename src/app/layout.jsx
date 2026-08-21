@@ -35,7 +35,8 @@ export const metadata = {
     default: `${CONFIG.appName} — Animales exóticos`,
     template: `%s | ${CONFIG.appName}`,
   },
-  description: 'Tienda de animales exóticos: tarántulas, reptiles y más, con procedencia legal.',
+  description:
+    'Tienda de animales exóticos: tarántulas, reptiles y más, con procedencia legal.',
   icons: [
     { rel: 'icon', url: `${CONFIG.assetsDir}/logo/opuntia-favicon.png`, type: 'image/png' },
     { rel: 'shortcut icon', url: `${CONFIG.assetsDir}/favicon.ico` },
@@ -92,7 +93,9 @@ export default async function RootLayout({ children }) {
                 <SessionProvider>
                   <AccountSync />
                   <NavCategoriesProvider categories={navCategories}>
-                    <SiteSettingsProvider site={site}>{children}</SiteSettingsProvider>
+                    <SiteSettingsProvider site={site}>
+                      {children}
+                    </SiteSettingsProvider>
                   </NavCategoriesProvider>
                 </SessionProvider>
               </MotionLazy>

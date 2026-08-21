@@ -57,40 +57,16 @@ export default function Page() {
             {STEPS.map((s) => (
               <Box key={s.title} sx={{ py: 3, borderBottom: '1px solid var(--color-divider)' }}>
                 <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 22 }}>{s.title}</Box>
-                <Box
-                  sx={{
-                    mt: 1,
-                    fontSize: 16,
-                    lineHeight: 1.8,
-                    color: 'var(--color-neutral-700)',
-                    textWrap: 'pretty',
-                  }}
-                >
+                <Box sx={{ mt: 1, fontSize: 16, lineHeight: 1.8, color: 'var(--color-neutral-700)', textWrap: 'pretty' }}>
                   {s.body}
                 </Box>
               </Box>
             ))}
           </Box>
 
-          <Box
-            component="aside"
-            sx={{
-              p: { xs: 3, md: '30px 32px' },
-              border: '1px solid var(--color-divider)',
-              borderRadius: '16px',
-            }}
-          >
-            <Box
-              sx={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 40,
-                fontVariantNumeric: 'tabular-nums',
-              }}
-            >
-              $250{' '}
-              <Box component="span" sx={{ fontSize: 16, color: 'var(--color-neutral-600)' }}>
-                MXN
-              </Box>
+          <Box component="aside" sx={{ p: { xs: 3, md: '30px 32px' }, border: '1px solid var(--color-divider)', borderRadius: '16px' }}>
+            <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 40, fontVariantNumeric: 'tabular-nums' }}>
+              $250 <Box component="span" sx={{ fontSize: 16, color: 'var(--color-neutral-600)' }}>MXN</Box>
             </Box>
             <Box sx={{ mt: 1, mb: 3, fontSize: 14, color: 'var(--color-neutral-700)' }}>
               30 minutos. Se descuenta si compras el mismo día.

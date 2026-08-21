@@ -2,13 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { OdLayout } from 'src/layouts/od/od-layout';
-import {
-  getAnimal,
-  getGroups,
-  getAnimals,
-  getSiteSettings,
-  getSpeciesCatalog,
-} from 'src/lib/public-api';
+import { getAnimal, getGroups, getAnimals, getSiteSettings, getSpeciesCatalog } from 'src/lib/public-api';
 
 import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
 import { OdSpeciesDetailsView } from 'src/sections/catalog/od/od-species-details-view';
@@ -45,11 +39,7 @@ const findListing = (listings, parsed) => {
 };
 
 async function loadCatalog() {
-  const [{ data: animals }, groups, taxa] = await Promise.all([
-    getAnimals(),
-    getGroups(),
-    getSpeciesCatalog(),
-  ]);
+  const [{ data: animals }, groups, taxa] = await Promise.all([getAnimals(), getGroups(), getSpeciesCatalog()]);
   return {
     groups,
     listings: buildListings(animals, taxa),
@@ -87,9 +77,7 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title,
         description,
-        ...((item.photos[0] ?? item.taxonPhoto)
-          ? { images: [item.photos[0] ?? item.taxonPhoto] }
-          : {}),
+        ...(item.photos[0] ?? item.taxonPhoto ? { images: [item.photos[0] ?? item.taxonPhoto] } : {}),
       },
     };
   }
@@ -137,13 +125,8 @@ export default async function Page({ params }) {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: item.title,
-      description:
-        item.description ?? `${scientificName(item.species)} en venta en ${CONFIG.appName}.`,
-      ...(item.photos.length
-        ? { image: item.photos }
-        : item.taxonPhoto
-          ? { image: [item.taxonPhoto] }
-          : {}),
+      description: item.description ?? `${scientificName(item.species)} en venta en ${CONFIG.appName}.`,
+      ...(item.photos.length ? { image: item.photos } : item.taxonPhoto ? { image: [item.taxonPhoto] } : {}),
       // AggregateOffer exige lowPrice/highPrice: sin ejemplares (minPrice
       // null) el bloque completo se omite en vez de publicar un dato
       // estructurado inválido.
@@ -155,8 +138,7 @@ export default async function Page({ params }) {
               lowPrice: item.minPrice,
               highPrice: item.maxPrice,
               priceCurrency: 'MXN',
-              availability:
-                item.count > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+              availability: item.count > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
               url: `${CONFIG.siteUrl}/catalogo/${item.slug}`,
             },
           }),

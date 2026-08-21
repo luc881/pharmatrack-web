@@ -147,10 +147,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
   const [seg, setSeg] = useState('all');
 
   const maxPrice = useMemo(
-    () =>
-      Math.ceil(
-        Math.max(0, ...items.map((i) => i.maxPrice), ...products.map((p) => p.price_retail))
-      ),
+    () => Math.ceil(Math.max(0, ...items.map((i) => i.maxPrice), ...products.map((p) => p.price_retail))),
     [items, products]
   );
   const [range, setRange] = useState([0, maxPrice]);
@@ -234,15 +231,9 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
   // Chips activos: cada uno limpia su propio filtro
   const priceFull = range[0] === 0 && range[1] === maxPrice;
   const chips = [
-    seg !== 'all' && {
-      label: segments.find((s) => s.key === seg)?.label,
-      clear: () => setSeg('all'),
-    },
+    seg !== 'all' && { label: segments.find((s) => s.key === seg)?.label, clear: () => setSeg('all') },
     level !== 'all' && { label: level, clear: () => setLevel('all') },
-    !priceFull && {
-      label: `${fCurrency(range[0])} – ${fCurrency(range[1])}`,
-      clear: () => setRange([0, maxPrice]),
-    },
+    !priceFull && { label: `${fCurrency(range[0])} – ${fCurrency(range[1])}`, clear: () => setRange([0, maxPrice]) },
   ].filter(Boolean);
   const clearAll = () => {
     setSeg('all');
@@ -263,44 +254,20 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           px: { xs: '18px', md: '40px' },
           pt: { xs: 5, md: 8 },
           pb: { xs: 4, md: 5 },
-          // banda mas profunda que el fondo de la pagina: separa la portada
-          // del cuerpo sin necesidad de una linea
+          // banda mas profunda que el fondo de la pagina: separa la portada del
+          // cuerpo sin necesidad de una linea
           bgcolor: 'var(--color-surface)',
           borderBottom: '1px solid var(--color-divider)',
         }}
       >
-        <Box
-          sx={{
-            mb: 2,
-            fontSize: 11,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: 'var(--color-neutral-600)',
-          }}
-        >
-          <Link
-            component={RouterLink}
-            href={paths.root}
-            sx={{
-              color: 'inherit',
-              textDecoration: 'none',
-              '&:hover': { color: 'var(--color-accent-700)' },
-            }}
-          >
+        <Box sx={{ mb: 2, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+          <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
             Inicio
           </Link>
           {' / '}
           {category ? (
             <>
-              <Link
-                component={RouterLink}
-                href={paths.catalog}
-                sx={{
-                  color: 'inherit',
-                  textDecoration: 'none',
-                  '&:hover': { color: 'var(--color-accent-700)' },
-                }}
-              >
+              <Link component={RouterLink} href={paths.catalog} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
                 Catálogo
               </Link>
               {` / ${category.name}`}
@@ -322,9 +289,9 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
 
       {/* Cuerpo: barra lateral fija + rejilla */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' } }}>
-        {/* La columna, no el <aside>: el aside es sticky y solo mide lo que
-            ocupan sus filtros, asi que pintarlo a el dejaria el panel cortado
-            a media pagina. El color va aqui y el sticky vive dentro. */}
+        {/* El color va en la celda de la rejilla, no en el <aside>: el aside es
+            sticky y solo mide lo que ocupan sus filtros, asi que pintarlo a el
+            dejaria el panel cortado a media pagina. */}
         <Box
           sx={{
             bgcolor: 'var(--color-neutral-100)',
@@ -342,165 +309,116 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
               top: { md: 130 },
             }}
           >
-            <Box
-              sx={{
-                mb: 2,
-                fontSize: 10,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'var(--color-neutral-600)',
-              }}
-            >
-              Categoría
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: { xs: 'row', md: 'column' },
-                flexWrap: { xs: 'wrap', md: 'nowrap' },
-                gap: { xs: '8px', md: 0 },
-                border: { md: '1px solid var(--color-divider)' },
-                borderRadius: { md: '14px' },
-                overflow: 'hidden',
-              }}
-            >
-              {segments.map((s, idx) => {
-                const active = seg === s.key;
-                return (
-                  <Box
-                    key={s.key}
-                    component="button"
-                    type="button"
-                    onClick={() => setSeg(s.key)}
-                    sx={{
-                      cursor: 'pointer',
-                      font: 'inherit',
-                      fontSize: 12,
-                      textAlign: 'left',
-                      letterSpacing: '0.06em',
-                      textTransform: 'uppercase',
-                      px: '14px',
-                      py: '11px',
-                      borderRadius: { xs: '999px', md: 0 },
-                      border: { xs: '1px solid var(--color-divider)', md: 0 },
-                      borderTop: { md: idx === 0 ? 0 : '1px solid var(--color-divider)' },
-                      transition: 'background 300ms, color 300ms',
-                      ...(active
-                        ? { bgcolor: 'var(--color-accent-600)', color: '#fff' }
-                        : {
-                            bgcolor: 'transparent',
-                            color: 'inherit',
-                            '&:hover': { bgcolor: 'var(--color-accent-100)' },
-                          }),
-                    }}
-                  >
-                    {s.label}
-                  </Box>
-                );
-              })}
-            </Box>
-
-            {levels.length > 0 && (
-              <>
+          <Box sx={{ mb: 2, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+            Categoría
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'row', md: 'column' },
+              flexWrap: { xs: 'wrap', md: 'nowrap' },
+              gap: { xs: '8px', md: 0 },
+              border: { md: '1px solid var(--color-divider)' },
+              borderRadius: { md: '14px' },
+              overflow: 'hidden',
+            }}
+          >
+            {segments.map((s, idx) => {
+              const active = seg === s.key;
+              return (
                 <Box
+                  key={s.key}
+                  component="button"
+                  type="button"
+                  onClick={() => setSeg(s.key)}
                   sx={{
-                    mt: 4.5,
-                    mb: 1.5,
-                    fontSize: 10,
-                    letterSpacing: '0.22em',
+                    cursor: 'pointer',
+                    font: 'inherit',
+                    fontSize: 12,
+                    textAlign: 'left',
+                    letterSpacing: '0.06em',
                     textTransform: 'uppercase',
-                    color: 'var(--color-neutral-600)',
+                    px: '14px',
+                    py: '11px',
+                    borderRadius: { xs: '999px', md: 0 },
+                    border: { xs: '1px solid var(--color-divider)', md: 0 },
+                    borderTop: { md: idx === 0 ? 0 : '1px solid var(--color-divider)' },
+                    transition: 'background 300ms, color 300ms',
+                    ...(active
+                      ? { bgcolor: 'var(--color-accent-600)', color: '#fff' }
+                      : { bgcolor: 'transparent', color: 'inherit', '&:hover': { bgcolor: 'var(--color-accent-100)' } }),
                   }}
                 >
-                  Nivel
+                  {s.label}
                 </Box>
-                <Box
-                  role="radiogroup"
-                  aria-label="Nivel"
-                  sx={{
-                    display: 'flex',
-                    flexWrap: { xs: 'wrap', md: 'nowrap' },
-                    flexDirection: { md: 'column' },
-                    gap: { xs: '8px', md: '10px' },
-                    fontSize: 13,
-                  }}
-                >
-                  {[
-                    { v: 'all', label: 'Cualquiera' },
-                    ...levels.map((l) => ({ v: l, label: l })),
-                  ].map((opt) => {
-                    const active = level === opt.v;
-                    return (
-                      <Box
-                        key={opt.v}
-                        component="button"
-                        type="button"
-                        onClick={() => setLevel(opt.v)}
-                        aria-pressed={active}
-                        sx={{
-                          cursor: 'pointer',
-                          font: 'inherit',
-                          fontSize: 13,
-                          textAlign: 'left',
-                          px: { xs: '12px', md: 0 },
-                          py: { xs: '7px', md: 0 },
-                          border: { xs: '1px solid var(--color-divider)', md: 0 },
-                          borderRadius: { xs: '999px', md: 0 },
-                          bgcolor: 'transparent',
-                          transition: 'color 250ms',
-                          color: active ? 'var(--color-accent-700)' : 'inherit',
-                          '&:hover': { color: 'var(--color-accent-700)' },
-                          '&::before': {
-                            content: '""',
-                            display: { xs: 'none', md: 'inline-block' },
-                            width: 8,
-                            height: 8,
-                            mr: 1.25,
-                            borderRadius: '999px',
-                            verticalAlign: 'middle',
-                            bgcolor: active ? 'var(--color-accent)' : 'transparent',
-                            boxShadow: active ? 'none' : 'inset 0 0 0 1px var(--color-neutral-500)',
-                          },
-                        }}
-                      >
-                        {opt.label}
-                      </Box>
-                    );
-                  })}
-                </Box>
-              </>
-            )}
+              );
+            })}
+          </Box>
 
-            <Box
-              sx={{
-                mt: 4.5,
-                mb: 1.5,
-                fontSize: 10,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'var(--color-neutral-600)',
-              }}
-            >
-              Precio
-            </Box>
-            <Slider
-              size="small"
-              value={range}
-              min={0}
-              max={maxPrice}
-              onChange={(_, v) => setRange(v)}
-              valueLabelDisplay="off"
-              sx={{ color: 'var(--color-accent)', maxWidth: { xs: 260, md: '100%' } }}
-            />
-            <Box
-              sx={{
-                fontSize: 12,
-                color: 'var(--color-neutral-600)',
-                fontVariantNumeric: 'tabular-nums',
-              }}
-            >
-              {fCurrency(range[0])} – {fCurrency(range[1])} MXN
-            </Box>
+          {levels.length > 0 && (
+            <>
+              <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+                Nivel
+              </Box>
+              <Box role="radiogroup" aria-label="Nivel" sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' }, flexDirection: { md: 'column' }, gap: { xs: '8px', md: '10px' }, fontSize: 13 }}>
+                {[{ v: 'all', label: 'Cualquiera' }, ...levels.map((l) => ({ v: l, label: l }))].map((opt) => {
+                  const active = level === opt.v;
+                  return (
+                    <Box
+                      key={opt.v}
+                      component="button"
+                      type="button"
+                      onClick={() => setLevel(opt.v)}
+                      aria-pressed={active}
+                      sx={{
+                        cursor: 'pointer',
+                        font: 'inherit',
+                        fontSize: 13,
+                        textAlign: 'left',
+                        px: { xs: '12px', md: 0 },
+                        py: { xs: '7px', md: 0 },
+                        border: { xs: '1px solid var(--color-divider)', md: 0 },
+                        borderRadius: { xs: '999px', md: 0 },
+                        bgcolor: 'transparent',
+                        transition: 'color 250ms',
+                        color: active ? 'var(--color-accent-700)' : 'inherit',
+                        '&:hover': { color: 'var(--color-accent-700)' },
+                        '&::before': {
+                          content: '""',
+                          display: { xs: 'none', md: 'inline-block' },
+                          width: 8,
+                          height: 8,
+                          mr: 1.25,
+                          borderRadius: '999px',
+                          verticalAlign: 'middle',
+                          bgcolor: active ? 'var(--color-accent)' : 'transparent',
+                          boxShadow: active ? 'none' : 'inset 0 0 0 1px var(--color-neutral-500)',
+                        },
+                      }}
+                    >
+                      {opt.label}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </>
+          )}
+
+          <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+            Precio
+          </Box>
+          <Slider
+            size="small"
+            value={range}
+            min={0}
+            max={maxPrice}
+            onChange={(_, v) => setRange(v)}
+            valueLabelDisplay="off"
+            sx={{ color: 'var(--color-accent)', maxWidth: { xs: 260, md: '100%' } }}
+          />
+          <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
+            {fCurrency(range[0])} – {fCurrency(range[1])} MXN
+          </Box>
           </Box>
         </Box>
 
@@ -548,17 +466,8 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                 <option value="stock">Disponibilidad</option>
               </Box>
               {/* Toggle de vista: cuadrícula / dos columnas / filas */}
-              <Box component="span" sx={{ display: { xs: 'none', sm: 'block' } }}>
-                Ver
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  border: '1px solid var(--color-divider)',
-                  borderRadius: '999px',
-                  overflow: 'hidden',
-                }}
-              >
+              <Box component="span" sx={{ display: { xs: 'none', sm: 'block' } }}>Ver</Box>
+              <Box sx={{ display: 'flex', border: '1px solid var(--color-divider)', borderRadius: '999px', overflow: 'hidden' }}>
                 {VIEWS.map((v) => (
                   <Box
                     key={v.key}
@@ -577,11 +486,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                       transition: 'background 250ms, color 250ms',
                       ...(view === v.key
                         ? { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' }
-                        : {
-                            bgcolor: 'transparent',
-                            color: 'var(--color-neutral-600)',
-                            '&:hover': { bgcolor: 'var(--color-accent-100)' },
-                          }),
+                        : { bgcolor: 'transparent', color: 'var(--color-neutral-600)', '&:hover': { bgcolor: 'var(--color-accent-100)' } }),
                     }}
                   >
                     <Iconify icon={v.icon} width={16} />
@@ -593,18 +498,8 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
 
           {/* Chips activos */}
           {chips.length > 0 && (
-            <Box
-              sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexWrap: 'wrap', pt: 2.5 }}
-            >
-              <Box
-                component="span"
-                sx={{
-                  fontSize: 11,
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-neutral-600)',
-                }}
-              >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexWrap: 'wrap', pt: 2.5 }}>
+              <Box component="span" sx={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
                 Filtros
               </Box>
               {chips.map((c) => (
@@ -627,10 +522,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                     bgcolor: 'transparent',
                     color: 'inherit',
                     transition: 'border-color 250ms, color 250ms',
-                    '&:hover': {
-                      borderColor: 'var(--color-accent)',
-                      color: 'var(--color-accent-700)',
-                    },
+                    '&:hover': { borderColor: 'var(--color-accent)', color: 'var(--color-accent-700)' },
                   }}
                 >
                   {c.label} ✕
@@ -640,17 +532,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                 component="button"
                 type="button"
                 onClick={clearAll}
-                sx={{
-                  border: 0,
-                  bgcolor: 'transparent',
-                  cursor: 'pointer',
-                  font: 'inherit',
-                  fontSize: 12,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-neutral-600)',
-                  '&:hover': { color: 'var(--color-accent-700)' },
-                }}
+                sx={{ border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', '&:hover': { color: 'var(--color-accent-700)' } }}
               >
                 Limpiar todo
               </Box>
@@ -664,10 +546,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                   pt: view === 'list' ? 2 : 5,
                   display: 'grid',
                   gap: view === 'list' ? 0 : '44px 28px',
-                  gridTemplateColumns: {
-                    xs: view === 'list' ? '1fr' : 'repeat(auto-fill, minmax(160px, 1fr))',
-                    md: GRID_COLUMNS[view],
-                  },
+                  gridTemplateColumns: { xs: view === 'list' ? '1fr' : 'repeat(auto-fill, minmax(160px, 1fr))', md: GRID_COLUMNS[view] },
                 }}
               >
                 {visible.map((card, i) => (
@@ -703,17 +582,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                     component="button"
                     type="button"
                     onClick={clearAll}
-                    sx={{
-                      cursor: 'pointer',
-                      font: 'inherit',
-                      fontSize: 13,
-                      px: '30px',
-                      py: '14px',
-                      border: 0,
-                      bgcolor: 'var(--color-neutral-900)',
-                      color: 'var(--color-neutral-100)',
-                      '&:hover': { bgcolor: 'var(--color-accent-700)' },
-                    }}
+                    sx={{ cursor: 'pointer', font: 'inherit', fontSize: 13, px: '30px', py: '14px', border: 0, bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', '&:hover': { bgcolor: 'var(--color-accent-700)' } }}
                   >
                     Limpiar filtros
                   </Box>

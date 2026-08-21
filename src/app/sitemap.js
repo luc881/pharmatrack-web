@@ -1,11 +1,5 @@
 import { CONFIG } from 'src/global-config';
-import {
-  getGroups,
-  getAnimals,
-  getProducts,
-  getArticles,
-  getSpeciesCatalog,
-} from 'src/lib/public-api';
+import { getGroups, getAnimals, getProducts, getArticles, getSpeciesCatalog } from 'src/lib/public-api';
 
 import { articleSlug } from 'src/sections/articles/utils';
 import { productSlug, buildListings, buildCategories } from 'src/sections/catalog/utils';

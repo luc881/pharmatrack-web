@@ -36,19 +36,12 @@ export function AccountButton({ sx, fullWidth, ...other }) {
         sx={[
           fullWidth
             ? {}
-            : {
-                minWidth: 0,
-                px: { xs: 1, sm: 2 },
-                '& .MuiButton-startIcon': { mr: { xs: 0, sm: 1 } },
-              },
+            : { minWidth: 0, px: { xs: 1, sm: 2 }, '& .MuiButton-startIcon': { mr: { xs: 0, sm: 1 } } },
           ...(Array.isArray(sx) ? sx : [sx]),
         ]}
         {...other}
       >
-        <Box
-          component="span"
-          sx={fullWidth ? undefined : { display: { xs: 'none', sm: 'inline' } }}
-        >
+        <Box component="span" sx={fullWidth ? undefined : { display: { xs: 'none', sm: 'inline' } }}>
           Entrar
         </Box>
       </Button>
@@ -71,11 +64,7 @@ export function AccountButton({ sx, fullWidth, ...other }) {
         onClose={() => setAnchor(null)}
         slotProps={{ paper: { sx: { minWidth: 200 } } }}
       >
-        <Typography
-          variant="caption"
-          sx={{ px: 2, py: 1, display: 'block', color: 'text.secondary' }}
-          noWrap
-        >
+        <Typography variant="caption" sx={{ px: 2, py: 1, display: 'block', color: 'text.secondary' }} noWrap>
           {user.email}
         </Typography>
 

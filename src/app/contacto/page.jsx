@@ -13,8 +13,7 @@ import { OdImage, OdPageHead } from 'src/layouts/od/od-ui';
 
 export const metadata = {
   title: 'Contacto',
-  description:
-    'Escríbenos por WhatsApp y coordinamos la entrega en persona en la Ciudad de México.',
+  description: 'Escríbenos por WhatsApp y coordinamos la entrega en persona en la Ciudad de México.',
 };
 
 const WA = `https://wa.me/${CONFIG.whatsapp}`;
@@ -34,13 +33,7 @@ const labelSx = {
   textTransform: 'uppercase',
   color: 'var(--color-neutral-600)',
 };
-const valueSx = {
-  m: 0,
-  fontSize: 17,
-  color: 'inherit',
-  textDecoration: 'none',
-  '&:hover': { color: 'var(--color-accent-700)' },
-};
+const valueSx = { m: 0, fontSize: 17, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } };
 
 export default function Page() {
   return (
@@ -88,38 +81,19 @@ export default function Page() {
                 <Box sx={{ mb: 2, fontSize: 17 }}>
                   Roma, Condesa, Coyoacán, Del Valle y Centro. Otras alcaldías por acuerdo.
                 </Box>
-                <OdImage
-                  label="Mapa de zona de entrega"
-                  ratio="16 / 9"
-                  radius={0}
-                  sx={{ maxWidth: 460 }}
-                />
+                <OdImage label="Mapa de zona de entrega" ratio="16 / 9" radius={0} sx={{ maxWidth: 460 }} />
               </Box>
             </Box>
             <Box sx={rowSx}>
               <Box sx={labelSx}>Redes</Box>
-              <Link
-                href="https://instagram.com/opuntiaden"
-                target="_blank"
-                rel="noopener"
-                sx={valueSx}
-              >
+              <Link href="https://instagram.com/opuntiaden" target="_blank" rel="noopener" sx={valueSx}>
                 @opuntiaden en Instagram
               </Link>
             </Box>
           </Box>
 
-          <Box
-            component="aside"
-            sx={{
-              p: { xs: 3, md: '30px 32px' },
-              border: '1px solid var(--color-divider)',
-              borderRadius: '16px',
-            }}
-          >
-            <Box
-              sx={{ mb: 1.25, fontFamily: 'var(--font-heading)', fontSize: 26, lineHeight: 1.2 }}
-            >
+          <Box component="aside" sx={{ p: { xs: 3, md: '30px 32px' }, border: '1px solid var(--color-divider)', borderRadius: '16px' }}>
+            <Box sx={{ mb: 1.25, fontFamily: 'var(--font-heading)', fontSize: 26, lineHeight: 1.2 }}>
               ¿Primera colonia?
             </Box>
             <Box sx={{ mb: 3, fontSize: 14, lineHeight: 1.7, color: 'var(--color-neutral-700)' }}>
@@ -152,14 +126,7 @@ export default function Page() {
             <Link
               component={RouterLink}
               href={paths.advisory}
-              sx={{
-                display: 'block',
-                mt: 1.75,
-                textAlign: 'center',
-                fontSize: 13,
-                color: 'var(--color-accent-700)',
-                textDecoration: 'none',
-              }}
+              sx={{ display: 'block', mt: 1.75, textAlign: 'center', fontSize: 13, color: 'var(--color-accent-700)', textDecoration: 'none' }}
             >
               Ver asesoría guiada
             </Link>

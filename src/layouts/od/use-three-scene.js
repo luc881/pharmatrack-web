@@ -59,12 +59,7 @@ export function useThreeScene(build, opts) {
       };
       raf = requestAnimationFrame(tick);
 
-      const io = new IntersectionObserver(
-        ([entry]) => {
-          visible = entry.isIntersecting;
-        },
-        { rootMargin: '120px' }
-      );
+      const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { rootMargin: '120px' });
       io.observe(el);
 
       const onResize = () => {

@@ -51,65 +51,23 @@ const STATS = [
 // Ingrediente del frasco: número, título, glosa y miniatura de 68px.
 function Ingredient({ item, align = 'right' }) {
   const thumb = (
-    <Box
-      sx={{
-        flex: 'none',
-        width: 68,
-        height: 68,
-        borderRadius: '12px',
-        overflow: 'hidden',
-        bgcolor: 'var(--color-neutral-800)',
-      }}
-    >
-      <OdImage
-        src={item.img}
-        alt={item.title}
-        ratio="1 / 1"
-        radius={12}
-        sx={{ width: 1, height: 1 }}
-      />
+    <Box sx={{ flex: 'none', width: 68, height: 68, borderRadius: '12px', overflow: 'hidden', bgcolor: 'var(--color-neutral-800)' }}>
+      <OdImage src={item.img} alt={item.title} ratio="1 / 1" radius={12} sx={{ width: 1, height: 1 }} />
     </Box>
   );
   const text = (
     <Box sx={{ minWidth: 0, textAlign: align }}>
-      <Box
-        sx={{
-          mb: 0.75,
-          fontSize: 11,
-          letterSpacing: '0.2em',
-          color: 'var(--color-neutral-500)',
-          fontVariantNumeric: 'tabular-nums',
-        }}
-      >
+      <Box sx={{ mb: 0.75, fontSize: 11, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
         {item.n}
       </Box>
-      <Box
-        component="h3"
-        sx={{
-          m: 0,
-          fontFamily: 'var(--font-heading)',
-          fontWeight: 500,
-          fontSize: 21,
-          color: 'var(--color-neutral-100)',
-        }}
-      >
+      <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 21, color: 'var(--color-neutral-100)' }}>
         {item.title}
       </Box>
-      <Box sx={{ mt: 1, fontSize: 14, lineHeight: 1.7, color: 'var(--color-neutral-400)' }}>
-        {item.body}
-      </Box>
+      <Box sx={{ mt: 1, fontSize: 14, lineHeight: 1.7, color: 'var(--color-neutral-400)' }}>{item.body}</Box>
     </Box>
   );
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: 2.25,
-        py: 3.25,
-        borderTop: '1px solid rgba(240,235,224,0.14)',
-      }}
-    >
+    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2.25, py: 3.25, borderTop: '1px solid rgba(240,235,224,0.14)' }}>
       {align === 'right' ? (
         <>
           {text}
@@ -133,71 +91,27 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
   // Los 6 elementos del bloque oscuro "Seis cosas dentro del frasco".
   const INGREDIENTS = [
-    {
-      n: '01',
-      title: 'Sustrato húmedo',
-      body: 'Coco, tierra y carbón: sostienen el gradiente de humedad sin encharcarse.',
-      img: IMG.mossTall,
-    },
-    {
-      n: '02',
-      title: 'Hojarasca curada',
-      body: 'Roble y magnolia secos: alimento base y refugio donde mudan tranquilos.',
-      img: IMG.leafLitter,
-    },
-    {
-      n: '03',
-      title: 'Madera blanda',
-      body: 'Piezas en descomposición que aportan celulosa y estructura al montaje.',
-      img: IMG.terrarium,
-    },
-    {
-      n: '04',
-      title: 'Calcio',
-      body: 'Sepia molida o cáscara: sin ella la muda falla y la colonia deja de crecer.',
-      img: IMG.isopodCubaris,
-    },
-    {
-      n: '05',
-      title: 'Proteína',
-      body: 'Una pizca cada dos semanas. Más que eso y aparecen ácaros.',
-      img: IMG.isopodZebra,
-    },
-    {
-      n: '06',
-      title: 'Colémbolos',
-      body: 'El copiloto invisible: consumen el moho antes de que llegue a la camada.',
-      img: IMG.mossWide,
-    },
+    { n: '01', title: 'Sustrato húmedo', body: 'Coco, tierra y carbón: sostienen el gradiente de humedad sin encharcarse.', img: IMG.mossTall },
+    { n: '02', title: 'Hojarasca curada', body: 'Roble y magnolia secos: alimento base y refugio donde mudan tranquilos.', img: IMG.leafLitter },
+    { n: '03', title: 'Madera blanda', body: 'Piezas en descomposición que aportan celulosa y estructura al montaje.', img: IMG.terrarium },
+    { n: '04', title: 'Calcio', body: 'Sepia molida o cáscara: sin ella la muda falla y la colonia deja de crecer.', img: IMG.isopodCubaris },
+    { n: '05', title: 'Proteína', body: 'Una pizca cada dos semanas. Más que eso y aparecen ácaros.', img: IMG.isopodZebra },
+    { n: '06', title: 'Colémbolos', body: 'El copiloto invisible: consumen el moho antes de que llegue a la camada.', img: IMG.mossWide },
   ];
 
-  const CAT_IMAGES = [
-    IMG.isopodCubaris,
-    IMG.mossTall,
-    IMG.leafLitter,
-    IMG.terrarium,
-    IMG.isopodZebra,
-    IMG.mossWide,
-  ];
+  const CAT_IMAGES = [IMG.isopodCubaris, IMG.mossTall, IMG.leafLitter, IMG.terrarium, IMG.isopodZebra, IMG.mossWide];
 
   // buildListings siembra el Map con `taxa` (orden alfabético del backend),
   // ya no con `animals` (Animal.id desc): sin reordenar, la home abriría con
   // la primera especie del alfabeto en vez de lo más nuevo con existencias.
-  const selection = [...species]
-    .sort((a, b) => b.count - a.count || b.latestId - a.latestId)
-    .slice(0, 4);
+  const selection = [...species].sort((a, b) => b.count - a.count || b.latestId - a.latestId).slice(0, 4);
 
   // insumos para "Todo para tu terrario": productos reales + sus categorías
-  const terrario = products
-    .slice(0, 10)
-    .map((p) => ({ ...productToCard(p), description: firstLine(p.description) }));
+  const terrario = products.slice(0, 10).map((p) => ({ ...productToCard(p), description: firstLine(p.description) }));
   const terrarioCats = [...new Set(products.map((p) => p.category).filter(Boolean))];
   // los ejemplares de id más alto son los recién llegados → badge "Nuevo"
   const newestIds = new Set(
-    [...species]
-      .sort((a, b) => b.latestId - a.latestId)
-      .slice(0, 2)
-      .map((s) => s.key)
+    [...species].sort((a, b) => b.latestId - a.latestId).slice(0, 2).map((s) => s.key)
   );
 
   const catCards = (categories ?? []).map((c, i) => ({
@@ -212,11 +126,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       <OdMasthead />
 
       {/* Hero (video de musgo en bucle) */}
-      <Box
-        component="section"
-        data-dark="1"
-        sx={{ position: 'relative', height: '78vh', overflow: 'hidden' }}
-      >
+      <Box component="section" data-dark="1" sx={{ position: 'relative', height: '78vh', overflow: 'hidden' }}>
         <Box
           component="video"
           autoPlay
@@ -224,14 +134,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           loop
           playsInline
           poster={media.hero_poster}
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            width: 1,
-            height: 1,
-            objectFit: 'cover',
-            bgcolor: 'var(--color-neutral-800)',
-          }}
+          sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', bgcolor: 'var(--color-neutral-800)' }}
         >
           <source src={media.hero_video_webm} type="video/webm" />
           <source src={media.hero_video_mp4} type="video/mp4" />
@@ -291,63 +194,26 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       </Box>
 
       {/* Tira de estado: apartados abiertos + teléfono */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2.75,
-          px: { xs: '18px', md: '32px' },
-          pt: '14px',
-          fontSize: 12,
-          letterSpacing: '0.16em',
-          textTransform: 'uppercase',
-          color: 'var(--color-neutral-700)',
-        }}
-      >
-        <Box
-          component="span"
-          sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, whiteSpace: 'nowrap' }}
-        >
-          <Box
-            component="span"
-            sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-accent-500)' }}
-          />
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.75, px: { xs: '18px', md: '32px' }, pt: '14px', fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
+        <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, whiteSpace: 'nowrap' }}>
+          <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-accent-500)' }} />
           Apartados abiertos
         </Box>
         <Box component="span" sx={{ flex: 1, height: '1px', bgcolor: 'var(--color-divider)' }} />
-        <Box component="span" sx={{ whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>
-          55 1234 5678
-        </Box>
+        <Box component="span" sx={{ whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>55 1234 5678</Box>
       </Box>
 
       {/* Banda "El criadero": marquesina de nombres + cifras (fondo terracota) */}
       <Box
         component="section"
         data-dark="1"
-        sx={{
-          mt: '60px',
-          bgcolor: 'var(--color-accent-900)',
-          color: 'var(--color-neutral-100)',
-          py: { xs: '48px', md: '64px' },
-          overflow: 'hidden',
-        }}
+        sx={{ mt: '60px', bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-100)', py: { xs: '48px', md: '64px' }, overflow: 'hidden' }}
       >
         <Kicker color="var(--color-neutral-500)" sx={{ textAlign: 'center', mb: 3.5 }}>
           (El criadero)
         </Kicker>
-        <Box
-          sx={{
-            mx: 'auto',
-            maxWidth: '30ch',
-            px: 2,
-            textAlign: 'center',
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(26px, 3.1vw, 46px)',
-            lineHeight: 1.24,
-          }}
-        >
-          Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus
-          parámetros.
+        <Box sx={{ mx: 'auto', maxWidth: '30ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3.1vw, 46px)', lineHeight: 1.24 }}>
+          Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.
         </Box>
 
         <Box sx={{ my: { xs: '44px', md: '60px' }, overflow: 'hidden' }}>
@@ -369,30 +235,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           </Box>
         </Box>
 
-        <Box
-          sx={{
-            px: '32px',
-            display: 'grid',
-            gap: '40px',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          }}
-        >
+        <Box sx={{ px: '32px', display: 'grid', gap: '40px', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
           {STATS.map((s) => (
             <Box key={s.label}>
-              <Box
-                sx={{
-                  mb: 1.5,
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 40,
-                  lineHeight: 1,
-                  fontVariantNumeric: 'tabular-nums',
-                }}
-              >
+              <Box sx={{ mb: 1.5, fontFamily: 'var(--font-heading)', fontSize: 40, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
                 {s.n}
               </Box>
-              <Box sx={{ fontSize: 15, lineHeight: 1.6, color: 'var(--color-neutral-400)' }}>
-                {s.label}
-              </Box>
+              <Box sx={{ fontSize: 15, lineHeight: 1.6, color: 'var(--color-neutral-400)' }}>{s.label}</Box>
             </Box>
           ))}
         </Box>
@@ -407,63 +256,22 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {/* Compra por categoría */}
       {catCards.length > 0 && (
         <Box component="section" sx={{ px: '18px', pt: { xs: '56px', md: '84px' } }}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'baseline',
-              justifyContent: 'space-between',
-              gap: 3,
-              flexWrap: 'wrap',
-              px: 1,
-              pb: 3.75,
-              borderBottom: '1px solid var(--color-divider)',
-            }}
-          >
+          <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: 1, pb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
             <Display size="clamp(28px, 3.4vw, 48px)" weight={300} sx={{ lineHeight: 1.1 }}>
               Compra por categoría
             </Display>
-            <Link
-              component={RouterLink}
-              href={paths.catalog}
-              sx={{
-                fontSize: 13,
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'inherit',
-                textDecoration: 'none',
-                '&:hover': { color: 'var(--color-accent-700)' },
-              }}
-            >
+            <Link component={RouterLink} href={paths.catalog} sx={{ fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todo el catálogo →
             </Link>
           </Box>
           {/* flex centrado con ancho fijo: si solo hay una categoría queda al
               centro sin estirarse; con varias se acomodan centradas y envuelven */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '18px',
-              pt: '34px',
-              px: 1,
-              justifyContent: 'center',
-            }}
-          >
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '18px', pt: '34px', px: 1, justifyContent: 'center' }}>
             {catCards.map((c, i) => (
-              <OdReveal
-                key={c.title}
-                delay={Math.min(i, 6) * 0.06}
-                sx={{ width: 220, maxWidth: '100%' }}
-              >
-                <Link
-                  component={RouterLink}
-                  href={c.href}
-                  sx={{ display: 'block', color: 'inherit', textDecoration: 'none' }}
-                >
+              <OdReveal key={c.title} delay={Math.min(i, 6) * 0.06} sx={{ width: 220, maxWidth: '100%' }}>
+                <Link component={RouterLink} href={c.href} sx={{ display: 'block', color: 'inherit', textDecoration: 'none' }}>
                   <OdImage src={c.img} alt={c.title} ratio="1 / 1" radius={0} />
-                  <Box sx={{ mt: 1.75, fontFamily: 'var(--font-heading)', fontSize: 20 }}>
-                    {c.title}
-                  </Box>
+                  <Box sx={{ mt: 1.75, fontFamily: 'var(--font-heading)', fontSize: 20 }}>{c.title}</Box>
                 </Link>
               </OdReveal>
             ))}
@@ -475,18 +283,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {selection.length > 0 && (
         <Box component="section" id="catalogo" sx={{ px: '18px', py: { xs: '70px', md: '110px' } }}>
           <OdReveal>
-            <Display
-              size="clamp(34px, 4.4vw, 66px)"
-              sx={{ textAlign: 'center', maxWidth: '16ch', mx: 'auto', mb: '64px' }}
-            >
+            <Display size="clamp(34px, 4.4vw, 66px)" sx={{ textAlign: 'center', maxWidth: '16ch', mx: 'auto', mb: '64px' }}>
               Nuestra selección de isópodos
             </Display>
           </OdReveal>
           {/* flex centrado con ancho fijo: una sola tarjeta queda al centro sin
               estirarse; con varias se acomodan centradas y envuelven en filas */}
-          <Box
-            sx={{ display: 'flex', flexWrap: 'wrap', gap: '28px 18px', justifyContent: 'center' }}
-          >
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '28px 18px', justifyContent: 'center' }}>
             {selection.map((item, i) => (
               <OdReveal key={item.key} delay={i * 0.08} sx={{ width: 280, maxWidth: '100%' }}>
                 <OdCatalogCard card={animalToCard(item, newestIds.has(item.key))} index={i} />
@@ -501,43 +304,12 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
       {/* Bloque oscuro del frasco: marquesina + "Seis cosas dentro del frasco" +
           6 ingredientes con el frasco 3D al centro (placeholder por ahora) */}
-      <Box
-        component="section"
-        data-dark="1"
-        sx={{
-          bgcolor: 'var(--color-accent-900)',
-          color: 'var(--color-neutral-200)',
-          py: { xs: '64px', md: '96px' },
-          overflow: 'hidden',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 3,
-            px: '40px',
-            pb: 2.75,
-            fontSize: 11,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: 'var(--color-neutral-500)',
-          }}
-        >
+      <Box component="section" data-dark="1" sx={{ bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-200)', py: { xs: '64px', md: '96px' }, overflow: 'hidden' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: '40px', pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
           <Box component="span">(Qué necesita una colonia)</Box>
-          <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>
-            06 elementos
-          </Box>
+          <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
         </Box>
-        <Box
-          sx={{
-            py: 3,
-            borderTop: '1px solid rgba(240,235,224,0.18)',
-            borderBottom: '1px solid rgba(240,235,224,0.18)',
-            overflow: 'hidden',
-          }}
-        >
+        <Box sx={{ py: 3, borderTop: '1px solid rgba(240,235,224,0.18)', borderBottom: '1px solid rgba(240,235,224,0.18)', overflow: 'hidden' }}>
           <Box
             sx={{
               display: 'flex',
@@ -557,37 +329,11 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           </Box>
         </Box>
 
-        <Box
-          component="h2"
-          sx={{
-            mx: 'auto',
-            mt: '62px',
-            maxWidth: '20ch',
-            px: 2,
-            textAlign: 'center',
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 300,
-            fontSize: 'clamp(30px, 3.8vw, 54px)',
-            lineHeight: 1.12,
-            color: 'var(--color-neutral-100)',
-          }}
-        >
+        <Box component="h2" sx={{ mx: 'auto', mt: '62px', maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
           Seis cosas dentro del frasco. Nada más.
         </Box>
 
-        <Box
-          sx={{
-            mt: '56px',
-            px: '40px',
-            display: 'grid',
-            gap: { xs: 4, md: '46px' },
-            alignItems: 'center',
-            gridTemplateColumns: {
-              xs: '1fr',
-              md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)',
-            },
-          }}
-        >
+        <Box sx={{ mt: '56px', px: '40px', display: 'grid', gap: { xs: 4, md: '46px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)' } }}>
           <Box>
             {INGREDIENTS.slice(0, 3).map((item) => (
               <Ingredient key={item.n} item={item} align="right" />
@@ -603,14 +349,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               ratio="3 / 4"
               sx={{ maxWidth: 380 }}
             />
-            <Box
-              sx={{
-                fontSize: 12,
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                color: 'var(--color-neutral-500)',
-              }}
-            >
+            <Box sx={{ fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
               Cultivo Opuntia Den · 1 L
             </Box>
           </Box>
@@ -630,117 +369,34 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
       {/* Todo para tu terrario (banda de productos con autoavance, pausa al hover) */}
       {terrario.length > 0 && (
-        <Box
-          component="section"
-          sx={{
-            pt: { xs: '48px', md: '60px' },
-            overflow: 'hidden',
-            '&:hover .od-band': { animationPlayState: 'paused' },
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'baseline',
-              justifyContent: 'space-between',
-              gap: 3,
-              flexWrap: 'wrap',
-              px: { xs: '18px', md: '40px' },
-              pb: 2.75,
-              mb: 3.75,
-              borderBottom: '1px solid var(--color-divider)',
-            }}
-          >
+        <Box component="section" sx={{ pt: { xs: '48px', md: '60px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
+          <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: '40px' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
             <Display size="clamp(26px, 3vw, 40px)" weight={300} sx={{ lineHeight: 1.1 }}>
               Todo para tu terrario
             </Display>
-            <Link
-              component={RouterLink}
-              href={paths.catalogCategory('sustratos-y-accesorios')}
-              sx={{
-                fontSize: 11,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'inherit',
-                textDecoration: 'none',
-                '&:hover': { color: 'var(--color-accent-700)' },
-              }}
-            >
+            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todos los insumos →
             </Link>
           </Box>
 
           {/* banda de tarjetas */}
           <Box sx={{ overflow: 'hidden' }}>
-            <Box
-              className="od-band"
-              sx={{
-                display: 'flex',
-                gap: '18px',
-                width: 'max-content',
-                animation: `odMarquee ${Math.max(40, terrario.length * 9)}s linear infinite`,
-              }}
-            >
+            <Box className="od-band" sx={{ display: 'flex', gap: '18px', width: 'max-content', animation: `odMarquee ${Math.max(40, terrario.length * 9)}s linear infinite` }}>
               {[...terrario, ...terrario].map((c, i) => (
                 <Link
                   key={`${c.key}-${i}`}
                   component={RouterLink}
                   href={c.href}
-                  sx={{
-                    flex: '0 0 300px',
-                    maxWidth: '80vw',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                    '&:hover .od-img-zoom': { transform: 'scale(1.06)' },
-                  }}
+                  sx={{ flex: '0 0 300px', maxWidth: '80vw', color: 'inherit', textDecoration: 'none', '&:hover .od-img-zoom': { transform: 'scale(1.06)' } }}
                 >
                   <OdImage src={c.image} alt={c.title} label={c.title} ratio="4 / 3" radius={0} />
-                  <Box
-                    sx={{
-                      mt: 1.75,
-                      fontSize: 11,
-                      letterSpacing: '0.14em',
-                      textTransform: 'uppercase',
-                      color: 'var(--color-neutral-600)',
-                    }}
-                  >
-                    {c.category}
-                  </Box>
-                  <Box
-                    sx={{
-                      mt: 0.5,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'baseline',
-                      gap: 2,
-                    }}
-                  >
-                    <Box component="span" sx={{ fontFamily: 'var(--font-heading)', fontSize: 18 }}>
-                      {c.title}
-                    </Box>
-                    <Box
-                      component="span"
-                      sx={{
-                        fontSize: 14,
-                        whiteSpace: 'nowrap',
-                        fontVariantNumeric: 'tabular-nums',
-                      }}
-                    >
-                      {c.price}
-                    </Box>
+                  <Box sx={{ mt: 1.75, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>{c.category}</Box>
+                  <Box sx={{ mt: 0.5, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 2 }}>
+                    <Box component="span" sx={{ fontFamily: 'var(--font-heading)', fontSize: 18 }}>{c.title}</Box>
+                    <Box component="span" sx={{ fontSize: 14, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{c.price}</Box>
                   </Box>
                   {c.description && (
-                    <Box
-                      sx={{
-                        mt: 0.75,
-                        fontSize: 13,
-                        lineHeight: 1.55,
-                        color: 'var(--color-neutral-600)',
-                        maxWidth: '34ch',
-                      }}
-                    >
-                      {c.description}
-                    </Box>
+                    <Box sx={{ mt: 0.75, fontSize: 13, lineHeight: 1.55, color: 'var(--color-neutral-600)', maxWidth: '34ch' }}>{c.description}</Box>
                   )}
                 </Link>
               ))}
@@ -749,29 +405,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
           {/* marquesina de categorías */}
           {terrarioCats.length > 0 && (
-            <Box
-              sx={{
-                mt: { xs: '40px', md: '56px' },
-                py: 3,
-                borderTop: '1px solid var(--color-divider)',
-                borderBottom: '1px solid var(--color-divider)',
-                overflow: 'hidden',
-              }}
-            >
-              <Box
-                className="od-marquee"
-                sx={{
-                  display: 'flex',
-                  width: 'max-content',
-                  whiteSpace: 'nowrap',
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 4.6vw, 72px)',
-                  lineHeight: 1.1,
-                  textTransform: 'uppercase',
-                  color: 'var(--color-neutral-300)',
-                  animation: 'odMarqueeR 60s linear infinite',
-                }}
-              >
+            <Box sx={{ mt: { xs: '40px', md: '56px' }, py: 3, borderTop: '1px solid var(--color-divider)', borderBottom: '1px solid var(--color-divider)', overflow: 'hidden' }}>
+              <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 4.6vw, 72px)', lineHeight: 1.1, textTransform: 'uppercase', color: 'var(--color-neutral-300)', animation: 'odMarqueeR 60s linear infinite' }}>
                 <Box component="span">{`${terrarioCats.join(' · ')} · `.repeat(3)}</Box>
                 <Box component="span">{`${terrarioCats.join(' · ')} · `.repeat(3)}</Box>
               </Box>
@@ -785,16 +420,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       <Box
         component="section"
         data-dark="1"
-        sx={{
-          position: 'relative',
-          minHeight: '66vh',
-          display: 'grid',
-          placeItems: 'center',
-          isolation: 'isolate',
-          textAlign: 'center',
-          mt: { xs: '48px', md: '60px' },
-          mb: '20px',
-        }}
+        sx={{ position: 'relative', minHeight: '66vh', display: 'grid', placeItems: 'center', isolation: 'isolate', textAlign: 'center', mt: { xs: '48px', md: '60px' }, mb: '20px' }}
       >
         <OdImage
           src={IMG.mossWide}
