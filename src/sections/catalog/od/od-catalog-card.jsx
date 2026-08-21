@@ -27,7 +27,10 @@ const pad3 = (n) => String(n).padStart(3, '0');
 export function OdCatalogCard({ card, index = 0, horizontal = false }) {
   const { ids, toggle } = useFavorites();
   const isFavorite = card.favKey ? ids.includes(card.favKey) : false;
-  const soldOut = card.badge === 'Agotado';
+  // `card.soldOut` es un booleano propio del card (no se deduce de `card.badge`):
+  // el badge es texto de presentación con prioridades ("Nuevo" gana sobre
+  // "Agotado" en animalToCard), así que no puede llevar el estado real.
+  const soldOut = !!card.soldOut;
 
   const code = card.codePrefix ? `${card.codePrefix}-${pad3(index + 1)}` : null;
 

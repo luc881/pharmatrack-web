@@ -58,15 +58,16 @@ export const animalToCard = (i, isNew = false) => {
   const pct = offerPct(i.minPrice, i.compareAt);
   const category = i.species?.genus?.group?.name ?? 'Isópodos';
   const soldOut = i.count === 0;
+  // El badge es texto de presentación con prioridad ("Nuevo" gana sobre
+  // "Agotado"), así que ya no puede llevar el estado de disponibilidad: la
+  // banda roja se encarga de avisar "Agotado" y lee `card.soldOut` directo.
   const badge = isNew
     ? 'Nuevo'
-    : soldOut
-      ? 'Agotado'
-      : i.count > 0 && i.count <= 6
-        ? `Últimos ${i.count}`
-        : pct
-          ? `-${pct}%`
-          : null;
+    : i.count > 0 && i.count <= 6
+      ? `Últimos ${i.count}`
+      : pct
+        ? `-${pct}%`
+        : null;
   return {
     key: i.key,
     href: paths.catalogSpecies(i.slug),
@@ -81,8 +82,9 @@ export const animalToCard = (i, isNew = false) => {
     // y NO dentro de title: listingSlug deriva del titulo, asi que meterlo ahi
     // cambiaria la URL de todas las especies y romperia los enlaces existentes.
     taxonLabel: i.morph ? null : 'Nominal',
+    soldOut,
     badge,
-    badgeVariant: soldOut ? 'outline' : isNew || pct ? 'accent' : 'neutral',
+    badgeVariant: isNew || pct ? 'accent' : 'neutral',
     addLabel: soldOut ? 'Avísame' : 'Añadir · 12–15 individuos',
     price: i.minPrice !== i.maxPrice ? `Desde ${fCurrency(i.minPrice)}` : `${fCurrency(i.minPrice)} MXN`,
     favKey: i.key,
@@ -105,6 +107,7 @@ export const productToCard = (p) => {
     codePrefix: null,
     category: p.category ?? 'Producto',
     title: p.title,
+    soldOut,
     badge: soldOut ? 'Agotado' : pct ? `-${pct}%` : null,
     badgeVariant: soldOut ? 'outline' : 'accent',
     addLabel: soldOut ? 'Avísame' : 'Añadir al carrito',
