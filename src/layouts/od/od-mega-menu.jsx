@@ -81,7 +81,7 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
           type="button"
           onClick={onClose}
           aria-label="Cerrar menú"
-          sx={{ alignSelf: 'flex-start', border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', color: 'inherit', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', transition: 'color 300ms', '&:hover': { color: 'var(--color-accent-300)' } }}
+          sx={{ alignSelf: 'flex-start', display: 'inline-flex', alignItems: 'center', minHeight: 44, px: 1.5, mx: -1.5, border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', color: 'inherit', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', transition: 'color 300ms', '&:hover': { color: 'var(--color-accent-300)' } }}
         >
           Cerrar ✕
         </Box>
@@ -116,10 +116,12 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
             )}
           </Box>
 
-          <Link component={RouterLink} href={paths.favorites} onClick={onClose} sx={bigLinkSx}>
+          {/* En movil estos dos ya estan en la barra inferior de pestanas; aqui
+              solo repetirian lo que el pulgar ya tiene a la mano. */}
+          <Link component={RouterLink} href={paths.favorites} onClick={onClose} sx={{ ...bigLinkSx, display: { xs: 'none', md: 'block' } }}>
             Favoritos ({ids.length})
           </Link>
-          <Link component={RouterLink} href={paths.cart} onClick={onClose} sx={bigLinkSx}>
+          <Link component={RouterLink} href={paths.cart} onClick={onClose} sx={{ ...bigLinkSx, display: { xs: 'none', md: 'block' } }}>
             Carrito ({count})
           </Link>
           <Link component={RouterLink} href={paths.articles} onClick={onClose} sx={bigLinkSx}>

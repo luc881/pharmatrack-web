@@ -1,13 +1,20 @@
 'use client';
 
+import { useBoolean } from 'minimal-shared/hooks';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { SearchDialog } from 'src/layouts/components/search-dialog';
+import { useNavCategories } from 'src/layouts/nav-categories-context';
+
 import { useCart } from 'src/sections/catalog/use-cart';
 import { useFavorites } from 'src/sections/catalog/use-favorites';
+
+import { OdMegaMenu } from './od-mega-menu';
 
 // ----------------------------------------------------------------------
 // Barra superior estática de las vistas interiores (no el home): tira de aviso
@@ -20,8 +27,12 @@ const linkSx = { color: 'inherit', textDecoration: 'none', transition: 'color 30
 export function OdTopbar() {
   const { ids } = useFavorites();
   const { count } = useCart();
+  const nav = useBoolean();
+  const search = useBoolean();
+  const categories = useNavCategories();
 
   return (
+    <>
     <Box sx={{ position: 'relative', zIndex: 60 }}>
       {/* Tira de aviso */}
       <Box sx={{ bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-200)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', textAlign: 'center', px: 2.5, py: '9px' }}>
@@ -51,8 +62,33 @@ export function OdTopbar() {
             Divulgación
           </Link>
         </Box>
-        {/* En móvil, la izquierda es un enlace al menú (mega-menú vive en la flotante) */}
-        <Box sx={{ display: { xs: 'block', md: 'none' } }} />
+        {/* En móvil el hamburguesa TIENE que estar aquí: la píldora flotante
+            (que es donde vive el otro) no aparece hasta pasar 320px de scroll,
+            así que al entrar a una página interior el menú era inalcanzable. */}
+        <Box
+          component="button"
+          type="button"
+          onClick={nav.onTrue}
+          aria-label="Abrir menú"
+          sx={{
+            display: { xs: 'inline-flex', md: 'none' },
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            width: 44,
+            height: 44,
+            ml: '-10px',
+            border: 0,
+            bgcolor: 'transparent',
+            cursor: 'pointer',
+            color: 'inherit',
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px', width: 20 }}>
+            <Box sx={{ height: '1px', bgcolor: 'currentColor' }} />
+            <Box sx={{ height: '1px', bgcolor: 'currentColor' }} />
+            <Box sx={{ height: '1px', bgcolor: 'currentColor' }} />
+          </Box>
+        </Box>
 
         <Link
           component={RouterLink}
@@ -75,5 +111,17 @@ export function OdTopbar() {
         </Box>
       </Box>
     </Box>
+
+    <OdMegaMenu
+      open={nav.value}
+      onClose={nav.onFalse}
+      onSearch={() => {
+        nav.onFalse();
+        search.onTrue();
+      }}
+      categories={categories}
+    />
+    <SearchDialog open={search.value} onClose={search.onFalse} />
+    </>
   );
 }

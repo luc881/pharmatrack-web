@@ -384,20 +384,19 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
       {/* Barra de filtros pegajosa (solo xs): sustituye a la columna lateral,
           que no cabe arriba del pliegue en móvil. Chips de categoría con
           scroll horizontal + botón "Filtros" fijo que abre la hoja inferior.
-          top:130 reutiliza el mismo despeje que ya usa el <aside> sticky de
-          escritorio (más abajo) para la píldora flotante del header — esa
-          píldora es fixed/zIndex:70 y aparece pasados 320px de scroll, así
-          que 130 dejaba margen de sobra ahí y sirve igual aquí. zIndex:40 la
-          mantiene por debajo de esa píldora y de la barra de pestañas móvil
-          (ambas fixed/zIndex:70, no deben taparse) pero por encima de la
-          rejilla de tarjetas que scrollea debajo. */}
+          top:0 porque en móvil ya no hay nada fijo arriba que esquivar: la
+          píldora flotante del header está oculta en xs. Un despeje mayor
+          dejaría un hueco por el que se vería pasar la rejilla, porque esa
+          píldora solo se revela pasados 320px de scroll y la barra se pega
+          bastante antes. zIndex:40: por encima de las tarjetas que scrollean
+          debajo, por debajo de la barra de pestañas (fixed, zIndex:70). */}
       <Box
         sx={{
           display: { xs: 'flex', md: 'none' },
           alignItems: 'center',
           gap: 1,
           position: 'sticky',
-          top: 130,
+          top: 0,
           zIndex: 40,
           px: '18px',
           py: '10px',

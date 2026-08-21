@@ -157,6 +157,11 @@ export function OdHeader({ revealOnScroll = false }) {
       {/* fija arriba: marquee y píldora viajan juntos al hacer scroll */}
       <Box
         sx={{
+          // Oculta en movil: ahi esta barra solo repetia lo que ya dan la barra
+          // estatica de arriba y la de pestanas de abajo, y al ser fixed
+          // obligaba a cualquier barra pegajosa de la pagina a esquivarla.
+          // En escritorio sigue igual: es la navegacion principal al hacer scroll.
+          display: { xs: 'none', md: 'block' },
           position: 'fixed',
           top: 0,
           left: 0,
@@ -273,7 +278,11 @@ export function OdHeader({ revealOnScroll = false }) {
                 Favoritos <CountPill n={favIds.length} pill={navPill} />
               </Link>
 
-              <Link component={RouterLink} href={paths.cart} aria-label="Cotización" sx={{ ...cellSx, display: 'inline-flex', alignItems: 'center', gap: 1 }}>
+              {/* En movil el carrito vive en la barra inferior de pestanas
+                  ("Cotizacion"). Repetirlo aqui hacia que este bloque no
+                  cupiera en su columna y, con justifySelf: 'end', se dibujara
+                  ENCIMA de la marca del centro. */}
+              <Link component={RouterLink} href={paths.cart} aria-label="Cotización" sx={{ ...cellSx, display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 1 }}>
                 Carrito <CountPill n={cartCount} pill={navPill} />
               </Link>
 

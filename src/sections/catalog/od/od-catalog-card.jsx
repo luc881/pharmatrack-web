@@ -163,7 +163,19 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
           <Box component="span" sx={{ opacity: 0.7 }}> · {card.taxonLabel}</Box>
         )}
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '14px' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          // En un telefono la columna mide ~163px y el precio va con nowrap, asi
+          // que el titulo no puede encoger por debajo de su palabra mas larga:
+          // la fila se desbordaba de la tarjeta y el precio salia cortado.
+          // Apilados caben los dos.
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: 'space-between',
+          alignItems: { xs: 'flex-start', md: 'baseline' },
+          gap: { xs: '4px', md: '14px' },
+        }}
+      >
         <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: horizontal ? 22 : 20 }}>
           {card.title}
         </Box>
