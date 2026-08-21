@@ -48,37 +48,47 @@ const STATS = [
   { n: 'Ficha propia', label: 'Cada ejemplar sale con sus parámetros de origen.' },
 ];
 
-// Ingrediente del frasco: número, título, glosa y miniatura de 68px.
+// Ingrediente del frasco: número, título, glosa y miniatura.
+//
+// En escritorio las tres primeras fichas van a la izquierda del frasco, con
+// texto alineado a la derecha y miniatura pegada al centro; las otras tres al
+// revés. En móvil no hay dos costados: todo cae en una columna, así que las
+// seis se ven igual (miniatura a la izquierda, texto a la izquierda) y más
+// compactas. El orden lo invierte flexDirection, no dos ramas de JSX.
 function Ingredient({ item, align = 'right' }) {
-  const thumb = (
-    <Box sx={{ flex: 'none', width: 68, height: 68, borderRadius: '12px', overflow: 'hidden', bgcolor: 'var(--color-neutral-800)' }}>
-      <OdImage src={item.img} alt={item.title} ratio="1 / 1" radius={12} sx={{ width: 1, height: 1 }} />
-    </Box>
-  );
-  const text = (
-    <Box sx={{ minWidth: 0, textAlign: align }}>
-      <Box sx={{ mb: 0.75, fontSize: 11, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
-        {item.n}
-      </Box>
-      <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 21, color: 'var(--color-neutral-100)' }}>
-        {item.title}
-      </Box>
-      <Box sx={{ mt: 1, fontSize: 14, lineHeight: 1.7, color: 'var(--color-neutral-400)' }}>{item.body}</Box>
-    </Box>
-  );
   return (
-    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2.25, py: 3.25, borderTop: '1px solid rgba(240,235,224,0.14)' }}>
-      {align === 'right' ? (
-        <>
-          {text}
-          {thumb}
-        </>
-      ) : (
-        <>
-          {thumb}
-          {text}
-        </>
-      )}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'row', md: align === 'right' ? 'row-reverse' : 'row' },
+        alignItems: 'flex-start',
+        gap: { xs: 1.75, md: 2.25 },
+        py: { xs: 2, md: 3.25 },
+        borderTop: '1px solid rgba(240,235,224,0.14)',
+      }}
+    >
+      <Box
+        sx={{
+          flex: 'none',
+          width: { xs: 52, md: 68 },
+          height: { xs: 52, md: 68 },
+          borderRadius: '12px',
+          overflow: 'hidden',
+          bgcolor: 'var(--color-neutral-800)',
+        }}
+      >
+        <OdImage src={item.img} alt={item.title} ratio="1 / 1" radius={12} sx={{ width: 1, height: 1 }} />
+      </Box>
+
+      <Box sx={{ minWidth: 0, textAlign: { xs: 'left', md: align } }}>
+        <Box sx={{ mb: 0.5, fontSize: 11, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
+          {item.n}
+        </Box>
+        <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: { xs: 18, md: 21 }, color: 'var(--color-neutral-100)' }}>
+          {item.title}
+        </Box>
+        <Box sx={{ mt: 0.75, fontSize: { xs: 13, md: 14 }, lineHeight: 1.55, color: 'var(--color-neutral-400)' }}>{item.body}</Box>
+      </Box>
     </Box>
   );
 }
@@ -344,7 +354,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           Seis cosas dentro del frasco. Nada más.
         </Box>
 
-        <Box sx={{ mt: '56px', px: '40px', display: 'grid', gap: { xs: 4, md: '46px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)' } }}>
+        <Box sx={{ mt: { xs: '32px', md: '56px' }, px: { xs: '18px', md: '40px' }, display: 'grid', gap: { xs: 2.5, md: '46px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)' } }}>
           <Box>
             {INGREDIENTS.slice(0, 3).map((item) => (
               <Ingredient key={item.n} item={item} align="right" />
@@ -358,7 +368,9 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               fallbackSrc={IMG.terrarium}
               fallbackLabel="Frasco de cultivo Opuntia Den"
               ratio="3 / 4"
-              sx={{ maxWidth: 380 }}
+              // 3/4 a ancho completo son ~460px de alto en un telefono, casi
+              // media pantalla para una foto de apoyo.
+              sx={{ maxWidth: { xs: 240, md: 380 } }}
             />
             <Box sx={{ fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
               Cultivo Opuntia Den · 1 L
@@ -371,7 +383,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: '56px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: '32px', md: '56px' } }}>
           <Pill variant="light" href={paths.catalogCategory('sustratos-y-accesorios')}>
             Comprar un cultivo ↗
           </Pill>
