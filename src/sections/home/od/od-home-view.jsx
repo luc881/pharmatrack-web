@@ -415,7 +415,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         </Box>
       )}
 
-      {/* Divisor de pago (a sangre) */}
+      {/* Divisor de pago (a sangre). width=1600: cubre todo el ancho de la
+          pantalla, con el default de 800 se veria borroso en escritorio. */}
       <Box
         component="section"
         data-dark="1"
@@ -427,6 +428,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           label="Foto ambiente del taller de cría"
           ratio="auto"
           radius={0}
+          width={1600}
           sx={{ position: 'absolute', inset: 0, zIndex: -2, aspectRatio: 'auto', borderRadius: 0 }}
         />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.5)' }} />
