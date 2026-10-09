@@ -15,7 +15,7 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { Display } from 'src/layouts/od/od-ui';
 import { OdReveal } from 'src/layouts/od/od-motion';
-import { BrandSeal, HeadingMark } from 'src/layouts/od/od-ornaments';
+import { HeadingMark } from 'src/layouts/od/od-ornaments';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -374,8 +374,15 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           )}
         </Box>
 
-        {/* Sello oscuro (el de fondos noche) a la derecha de la banda */}
-        <BrandSeal dark size={168} sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: '50%', right: 'var(--od-gutter)', transform: 'translateY(-50%)' }} />
+        {/* Nopal del destacado "noche" de Instagram (07_Destacados_Instagram):
+            su fondo es noche, igual que la banda, así que se funde sin borde */}
+        <Box
+          component="img"
+          src="/brand/assets/destacados/destacado-noche.svg"
+          alt=""
+          aria-hidden
+          sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: '50%', right: 'var(--od-gutter)', transform: 'translateY(-50%)', height: '78%', maxHeight: 260, width: 'auto', pointerEvents: 'none' }}
+        />
 
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ position: 'relative', lineHeight: 1.02 }}>
           {title}
