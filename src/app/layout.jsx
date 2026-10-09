@@ -92,7 +92,7 @@ export default async function RootLayout({ children }) {
               defaultMode={themeConfig.defaultMode}
             >
               <MotionLazy>
-                <SiteSplash heroPoster={site.media.hero_poster} />
+                <SiteSplash />
                 <ProgressBar />
                 <SessionProvider>
                   <AccountSync />
