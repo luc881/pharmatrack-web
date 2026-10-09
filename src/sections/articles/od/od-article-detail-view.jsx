@@ -3,7 +3,8 @@
 import Box from '@mui/material/Box';
 
 import { OdReveal } from 'src/layouts/od/od-motion';
-import { OdImage, Display } from 'src/layouts/od/od-ui';
+import { Star, OdImage, Display } from 'src/layouts/od/od-ui';
+import { HeadingMark, SectionHead } from 'src/layouts/od/od-ornaments';
 
 import { OdArticleCard } from './od-article-card';
 import { fArticleDate, parseArticleBody } from '../utils';
@@ -87,11 +88,17 @@ export function OdArticleDetailView({ article, related = [] }) {
       <Box component="section" className="od-rise" sx={{ maxWidth: 900, mx: 'auto', px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 8 }, pb: 4, textAlign: 'center' }}>
         <Box sx={{ mb: 2.5, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>
           ART-{String(article.id).padStart(3, '0')}
-          {article.category ? ` · ${article.category}` : ''}
+          {article.category && (
+            <>
+              <Star sx={{ mx: '0.8em', verticalAlign: '0' }} />
+              {article.category}
+            </>
+          )}
         </Box>
         <Display component="h1" size="clamp(36px, 5vw, 68px)" sx={{ lineHeight: 1.04 }}>
           {article.title}
         </Display>
+        <HeadingMark sx={{ mt: '24px', justifyContent: 'center' }} />
         {article.excerpt && (
           <Box sx={{ mt: '26px', mx: 'auto', maxWidth: '54ch', fontSize: 17, lineHeight: 1.7, opacity: 0.78 }}>
             {article.excerpt}
@@ -183,9 +190,7 @@ export function OdArticleDetailView({ article, related = [] }) {
           component="section"
           sx={{ maxWidth: 1180, mx: 'auto', mt: { xs: 4, md: 5 }, px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '70px' }, pb: { xs: 8, md: 12 }, borderTop: '1px solid var(--color-divider)' }}
         >
-          <Display size="clamp(26px, 3vw, 40px)" weight={400} sx={{ pb: '22px', borderBottom: '1px solid var(--color-divider)' }}>
-            Sigue leyendo
-          </Display>
+          <SectionHead kicker="Más notas de cría" title="Sigue leyendo" ghost={false} size="clamp(26px, 3vw, 40px)" />
           <Box sx={{ pt: '34px', display: 'grid', gap: '28px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
             {related.map((item, i) => (
               <OdReveal key={item.id} delay={i * 0.08}>

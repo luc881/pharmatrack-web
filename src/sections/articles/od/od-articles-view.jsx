@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { Kicker, Display } from 'src/layouts/od/od-ui';
+import { LeafBranch, HeadingMark } from 'src/layouts/od/od-ornaments';
 
 import { OdArticleCard } from './od-article-card';
 
@@ -13,12 +14,14 @@ import { OdArticleCard } from './od-article-card';
 
 export function OdArticlesView({ articles = [] }) {
   return (
-    <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
-      <Box className="od-rise">
-        <Kicker sx={{ mb: 2.5 }}>Divulgación</Kicker>
+    <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
+      <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: 24, right: 40, width: 260, opacity: 0.5 }} />
+      <Box className="od-rise" sx={{ position: 'relative' }}>
+        <Kicker sx={{ mb: 2.5 }}>Notas de cría</Kicker>
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02 }}>
           Divulgación
         </Display>
+        <HeadingMark sx={{ mt: '22px' }} />
         <Box sx={{ mt: 2.5, mb: { xs: 5, md: 7 }, maxWidth: '52ch', fontSize: 15, lineHeight: 1.6, opacity: 0.8 }}>
           Notas de cría, montaje de terrarios bioactivos y fichas de especie. Lo que aprendimos
           manteniendo colonias, escrito para que no repitas nuestros errores.

@@ -14,6 +14,7 @@ import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { Star, Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
+import { LeafBranch, HeadingMark, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 
 import { OdCatalogCard } from 'src/sections/catalog/od/od-catalog-card';
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
@@ -42,16 +43,17 @@ const buildImg = (media) => ({
 });
 
 // Nombres que corren en la marquesina de la banda de marca.
-// Separados por el destello tuna de la marca ("Isópodos ✦ Colémbolos").
+// Marquesinas separadas por el destello tuna de la marca ("Isópodos ✦ Colémbolos").
 const MARQUEE_NAMES = ['Isópodos', 'Colémbolos', 'Cubaris', 'Porcellio', 'Armadillidium'];
-const NAME_MARQUEE = Array.from({ length: 4 }, () => MARQUEE_NAMES).flat();
+const JAR_MARQUEE = ['Dentro del frasco'];
 
-function NameRun() {
+function StarRun({ words, times = 5 }) {
+  const run = Array.from({ length: times }, () => words).flat();
   return (
     <Box component="span">
-      {NAME_MARQUEE.map((name, i) => (
+      {run.map((word, i) => (
         <Fragment key={i}>
-          {name}
+          {word}
           <Star sx={{ width: '0.32em', height: '0.32em', mx: '0.45em', verticalAlign: '0.32em' }} />
         </Fragment>
       ))}
@@ -260,8 +262,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               animation: 'odMarquee 110s linear infinite',
             }}
           >
-            <NameRun />
-            <NameRun />
+            <StarRun words={MARQUEE_NAMES} times={4} />
+            <StarRun words={MARQUEE_NAMES} times={4} />
           </Box>
         </Box>
 
@@ -295,10 +297,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {/* Compra por categoría */}
       {catCards.length > 0 && (
         <Box component="section" sx={{ px: '18px', pt: { xs: '56px', md: '84px' } }}>
-          <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: 1, pb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
-            <Display size="clamp(28px, 3.4vw, 48px)" weight={300} sx={{ lineHeight: 1.1 }}>
-              Compra por categoría
-            </Display>
+          <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: 1, pb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
+            <SectionHead kicker="Explora" title="Compra por categoría" ghost={false} size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalog} sx={{ fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todo el catálogo →
             </Link>
@@ -322,9 +322,17 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {selection.length > 0 && (
         <Box component="section" id="catalogo" sx={{ px: '18px', py: { xs: '70px', md: '110px' } }}>
           <OdReveal>
-            <Display size="clamp(34px, 4.4vw, 66px)" sx={{ textAlign: 'center', maxWidth: '16ch', mx: 'auto', mb: '64px' }}>
-              Nuestra selección de isópodos
-            </Display>
+            <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { md: '28px' }, mb: '64px' }}>
+              <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, width: 190, opacity: 0.6, transform: 'scaleX(-1)' }} />
+              <Box sx={{ textAlign: 'center' }}>
+                <Kicker sx={{ mb: '14px' }}>Del criadero</Kicker>
+                <Display size="clamp(34px, 4.4vw, 66px)" sx={{ maxWidth: '16ch', mx: 'auto' }}>
+                  Nuestra selección de isópodos
+                </Display>
+                <HeadingMark sx={{ mt: '22px', justifyContent: 'center' }} />
+              </Box>
+              <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, width: 190, opacity: 0.6 }} />
+            </Box>
           </OdReveal>
           {/* flex centrado con ancho fijo: una sola tarjeta queda al centro sin
               estirarse; con varias se acomodan centradas y envuelven en filas */}
@@ -363,14 +371,15 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               animation: 'odMarquee 64s linear infinite',
             }}
           >
-            <Box component="span">{'Dentro del frasco · '.repeat(5)}</Box>
-            <Box component="span">{'Dentro del frasco · '.repeat(5)}</Box>
+            <StarRun words={JAR_MARQUEE} />
+            <StarRun words={JAR_MARQUEE} />
           </Box>
         </Box>
 
         <Box component="h2" sx={{ mx: 'auto', mt: '62px', maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
           Seis cosas dentro del frasco. Nada más.
         </Box>
+        <LeafDivider sx={{ mx: 'auto', mt: '28px', maxWidth: 360, px: 2, color: 'var(--od-arena-texto)' }} />
 
         <Box sx={{ mt: { xs: '32px', md: '56px' }, px: { xs: '18px', md: '40px' }, display: 'grid', gap: { xs: 2.5, md: '46px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)' } }}>
           <Box>
@@ -411,10 +420,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {/* Todo para tu terrario (banda de productos con autoavance, pausa al hover) */}
       {terrario.length > 0 && (
         <Box component="section" sx={{ pt: { xs: '48px', md: '60px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
-          <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: '40px' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
-            <Display size="clamp(26px, 3vw, 40px)" weight={300} sx={{ lineHeight: 1.1 }}>
-              Todo para tu terrario
-            </Display>
+          <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: '40px' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
+            <SectionHead kicker="Insumos" title="Todo para tu terrario" ghost={false} size="clamp(26px, 3vw, 40px)" />
             <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todos los insumos →
             </Link>
@@ -448,8 +455,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           {terrarioCats.length > 0 && (
             <Box sx={{ mt: { xs: '40px', md: '56px' }, py: 3, borderTop: '1px solid var(--color-divider)', borderBottom: '1px solid var(--color-divider)', overflow: 'hidden' }}>
               <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 4.6vw, 72px)', lineHeight: 1.1, textTransform: 'uppercase', color: 'var(--color-neutral-300)', animation: 'odMarqueeR 60s linear infinite' }}>
-                <Box component="span">{`${terrarioCats.join(' · ')} · `.repeat(3)}</Box>
-                <Box component="span">{`${terrarioCats.join(' · ')} · `.repeat(3)}</Box>
+                <StarRun words={terrarioCats} times={3} />
+                <StarRun words={terrarioCats} times={3} />
               </Box>
             </Box>
           )}

@@ -15,6 +15,7 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { Display } from 'src/layouts/od/od-ui';
 import { OdReveal } from 'src/layouts/od/od-motion';
+import { NopalSprig, HeadingMark } from 'src/layouts/od/od-ornaments';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -344,6 +345,8 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
         className="od-rise"
         data-dark="1"
         sx={{
+          position: 'relative',
+          overflow: 'hidden',
           px: { xs: '18px', md: '40px' },
           pt: { xs: 5, md: 8 },
           pb: { xs: 4, md: 5 },
@@ -371,9 +374,13 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           )}
         </Box>
 
-        <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02 }}>
+        {/* Nopal a línea sobre la banda noche; las tunas quedan como chispa */}
+        <NopalSprig paper="transparent" sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', right: 56, bottom: -36, width: 200, color: 'var(--od-arena-texto)', opacity: 0.7 }} />
+
+        <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ position: 'relative', lineHeight: 1.02 }}>
           {title}
         </Display>
+        <HeadingMark sx={{ mt: '20px', color: 'var(--od-papel)' }} />
 
         <Box sx={{ mt: 2.5, maxWidth: '52ch', fontSize: 15, lineHeight: 1.6, opacity: 0.8 }}>
           Todo lo que hay disponible hoy. Los ejemplares se reservan con anticipo y se entregan en

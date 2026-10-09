@@ -6,6 +6,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { cdnImage } from 'src/lib/cdn-image';
 
+import { LeafBranch, HeadingMark } from './od-ornaments';
+
 // ----------------------------------------------------------------------
 // Primitivas del rediseño editorial (Opuntia Den). Comparten tokens de
 // global.css (var(--color-*), var(--shadow-*), var(--od-ease)) para que las
@@ -222,12 +224,15 @@ export function SciName({ children, sx }) {
 // header entra con la animación de carga `od-rise` (definida en global.css).
 export function OdPageHead({ kicker, title, intro, introWidth = '62ch' }) {
   return (
-    <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 } }}>
-      <Box className="od-rise" sx={{ maxWidth: 1180 }}>
+    <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 } }}>
+      {/* Rama a línea a la derecha, como en las láminas del tríptico */}
+      <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: 24, right: 40, width: 260, opacity: 0.5 }} />
+      <Box className="od-rise" sx={{ position: 'relative', maxWidth: 1180 }}>
         <Kicker sx={{ mb: 1.75 }}>{kicker}</Kicker>
-        <Display component="h1" size="clamp(34px, 4.6vw, 68px)" sx={{ lineHeight: 1.05 }}>
+        <Display component="h1" size="clamp(34px, 4.6vw, 68px)" sx={{ lineHeight: 1.05, maxWidth: '18ch' }}>
           {title}
         </Display>
+        <HeadingMark sx={{ mt: '22px' }} />
         {intro && (
           <Box
             sx={{
