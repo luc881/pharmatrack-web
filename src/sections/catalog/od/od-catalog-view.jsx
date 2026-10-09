@@ -204,7 +204,7 @@ function PriceFilter({ range, setRange, maxPrice }) {
         max={maxPrice}
         onChange={(_, v) => setRange(v)}
         valueLabelDisplay="off"
-        sx={{ color: 'var(--color-accent)', maxWidth: { xs: 260, md: '100%' } }}
+        sx={{ color: 'var(--color-accent-700)', maxWidth: { xs: 260, md: '100%' } }}
       />
       <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
         {fCurrency(range[0])} – {fCurrency(range[1])} MXN

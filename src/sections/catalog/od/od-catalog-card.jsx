@@ -73,7 +73,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
             right: -34,
             width: 140,
             transform: 'rotate(45deg)',
-            bgcolor: '#b3261e',
+            bgcolor: 'var(--od-tuna)', // acento de marca en vez de rojo de error
             color: '#fff',
             textAlign: 'center',
             py: '5px',

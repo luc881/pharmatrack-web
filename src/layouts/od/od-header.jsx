@@ -27,6 +27,9 @@ import { useNavTheme } from './use-nav-theme';
 
 // celda de texto de la barra (Buscar, ES·MXN, Favoritos, Carrito)
 const cellSx = {
+  // `font` va antes que fontSize: el shorthand reinicia el tamaño, y al revés
+  // estas celdas heredaban 18px mientras los enlaces de la izquierda van en 13.
+  font: 'inherit',
   color: 'inherit',
   fontSize: 13,
   whiteSpace: 'nowrap',
@@ -35,7 +38,6 @@ const cellSx = {
   border: 0,
   borderLeft: '1px solid var(--od-nav-bd)',
   bgcolor: 'transparent',
-  font: 'inherit',
   cursor: 'pointer',
   textDecoration: 'none',
   transition: 'color 350ms',

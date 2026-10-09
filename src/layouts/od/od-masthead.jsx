@@ -39,9 +39,10 @@ export function OdMasthead() {
             component={RouterLink}
             href={paths.root}
             aria-label="Opuntia Den — inicio"
-            sx={{ display: 'inline-grid', placeItems: 'center', width: 26, height: 26, flexShrink: 0, borderRadius: '50%', bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', fontSize: 12, textDecoration: 'none' }}
+            sx={{ display: 'inline-flex', width: 34, height: 34, flexShrink: 0 }}
           >
-            ✳
+            {/* Isotipo de marca: BRAND.md lo pide para espacios menores a 64 px */}
+            <Box component="img" src="/brand/assets/logo/isotipo-claro.svg" alt="" sx={{ width: 1, height: 1 }} />
           </Box>
           {/* En movil los cinco enlaces se envolvian en dos renglones y se
               encimaban con el logo. Aqui corren en una sola linea que se

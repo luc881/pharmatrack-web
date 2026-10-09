@@ -59,21 +59,21 @@ export const typography = {
   ...baseTypography,
   h1: {
     fontFamily: secondaryFont,
-    fontWeight: baseTypography.fontWeightExtraBold,
+    fontWeight: 400, // marca: Playfair sin negritas
     lineHeight: 80 / 64,
     fontSize: pxToRem(40),
     ...responsiveFontSizes({ sm: 52, md: 58, lg: 64 }),
   },
   h2: {
     fontFamily: secondaryFont,
-    fontWeight: baseTypography.fontWeightExtraBold,
+    fontWeight: 400, // marca: Playfair sin negritas
     lineHeight: 64 / 48,
     fontSize: pxToRem(32),
     ...responsiveFontSizes({ sm: 40, md: 44, lg: 48 }),
   },
   h3: {
     fontFamily: secondaryFont,
-    fontWeight: baseTypography.fontWeightBold,
+    fontWeight: 400, // marca: Playfair sin negritas
     lineHeight: 1.5,
     fontSize: pxToRem(24),
     ...responsiveFontSizes({ sm: 26, md: 30, lg: 32 }),

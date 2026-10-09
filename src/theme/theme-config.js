@@ -18,24 +18,24 @@ export const themeConfig = {
   /** **************************************
    * Typography
    *************************************** */
-  // Rediseño editorial: cuerpo DM Sans, títulos (h1–h3) Playfair Display serif
+  // Marca (brand/BRAND.md): cuerpo Inter, títulos (h1–h3) Playfair Display serif
   fontFamily: {
-    primary: 'DM Sans Variable',
+    primary: 'Inter Variable',
     secondary: 'Playfair Display',
   },
   /** **************************************
    * Palette
    *************************************** */
   palette: {
-    // Terracota del rediseño editorial (escala accent 100→900). `main` es
-    // accent-600 (#9c5a33); sobre él el texto blanco da 4.6:1 (legible).
+    // Marca: el primario es tinta (botones "tinta sobre crema"); la tuna
+    // queda solo como acento. Valores de public/brand/tokens.css.
     primary: {
-      lighter: '#F7ECE0',
-      light: '#CF9553',
-      main: '#9C5A33',
-      dark: '#63341E',
-      darker: '#2F2620',
-      contrastText: '#FFFFFF',
+      lighter: '#EFE8DC',
+      light: '#6E6359',
+      main: '#3A3029',
+      dark: '#2E2924',
+      darker: '#2E2924',
+      contrastText: '#F4F0E9',
     },
     secondary: {
       lighter: '#EFD6FF',

@@ -174,7 +174,7 @@ export function ArrowButton({ onClick, label, size = 46, solid = false, children
 // ----------------------------------------------------------------------
 
 // Kicker: rótulo en mayúsculas con tracking amplio (eyebrow editorial).
-export function Kicker({ children, color = 'var(--color-accent-700)', size = 13, sx }) {
+export function Kicker({ children, color = 'var(--od-text-muted)', size = 13, sx }) {
   return (
     <Box
       component="p"

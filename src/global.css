@@ -17,11 +17,14 @@
 @import '@fontsource/playfair-display/400.css';
 @import '@fontsource/playfair-display/500.css';
 @import '@fontsource/playfair-display/600.css';
+@import '@fontsource/playfair-display/400-italic.css'; /* nombres científicos (.od-sci) */
+
+/* tokens de marca --od-* y clases .od-* (fuente de verdad: brand/BRAND.md) */
+@import '../public/brand/tokens.css';
 
 /** **************************************
 * Fonts: options
 *************************************** */
-@import '@fontsource-variable/dm-sans';
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/nunito-sans';
 
@@ -94,19 +97,21 @@ input[type='number']::-webkit-inner-spin-button {
 
 /** **************************************
 * Rediseño Opuntia Den — tokens del sistema editorial
-* Escala cálida terracota/arena. Los usa la piel nueva (home, catálogo, ficha,
-* artículo) vía var(...) en sx. Definidos aquí, globales, para no repetirlos.
+* La fuente de verdad es public/brand/tokens.css (--od-*, ver brand/BRAND.md).
+* Los --color-* de abajo son alias que ya usa la piel nueva vía var(...) en sx;
+* apuntan a --od-* para no duplicar valores.
 *************************************** */
 :root {
-  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-heading: var(--od-font-display);
 
-  --color-bg: #e9e3d8;
-  --color-surface: #ddd6c8;
-  --color-text: #3a322b;
-  --color-accent: #9c5a33;
+  --color-bg: var(--od-crema);
+  --color-surface: var(--od-papel);
+  --color-text: var(--od-tinta);
+  /* Tuna: solo acento puntual (puntos de estado, bordes activos, foco) */
+  --color-accent: var(--od-tuna);
   --color-divider: rgba(58, 50, 43, 0.17);
 
-  --color-neutral-100: #fdfcf9;
+  --color-neutral-100: var(--od-papel);
   --color-neutral-200: #f0ebe0;
   --color-neutral-300: #ddd6c8;
   --color-neutral-400: #c3b9a8;
@@ -116,19 +121,23 @@ input[type='number']::-webkit-inner-spin-button {
   --color-neutral-800: #453f38;
   --color-neutral-900: #332d27;
 
-  --color-accent-100: #f7ece0;
-  --color-accent-200: #eed7bd;
-  --color-accent-300: #dfb587;
-  --color-accent-400: #cf9553;
-  --color-accent-500: #b87738;
-  --color-accent-600: #9c5a33;
-  --color-accent-700: #86482a;
-  --color-accent-800: #63341e;
-  --color-accent-900: #23201d;
+  /* Antes era una escala terracota. La marca no usa terracota: los tonos
+     claros son la familia de cremas, los oscuros tinta/noche, y solo
+     400-500 (los puntos de estado) quedan en tuna. */
+  --color-accent-100: var(--od-crema-hueso);
+  --color-accent-200: var(--od-crema-lino);
+  --color-accent-300: var(--od-arena-texto);
+  --color-accent-400: var(--od-tuna);
+  --color-accent-500: var(--od-tuna);
+  --color-accent-600: var(--od-tinta);
+  --color-accent-700: var(--od-tinta);
+  --color-accent-800: var(--od-noche);
+  --color-accent-900: var(--od-noche);
 
-  --shadow-sm: 0 1px 2px rgba(45, 43, 43, 0.14);
-  --shadow-md: 0 3px 10px rgba(45, 43, 43, 0.16);
-  --shadow-lg: 0 12px 32px rgba(45, 43, 43, 0.22);
+  /* Sombras planas, sin blur (BRAND.md: "sin sombras difusas") */
+  --shadow-sm: 2px 2px 0 rgba(51, 36, 20, 0.08);
+  --shadow-md: var(--od-shadow-flat);
+  --shadow-lg: 4px 4px 0 rgba(51, 36, 20, 0.12);
 
   --od-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
