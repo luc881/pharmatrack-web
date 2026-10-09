@@ -159,7 +159,21 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
   const info = (
     <Box sx={horizontal ? { minWidth: 0, alignSelf: 'center' } : { mt: '14px' }}>
       {/* Cinta de rayitas, como el anillo del sello (BRAND.md §6) */}
-      {!horizontal && <Box className="od-ticks" sx={{ mb: '12px', opacity: 0.55 }} />}
+      {/* Cinta de rayitas: al pasar el cursor se entinta de izquierda a derecha */}
+      {!horizontal && (
+        <Box sx={{ position: 'relative', mb: '12px' }}>
+          <Box className="od-ticks" sx={{ opacity: 0.35 }} />
+          <Box
+            className="od-ticks"
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              clipPath: 'inset(0 calc((1 - var(--od-h, 0)) * 100%) 0 0)',
+              transition: 'clip-path 650ms var(--od-ease)',
+            }}
+          />
+        </Box>
+      )}
       <Box sx={{ mb: '10px', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
         {code && <Box component="span" sx={{ color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>{code}&nbsp;&nbsp;|&nbsp;&nbsp;</Box>}
         <Box component="span" sx={{ color: 'var(--color-neutral-600)' }}>{card.category}</Box>

@@ -10,8 +10,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
 import { OdScene } from 'src/layouts/od/od-scene';
-import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
+import { OdReveal, OdCountUp } from 'src/layouts/od/od-motion';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { Star, Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 import { LeafBranch, HeadingMark, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
@@ -54,7 +54,7 @@ function StarRun({ words, times = 5 }) {
       {run.map((word, i) => (
         <Fragment key={i}>
           {word}
-          <Star sx={{ width: '0.32em', height: '0.32em', mx: '0.45em', verticalAlign: '0.32em' }} />
+          <Star spin sx={{ width: '0.32em', height: '0.32em', mx: '0.45em', verticalAlign: '0.32em' }} />
         </Fragment>
       ))}
     </Box>
@@ -280,7 +280,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           {STATS.map((s) => (
             <Box key={s.label}>
               <Box sx={{ mb: 1.5, fontFamily: 'var(--font-heading)', fontSize: { xs: 28, md: 40 }, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums' }}>
-                {s.n}
+                {/^\d+$/.test(s.n) ? <OdCountUp value={Number(s.n)} /> : s.n}
               </Box>
               <Box sx={{ fontSize: { xs: 13, md: 15 }, lineHeight: 1.55, color: 'var(--color-neutral-400)' }}>{s.label}</Box>
             </Box>
@@ -299,7 +299,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '56px', md: '84px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: 1, pb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
             <SectionHead kicker="Explora" title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
-            <Link component={RouterLink} href={paths.catalog} sx={{ fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+            <Link component={RouterLink} href={paths.catalog} className="od-link" sx={{ fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todo el catálogo →
             </Link>
           </Box>
@@ -422,7 +422,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         <Box component="section" sx={{ pt: { xs: '48px', md: '60px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
             <SectionHead kicker="Insumos" title="Todo para tu terrario" size="clamp(26px, 3vw, 40px)" />
-            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} className="od-link" sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todos los insumos →
             </Link>
           </Box>

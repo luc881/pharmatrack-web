@@ -69,20 +69,25 @@ export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 1
 // ----------------------------------------------------------------------
 
 const PILL_VARIANTS = {
+  // Hover: se levanta y deja una sombra plana (BRAND.md: sin blur); la del
+  // botón oscuro es tuna, como un sello. Al presionar se hunde.
   dark: {
     bgcolor: 'var(--color-neutral-900)',
     color: 'var(--color-neutral-100)',
-    '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-3px)', color: 'var(--color-neutral-100)' },
+    '&:hover': { bgcolor: 'var(--od-noche)', transform: 'translate(-2px, -2px)', boxShadow: '4px 4px 0 var(--od-tuna)', color: 'var(--color-neutral-100)' },
+    '&:active': { transform: 'translate(0, 0)', boxShadow: '1px 1px 0 var(--od-tuna)' },
   },
   light: {
     bgcolor: 'rgba(246,244,241,0.95)',
     color: 'var(--color-neutral-900)',
-    '&:hover': { bgcolor: '#ffffff', transform: 'translateY(-3px)', color: 'var(--color-neutral-900)' },
+    '&:hover': { bgcolor: 'var(--od-papel)', transform: 'translate(-2px, -2px)', boxShadow: '4px 4px 0 var(--od-tuna)', color: 'var(--color-neutral-900)' },
+    '&:active': { transform: 'translate(0, 0)', boxShadow: '1px 1px 0 var(--od-tuna)' },
   },
   outline: {
     color: '#eae7e7',
     border: '1px solid rgba(234,231,231,0.5)',
-    '&:hover': { bgcolor: 'rgba(234,231,231,0.12)', color: '#eae7e7' },
+    '&:hover': { bgcolor: 'rgba(234,231,231,0.12)', borderColor: '#eae7e7', transform: 'translateY(-2px)', color: '#eae7e7' },
+    '&:active': { transform: 'none' },
   },
 };
 
@@ -112,7 +117,7 @@ export function Pill({ variant = 'dark', href, onClick, children, sx, ...other }
           py: '15px',
           borderRadius: '999px',
           textDecoration: 'none',
-          transition: 'background 400ms, color 400ms, transform 400ms var(--od-ease)',
+          transition: 'background 250ms ease, color 250ms ease, border-color 250ms ease, transform 250ms var(--od-ease), box-shadow 250ms var(--od-ease)',
         },
         PILL_VARIANTS[variant],
         ...(Array.isArray(sx) ? sx : [sx]),
@@ -200,8 +205,8 @@ export function Kicker({ children, color = 'var(--od-text-muted)', size = 13, sx
 
 // Destello de 4 puntas en tuna (clase .od-star de brand/tokens.css). Separador
 // de metadatos y viñeta; hereda el tamaño de la letra.
-export function Star({ sx }) {
-  return <Box component="span" className="od-star" aria-hidden sx={sx} />;
+export function Star({ spin = false, sx }) {
+  return <Box component="span" className={spin ? 'od-star od-star-spin' : 'od-star'} aria-hidden sx={sx} />;
 }
 
 // Nombre científico según BRAND.md: el binomio en itálica y la localidad o

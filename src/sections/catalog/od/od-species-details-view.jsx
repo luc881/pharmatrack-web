@@ -504,6 +504,8 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                       mb: '-1px',
                       borderRight: '1px solid var(--od-linea)',
                       borderBottom: '1px solid var(--od-linea)',
+                      transition: 'background-color 250ms ease',
+                      '&:hover': { bgcolor: 'var(--od-crema-hueso)' },
                     }}
                   >
                     <Box component="dt" sx={{ fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase', color: 'var(--od-text-muted)' }}>
@@ -559,7 +561,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                     <Box component="table" sx={{ mt: '14px', width: 1, borderCollapse: 'collapse', fontSize: 14 }}>
                       <tbody>
                         {taxonomy.map((row) => (
-                          <Box component="tr" key={row.label} sx={{ borderTop: '1px solid var(--od-linea)' }}>
+                          <Box component="tr" key={row.label} sx={{ borderTop: '1px solid var(--od-linea)', transition: 'background-color 250ms ease', '&:hover': { bgcolor: 'var(--od-crema-hueso)' } }}>
                             <Box component="th" scope="row" sx={{ py: '11px', pr: 2, textAlign: 'left', fontWeight: 500, color: 'var(--od-gris)', width: '44%' }}>{row.label}</Box>
                             <Box component="td" sx={{ py: '11px', textAlign: 'right' }}>
                               {row.italic ? <SciName sx={{ fontSize: 16 }}>{row.value}</SciName> : row.value}

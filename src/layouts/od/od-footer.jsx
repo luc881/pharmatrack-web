@@ -65,7 +65,7 @@ export function OdFooter() {
             <Link
               key={l.label}
               {...(l.hash ? { href: l.href } : { component: RouterLink, href: l.href })}
-              sx={{ display: 'block', py: 1.5, borderBottom: navBd, fontFamily: 'var(--font-heading)', fontSize: { xs: 30, md: 46 }, lineHeight: 1.12, color: 'var(--color-neutral-100)', textDecoration: 'none', transition: 'color 300ms', '&:hover': { color: 'var(--color-accent-300)' } }}
+              sx={{ display: 'block', py: 1.5, borderBottom: navBd, fontFamily: 'var(--font-heading)', fontSize: { xs: 30, md: 46 }, lineHeight: 1.12, color: 'var(--color-neutral-100)', textDecoration: 'none', transition: 'color 300ms, padding-left 400ms var(--od-ease)', '&:hover': { color: 'var(--color-accent-300)', pl: '14px' } }}
             >
               {l.label}
             </Link>

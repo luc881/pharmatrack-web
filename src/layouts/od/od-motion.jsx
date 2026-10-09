@@ -1,6 +1,7 @@
 'use client';
 
-import { m, useReducedMotion } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { m, animate, useInView, useReducedMotion } from 'framer-motion';
 
 import Box from '@mui/material/Box';
 
@@ -65,4 +66,28 @@ export function OdFadeIn({ children, y = 20, delay = 0, duration = 1, sx, ...oth
       {children}
     </Box>
   );
+}
+
+// Número que cuenta desde 0 cuando entra en pantalla. En el HTML del servidor
+// va el valor final (sin JS o con movimiento reducido se queda así); al montar,
+// si todavía no se ve, se pone en 0 para contar después.
+export function OdCountUp({ value, duration = 1.6 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' });
+  const reduce = useReducedMotion();
+  const [n, setN] = useState(value);
+
+  useEffect(() => {
+    if (!reduce && !inView) setN(0);
+    // ponytail: solo al montar; el conteo lo dispara el efecto de abajo
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!inView || reduce) return undefined;
+    const controls = animate(0, value, { duration, ease: EASE, onUpdate: (v) => setN(Math.round(v)) });
+    return () => controls.stop();
+  }, [inView, reduce, value, duration]);
+
+  return <span ref={ref}>{n}</span>;
 }

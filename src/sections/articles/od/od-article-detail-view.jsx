@@ -84,6 +84,8 @@ export function OdArticleDetailView({ article, related = [] }) {
 
   return (
     <article>
+      {/* Barra de lectura tuna, ligada al scroll (CSS en global.css) */}
+      <Box className="od-progress" aria-hidden />
       {/* Encabezado centrado */}
       <Box component="section" className="od-rise" sx={{ maxWidth: 900, mx: 'auto', px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 8 }, pb: 4, textAlign: 'center' }}>
         <Box sx={{ mb: 2.5, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>

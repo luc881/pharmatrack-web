@@ -162,6 +162,79 @@ input[type='number']::-webkit-inner-spin-button {
 /* fade + subida al cargar (hero): CSS puro para que siempre dispare */
 .od-rise { animation: odRise 1.1s var(--od-ease) 0.35s both; }
 
+/** **************************************
+* Adornos vivos (BRAND.md §7: movimiento sutil). Todo CSS; la regla de
+* prefers-reduced-motion de abajo los apaga.
+*************************************** */
+@keyframes odGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes odPop { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: none; } }
+@keyframes odSway { 0%, 100% { transform: rotate(-1.4deg); } 50% { transform: rotate(1.4deg); } }
+@keyframes odTwinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.65); } }
+@keyframes odSpin { to { transform: rotate(360deg); } }
+
+.od-mark-bar { transform-origin: left center; }
+.od-div-line-l { transform-origin: right center; }
+.od-div-line-r { transform-origin: left center; }
+
+/* La barra de los títulos se dibuja y el divisor de hojas se abre desde el
+   centro conforme entran en pantalla (scroll-driven). Donde el navegador no
+   lo soporta se ven quietos, completos. */
+@supports (animation-timeline: view()) {
+  .od-mark-bar,
+  .od-div-line-l,
+  .od-div-line-r {
+    animation: odGrowX ease-out both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 90%;
+  }
+  .od-mark-dot,
+  .od-div-leaf {
+    animation: odPop ease-out both;
+    animation-timeline: view();
+    animation-range: entry 45% entry 100%;
+  }
+}
+
+/* Ramas que se mecen muy despacio, destellos que titilan y giran */
+.od-sway { transform-origin: 0% 100%; animation: odSway 7s ease-in-out infinite; }
+.od-twinkle { transform-box: fill-box; transform-origin: center; animation: odTwinkle 3.4s ease-in-out infinite; }
+.od-star-spin { animation: odSpin 10s linear infinite; }
+
+/* Barra de lectura de los artículos, ligada al scroll de la página */
+.od-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1300;
+  height: 3px;
+  background: var(--od-tuna);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  .od-progress { animation: odGrowX linear both; animation-timeline: scroll(root); }
+}
+
+/* Subrayado que crece desde la izquierda en enlaces de texto */
+.od-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 320ms var(--od-ease), color 250ms ease;
+}
+.od-link:hover { background-size: 100% 1px; }
+
+/* Foco visible en tuna (BRAND.md §7) */
+a:focus-visible,
+button:focus-visible,
+[role='button']:focus-visible {
+  outline: 2px solid var(--od-tuna);
+  outline-offset: 3px;
+}
+
 /* Accesibilidad: si el usuario pidio menos movimiento, se lo damos en TODO.
    Antes esto era una lista de cuatro clases, que dejaba fuera odFade (el menu)
    y cualquier transicion escrita inline en un `sx` — un selector por clase no

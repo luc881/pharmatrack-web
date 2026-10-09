@@ -36,9 +36,9 @@ export function NumberedKicker({ n, children, sx }) {
 export function HeadingMark({ sx }) {
   return (
     <Box aria-hidden sx={[{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--od-tinta)' }, ...asArray(sx)]}>
-      <Box sx={{ width: 34, height: 3, bgcolor: 'currentColor' }} />
-      <Box sx={{ width: 4, height: 4, ml: '4px', borderRadius: '50%', bgcolor: 'var(--od-gris)' }} />
-      <Box sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: 'var(--od-gris)' }} />
+      <Box className="od-mark-bar" sx={{ width: 34, height: 3, bgcolor: 'currentColor' }} />
+      <Box className="od-mark-dot" sx={{ width: 4, height: 4, ml: '4px', borderRadius: '50%', bgcolor: 'var(--od-gris)' }} />
+      <Box className="od-mark-dot" sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: 'var(--od-gris)' }} />
     </Box>
   );
 }
@@ -63,16 +63,16 @@ export function SectionHead({ n, kicker, title, size = 'clamp(30px, 3.4vw, 46px)
 export function LeafDivider({ sx }) {
   return (
     <Box aria-hidden sx={[{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--od-tinta)' }, ...asArray(sx)]}>
-      <Box sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: 'currentColor', opacity: 0.55 }} />
-      <Box sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.35 }} />
-      <Box component="svg" viewBox="0 0 64 16" sx={{ width: 64, height: 16, flexShrink: 0 }} fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round">
+      <Box className="od-mark-dot" sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: 'currentColor', opacity: 0.55 }} />
+      <Box className="od-div-line-l" sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.35 }} />
+      <Box component="svg" className="od-div-leaf" viewBox="0 0 64 16" sx={{ width: 64, height: 16, flexShrink: 0 }} fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round">
         <path d="M30 8 C26 3, 18 3, 12 8 C18 13, 26 13, 30 8 Z" fill="var(--od-crema-lino)" />
         <path d="M34 8 C38 3, 46 3, 52 8 C46 13, 38 13, 34 8 Z" fill="var(--od-crema-lino)" />
         <path d="M30 8 H12 M34 8 H52" strokeWidth=".6" />
         <circle cx="32" cy="8" r="1.6" fill="currentColor" stroke="none" />
       </Box>
-      <Box sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.35 }} />
-      <Box sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: 'currentColor', opacity: 0.55 }} />
+      <Box className="od-div-line-r" sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.35 }} />
+      <Box className="od-mark-dot" sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: 'currentColor', opacity: 0.55 }} />
     </Box>
   );
 }
@@ -157,13 +157,17 @@ export function LeafBranch({ paper = 'var(--od-papel)', sx }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M4 152 C40 136, 64 100, 104 84 S176 48, 214 12" />
-      {BRANCH_LEAVES.map(([x, y, r, filled], i) => (
-        <g key={i} transform={`translate(${x} ${y}) rotate(${r})`}>
-          <path d={LEAF} fill={filled ? 'var(--od-linea)' : paper} fillOpacity={filled ? 0.7 : 1} />
-          <path d={LEAF_VEINS} strokeWidth=".55" />
-        </g>
-      ))}
+      {/* el vaivén va en un grupo interno: así no pisa un `transform` del sx
+          (p. ej. la rama espejeada con scaleX(-1)) */}
+      <g className="od-sway">
+        <path d="M4 152 C40 136, 64 100, 104 84 S176 48, 214 12" />
+        {BRANCH_LEAVES.map(([x, y, r, filled], i) => (
+          <g key={i} transform={`translate(${x} ${y}) rotate(${r})`}>
+            <path d={LEAF} fill={filled ? 'var(--od-linea)' : paper} fillOpacity={filled ? 0.7 : 1} />
+            <path d={LEAF_VEINS} strokeWidth=".55" />
+          </g>
+        ))}
+      </g>
     </Box>
   );
 }
@@ -197,8 +201,8 @@ export function NopalSprig({ paper = 'var(--od-papel)', sx }) {
       {spines(106, 86, 16, 25)}
       <ellipse cx="44" cy="62" rx="6" ry="8" transform="rotate(-26 44 62)" fill="var(--od-tuna)" />
       <ellipse cx="116" cy="54" rx="6" ry="8" transform="rotate(24 116 54)" fill="var(--od-tuna)" />
-      <path d="M134 34 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 Z" fill="currentColor" stroke="none" />
-      <path d="M22 120 l1.5 4.5 4.5 1.5 -4.5 1.5 -1.5 4.5 -1.5 -4.5 -4.5 -1.5 4.5 -1.5 Z" fill="currentColor" stroke="none" />
+      <path className="od-twinkle" d="M134 34 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 Z" fill="currentColor" stroke="none" />
+      <path className="od-twinkle" style={{ animationDelay: '1.6s' }} d="M22 120 l1.5 4.5 4.5 1.5 -4.5 1.5 -1.5 4.5 -1.5 -4.5 -4.5 -1.5 4.5 -1.5 Z" fill="currentColor" stroke="none" />
     </Box>
   );
 }
