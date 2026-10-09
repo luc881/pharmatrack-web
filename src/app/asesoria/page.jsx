@@ -44,7 +44,7 @@ export default function Page() {
         <Box
           component="section"
           sx={{
-            px: { xs: '18px', md: '40px' },
+            px: { xs: '18px', md: 'var(--od-gutter)' },
             pt: { xs: 5, md: 6 },
             pb: { xs: 10, md: 15 },
             display: 'grid',

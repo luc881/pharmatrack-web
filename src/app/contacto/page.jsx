@@ -2,7 +2,6 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
 import { OdReveal } from 'src/layouts/od/od-motion';
@@ -49,7 +48,7 @@ export default function Page() {
         <Box
           component="section"
           sx={{
-            px: { xs: '18px', md: '40px' },
+            px: { xs: '18px', md: 'var(--od-gutter)' },
             pt: { xs: 4, md: 5 },
             pb: { xs: 10, md: 15 },
             display: 'grid',
@@ -123,8 +122,9 @@ export default function Page() {
             >
               Abrir WhatsApp
             </Box>
+            {/* href simple: esta página es componente de servidor y no puede
+                pasarle RouterLink (una función) al Link de MUI, que es de cliente */}
             <Link
-              component={RouterLink}
               href={paths.advisory}
               sx={{ display: 'block', mt: 1.75, textAlign: 'center', fontSize: 13, color: 'var(--color-accent-700)', textDecoration: 'none' }}
             >

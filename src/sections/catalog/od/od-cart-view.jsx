@@ -320,7 +320,7 @@ export function OdCartView() {
   // Confirmación (ruta de cierre por WhatsApp; el pago en línea redirige a MP)
   if (confirmed) {
     return (
-      <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 6, md: 10 }, pb: { xs: 10, md: 16 }, textAlign: 'center' }}>
+      <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 6, md: 10 }, pb: { xs: 10, md: 16 }, textAlign: 'center' }}>
         <Box sx={{ mb: 2, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>
           Pedido confirmado
         </Box>
@@ -347,7 +347,7 @@ export function OdCartView() {
   }
 
   return (
-    <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 3, md: 5 }, pb: { xs: 8, md: 12 } }}>
+    <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 3, md: 5 }, pb: { xs: 8, md: 12 } }}>
       <Display component="h1" size="clamp(48px, 7vw, 104px)" sx={{ textAlign: 'center', lineHeight: 1, mb: { xs: 4, md: 6 } }}>
         Tu cotización{count > 0 ? ` (${count})` : ''}
       </Display>

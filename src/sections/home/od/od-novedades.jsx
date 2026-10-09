@@ -35,7 +35,7 @@ export function OdNovedades({ mossWide }) {
   return (
     <>
       <Ticker />
-      <Box component="section" data-dark="1" sx={{ position: 'relative', px: { xs: '18px', md: '40px' }, py: { xs: '40px', md: '54px' }, overflow: 'hidden', isolation: 'isolate' }}>
+      <Box component="section" data-dark="1" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '40px', md: '54px' }, overflow: 'hidden', isolation: 'isolate' }}>
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${mossWide})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.28)' }} />
         <Box sx={{ maxWidth: 1040, mx: 'auto', bgcolor: 'var(--color-neutral-100)', color: 'var(--color-text)', p: { xs: '28px 22px', md: '38px 46px 36px' }, boxShadow: 'var(--shadow-md)' }}>

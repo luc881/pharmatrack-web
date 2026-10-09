@@ -14,8 +14,8 @@ import { OdArticleCard } from './od-article-card';
 
 export function OdArticlesView({ articles = [] }) {
   return (
-    <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
-      <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: 24, right: 40, width: 260, opacity: 0.5 }} />
+    <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
+      <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: 24, right: 'var(--od-gutter)', width: 260, opacity: 0.5 }} />
       <Box className="od-rise" sx={{ position: 'relative' }}>
         <Kicker sx={{ mb: 2.5 }}>Notas de cría</Kicker>
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02 }}>

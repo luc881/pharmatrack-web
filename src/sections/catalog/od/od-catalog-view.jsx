@@ -347,7 +347,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
         sx={{
           position: 'relative',
           overflow: 'hidden',
-          px: { xs: '18px', md: '40px' },
+          px: { xs: '18px', md: 'var(--od-gutter)' },
           pt: { xs: 5, md: 8 },
           pb: { xs: 4, md: 5 },
           // Banda oscura, el mismo tratamiento que el pie y las preguntas.
@@ -375,7 +375,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
         </Box>
 
         {/* Nopal a línea sobre la banda noche; las tunas quedan como chispa */}
-        <NopalSprig paper="transparent" sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', right: 56, bottom: -36, width: 200, color: 'var(--od-arena-texto)', opacity: 0.7 }} />
+        <NopalSprig paper="transparent" sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', right: 'calc(var(--od-gutter) + 16px)', bottom: -36, width: 200, color: 'var(--od-arena-texto)', opacity: 0.7 }} />
 
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ position: 'relative', lineHeight: 1.02 }}>
           {title}
@@ -571,7 +571,9 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
       </Drawer>
 
       {/* Cuerpo: barra lateral fija + rejilla */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' } }}>
+      {/* En 2K/4K el cuerpo se centra al ancho del contenido para que la barra
+          lateral quede alineada con el título, no pegada a la orilla */}
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' }, mx: 'auto', maxWidth: 'calc(var(--od-max) + 80px)' }}>
         {/* El color va en la celda de la rejilla, no en el <aside>: el aside es
             sticky y solo mide lo que ocupan sus filtros, asi que pintarlo a el
             dejaria el panel cortado a media pagina. */}
@@ -583,12 +585,14 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             bgcolor: 'var(--color-surface)',
             borderRight: { md: '1px solid var(--color-divider)' },
             borderBottom: { xs: '1px solid var(--color-divider)', md: 'none' },
+            // cuando el cuerpo ya no llega a la orilla, la columna cierra con línea
+            '@media (min-width: 1521px)': { borderLeft: '1px solid var(--color-divider)' },
           }}
         >
           <Box
             component="aside"
             sx={{
-              px: { xs: '18px', md: '32px' },
+              px: { xs: '18px', md: 'var(--od-gutter)' },
               py: { xs: 4, md: 5 },
               // se queda fija mientras la rejilla de productos hace scroll
               position: { md: 'sticky' },
@@ -646,7 +650,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           </Box>
         </Box>
 
-        <Box sx={{ px: { xs: '18px', md: '40px' }, py: { xs: 4, md: 5 }, pb: { xs: 8, md: 11 } }}>
+        <Box sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: 4, md: 5 }, pb: { xs: 8, md: 11 } }}>
           <Box
             sx={{
               display: 'flex',

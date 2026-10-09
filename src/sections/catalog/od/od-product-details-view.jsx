@@ -57,7 +57,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
       <Box
         component="nav"
         className="od-rise"
-        sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 3, md: 4 }, display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}
+        sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 3, md: 4 }, display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}
       >
         <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
           Inicio
@@ -73,7 +73,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
       {/* Imagen + panel de compra */}
       <Box
         component="section"
-        sx={{ display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'start', px: { xs: '18px', md: '40px' }, pt: { xs: 3, md: 4 }, gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.08fr) minmax(0, 1fr)' } }}
+        sx={{ display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'start', px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 3, md: 4 }, gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.08fr) minmax(0, 1fr)' } }}
       >
         <OdReveal sx={{ minWidth: 0, position: 'relative' }}>
           <OdImage src={product.image} alt={product.title} label={product.title} ratio="1 / 1" />
@@ -167,7 +167,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
       {/* Este paquete incluye */}
       {(product.components ?? []).length > 0 && (
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 6, md: '70px' } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 6, md: '70px' } }}>
           <Display size="clamp(24px, 3vw, 40px)" weight={400} sx={{ mb: '24px' }}>
             Este paquete incluye
           </Display>
@@ -187,7 +187,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
       {/* Descripción extendida */}
       {paragraphs.length > 1 && (
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 6, md: '70px' } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 6, md: '70px' } }}>
           <Box sx={{ maxWidth: '68ch' }}>
             {paragraphs.slice(1).map((p, i) => (
               <Box component="p" key={i} sx={{ m: 0, mb: '18px', fontSize: 16, lineHeight: 1.85 }}>{p}</Box>
@@ -198,7 +198,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
       {/* Productos similares */}
       {related.length > 0 && (
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '80px' }, pb: { xs: 8, md: 12 } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 7, md: '80px' }, pb: { xs: 8, md: 12 } }}>
           <Display size="clamp(26px, 3vw, 40px)" weight={400} sx={{ pb: '22px', borderBottom: '1px solid var(--color-divider)' }}>
             Productos similares
           </Display>

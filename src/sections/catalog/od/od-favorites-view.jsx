@@ -20,7 +20,7 @@ export function OdFavoritesView({ items = [] }) {
   const favorites = items.filter((item) => ids.includes(item.key));
 
   return (
-    <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
+    <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
       <Box className="od-rise">
         <Kicker sx={{ mb: 2.5 }}>Tu selección</Kicker>
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02, mb: { xs: 4, md: 6 } }}>

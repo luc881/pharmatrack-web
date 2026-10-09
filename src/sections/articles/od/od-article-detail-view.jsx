@@ -111,7 +111,7 @@ export function OdArticleDetailView({ article, related = [] }) {
 
       {/* Portada */}
       {article.cover_image && (
-        <Box sx={{ px: { xs: '18px', md: '40px' } }}>
+        <Box sx={{ px: { xs: '18px', md: 'var(--od-gutter)' } }}>
           <OdReveal sx={{ maxWidth: 1180, mx: 'auto' }}>
             <OdImage src={article.cover_image} alt={article.title} ratio="16 / 9" width={1200} />
           </OdReveal>

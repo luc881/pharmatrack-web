@@ -47,7 +47,7 @@ export default function Page() {
       />
 
       <OdReveal>
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 7 } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 5, md: 7 } }}>
           <Box sx={{ maxWidth: 1180, overflowX: 'auto' }}>
             <Box component="table" sx={{ width: '100%', minWidth: 520, borderCollapse: 'collapse', textAlign: 'left' }}>
               <Box component="thead">
@@ -100,7 +100,7 @@ export default function Page() {
         <Box
           component="section"
           sx={{
-            px: { xs: '18px', md: '40px' },
+            px: { xs: '18px', md: 'var(--od-gutter)' },
             pt: { xs: 7, md: 8 },
             pb: { xs: 10, md: 15 },
             display: 'grid',

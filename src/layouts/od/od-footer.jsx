@@ -53,7 +53,7 @@ export function OdFooter() {
   const today = now ? now.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
 
   return (
-    <Box component="footer" data-dark="1" sx={{ bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-200)', px: { xs: '18px', md: '40px' }, pt: { xs: '48px', md: '74px' }, overflow: 'hidden' }}>
+    <Box component="footer" data-dark="1" sx={{ bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-200)', px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '48px', md: '74px' }, overflow: 'hidden' }}>
       <Box sx={{ display: 'grid', gap: { xs: 5, md: '56px' }, alignItems: 'start', gridTemplateColumns: { xs: '1fr', md: 'minmax(320px, 1.5fr) minmax(240px, 1fr) minmax(160px, 0.6fr)' } }}>
         {/* Navegación */}
         <Box>
@@ -137,7 +137,7 @@ export function OdFooter() {
         {/* Sello oscuro: el del fondo noche (BRAND.md §5, mínimo 96 px) */}
         <Box component="img" src="/brand/assets/logo/sello-oscuro.svg" alt="Opuntia Den, criadero en CDMX" sx={{ display: 'block', mx: 'auto', mb: { xs: 3, md: 4 }, width: { xs: 96, md: 120 }, height: 'auto' }} />
         <Box sx={{ mb: 0.75, fontFamily: 'var(--font-body)', fontSize: 22, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'var(--color-neutral-400)' }}>Invertebrados</Box>
-        <Box sx={{ fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: '15.5vw', lineHeight: 1.02, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-neutral-100)' }}>Opuntia</Box>
+        <Box sx={{ fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'min(15.5vw, 224px)', lineHeight: 1.02, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-neutral-100)' }}>Opuntia</Box>
       </Box>
     </Box>
   );

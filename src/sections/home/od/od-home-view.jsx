@@ -224,7 +224,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       </Box>
 
       {/* Tira de estado: apartados abiertos + teléfono */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, md: 2.75 }, px: { xs: '18px', md: '32px' }, pt: '14px', fontSize: { xs: 11, md: 12 }, letterSpacing: { xs: '0.1em', md: '0.16em' }, textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, md: 2.75 }, px: { xs: '18px', md: 'var(--od-gutter)' }, pt: '14px', fontSize: { xs: 11, md: 12 }, letterSpacing: { xs: '0.1em', md: '0.16em' }, textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
         <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, whiteSpace: 'nowrap' }}>
           <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-accent-500)' }} />
           Apartados abiertos
@@ -271,7 +271,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
             cuatro cifras se apilaban y ocupaban pantalla y media. */}
         <Box
           sx={{
-            px: { xs: '18px', md: '32px' },
+            px: { xs: '18px', md: 'var(--od-gutter)' },
             display: 'grid',
             gap: { xs: '28px 18px', md: '40px' },
             gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(auto-fit, minmax(220px, 1fr))' },
@@ -296,7 +296,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
       {/* Compra por categoría */}
       {catCards.length > 0 && (
-        <Box component="section" sx={{ px: '18px', pt: { xs: '56px', md: '84px' } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '56px', md: '84px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: 1, pb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
             <SectionHead kicker="Explora" title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalog} sx={{ fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
@@ -320,7 +320,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
       {/* Selección de isópodos */}
       {selection.length > 0 && (
-        <Box component="section" id="catalogo" sx={{ px: '18px', py: { xs: '70px', md: '110px' } }}>
+        <Box component="section" id="catalogo" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '70px', md: '110px' } }}>
           <OdReveal>
             <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { md: '28px' }, mb: '64px' }}>
               <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, width: 190, opacity: 0.6, transform: 'scaleX(-1)' }} />
@@ -352,7 +352,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {/* Bloque oscuro del frasco: marquesina + "Seis cosas dentro del frasco" +
           6 ingredientes con el frasco 3D al centro (placeholder por ahora) */}
       <Box component="section" data-dark="1" sx={{ bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-200)', py: { xs: '64px', md: '96px' }, overflow: 'hidden' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: '40px' }, pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
           <Box component="span">(Qué necesita una colonia)</Box>
           <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
         </Box>
@@ -381,7 +381,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         </Box>
         <LeafDivider sx={{ mx: 'auto', mt: '28px', maxWidth: 360, px: 2, color: 'var(--od-arena-texto)' }} />
 
-        <Box sx={{ mt: { xs: '32px', md: '56px' }, px: { xs: '18px', md: '40px' }, display: 'grid', gap: { xs: 2.5, md: '46px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)' } }}>
+        <Box sx={{ mt: { xs: '32px', md: '56px' }, px: { xs: '18px', md: 'var(--od-gutter)' }, display: 'grid', gap: { xs: 2.5, md: '46px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)' } }}>
           <Box>
             {INGREDIENTS.slice(0, 3).map((item) => (
               <Ingredient key={item.n} item={item} align="right" />
@@ -420,7 +420,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {/* Todo para tu terrario (banda de productos con autoavance, pausa al hover) */}
       {terrario.length > 0 && (
         <Box component="section" sx={{ pt: { xs: '48px', md: '60px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: '40px' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
+          <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
             <SectionHead kicker="Insumos" title="Todo para tu terrario" size="clamp(26px, 3vw, 40px)" />
             <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todos los insumos →

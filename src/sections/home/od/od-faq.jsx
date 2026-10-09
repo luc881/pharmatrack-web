@@ -31,7 +31,7 @@ export function OdFaq({ mossTall }) {
 
   return (
     <Box component="section" id="preguntas" data-dark="1" sx={{ bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-200)', pt: { xs: '56px', md: '72px' }, pb: { xs: '72px', md: '110px' }, overflow: 'hidden' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: '40px' }, pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
         <Box component="span">(Preguntas frecuentes)</Box>
         <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 respuestas</Box>
       </Box>
@@ -43,7 +43,7 @@ export function OdFaq({ mossTall }) {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'grid', alignItems: 'stretch', gridTemplateColumns: { xs: '1fr', md: 'minmax(260px, 0.75fr) minmax(340px, 1.65fr)' } }}>
+      <Box sx={{ display: 'grid', alignItems: 'stretch', px: { md: 'var(--od-gutter-extra)' }, gridTemplateColumns: { xs: '1fr', md: 'minmax(260px, 0.75fr) minmax(340px, 1.65fr)' } }}>
         {/* Izquierda: escena del tronco + WhatsApp */}
         <Box sx={{ display: 'flex', flexDirection: 'column', p: { xs: '40px 18px 0', md: '62px 46px 0 40px' }, borderRight: { md: '1px solid rgba(240,235,224,0.14)' } }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, fontSize: 13, color: 'var(--color-neutral-400)' }}>

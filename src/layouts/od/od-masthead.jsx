@@ -32,7 +32,7 @@ const navLinkSx = {
 
 export function OdMasthead() {
   return (
-    <Box component="header" sx={{ px: { xs: '18px', md: '32px' }, pt: '18px' }}>
+    <Box component="header" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: '18px' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: { xs: 1.5, md: 3 }, flexWrap: { xs: 'nowrap', md: 'wrap' } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0, gap: { xs: 2.5, md: '34px' } }}>
           <Box

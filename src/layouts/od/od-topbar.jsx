@@ -48,7 +48,7 @@ export function OdTopbar() {
           gridTemplateColumns: { xs: 'auto 1fr auto', md: '1fr auto 1fr' },
           alignItems: 'center',
           gap: { xs: 2, md: 3 },
-          px: { xs: '18px', md: '40px' },
+          px: { xs: '18px', md: 'var(--od-gutter)' },
           py: { xs: '14px', md: '20px' },
           bgcolor: 'rgba(243,242,242,0.9)',
           backdropFilter: 'blur(10px)',

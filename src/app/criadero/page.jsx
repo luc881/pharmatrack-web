@@ -41,7 +41,7 @@ export default async function Page() {
       />
 
       <OdReveal>
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 7 } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 5, md: 7 } }}>
           <Box
             sx={{
               display: 'grid',
@@ -57,7 +57,7 @@ export default async function Page() {
       </OdReveal>
 
       <OdReveal>
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: 9 }, display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(280px, 0.8fr) minmax(0, 1fr)' } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 7, md: 9 }, display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(280px, 0.8fr) minmax(0, 1fr)' } }}>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <OdScene
               scene="log"
@@ -81,7 +81,7 @@ export default async function Page() {
       </OdReveal>
 
       <OdReveal>
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: 9 }, pb: { xs: 10, md: 15 } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 7, md: 9 }, pb: { xs: 10, md: 15 } }}>
           <Box
             sx={{
               display: 'grid',

@@ -119,7 +119,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
         component="nav"
         className="od-rise"
         sx={{
-          px: { xs: '18px', md: '40px' },
+          px: { xs: '18px', md: 'var(--od-gutter)' },
           pt: { xs: 3, md: 4 },
           display: 'flex',
           flexWrap: 'wrap',
@@ -156,7 +156,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           display: 'grid',
           gap: { xs: 4, md: '48px' },
           alignItems: 'start',
-          px: { xs: '18px', md: '40px' },
+          px: { xs: '18px', md: 'var(--od-gutter)' },
           pt: { xs: 3, md: 4 },
           gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.08fr) minmax(0, 1fr)' },
         }}
@@ -471,7 +471,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           detalles de la marca en pequeño: kicker numerado, marca de barra con
           puntos y divisor de hojas. Sin marcos ni ilustraciones decorativas. */}
       {(careColumns.length > 0 || sections.length > 0 || taxonomy.length > 0) && (
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '100px' } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 7, md: '100px' } }}>
           <OdReveal>
             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap' }}>
               <SectionHead kicker="Guía de cuidado" title="Ficha de cuidados" size="clamp(28px, 3.2vw, 44px)" />
@@ -593,9 +593,9 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
 
       {/* Suele ir con */}
       {related.length > 0 && (
-        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 6 }, pb: { xs: 8, md: 12 } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 5, md: 6 }, pb: { xs: 8, md: 12 } }}>
           <SectionHead kicker="Para el mismo terrario" title="Suele ir con" size="clamp(26px, 3vw, 40px)" />
-          <Box sx={{ pt: '34px', display: 'grid', gap: '22px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
+          <Box sx={{ pt: '34px', display: 'grid', gap: '22px', gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' } }}>
             {related.slice(0, 4).map((rel, i) => (
               <OdReveal key={rel.key} delay={i * 0.08}>
                 <OdCatalogCard card={animalToCard(rel)} index={i} />

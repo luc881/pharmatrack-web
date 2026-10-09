@@ -177,7 +177,8 @@ export function OdHeader({ revealOnScroll = false }) {
       >
         <Marquee />
 
-        <Box sx={{ px: '18px', pt: '14px' }}>
+        {/* En 2K/4K la barra no pasa del ancho del contenido */}
+        <Box sx={{ px: '18px', pt: '14px', mx: 'auto', maxWidth: 'calc(var(--od-max) + 116px)' }}>
           <Box
             sx={{
               display: 'grid',

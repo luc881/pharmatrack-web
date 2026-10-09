@@ -140,6 +140,16 @@ input[type='number']::-webkit-inner-spin-button {
   --shadow-lg: 4px 4px 0 rgba(51, 36, 20, 0.12);
 
   --od-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Ancho máximo del contenido en monitores grandes (2K/4K). Las bandas de
+     fondo siguen a sangre; el contenido se centra con este margen lateral,
+     que vale 40px hasta que la pantalla pasa de 1440 + 80. El % se resuelve
+     contra el ancho del padre donde se usa (padding). */
+  --od-max: 1440px;
+  --od-gutter: max(40px, calc((100% - var(--od-max)) / 2));
+  /* Solo lo que excede a 40px (0 en pantallas normales), para bloques que
+     ya traen su propio padding interno de 40px */
+  --od-gutter-extra: max(0px, calc((100% - var(--od-max)) / 2 - 40px));
 }
 
 @keyframes odFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
