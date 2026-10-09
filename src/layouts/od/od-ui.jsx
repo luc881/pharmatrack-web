@@ -44,21 +44,19 @@ export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 1
             sx={{ width: 1, height: 1, display: 'block', objectFit: 'cover' }}
           />
         ) : (
+          // Sin foto: el favicon claro de la marca en grande, para que el hueco
+          // no se vea vacío; el nombre queda para lectores de pantalla.
           <Box
-            sx={{
-              width: 1,
-              height: 1,
-              px: 2,
-              display: 'grid',
-              textAlign: 'center',
-              placeItems: 'center',
-              color: 'var(--color-neutral-500)',
-              fontSize: 12,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-            }}
+            role="img"
+            aria-label={label || alt || 'Sin foto'}
+            sx={{ width: 1, height: 1, display: 'grid', placeItems: 'center', bgcolor: 'var(--od-crema-hueso)' }}
           >
-            {label}
+            <Box
+              component="img"
+              src="/brand/assets/favicon/favicon-claro.svg"
+              alt=""
+              sx={{ width: '42%', maxWidth: 220, height: 'auto', opacity: 0.9 }}
+            />
           </Box>
         )}
       </Box>
