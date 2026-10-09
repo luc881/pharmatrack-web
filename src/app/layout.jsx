@@ -8,10 +8,10 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
 import { CONFIG } from 'src/global-config';
+import { themeConfig, ThemeProvider } from 'src/theme';
 import { getSiteSettings, getNavCategories } from 'src/lib/public-api';
 import { SiteSettingsProvider } from 'src/layouts/site-settings-context';
 import { NavCategoriesProvider } from 'src/layouts/nav-categories-context';
-import { themeConfig, ThemeProvider, primary as primaryColor } from 'src/theme';
 
 import { ProgressBar } from 'src/components/progress-bar';
 import { SiteSplash } from 'src/components/loading-screen';
@@ -26,7 +26,7 @@ import { AccountSync } from 'src/sections/account/account-sync';
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: primaryColor.main,
+  themeColor: '#2E2924', // noche, igual que brand/assets/favicon/site.webmanifest
 };
 
 export const metadata = {
@@ -37,11 +37,15 @@ export const metadata = {
   },
   description:
     'Tienda de animales exóticos: tarántulas, reptiles y más, con procedencia legal.',
-  icons: [
-    { rel: 'icon', url: `${CONFIG.assetsDir}/logo/opuntia-favicon.png`, type: 'image/png' },
-    { rel: 'shortcut icon', url: `${CONFIG.assetsDir}/favicon.ico` },
-    { rel: 'apple-touch-icon', url: `${CONFIG.assetsDir}/logo/opuntia-favicon.png` },
-  ],
+  icons: {
+    icon: [
+      { url: `${CONFIG.assetsDir}/favicon.ico`, sizes: 'any' },
+      { url: `${CONFIG.assetsDir}/brand/assets/favicon/favicon.svg`, type: 'image/svg+xml' },
+      { url: `${CONFIG.assetsDir}/brand/assets/favicon/favicon-32.png`, type: 'image/png', sizes: '32x32' },
+    ],
+    apple: `${CONFIG.assetsDir}/brand/assets/favicon/apple-touch-icon.png`,
+  },
+  manifest: `${CONFIG.assetsDir}/brand/assets/favicon/site.webmanifest`,
 };
 
 // ----------------------------------------------------------------------

@@ -112,7 +112,7 @@ export function SiteSplash({ heroPoster }) {
       }}
     >
       <Logo
-        variant="icon"
+        variant="full"
         disabled
         sx={{
           width: 104,
