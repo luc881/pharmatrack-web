@@ -7,7 +7,7 @@ import { OdArticlesView } from 'src/sections/articles/od/od-articles-view';
 
 export const metadata = {
   title: 'Artículos',
-  description: 'Guías de cuidado, especies y divulgación sobre animales exóticos.',
+  description: 'Guías de cuidado, especies y divulgación sobre isópodos, colémbolos, fásmidos y terrarios bioactivos.',
 };
 
 export default async function Page() {

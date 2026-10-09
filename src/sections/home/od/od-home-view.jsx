@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { CONFIG } from 'src/global-config';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
@@ -227,7 +228,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           Apartados abiertos
         </Box>
         <Box component="span" sx={{ flex: 1, height: '1px', bgcolor: 'var(--color-divider)' }} />
-        <Box component="span" sx={{ whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>55 1234 5678</Box>
+        <Box component="span" sx={{ whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{CONFIG.phone}</Box>
       </Box>
 
       {/* Banda "El criadero": marquesina de nombres + cifras (fondo terracota) */}

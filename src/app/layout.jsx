@@ -32,18 +32,18 @@ export const viewport = {
 export const metadata = {
   metadataBase: new URL(CONFIG.siteUrl),
   title: {
-    default: `${CONFIG.appName} — Animales exóticos`,
+    default: `${CONFIG.appName} — Criadero de invertebrados en CDMX`,
     template: `%s | ${CONFIG.appName}`,
   },
   description:
-    'Tienda de animales exóticos: tarántulas, reptiles y más, con procedencia legal.',
+    'Criadero en Col. Roma Norte, CDMX: isópodos, colémbolos, fásmidos y sustratos para terrarios bioactivos. Entrega en persona.',
   icons: {
     icon: [
       { url: `${CONFIG.assetsDir}/favicon.ico`, sizes: 'any' },
-      { url: `${CONFIG.assetsDir}/brand/assets/favicon/favicon.svg`, type: 'image/svg+xml' },
-      { url: `${CONFIG.assetsDir}/brand/assets/favicon/favicon-32.png`, type: 'image/png', sizes: '32x32' },
+      { url: `${CONFIG.assetsDir}/brand/assets/favicon/favicon-claro.svg`, type: 'image/svg+xml' },
+      { url: `${CONFIG.assetsDir}/brand/assets/favicon/favicon-32-claro.png`, type: 'image/png', sizes: '32x32' },
     ],
-    apple: `${CONFIG.assetsDir}/brand/assets/favicon/apple-touch-icon.png`,
+    apple: `${CONFIG.assetsDir}/brand/assets/favicon/apple-touch-icon-claro.png`,
   },
   manifest: `${CONFIG.assetsDir}/brand/assets/favicon/site.webmanifest`,
 };

@@ -68,7 +68,7 @@ export async function generateMetadata({ params }) {
     const format = saleFormatLabel(item.species);
     const description =
       item.description?.split('\n')[0]?.slice(0, 300) ??
-      `${item.title} (${sci}) en venta${format ? ` — ${format.toLowerCase()}` : ''}. Animales exóticos con procedencia legal.`;
+      `${item.title} (${sci}) en venta${format ? ` — ${format.toLowerCase()}` : ''}. Criado en Opuntia Den, CDMX.`;
 
     return {
       title,

@@ -86,8 +86,8 @@ export default function Page() {
             </Box>
             <Box sx={rowSx}>
               <Box sx={labelSx}>Redes</Box>
-              <Link href="https://instagram.com/opuntiaden" target="_blank" rel="noopener" sx={valueSx}>
-                @opuntiaden en Instagram
+              <Link href={CONFIG.instagram} target="_blank" rel="noopener" sx={valueSx}>
+                {CONFIG.instagramHandle} en Instagram
               </Link>
             </Box>
           </Box>

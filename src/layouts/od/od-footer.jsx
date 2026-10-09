@@ -29,7 +29,7 @@ const NAV = [
 ];
 
 const REDES = [
-  { label: 'Instagram ↗', href: 'https://instagram.com/opuntiaden', external: true },
+  { label: 'Instagram ↗', href: CONFIG.instagram, external: true },
   { label: 'WhatsApp ↗', href: WA, external: true },
   { label: 'Cómo llegar ↗', href: paths.contact },
 ];
@@ -89,7 +89,7 @@ export function OdFooter() {
             <br />
             Ciudad de México y área metropolitana
             <br />
-            55 1234 5678
+            {CONFIG.phone}
           </Box>
           <Box sx={{ fontSize: 14, lineHeight: 1.65, color: 'var(--color-neutral-400)' }}>
             Lun a vie 11–19 h · Sáb 11–15 h
@@ -134,6 +134,8 @@ export function OdFooter() {
 
       {/* Wordmark a sangre */}
       <Box sx={{ mt: { xs: 4, md: '40px' }, pb: 3, textAlign: 'center' }}>
+        {/* Sello oscuro: el del fondo noche (BRAND.md §5, mínimo 96 px) */}
+        <Box component="img" src="/brand/assets/logo/sello-oscuro.svg" alt="Opuntia Den, criadero en CDMX" sx={{ display: 'block', mx: 'auto', mb: { xs: 3, md: 4 }, width: { xs: 96, md: 120 }, height: 'auto' }} />
         <Box sx={{ mb: 0.75, fontFamily: 'var(--font-body)', fontSize: 22, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'var(--color-neutral-400)' }}>Invertebrados</Box>
         <Box sx={{ fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: '15.5vw', lineHeight: 1.02, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-neutral-100)' }}>Opuntia</Box>
       </Box>
