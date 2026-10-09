@@ -14,7 +14,7 @@ import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { OdReveal, OdCountUp } from 'src/layouts/od/od-motion';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { Star, Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
-import { LeafBranch, HeadingMark, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
+import { StarRule, HeadingMark, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 
 import { OdCatalogCard } from 'src/sections/catalog/od/od-catalog-card';
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
@@ -323,7 +323,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         <Box component="section" id="catalogo" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '70px', md: '110px' } }}>
           <OdReveal>
             <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { md: '28px' }, mb: '64px' }}>
-              <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, width: 190, opacity: 0.6, transform: 'scaleX(-1)' }} />
+              <StarRule sx={{ display: { xs: 'none', md: 'flex' } }} />
               <Box sx={{ textAlign: 'center' }}>
                 <Kicker sx={{ mb: '14px' }}>Del criadero</Kicker>
                 <Display size="clamp(34px, 4.4vw, 66px)" sx={{ maxWidth: '16ch', mx: 'auto' }}>
@@ -331,7 +331,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
                 </Display>
                 <HeadingMark sx={{ mt: '22px', justifyContent: 'center' }} />
               </Box>
-              <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, width: 190, opacity: 0.6 }} />
+              <StarRule flip sx={{ display: { xs: 'none', md: 'flex' } }} />
             </Box>
           </OdReveal>
           {/* flex centrado con ancho fijo: una sola tarjeta queda al centro sin

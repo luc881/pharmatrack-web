@@ -168,8 +168,6 @@ input[type='number']::-webkit-inner-spin-button {
 *************************************** */
 @keyframes odGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes odPop { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: none; } }
-@keyframes odSway { 0%, 100% { transform: rotate(-1.4deg); } 50% { transform: rotate(1.4deg); } }
-@keyframes odTwinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.65); } }
 @keyframes odSpin { to { transform: rotate(360deg); } }
 
 .od-mark-bar { transform-origin: left center; }
@@ -195,9 +193,7 @@ input[type='number']::-webkit-inner-spin-button {
   }
 }
 
-/* Ramas que se mecen muy despacio, destellos que titilan y giran */
-.od-sway { transform-origin: 0% 100%; animation: odSway 7s ease-in-out infinite; }
-.od-twinkle { transform-box: fill-box; transform-origin: center; animation: odTwinkle 3.4s ease-in-out infinite; }
+/* Destellos de las marquesinas que giran despacio */
 .od-star-spin { animation: odSpin 10s linear infinite; }
 
 /* Barra de lectura de los artículos, ligada al scroll de la página */

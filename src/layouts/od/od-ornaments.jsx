@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 // ----------------------------------------------------------------------
 // Adornos de la marca (mismo lenguaje que el tríptico de cuidados y el
 // sello): kicker numerado, marca de título, divisor de hojas, nota
-// "¿Sabías que…?" y ramas a línea. Todo en SVG en línea con currentColor
+// "¿Sabías que…?", sello oficial y filete con destello. Todo en SVG en línea con currentColor
 // para heredar la tinta del contexto (BRAND.md §6). Con moderación: uno o
 // dos por sección.
 // ----------------------------------------------------------------------
@@ -125,84 +125,35 @@ export function NoteBox({ icon = 'leaf', label = '¿Sabías que…?', compact = 
 }
 
 // ----------------------------------------------------------------------
-// Ilustraciones a línea (decoración de fondo). Van con aria-hidden y opacidad
-// baja; se posicionan con sx (position absolute) desde quien las usa.
+// Elementos de marca tomados tal cual del paquete (public/brand/).
 
-const LEAF = 'M0 0 C9 -10 25 -11 34 0 C25 11 9 10 0 0 Z';
-const LEAF_VEINS = 'M2 0 L31 0 M10 0 L15 -5 M17 0 L22 -6 M24 0 L28 -4 M10 0 L15 5 M17 0 L22 6 M24 0 L28 4';
-// [x, y, giro, rellena]
-const BRANCH_LEAVES = [
-  [38, 128, -128, true],
-  [50, 121, 18, false],
-  [82, 96, -112, false],
-  [98, 86, 28, true],
-  [132, 70, -104, true],
-  [148, 62, 22, false],
-  [178, 41, -98, false],
-  [193, 31, 30, true],
-  [212, 12, -46, false],
-];
-
-// Rama con hojas, como las del tríptico.
-export function LeafBranch({ paper = 'var(--od-papel)', sx }) {
+// Sello oficial. `dark` usa el sello oscuro (para fondos noche o fotos).
+// BRAND.md §5: mínimo 96 px, sin rotar, estirar ni recolorear.
+export function BrandSeal({ dark = false, size = 140, sx }) {
   return (
     <Box
-      component="svg"
-      viewBox="0 0 230 160"
+      component="img"
+      src={`/brand/assets/logo/sello-${dark ? 'oscuro' : 'claro'}.svg`}
+      alt=""
       aria-hidden
-      sx={[{ display: 'block', color: 'var(--od-tinta)', pointerEvents: 'none' }, ...asArray(sx)]}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.1"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {/* el vaivén va en un grupo interno: así no pisa un `transform` del sx
-          (p. ej. la rama espejeada con scaleX(-1)) */}
-      <g className="od-sway">
-        <path d="M4 152 C40 136, 64 100, 104 84 S176 48, 214 12" />
-        {BRANCH_LEAVES.map(([x, y, r, filled], i) => (
-          <g key={i} transform={`translate(${x} ${y}) rotate(${r})`}>
-            <path d={LEAF} fill={filled ? 'var(--od-linea)' : paper} fillOpacity={filled ? 0.7 : 1} />
-            <path d={LEAF_VEINS} strokeWidth=".55" />
-          </g>
-        ))}
-      </g>
-    </Box>
+      sx={[{ display: 'block', width: size, height: size, pointerEvents: 'none' }, ...asArray(sx)]}
+    />
   );
 }
 
-// Penca con tunas, el nopal del sello a línea. Las tunas son la chispa tuna.
-export function NopalSprig({ paper = 'var(--od-papel)', sx }) {
-  const spines = (cx, cy, rx, ry) =>
-    [
-      [-0.45, -0.35], [0.3, -0.5], [-0.1, -0.05], [0.42, 0.1], [-0.4, 0.3], [0.15, 0.45],
-    ].map(([dx, dy], i) => {
-      const x = cx + dx * rx;
-      const y = cy + dy * ry;
-      return <path key={i} d={`M${x} ${y} l1.2 -3.2`} strokeWidth=".8" />;
-    });
+// Filete fino que remata en el destello tuna de la marca: "———— ✦".
+// `flip` lo invierte para el lado derecho ("✦ ————").
+export function StarRule({ flip = false, width = 140, sx }) {
   return (
     <Box
-      component="svg"
-      viewBox="0 0 160 210"
       aria-hidden
-      sx={[{ display: 'block', color: 'var(--od-tinta)', pointerEvents: 'none' }, ...asArray(sx)]}
-      fill={paper}
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinejoin="round"
+      sx={[
+        { display: 'flex', alignItems: 'center', gap: '12px', width, flexDirection: flip ? 'row-reverse' : 'row', color: 'var(--od-tinta)' },
+        ...asArray(sx),
+      ]}
     >
-      <ellipse cx="82" cy="160" rx="27" ry="42" />
-      {spines(82, 160, 27, 42)}
-      <ellipse cx="56" cy="98" rx="20" ry="30" transform="rotate(-26 56 98)" />
-      {spines(56, 98, 18, 28)}
-      <ellipse cx="106" cy="86" rx="18" ry="27" transform="rotate(24 106 86)" />
-      {spines(106, 86, 16, 25)}
-      <ellipse cx="44" cy="62" rx="6" ry="8" transform="rotate(-26 44 62)" fill="var(--od-tuna)" />
-      <ellipse cx="116" cy="54" rx="6" ry="8" transform="rotate(24 116 54)" fill="var(--od-tuna)" />
-      <path className="od-twinkle" d="M134 34 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 Z" fill="currentColor" stroke="none" />
-      <path className="od-twinkle" style={{ animationDelay: '1.6s' }} d="M22 120 l1.5 4.5 4.5 1.5 -4.5 1.5 -1.5 4.5 -1.5 -4.5 -4.5 -1.5 4.5 -1.5 Z" fill="currentColor" stroke="none" />
+      <Box className={flip ? 'od-div-line-r' : 'od-div-line-l'} sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.4 }} />
+      <Box component="span" className="od-star od-mark-dot" sx={{ width: 12, height: 12, flexShrink: 0 }} />
     </Box>
   );
 }

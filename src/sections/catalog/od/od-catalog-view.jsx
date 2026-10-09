@@ -15,7 +15,7 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { Display } from 'src/layouts/od/od-ui';
 import { OdReveal } from 'src/layouts/od/od-motion';
-import { NopalSprig, HeadingMark } from 'src/layouts/od/od-ornaments';
+import { BrandSeal, HeadingMark } from 'src/layouts/od/od-ornaments';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -374,8 +374,8 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           )}
         </Box>
 
-        {/* Nopal a línea sobre la banda noche; las tunas quedan como chispa */}
-        <NopalSprig paper="transparent" sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', right: 'calc(var(--od-gutter) + 16px)', bottom: -36, width: 200, color: 'var(--od-arena-texto)', opacity: 0.7 }} />
+        {/* Sello oscuro (el de fondos noche) a la derecha de la banda */}
+        <BrandSeal dark size={168} sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: '50%', right: 'var(--od-gutter)', transform: 'translateY(-50%)' }} />
 
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ position: 'relative', lineHeight: 1.02 }}>
           {title}

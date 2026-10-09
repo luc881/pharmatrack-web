@@ -6,7 +6,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { cdnImage } from 'src/lib/cdn-image';
 
-import { LeafBranch, HeadingMark } from './od-ornaments';
+import { BrandSeal, HeadingMark } from './od-ornaments';
 
 // ----------------------------------------------------------------------
 // Primitivas del rediseño editorial (Opuntia Den). Comparten tokens de
@@ -230,8 +230,8 @@ export function SciName({ children, sx }) {
 export function OdPageHead({ kicker, title, intro, introWidth = '62ch' }) {
   return (
     <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 4, md: 6 } }}>
-      {/* Rama a línea a la derecha, como en las láminas del tríptico */}
-      <LeafBranch sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: 24, right: 'var(--od-gutter)', width: 260, opacity: 0.5 }} />
+      {/* Sello oficial a la derecha del título */}
+      <BrandSeal size={132} sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: { md: 40 }, right: 'var(--od-gutter)' }} />
       <Box className="od-rise" sx={{ position: 'relative', maxWidth: 1180 }}>
         <Kicker sx={{ mb: 1.75 }}>{kicker}</Kicker>
         <Display component="h1" size="clamp(34px, 4.6vw, 68px)" sx={{ lineHeight: 1.05, maxWidth: '18ch' }}>
