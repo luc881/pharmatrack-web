@@ -190,7 +190,7 @@ export function OdArticleDetailView({ article, related = [] }) {
           component="section"
           sx={{ maxWidth: 1180, mx: 'auto', mt: { xs: 4, md: 5 }, px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '70px' }, pb: { xs: 8, md: 12 }, borderTop: '1px solid var(--color-divider)' }}
         >
-          <SectionHead kicker="Más notas de cría" title="Sigue leyendo" ghost={false} size="clamp(26px, 3vw, 40px)" />
+          <SectionHead kicker="Más notas de cría" title="Sigue leyendo" size="clamp(26px, 3vw, 40px)" />
           <Box sx={{ pt: '34px', display: 'grid', gap: '28px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
             {related.map((item, i) => (
               <OdReveal key={item.id} delay={i * 0.08}>

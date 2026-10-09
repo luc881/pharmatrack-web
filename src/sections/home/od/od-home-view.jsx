@@ -298,7 +298,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {catCards.length > 0 && (
         <Box component="section" sx={{ px: '18px', pt: { xs: '56px', md: '84px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: 1, pb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
-            <SectionHead kicker="Explora" title="Compra por categoría" ghost={false} size="clamp(28px, 3.4vw, 48px)" />
+            <SectionHead kicker="Explora" title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalog} sx={{ fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todo el catálogo →
             </Link>
@@ -421,7 +421,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {terrario.length > 0 && (
         <Box component="section" sx={{ pt: { xs: '48px', md: '60px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: '40px' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
-            <SectionHead kicker="Insumos" title="Todo para tu terrario" ghost={false} size="clamp(26px, 3vw, 40px)" />
+            <SectionHead kicker="Insumos" title="Todo para tu terrario" size="clamp(26px, 3vw, 40px)" />
             <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todos los insumos →
             </Link>

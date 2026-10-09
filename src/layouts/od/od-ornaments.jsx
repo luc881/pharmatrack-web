@@ -1,10 +1,9 @@
 import Box from '@mui/material/Box';
 
 // ----------------------------------------------------------------------
-// Adornos de "lámina de naturalista" (mismo lenguaje que el tríptico de
-// cuidados y el sello): kicker numerado, marca de título, número fantasma,
-// divisor de hojas, nota "¿Sabías que…?", marco de lámina, medallón con
-// anillo de puntos y ramas a línea. Todo en SVG en línea con currentColor
+// Adornos de la marca (mismo lenguaje que el tríptico de cuidados y el
+// sello): kicker numerado, marca de título, divisor de hojas, nota
+// "¿Sabías que…?" y ramas a línea. Todo en SVG en línea con currentColor
 // para heredar la tinta del contexto (BRAND.md §6). Con moderación: uno o
 // dos por sección.
 // ----------------------------------------------------------------------
@@ -44,34 +43,9 @@ export function HeadingMark({ sx }) {
   );
 }
 
-// Número grande en itálica, casi transparente, detrás del título.
-export function GhostNumber({ n, sx }) {
-  return (
-    <Box
-      aria-hidden
-      sx={[
-        {
-          fontFamily: 'var(--od-font-display)',
-          fontStyle: 'italic',
-          fontSize: { xs: 64, md: 104 },
-          lineHeight: 0.9,
-          color: 'var(--od-linea)',
-          opacity: 0.75,
-          userSelect: 'none',
-          pointerEvents: 'none',
-          fontVariantNumeric: 'lining-nums',
-        },
-        ...asArray(sx),
-      ]}
-    >
-      {String(n).padStart(2, '0')}
-    </Box>
-  );
-}
-
-// Título de sección completo: kicker numerado, título con número fantasma
-// a la derecha y la marca de barra con puntos.
-export function SectionHead({ n, kicker, title, ghost = true, size = 'clamp(30px, 3.4vw, 46px)', sx }) {
+// Título de sección completo: kicker (numerado si hay `n`), título y la
+// marca de barra con puntos.
+export function SectionHead({ n, kicker, title, size = 'clamp(30px, 3.4vw, 46px)', sx }) {
   return (
     <Box sx={[{ position: 'relative' }, ...asArray(sx)]}>
       {kicker && <NumberedKicker n={n}>{kicker}</NumberedKicker>}
@@ -79,7 +53,6 @@ export function SectionHead({ n, kicker, title, ghost = true, size = 'clamp(30px
         <Box component="h2" sx={{ m: 0, fontFamily: 'var(--od-font-display)', fontWeight: 400, fontSize: size, lineHeight: 1.08, textWrap: 'balance' }}>
           {title}
         </Box>
-        {ghost && n != null && <GhostNumber n={n} sx={{ flexShrink: 0, mt: '-4px' }} />}
       </Box>
       <HeadingMark sx={{ mt: '18px' }} />
     </Box>
@@ -104,17 +77,6 @@ export function LeafDivider({ sx }) {
   );
 }
 
-// Fila de cinco puntos con el central más grande (pie del tríptico).
-export function DotRow({ sx }) {
-  return (
-    <Box aria-hidden sx={[{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '9px' }, ...asArray(sx)]}>
-      {[3, 3, 5, 3, 3].map((d, i) => (
-        <Box key={i} sx={{ width: d, height: d, borderRadius: '50%', bgcolor: 'var(--od-gris)' }} />
-      ))}
-    </Box>
-  );
-}
-
 // Iconos a línea para las notas. Trazo de 1.4, igual que el nopal del sello.
 const NOTE_ICONS = {
   leaf: (
@@ -131,76 +93,33 @@ const NOTE_ICONS = {
 };
 
 // Nota "¿Sabías que…?": icono en círculo + etiqueta + texto en itálica.
-export function NoteBox({ icon = 'leaf', label = '¿Sabías que…?', children, sx }) {
+export function NoteBox({ icon = 'leaf', label = '¿Sabías que…?', compact = false, children, sx }) {
   return (
     <Box
       sx={[
         {
           display: 'grid',
-          gridTemplateColumns: '56px 1fr',
-          gap: '20px',
+          gridTemplateColumns: compact ? '40px 1fr' : '56px 1fr',
+          gap: compact ? '14px' : '20px',
           alignItems: 'start',
-          p: { xs: '20px', md: '24px 28px' },
+          p: compact ? '20px 22px' : { xs: '20px', md: '24px 28px' },
           borderRadius: '18px',
           bgcolor: 'var(--od-crema-lino)',
         },
         ...asArray(sx),
       ]}
     >
-      <Box sx={{ width: 56, height: 56, display: 'grid', placeItems: 'center', borderRadius: '50%', border: '1.4px solid var(--od-tinta)', color: 'var(--od-tinta)' }}>
-        <Box component="svg" viewBox="0 0 24 24" sx={{ width: 24, height: 24 }} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <Box sx={{ width: compact ? 40 : 56, height: compact ? 40 : 56, display: 'grid', placeItems: 'center', borderRadius: '50%', border: '1.4px solid var(--od-tinta)', color: 'var(--od-tinta)' }}>
+        <Box component="svg" viewBox="0 0 24 24" sx={{ width: compact ? 18 : 24, height: compact ? 18 : 24 }} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
           {NOTE_ICONS[icon] ?? NOTE_ICONS.leaf}
         </Box>
       </Box>
       <Box>
         <Box sx={{ ...LABEL, letterSpacing: '0.08em', color: 'var(--od-text)' }}>{label}</Box>
-        <Box sx={{ mt: '6px', fontFamily: 'var(--od-font-display)', fontStyle: 'italic', fontSize: { xs: 19, md: 22 }, lineHeight: 1.45 }}>
+        <Box sx={compact ? { mt: '6px', fontSize: 14, lineHeight: 1.7, color: 'var(--od-text)' } : { mt: '6px', fontFamily: 'var(--od-font-display)', fontStyle: 'italic', fontSize: { xs: 19, md: 22 }, lineHeight: 1.45 }}>
           {children}
         </Box>
       </Box>
-    </Box>
-  );
-}
-
-// Marco doble de lámina con cabecera "LÁMINA Nº 01 · GUÍA DE CUIDADO".
-export function PlateFrame({ number, title = 'Guía de cuidado', children, sx }) {
-  return (
-    <Box sx={[{ border: '1px solid var(--od-tinta)', p: { xs: '5px', md: '7px' } }, ...asArray(sx)]}>
-      <Box sx={{ position: 'relative', overflow: 'hidden', border: '1px solid var(--od-tinta)', bgcolor: 'var(--od-papel)', px: { xs: '18px', md: '48px' }, pt: { xs: '18px', md: '26px' }, pb: { xs: '28px', md: '56px' } }}>
-        <Box sx={{ ...LABEL, display: 'flex', justifyContent: 'space-between', gap: 2, pb: '16px', mb: { xs: '28px', md: '44px' }, borderBottom: '1px solid var(--od-linea)', color: 'var(--od-text-muted)' }}>
-          <span>Lámina Nº {String(number ?? 1).padStart(2, '0')}</span>
-          <span>{title}</span>
-        </Box>
-        {children}
-      </Box>
-    </Box>
-  );
-}
-
-// Foto en círculo con el anillo de puntos del sello alrededor y pie "FIG. N".
-export function Medallion({ src, alt = '', fig = 1, caption, size = 300, sx }) {
-  const dots = Array.from({ length: 60 }, (_, i) => {
-    const a = (i / 60) * Math.PI * 2;
-    return [50 + 48 * Math.cos(a), 50 + 48 * Math.sin(a)];
-  });
-  return (
-    <Box component="figure" sx={[{ m: 0, textAlign: 'center' }, ...asArray(sx)]}>
-      <Box sx={{ position: 'relative', mx: 'auto', width: { xs: Math.min(size, 240), md: size }, aspectRatio: '1', color: 'var(--od-gris)' }}>
-        <Box component="svg" viewBox="0 0 100 100" aria-hidden sx={{ position: 'absolute', inset: 0, width: 1, height: 1 }} fill="currentColor">
-          {dots.map(([x, y], i) => (
-            <circle key={i} cx={x.toFixed(2)} cy={y.toFixed(2)} r=".55" />
-          ))}
-        </Box>
-        <Box sx={{ position: 'absolute', inset: '7%', borderRadius: '50%', overflow: 'hidden', border: '1.4px solid var(--od-tinta)', bgcolor: 'var(--od-crema-hueso)' }}>
-          {src && <Box component="img" src={src} alt={alt} loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover' }} />}
-        </Box>
-      </Box>
-      {caption && (
-        <Box component="figcaption" sx={{ mt: '18px' }}>
-          <Box sx={{ ...LABEL, color: 'var(--od-text-muted)' }}>Fig. {fig}</Box>
-          <Box sx={{ mt: '6px', fontFamily: 'var(--od-font-display)', fontStyle: 'italic', fontSize: 17, color: 'var(--od-gris)' }}>{caption}</Box>
-        </Box>
-      )}
     </Box>
   );
 }

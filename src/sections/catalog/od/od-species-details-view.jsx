@@ -13,18 +13,7 @@ import { fCurrency } from 'src/utils/format-number';
 import { CONFIG } from 'src/global-config';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdImage, SciName, Display } from 'src/layouts/od/od-ui';
-import {
-  DotRow,
-  NoteBox,
-  Medallion,
-  LeafBranch,
-  NopalSprig,
-  PlateFrame,
-  HeadingMark,
-  LeafDivider,
-  SectionHead,
-  NumberedKicker,
-} from 'src/layouts/od/od-ornaments';
+import { NoteBox, LeafDivider, SectionHead, NumberedKicker } from 'src/layouts/od/od-ornaments';
 
 import { useCart } from '../use-cart';
 import { shopInfoFor } from '../shop-info';
@@ -48,7 +37,7 @@ const CARE_FIELDS = [
   { key: 'rarity', label: 'Rareza' },
 ];
 
-const paraSx = { m: 0, mb: '20px', fontSize: 16, lineHeight: 1.85 };
+const paraSx = { m: 0, mb: '20px', maxWidth: '68ch', fontSize: 16, lineHeight: 1.85 };
 
 export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true }) {
   const { species, key, slug, morph, photos, morphs, minPrice, maxPrice, compareAt = null, count = null, taxonPhoto = null } = item;
@@ -478,128 +467,134 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
         </Box>
       </Box>
 
-      {/* Ficha de cuidados como lámina de naturalista (lenguaje del tríptico) */}
+      {/* Guía de cuidado: estructura sobria (datos, secciones, resumen) con los
+          detalles de la marca en pequeño: kicker numerado, marca de barra con
+          puntos y divisor de hojas. Sin marcos ni ilustraciones decorativas. */}
       {(careColumns.length > 0 || sections.length > 0 || taxonomy.length > 0) && (
-        <Box component="section" sx={{ px: { xs: '12px', md: '40px' }, pt: { xs: 7, md: '100px' } }}>
+        <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '100px' } }}>
           <OdReveal>
-            <PlateFrame number={species.id}>
-              {/* Rama de fondo, arriba a la derecha */}
-              <LeafBranch sx={{ position: 'absolute', top: { xs: 40, md: 54 }, right: { xs: -40, md: -10 }, width: { xs: 170, md: 300 }, opacity: 0.55 }} />
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap' }}>
+              <SectionHead kicker="Guía de cuidado" title="Ficha de cuidados" size="clamp(28px, 3.2vw, 44px)" />
+              <SciName sx={{ fontSize: 18, color: 'var(--od-gris)' }}>{sci}</SciName>
+            </Box>
 
-              {/* 01 · La especie */}
-              <Box sx={{ position: 'relative', display: 'grid', gap: { xs: 5, md: '64px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.2fr) minmax(260px, 0.8fr)' } }}>
-                <Box sx={{ minWidth: 0 }}>
-                  <NumberedKicker n={1}>La especie</NumberedKicker>
-                  <SciName sx={{ display: 'block', mt: '18px', fontSize: 'clamp(38px, 5vw, 66px)', lineHeight: 1.04 }}>{sci}</SciName>
-                  <HeadingMark sx={{ mt: '22px' }} />
+            {careColumns.length > 0 && (
+              <Box
+                component="dl"
+                sx={{
+                  m: 0,
+                  mt: '32px',
+                  display: 'grid',
+                  gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: `repeat(${Math.min(careColumns.length, 3)}, minmax(0, 1fr))` },
+                  bgcolor: 'var(--od-papel)',
+                  border: '1px solid var(--od-linea)',
+                  borderRadius: 'var(--od-radius-md)',
+                  boxShadow: 'var(--od-shadow-flat)',
+                  overflow: 'hidden',
+                }}
+              >
+                {careColumns.map((field) => (
+                  <Box
+                    key={field.key}
+                    sx={{
+                      p: { xs: '18px 16px', md: '24px 28px' },
+                      // líneas internas: cada celda pinta su borde derecho e inferior;
+                      // el contenedor recorta los que caen en la orilla
+                      mr: '-1px',
+                      mb: '-1px',
+                      borderRight: '1px solid var(--od-linea)',
+                      borderBottom: '1px solid var(--od-linea)',
+                    }}
+                  >
+                    <Box component="dt" sx={{ fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase', color: 'var(--od-text-muted)' }}>
+                      {field.label}
+                    </Box>
+                    <Box component="dd" sx={{ m: 0, mt: '10px', fontFamily: 'var(--od-font-display)', fontSize: { xs: 21, md: 26 }, lineHeight: 1.15 }}>
+                      {species[field.key]}
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </OdReveal>
 
-                  {careColumns.length > 0 && (
-                    <Box component="dl" sx={{ m: 0, mt: '34px', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', borderTop: '1px solid var(--od-linea)' }}>
-                      {careColumns.map((field, i) => (
-                        <Box
-                          key={field.key}
-                          sx={{
-                            py: '18px',
-                            pl: i % 2 ? { xs: '16px', md: '26px' } : 0,
-                            pr: i % 2 ? 0 : { xs: '16px', md: '26px' },
-                            borderBottom: '1px solid var(--od-linea)',
-                            borderLeft: i % 2 ? '1px solid var(--od-linea)' : 'none',
-                          }}
-                        >
-                          <Box component="dt" sx={{ fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase', color: 'var(--od-text-muted)' }}>
-                            {field.label}
-                          </Box>
-                          <Box component="dd" sx={{ m: 0, mt: '8px', fontFamily: 'var(--od-font-display)', fontSize: { xs: 22, md: 30 }, lineHeight: 1.12 }}>
-                            {species[field.key]}
-                          </Box>
-                        </Box>
+          {(sections.length > 0 || taxonomy.length > 0) && <LeafDivider sx={{ my: { xs: '44px', md: '60px' }, mx: 'auto', maxWidth: 520 }} />}
+
+          {(sections.length > 0 || taxonomy.length > 0) && (
+            <Box
+              sx={{
+                display: 'grid',
+                gap: { xs: 5, md: '64px' },
+                alignItems: 'start',
+                gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.5fr) minmax(280px, 0.75fr)' },
+              }}
+            >
+              <Box sx={{ minWidth: 0 }}>
+                {sections.length > 0 ? (
+                  sections.map((section, i) => (
+                    <Box key={section.title} sx={{ mb: '44px', '&:last-of-type': { mb: 0 } }}>
+                      <NumberedKicker n={i + 1}>{section.kicker}</NumberedKicker>
+                      <Box component="h3" sx={{ m: 0, mt: '12px', mb: '18px', fontFamily: 'var(--od-font-display)', fontWeight: 400, fontSize: { xs: 24, md: 28 }, lineHeight: 1.2 }}>
+                        {section.title}
+                      </Box>
+                      {section.text.split('\n').filter(Boolean).map((para, idx) => (
+                        <Box component="p" key={idx} sx={paraSx}>{para}</Box>
                       ))}
                     </Box>
-                  )}
-                </Box>
-
-                <Medallion src={gallery[0]} alt={title} fig={1} caption={`${title}, del criadero`} size={320} />
+                  ))
+                ) : (
+                  <Box sx={{ fontSize: 15, color: 'var(--od-gris)' }}>
+                    Pronto agregaremos la descripción de esta especie. Pregúntanos por WhatsApp cualquier
+                    duda sobre su cuidado.
+                  </Box>
+                )}
               </Box>
 
-              {sections.length > 0 && <LeafDivider sx={{ my: { xs: '44px', md: '64px' } }} />}
-
-              {/* 02, 03… secciones de la guía */}
-              {sections.length > 0 && (
-                <Box sx={{ position: 'relative', display: 'grid', columnGap: { md: '72px' }, rowGap: { xs: '48px', md: '64px' }, gridTemplateColumns: { xs: '1fr', md: sections.length > 1 ? 'repeat(2, minmax(0, 1fr))' : '1fr' } }}>
-                  {sections.map((section, i) => (
-                    <Box key={section.title} sx={{ minWidth: 0 }}>
-                      <SectionHead n={i + 2} kicker={section.kicker} title={section.title} size="clamp(28px, 3vw, 40px)" />
-                      <Box sx={{ mt: '24px' }}>
-                        {section.text.split('\n').filter(Boolean).map((para, idx) => (
-                          <Box component="p" key={idx} sx={paraSx}>{para}</Box>
-                        ))}
-                      </Box>
+              <Box component="aside" sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: '20px', position: { md: 'sticky' }, top: { md: 120 } }}>
+                {taxonomy.length > 0 && (
+                  <Box sx={{ p: '22px 24px', bgcolor: 'var(--od-papel)', border: '1px solid var(--od-linea)', borderRadius: 'var(--od-radius-md)', boxShadow: 'var(--od-shadow-flat)' }}>
+                    <Box sx={{ fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase', color: 'var(--od-text-muted)' }}>
+                      De un vistazo
                     </Box>
-                  ))}
-                  {/* La nota ocupa el hueco que deja una sección impar */}
-                  {species.notes && (
-                    <NoteBox icon="leaf" label="Notas del criadero" sx={{ alignSelf: 'center' }}>
-                      {species.notes}
-                    </NoteBox>
-                  )}
-                </Box>
-              )}
-
-              {species.notes && sections.length === 0 && (
-                <NoteBox icon="leaf" label="Notas del criadero" sx={{ mt: { xs: '40px', md: '56px' }, maxWidth: 760 }}>
-                  {species.notes}
-                </NoteBox>
-              )}
-
-              {/* De un vistazo: taxonomía y etiquetas */}
-              {taxonomy.length > 0 && (
-                <Box sx={{ position: 'relative', mt: { xs: '48px', md: '72px' }, display: 'grid', gap: { xs: 4, md: '72px' }, alignItems: 'end', gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1fr) minmax(0, 1fr)' } }}>
-                  <Box sx={{ minWidth: 0 }}>
-                    <SectionHead kicker="En resumen" title="De un vistazo" ghost={false} size="clamp(28px, 3vw, 40px)" />
-                    <Box component="table" sx={{ mt: '26px', width: 1, borderCollapse: 'collapse', fontSize: 15 }}>
+                    <Box component="table" sx={{ mt: '14px', width: 1, borderCollapse: 'collapse', fontSize: 14 }}>
                       <tbody>
                         {taxonomy.map((row) => (
-                          <Box component="tr" key={row.label} sx={{ borderTop: '1px solid var(--od-linea)', '&:last-of-type': { borderBottom: '1px solid var(--od-linea)' } }}>
-                            <Box component="th" scope="row" sx={{ py: '13px', pr: 2, textAlign: 'left', fontWeight: 500, width: '42%' }}>{row.label}</Box>
-                            <Box component="td" sx={{ py: '13px' }}>
-                              {row.italic ? <SciName sx={{ fontSize: 17 }}>{row.value}</SciName> : row.value}
+                          <Box component="tr" key={row.label} sx={{ borderTop: '1px solid var(--od-linea)' }}>
+                            <Box component="th" scope="row" sx={{ py: '11px', pr: 2, textAlign: 'left', fontWeight: 500, color: 'var(--od-gris)', width: '44%' }}>{row.label}</Box>
+                            <Box component="td" sx={{ py: '11px', textAlign: 'right' }}>
+                              {row.italic ? <SciName sx={{ fontSize: 16 }}>{row.value}</SciName> : row.value}
                             </Box>
                           </Box>
                         ))}
                       </tbody>
                     </Box>
                     {tags.length > 0 && (
-                      <Box sx={{ mt: '22px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      <Box sx={{ mt: '16px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {tags.map((tag) => (
-                          <Box key={tag} sx={{ px: '14px', py: '6px', borderRadius: '999px', fontSize: 13, border: '1px solid var(--od-linea)', bgcolor: 'var(--od-crema-hueso)' }}>
+                          <Box key={tag} sx={{ px: '12px', py: '5px', borderRadius: '999px', fontSize: 12, border: '1px solid var(--od-linea)' }}>
                             {tag}
                           </Box>
                         ))}
                       </Box>
                     )}
                   </Box>
-                  <Box component="figure" sx={{ display: { xs: 'none', md: 'block' }, m: 0, justifySelf: 'center', textAlign: 'center' }}>
-                    <NopalSprig sx={{ mx: 'auto', width: 190 }} />
-                    <Box component="figcaption" sx={{ mt: '14px' }}>
-                      <Box sx={{ fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase', color: 'var(--od-text-muted)' }}>Fig. 2</Box>
-                      <Box sx={{ mt: '6px', fontFamily: 'var(--od-font-display)', fontStyle: 'italic', fontSize: 17, color: 'var(--od-gris)' }}>
-                        <em>Opuntia</em>, el nopal que da nombre al criadero
-                      </Box>
-                    </Box>
-                  </Box>
-                </Box>
-              )}
+                )}
 
-              <DotRow sx={{ mt: { xs: '40px', md: '56px' } }} />
-            </PlateFrame>
-          </OdReveal>
+                {species.notes && (
+                  <NoteBox icon="leaf" label="Notas del criadero" compact>
+                    {species.notes}
+                  </NoteBox>
+                )}
+              </Box>
+            </Box>
+          )}
         </Box>
       )}
 
       {/* Suele ir con */}
       {related.length > 0 && (
         <Box component="section" sx={{ px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 6 }, pb: { xs: 8, md: 12 } }}>
-          <SectionHead kicker="Para el mismo terrario" title="Suele ir con" ghost={false} size="clamp(26px, 3vw, 40px)" />
+          <SectionHead kicker="Para el mismo terrario" title="Suele ir con" size="clamp(26px, 3vw, 40px)" />
           <Box sx={{ pt: '34px', display: 'grid', gap: '22px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
             {related.slice(0, 4).map((rel, i) => (
               <OdReveal key={rel.key} delay={i * 0.08}>
