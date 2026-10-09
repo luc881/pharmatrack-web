@@ -183,13 +183,36 @@ export function Kicker({ children, color = 'var(--od-text-muted)', size = 13, sx
           m: 0,
           color,
           fontSize: size,
-          letterSpacing: '0.18em',
+          letterSpacing: 'var(--od-tracking-label)',
           textTransform: 'uppercase',
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
       {children}
+    </Box>
+  );
+}
+
+// ----------------------------------------------------------------------
+
+// Destello de 4 puntas en tuna (clase .od-star de brand/tokens.css). Separador
+// de metadatos y viñeta; hereda el tamaño de la letra.
+export function Star({ sx }) {
+  return <Box component="span" className="od-star" aria-hidden sx={sx} />;
+}
+
+// Nombre científico según BRAND.md: el binomio en itálica y la localidad o
+// variedad entre comillas, sin itálica. 'Nesodillo arcangelii "Shiro Utsuri"'.
+export function SciName({ children, sx }) {
+  const text = String(children ?? '');
+  const cut = text.search(/["“]/);
+  const binomial = cut === -1 ? text : text.slice(0, cut).trimEnd();
+  const rest = cut === -1 ? '' : text.slice(cut).replace(/^"([^"]*)"/, '“$1”');
+  return (
+    <Box component="span" sx={[{ fontFamily: 'var(--od-font-display)' }, ...(Array.isArray(sx) ? sx : [sx])]}>
+      <Box component="em" sx={{ fontStyle: 'italic' }}>{binomial}</Box>
+      {rest && ` ${rest}`}
     </Box>
   );
 }

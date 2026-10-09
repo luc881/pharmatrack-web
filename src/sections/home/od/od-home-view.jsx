@@ -1,5 +1,7 @@
 'use client';
 
+import { Fragment } from 'react';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
@@ -10,7 +12,7 @@ import { OdScene } from 'src/layouts/od/od-scene';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
-import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
+import { Star, Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 
 import { OdCatalogCard } from 'src/sections/catalog/od/od-catalog-card';
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
@@ -39,7 +41,22 @@ const buildImg = (media) => ({
 });
 
 // Nombres que corren en la marquesina de la banda de marca.
-const NAME_MARQUEE = 'Isópodos · Colémbolos · Cubaris · Porcellio · Armadillidium · ';
+// Separados por el destello tuna de la marca ("Isópodos ✦ Colémbolos").
+const MARQUEE_NAMES = ['Isópodos', 'Colémbolos', 'Cubaris', 'Porcellio', 'Armadillidium'];
+const NAME_MARQUEE = Array.from({ length: 4 }, () => MARQUEE_NAMES).flat();
+
+function NameRun() {
+  return (
+    <Box component="span">
+      {NAME_MARQUEE.map((name, i) => (
+        <Fragment key={i}>
+          {name}
+          <Star sx={{ width: '0.32em', height: '0.32em', mx: '0.45em', verticalAlign: '0.32em' }} />
+        </Fragment>
+      ))}
+    </Box>
+  );
+}
 
 const STATS = [
   { n: '14', label: 'Especies en cultivo activo, todas nacidas en casa.' },
@@ -242,8 +259,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               animation: 'odMarquee 110s linear infinite',
             }}
           >
-            <Box component="span">{NAME_MARQUEE.repeat(4)}</Box>
-            <Box component="span">{NAME_MARQUEE.repeat(4)}</Box>
+            <NameRun />
+            <NameRun />
           </Box>
         </Box>
 

@@ -12,7 +12,7 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { CONFIG } from 'src/global-config';
 import { OdReveal } from 'src/layouts/od/od-motion';
-import { OdImage, Display } from 'src/layouts/od/od-ui';
+import { OdImage, SciName, Display } from 'src/layouts/od/od-ui';
 
 import { useCart } from '../use-cart';
 import { shopInfoFor } from '../shop-info';
@@ -277,9 +277,9 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
             )}
           </Box>
 
-          <Box sx={{ mt: '10px', fontSize: 17, fontStyle: 'italic', color: 'var(--color-neutral-600)' }}>
+          <SciName sx={{ display: 'block', mt: '10px', fontSize: 19, color: 'var(--color-neutral-600)' }}>
             {sci}
-          </Box>
+          </SciName>
 
           {excerpt && (
             <Box sx={{ mt: '26px', fontSize: 15, lineHeight: 1.8, maxWidth: '48ch' }}>{excerpt}</Box>

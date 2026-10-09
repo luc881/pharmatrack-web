@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 
 import { RouterLink } from 'src/routes/components';
 
-import { OdImage } from 'src/layouts/od/od-ui';
+import { Star, OdImage } from 'src/layouts/od/od-ui';
 
 import { useFavorites } from '../use-favorites';
 
@@ -157,12 +157,14 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
   );
 
   const info = (
-    <Box sx={horizontal ? { minWidth: 0, alignSelf: 'center' } : { mt: '16px' }}>
+    <Box sx={horizontal ? { minWidth: 0, alignSelf: 'center' } : { mt: '14px' }}>
+      {/* Cinta de rayitas, como el anillo del sello (BRAND.md §6) */}
+      {!horizontal && <Box className="od-ticks" sx={{ mb: '12px', opacity: 0.55 }} />}
       <Box sx={{ mb: '10px', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
         {code && <Box component="span" sx={{ color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>{code}&nbsp;&nbsp;|&nbsp;&nbsp;</Box>}
         <Box component="span" sx={{ color: 'var(--color-neutral-600)' }}>{card.category}</Box>
         {card.taxonLabel && (
-          <Box component="span" sx={{ opacity: 0.7 }}> · {card.taxonLabel}</Box>
+          <Box component="span" sx={{ opacity: 0.7 }}><Star sx={{ mx: '0.6em', verticalAlign: '0' }} />{card.taxonLabel}</Box>
         )}
       </Box>
       <Box

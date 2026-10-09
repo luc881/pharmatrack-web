@@ -18,16 +18,24 @@ const pad2 = (n) => String(n).padStart(2, '0');
 
 const paraSx = { m: 0, mb: '18px', fontSize: 17, lineHeight: 1.8 };
 
-function BodySection({ section, id }) {
+function BodySection({ section, id, divider }) {
   if (section.type === 'subheading') {
     return (
-      <Box
-        component="h2"
-        id={id}
-        sx={{ m: '46px 0 16px', fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 30, scrollMarginTop: '130px' }}
-      >
-        {section.content}
-      </Box>
+      <>
+        {/* Divisor con hojitas entre secciones (BRAND.md §6) */}
+        {divider && (
+          <Box className="od-divider" aria-hidden sx={{ mt: '46px', mx: 'auto', maxWidth: 320 }}>
+            <Box component="img" src="/brand/ornaments/divisor-hojas.svg" alt="" sx={{ width: 64 }} />
+          </Box>
+        )}
+        <Box
+          component="h2"
+          id={id}
+          sx={{ m: '46px 0 16px', fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 30, scrollMarginTop: '130px' }}
+        >
+          {section.content}
+        </Box>
+      </>
     );
   }
   if (section.type === 'quote') {
@@ -149,7 +157,12 @@ export function OdArticleDetailView({ article, related = [] }) {
 
         <OdReveal sx={{ maxWidth: '68ch' }}>
           {sections.map((section, index) => (
-            <BodySection key={index} section={section} id={section.type === 'subheading' ? `sec-${index}` : undefined} />
+            <BodySection
+              key={index}
+              section={section}
+              id={section.type === 'subheading' ? `sec-${index}` : undefined}
+              divider={index > 0 && section.type === 'subheading'}
+            />
           ))}
 
           {(article.tags ?? []).length > 0 && (
