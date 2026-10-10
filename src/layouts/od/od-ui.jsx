@@ -68,22 +68,22 @@ export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 1
 
 // ----------------------------------------------------------------------
 
-// Hover (ver .od-btn en global.css): se deja jalar por el cursor y un círculo
+// Hover (ver .od-fxbtn en global.css): se deja jalar por el cursor y un círculo
 // de color nace donde entra el ratón; el texto rueda hacia arriba.
 const PILL_VARIANTS = {
-  dark: { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', '--od-btn-fill': 'var(--od-tuna)', '--od-btn-ink': '#fff' },
-  light: { bgcolor: 'rgba(246,244,241,0.95)', color: 'var(--color-neutral-900)', '--od-btn-fill': 'var(--od-tuna)', '--od-btn-ink': '#fff' },
+  dark: { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', '--od-fxbtn-fill': 'var(--od-tuna)', '--od-fxbtn-ink': '#fff' },
+  light: { bgcolor: 'rgba(246,244,241,0.95)', color: 'var(--color-neutral-900)', '--od-fxbtn-fill': 'var(--od-tuna)', '--od-fxbtn-ink': '#fff' },
   outline: {
     color: '#eae7e7',
     border: '1px solid rgba(234,231,231,0.5)',
-    '--od-btn-fill': '#f6f4f1',
-    '--od-btn-ink': 'var(--color-neutral-900)',
+    '--od-fxbtn-fill': '#f6f4f1',
+    '--od-fxbtn-ink': 'var(--color-neutral-900)',
     '&:hover': { borderColor: '#f6f4f1' },
   },
 };
 
-// Contenido de un .od-btn: el texto normal y, encima, una copia en el color
-// de hover (--od-btn-ink) recortada por el MISMO círculo que el relleno. Así
+// Contenido de un .od-fxbtn: el texto normal y, encima, una copia en el color
+// de hover (--od-fxbtn-ink) recortada por el MISMO círculo que el relleno. Así
 // el texto cambia de color exactamente donde pasa el relleno: no hay un
 // instante de texto claro sobre relleno claro (se veía gris, como glitch).
 export function BtnInk({ children, roll = true }) {
@@ -91,7 +91,7 @@ export function BtnInk({ children, roll = true }) {
   return (
     <>
       {content}
-      <span className="od-btn-ink" aria-hidden>
+      <span className="od-fxbtn-ink" aria-hidden>
         {content}
       </span>
     </>
@@ -189,7 +189,7 @@ export function Pill({ variant = 'dark', href, onClick, children, sx, ...other }
       {...linkProps}
       {...other}
       data-fx
-      className="od-btn"
+      className="od-fxbtn"
       sx={[
         {
           border: 0,
@@ -218,7 +218,7 @@ export function Pill({ variant = 'dark', href, onClick, children, sx, ...other }
 // ----------------------------------------------------------------------
 
 // Flecha circular de carrusel. `solid` la pinta oscura sólida (avance/retroceso
-// enfatizado); si no, contorno. Mismo hover que la píldora (.od-btn).
+// enfatizado); si no, contorno. Mismo hover que la píldora (.od-fxbtn).
 export function ArrowButton({ onClick, label, size = 46, solid = false, children, sx }) {
   return (
     <Box
@@ -227,7 +227,7 @@ export function ArrowButton({ onClick, label, size = 46, solid = false, children
       onClick={onClick}
       aria-label={label}
       data-fx
-      className="od-btn"
+      className="od-fxbtn"
       sx={[
         {
           width: size,
@@ -245,16 +245,16 @@ export function ArrowButton({ onClick, label, size = 46, solid = false, children
               border: '1px solid var(--color-neutral-900)',
               bgcolor: 'var(--color-neutral-900)',
               color: 'var(--color-neutral-100)',
-              '--od-btn-fill': 'var(--od-tuna)',
-              '--od-btn-ink': '#fff',
+              '--od-fxbtn-fill': 'var(--od-tuna)',
+              '--od-fxbtn-ink': '#fff',
               '&:hover': { borderColor: 'var(--od-tuna)' },
             }
           : {
               border: '1px solid var(--color-divider)',
               bgcolor: 'transparent',
               color: 'inherit',
-              '--od-btn-fill': 'var(--color-neutral-900)',
-              '--od-btn-ink': 'var(--color-neutral-100)',
+              '--od-fxbtn-fill': 'var(--color-neutral-900)',
+              '--od-fxbtn-ink': 'var(--color-neutral-100)',
               '&:hover': { borderColor: 'var(--color-neutral-900)' },
             },
         ...(Array.isArray(sx) ? sx : [sx]),

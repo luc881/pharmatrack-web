@@ -258,9 +258,12 @@ button:focus-visible,
    --mx/--my (-0.5→0.5) en el [data-fx] bajo el puntero.
    ---------------------------------------------------------------------- */
 
-/* Botón: imán hacia el cursor + relleno circular que nace donde entra el
-   ratón y se encoge hacia donde sale. Color del relleno: --od-btn-fill. */
-.od-btn {
+/* (.od-fxbtn y no .od-btn: public/brand/tokens.css ya define .od-btn con
+   fondo y hover propios, y al chocar el botón de contorno salía relleno y el
+   hover cambiaba el fondo de golpe.)
+   Botón: imán hacia el cursor + relleno circular que nace donde entra el
+   ratón y se encoge hacia donde sale. Color del relleno: --od-fxbtn-fill. */
+.od-fxbtn {
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -269,31 +272,31 @@ button:focus-visible,
 }
 /* Relleno y texto de hover comparten el mismo círculo (clip-path) que nace en
    el punto de entrada (--ex/--ey) y se cierra hacia el de salida. */
-.od-btn::before,
-.od-btn-ink {
+.od-fxbtn::before,
+.od-fxbtn-ink {
   clip-path: circle(0% at calc(var(--ex, 0.5) * 100%) calc(var(--ey, 0.5) * 100%));
   transition: clip-path 800ms cubic-bezier(0.65, 0, 0.35, 1);
   pointer-events: none;
 }
-.od-btn::before {
+.od-fxbtn::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--od-btn-fill, var(--od-tuna));
+  background: var(--od-fxbtn-fill, var(--od-tuna));
 }
-.od-btn-ink {
+.od-fxbtn-ink {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--od-btn-ink, #fff);
+  color: var(--od-fxbtn-ink, #fff);
 }
-.od-btn:hover::before,
-.od-btn:focus-visible::before,
-.od-btn:hover .od-btn-ink,
-.od-btn:focus-visible .od-btn-ink {
+.od-fxbtn:hover::before,
+.od-fxbtn:focus-visible::before,
+.od-fxbtn:hover .od-fxbtn-ink,
+.od-fxbtn:focus-visible .od-fxbtn-ink {
   clip-path: circle(150% at calc(var(--ex, 0.5) * 100%) calc(var(--ey, 0.5) * 100%));
 }
 
@@ -303,10 +306,10 @@ button:focus-visible,
 .od-roll > span + span { transform: translateY(110%); }
 :hover > .od-roll > span:first-child,
 :focus-visible > .od-roll > span:first-child,
-.od-btn:hover .od-roll > span:first-child { transform: translateY(-110%); }
+.od-fxbtn:hover .od-roll > span:first-child { transform: translateY(-110%); }
 :hover > .od-roll > span + span,
 :focus-visible > .od-roll > span + span,
-.od-btn:hover .od-roll > span + span { transform: none; }
+.od-fxbtn:hover .od-roll > span + span { transform: none; }
 
 /* Inclinación 3D (el elemento) y brillo que sigue al cursor (::after) */
 .od-tilt {
@@ -361,5 +364,5 @@ button:focus-visible,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .od-btn, .od-tilt, .od-tilt-lg, .od-magnet { transform: none !important; scale: none !important; }
+  .od-fxbtn, .od-tilt, .od-tilt-lg, .od-magnet { transform: none !important; scale: none !important; }
 }

@@ -335,7 +335,7 @@ export function OdCartView() {
           . Te escribimos por WhatsApp para coordinar la entrega. También te llegó un correo con el detalle.
         </Box>
         <Box sx={{ mt: 5, display: 'flex', flexWrap: 'wrap', gap: 1.5, justifyContent: 'center' }}>
-          <Button className="od-btn" data-fx component={RouterLink} href={paths.catalog} variant="contained" sx={{ borderRadius: '999px', px: 3, bgcolor: 'var(--color-neutral-900)', '&:hover': { bgcolor: 'var(--color-neutral-900)' }, transition: 'transform 600ms var(--od-ease)' }}>
+          <Button className="od-fxbtn" data-fx component={RouterLink} href={paths.catalog} variant="contained" sx={{ borderRadius: '999px', px: 3, bgcolor: 'var(--color-neutral-900)', '&:hover': { bgcolor: 'var(--color-neutral-900)' }, transition: 'transform 600ms var(--od-ease)' }}>
             Seguir viendo
           </Button>
           <Button component={RouterLink} href={paths.shipping} color="inherit" variant="outlined" sx={{ borderRadius: '999px', px: 3 }}>
@@ -412,7 +412,7 @@ export function OdCartView() {
                       <strong>Solo entrega en persona en CDMX.</strong> Por ahora no hacemos envíos a domicilio.
                     </Alert>
                   )}
-                  <Button className="od-btn" data-fx fullWidth variant="contained" onClick={() => setStep(1)}
+                  <Button className="od-fxbtn" data-fx fullWidth variant="contained" onClick={() => setStep(1)}
                     sx={{ mt: 3, borderRadius: '999px', py: 1.25, bgcolor: 'var(--color-neutral-900)', '&:hover': { bgcolor: 'var(--color-neutral-900)' }, transition: 'transform 600ms var(--od-ease)' }}>
                     Continuar
                   </Button>
@@ -450,7 +450,7 @@ export function OdCartView() {
                         <Button color="inherit" onClick={() => { setError(''); setStep(0); }} sx={{ borderRadius: '999px' }}>
                           Atrás
                         </Button>
-                        <Button className="od-btn" data-fx fullWidth variant="contained" onClick={goToPay}
+                        <Button className="od-fxbtn" data-fx fullWidth variant="contained" onClick={goToPay}
                           sx={{ borderRadius: '999px', bgcolor: 'var(--color-neutral-900)', '&:hover': { bgcolor: 'var(--color-neutral-900)' }, transition: 'transform 600ms var(--od-ease)' }}>
                           Continuar al pago
                         </Button>
@@ -461,7 +461,7 @@ export function OdCartView() {
                       <Box sx={{ fontSize: 14, color: 'var(--color-neutral-700)', lineHeight: 1.6 }}>
                         Entra con Google para guardar tu pedido y coordinar la entrega.
                       </Box>
-                      <Button className="od-btn" data-fx fullWidth variant="contained" onClick={() => signIn('google')}
+                      <Button className="od-fxbtn" data-fx fullWidth variant="contained" onClick={() => signIn('google')}
                         sx={{ mt: 2, borderRadius: '999px', py: 1.25, bgcolor: 'var(--color-neutral-900)', '&:hover': { bgcolor: 'var(--color-neutral-900)' }, transition: 'transform 600ms var(--od-ease)' }}>
                         Entrar para continuar
                       </Button>
@@ -511,7 +511,7 @@ export function OdCartView() {
                     <Button color="inherit" onClick={() => { setError(''); setStep(1); }} sx={{ borderRadius: '999px' }}>
                       Atrás
                     </Button>
-                    <Button className="od-btn" data-fx fullWidth variant="contained" loading={placing} onClick={handleOrder}
+                    <Button className="od-fxbtn" data-fx fullWidth variant="contained" loading={placing} onClick={handleOrder}
                       sx={{ borderRadius: '999px', bgcolor: 'var(--color-neutral-900)', '&:hover': { bgcolor: 'var(--color-neutral-900)' }, transition: 'transform 600ms var(--od-ease)' }}>
                       {isPickup ? `Pagar ${fCurrency(total)}` : 'Pedir cotización'}
                     </Button>

@@ -795,8 +795,10 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                 sx={{
                   pt: view === 'list' ? 2 : 5,
                   display: 'grid',
-                  gap: view === 'list' ? 0 : '44px 28px',
-                  gridTemplateColumns: { xs: view === 'list' ? '1fr' : 'repeat(auto-fill, minmax(160px, 1fr))', md: GRID_COLUMNS[view] },
+                  gap: view === 'list' ? 0 : { xs: '32px 14px', md: '44px 28px' },
+                  // En móvil siempre dos columnas: con minmax(160px) un teléfono
+                  // de 360-375px caía a una sola y cada tarjeta medía una pantalla
+                  gridTemplateColumns: { xs: view === 'list' ? '1fr' : 'repeat(2, minmax(0, 1fr))', md: GRID_COLUMNS[view] },
                 }}
               >
                 {visible.map((card, i) => (
@@ -832,7 +834,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                     component="button"
                     type="button"
                     onClick={clearAll}
-                    className="od-btn"
+                    className="od-fxbtn"
                     data-fx
                     sx={{ cursor: 'pointer', font: 'inherit', fontSize: 13, px: '30px', py: '14px', border: 0, borderRadius: '999px', bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' }}
                   >

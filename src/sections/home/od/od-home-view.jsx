@@ -374,7 +374,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         <OdGutterNote dark n="02" label="El frasco" start={160} />
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(240,235,224,0.18)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
           <Box component="span">(Qué necesita una colonia)</Box>
-          <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
+          <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' }, fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
         </Box>
         <Box component="h2" sx={{ mx: 'auto', mt: { xs: '44px', md: '62px' }, maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
           Seis cosas dentro del frasco. Nada más.

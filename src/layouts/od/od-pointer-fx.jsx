@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 //                punto de SALIDA. El relleno de los botones nace ahí y no
 //                persigue al cursor: si lo persiguiera, el círculo salta de
 //                lugar a media animación y la entrada se ve como un glitch.
-// Las clases de global.css (.od-btn, .od-tilt, .od-glare, .od-glow,
+// Las clases de global.css (.od-fxbtn, .od-tilt, .od-glare, .od-glow,
 // .od-magnet) leen esas variables. Solo con puntero fino.
 // ----------------------------------------------------------------------
 

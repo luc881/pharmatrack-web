@@ -375,7 +375,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               type="button"
               onClick={soldOut ? undefined : handleAdd}
               disabled={soldOut}
-              className={soldOut ? undefined : 'od-btn'}
+              className={soldOut ? undefined : 'od-fxbtn'}
               data-fx
               sx={{
                 flex: 1,
@@ -637,7 +637,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           type="button"
           onClick={soldOut ? undefined : handleAdd}
           disabled={soldOut}
-          className={soldOut ? undefined : 'od-btn'}
+          className={soldOut ? undefined : 'od-fxbtn'}
           data-fx
           sx={{
             height: 48,
