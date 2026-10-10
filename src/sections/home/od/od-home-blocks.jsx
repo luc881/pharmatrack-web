@@ -268,7 +268,8 @@ export function OdHowToBuy({ bg }) {
                 p: { xs: '24px 22px', md: '34px 30px' },
                 bgcolor: 'rgba(246,244,241,0.08)',
                 border: '1px solid rgba(246,244,241,0.22)',
-                backdropFilter: 'blur(6px)',
+                // el desenfoque cuesta en cada cuadro del scroll: solo escritorio
+                backdropFilter: { md: 'blur(6px)' },
                 '& .od-step-n': { transition: 'color 300ms' },
                 '&:hover': { borderColor: 'rgba(246,244,241,0.5)' },
                 '&:hover .od-step-n': { color: 'var(--od-tuna)' },

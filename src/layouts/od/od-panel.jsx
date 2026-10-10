@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 
@@ -11,7 +11,9 @@ import Box from '@mui/material/Box';
 // hacer clic, lanza una onda que empuja los puntos hacia afuera.
 // El ciclo de animación solo corre mientras hay energía (cursor encima o
 // puntos regresando a su lugar); en reposo no consume nada.
-// Táctil o movimiento reducido: retícula estática, sin animación.
+// Táctil o movimiento reducido: NO se monta el canvas (un lienzo del tamaño de
+// la sección a 2x es memoria de GPU para puntos quietos); queda la misma
+// retícula pintada con un fondo CSS.
 // ----------------------------------------------------------------------
 
 const GAP = 26; // separación de la retícula (px)
@@ -30,9 +32,6 @@ function OdDotField() {
     const host = canvas?.parentElement;
     if (!canvas || !host) return undefined;
     const ctx = canvas.getContext('2d');
-    const interactive =
-      window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let dots = [];
     let w = 0;
@@ -156,12 +155,10 @@ function OdDotField() {
     });
     ro.observe(host);
 
-    if (interactive) {
-      host.addEventListener('pointerenter', enter);
-      host.addEventListener('pointermove', move);
-      host.addEventListener('pointerleave', leave);
-      host.addEventListener('pointerdown', click);
-    }
+    host.addEventListener('pointerenter', enter);
+    host.addEventListener('pointermove', move);
+    host.addEventListener('pointerleave', leave);
+    host.addEventListener('pointerdown', click);
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
@@ -183,7 +180,22 @@ function OdDotField() {
   );
 }
 
+// Retícula estática (mismo paso y tono que el canvas en reposo)
+const STATIC_DOTS = {
+  backgroundImage: 'radial-gradient(rgba(240,235,224,0.11) 1.1px, transparent 1.6px)',
+  backgroundSize: `${GAP}px ${GAP}px`,
+  backgroundPosition: `${GAP / 2 - 13}px ${GAP / 2 - 13}px`,
+};
+
 export function OdPanel({ children, sx, ...other }) {
+  const [live, setLive] = useState(false);
+  useEffect(() => {
+    setLive(
+      window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+  }, []);
+
   return (
     <Box
       component="section"
@@ -197,13 +209,14 @@ export function OdPanel({ children, sx, ...other }) {
           bgcolor: 'var(--color-accent-900)',
           color: 'var(--color-neutral-200)',
         },
+        !live && STATIC_DOTS,
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
       {children}
       {/* después de los hijos: con el mismo z-index queda sobre la capa
           oscura de un fondo fotográfico (Cómo comprar) */}
-      <OdDotField />
+      {live && <OdDotField />}
     </Box>
   );
 }

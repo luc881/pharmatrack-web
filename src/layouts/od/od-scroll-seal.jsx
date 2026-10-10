@@ -131,7 +131,6 @@ export function OdScrollSeal() {
           inset: '8%',
           borderRadius: '50%',
           bgcolor: 'rgba(246,244,241,0.92)',
-          backdropFilter: 'blur(4px)',
           opacity: onDark ? 1 : 0,
           transition: 'opacity 400ms ease',
         }}

@@ -24,7 +24,8 @@ export function OdContours({ sx }) {
 
   useEffect(() => {
     const canvas = ref.current;
-    if (!canvas) return undefined;
+    // las columnas solo se muestran desde 1920px: debajo ni se arranca
+    if (!canvas || !window.matchMedia('(min-width: 1920px)').matches) return undefined;
     const ctx = canvas.getContext('2d');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

@@ -315,7 +315,6 @@ button:focus-visible,
 .od-tilt {
   transform: perspective(900px) rotateX(calc(var(--my, 0) * -9deg)) rotateY(calc(var(--mx, 0) * 11deg));
   transition: transform 700ms var(--od-ease);
-  will-change: transform;
 }
 .od-glare::after {
   content: '';
