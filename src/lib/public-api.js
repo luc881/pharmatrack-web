@@ -1,5 +1,7 @@
 import { CONFIG } from 'src/global-config';
 
+import { LINK_PAGES_DEFAULTS } from 'src/sections/links/link-pages-defaults';
+
 import { cdnImage } from './cdn-image';
 
 // ----------------------------------------------------------------------
@@ -183,5 +185,19 @@ export async function getProduct(id) {
     return await res.json();
   } catch {
     return null;
+  }
+}
+
+// Contenido de /gracias y /links (se edita en el dashboard). Si el API no
+// responde o devuelve algo raro, el contenido con el que se publicaron: el QR
+// del sticker no puede quedarse en blanco.
+export async function getLinkPages() {
+  try {
+    const res = await fetch(`${CONFIG.serverUrl}/api/v1/settings/link-pages`, { next: { revalidate: 60 } });
+    if (!res.ok) return LINK_PAGES_DEFAULTS;
+    const data = await res.json();
+    return data?.pages?.gracias && data?.pages?.links ? data : LINK_PAGES_DEFAULTS;
+  } catch {
+    return LINK_PAGES_DEFAULTS;
   }
 }

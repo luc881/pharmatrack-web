@@ -1,61 +1,64 @@
 import Box from '@mui/material/Box';
 
 import { CONFIG } from 'src/global-config';
+import { getLinkPages } from 'src/lib/public-api';
 import { Pill, Star, SciName } from 'src/layouts/od/od-ui';
 
+import { slugify } from 'src/sections/catalog/utils';
+
 import { LinksTrack } from './links-track';
+import { OdCountdown } from './od-countdown';
 
 // ----------------------------------------------------------------------
 // Página tipo "linktree" propia, compartida por /gracias (QR del sticker, ya
-// compró) y /links (bio de Instagram, todavía no compra). Cada ruta pasa su
-// configuración: encabezado, orden de secciones, botones, evento y pie.
-// Página estática, sin el layout del sitio (barra, pestañas, sello flotante):
-// ligera y pensada para el celular.
+// compró) y /links (bio de Instagram, todavía no compra). Textos, botones,
+// guías y eventos se editan en el dashboard (Sitio → Links y eventos) y llegan
+// por getLinkPages(); cada ruta solo elige su página y el orden de secciones.
+// Página sin el layout del sitio (barra, pestañas, sello flotante): ligera y
+// pensada para el celular.
 //
-// Eventos de analítica: clic_<prefix><key> y clic_<prefix>guia_<grupo>
+// Eventos de analítica: clic_<prefix><botón> y clic_<prefix>guia_<guía>
 // (prefix '' en /gracias, 'links_' en /links).
 // ----------------------------------------------------------------------
 
-export const WA = `https://wa.me/${CONFIG.whatsapp}`;
+const WA = `https://wa.me/${CONFIG.whatsapp}`;
 const waGuide = (name) => `${WA}?text=${encodeURIComponent(`Hola, quiero la guía de cuidados de ${name}.`)}`;
 
-// Artículo real del sitio que cubre isópodos y colémbolos
-const ISO_COLE = '/articulos/isopodos-y-colembolos-el-equipo-de-limpieza-del-terrario-2';
+const isExternal = (url) => !url.startsWith('/');
 
-// href: página real del sitio. Sin página → `todo` y el botón pide la guía por
-// WhatsApp (no se inventa contenido de cuidados).
-const GUIDES = [
-  {
-    key: 'fasmidos',
-    name: 'Fásmidos',
-    // TODO(guias): no hay guía ni especie publicada de fásmidos; enlazar aquí cuando exista.
-    todo: true,
-    species: [
-      {
-        key: 'fasmidos',
-        sci: 'Phyllium gardabagusi "Argopuro"',
-        // TODO(guias): enlazar la ficha /catalogo/... de P. gardabagusi "Argopuro" cuando se publique.
-        todo: true,
-      },
-    ],
-  },
-  { key: 'isopodos', name: 'Isópodos', href: ISO_COLE },
-  { key: 'colembolos', name: 'Colémbolos', href: ISO_COLE },
-  // TODO(guias): no hay guía de cucarachas; enlazar aquí cuando exista.
-  { key: 'cucarachas', name: 'Cucarachas', todo: true },
-];
-
-// Botones disponibles; cada página elige cuáles, en qué orden y con qué texto.
-export const LINK = {
-  catalogo: { key: 'catalogo', label: 'Ver catálogo', href: '/catalogo', primary: true },
-  instagram: { key: 'instagram', label: `Instagram · ${CONFIG.instagramHandle}`, href: CONFIG.instagram, external: true },
-  whatsapp: { key: 'whatsapp', label: `WhatsApp · ${CONFIG.phoneLabel}`, href: WA, external: true },
-  sitio: { key: 'sitio', label: 'Sitio web', href: '/' },
+// Nombre estable para analítica: los botones de siempre conservan su nombre
+// aunque cambie el texto; el resto usa el texto.
+const buttonKey = ({ url, label }) => {
+  if (url.includes('wa.me') || url.startsWith('tel:')) return 'whatsapp';
+  if (url.includes('instagram.com')) return 'instagram';
+  if (url.startsWith('/catalogo')) return 'catalogo';
+  if (url === '/') return 'sitio';
+  return slugify(label).replace(/-/g, '_');
 };
 
 // Hoy en CDMX como 'YYYY-MM-DD' (en-CA ya da ese formato) para comparar con
 // las fechas del evento sin líos de zona horaria.
 const todayMx = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Mexico_City' });
+
+// El evento sigue visible hasta su último día (ends, o date si dura uno).
+const nextEvent = (events = []) =>
+  events
+    .filter((e) => (e.ends || e.date) >= todayMx())
+    .sort((a, b) => a.date.localeCompare(b.date))[0] ?? null;
+
+// ponytail: CDMX es UTC-6 todo el año desde 2022 (sin horario de verano)
+const eventStart = (e) => `${e.date}T${e.time || '00:00'}:00-06:00`;
+
+const eventWhen = (e) => {
+  const day = new Date(`${e.date}T12:00:00-06:00`).toLocaleDateString('es-MX', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'America/Mexico_City',
+  });
+  return `${day.charAt(0).toUpperCase()}${day.slice(1)}${e.time ? ` · ${e.time} h` : ''}`;
+};
 
 const focusSx = { '&:focus-visible': { outline: '2px solid var(--od-focus)', outlineOffset: '3px' } };
 
@@ -79,22 +82,21 @@ const cardSx = {
   },
 };
 
-const guideLink = (g) =>
-  g.todo
-    ? { href: waGuide(g.sci ?? g.name), target: '_blank', rel: 'noopener' }
-    : { href: g.href };
-
-function GuideCard({ g, sub, prefix }) {
+// Guía sin url: todavía no hay página, se pide por WhatsApp (no se inventa
+// contenido de cuidados). Las `sub` son especies: sangría y nombre científico.
+function GuideCard({ g, prefix }) {
+  const todo = !g.url;
+  const link = todo ? { href: waGuide(g.name), target: '_blank', rel: 'noopener' } : { href: g.url };
   return (
-    <Box component="a" {...guideLink(g)} data-track={`clic_${prefix}guia_${g.key}`} sx={[cardSx, sub && { ml: 3, minHeight: 48 }]}>
+    <Box component="a" {...link} data-track={`clic_${prefix}guia_${slugify(g.name).replace(/-/g, '_')}`} sx={[cardSx, g.sub && { ml: 3, minHeight: 48 }]}>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Box sx={{ fontFamily: 'var(--od-font-display)', fontSize: sub ? 17 : 21, lineHeight: 1.2 }}>
-          {g.sci ? <SciName>{g.sci}</SciName> : g.name}
+        <Box sx={{ fontFamily: 'var(--od-font-display)', fontSize: g.sub ? 17 : 21, lineHeight: 1.2 }}>
+          {g.sub ? <SciName>{g.name}</SciName> : g.name}
         </Box>
-        {g.todo && <Box sx={{ mt: 0.5, fontSize: 12, color: 'var(--od-text-muted)' }}>Pídela por WhatsApp</Box>}
+        {todo && <Box sx={{ mt: 0.5, fontSize: 12, color: 'var(--od-text-muted)' }}>Pídela por WhatsApp</Box>}
       </Box>
       <Box component="span" aria-hidden sx={{ fontSize: 18 }}>
-        {g.todo ? '↗' : '→'}
+        {todo ? '↗' : '→'}
       </Box>
     </Box>
   );
@@ -117,9 +119,9 @@ const pillSx = (primary) => [
   },
 ];
 
-const linkPill = (l, prefix) => (
-  <Pill key={l.key} href={l.href} data-track={`clic_${prefix}${l.key}`} {...(l.external && { target: '_blank', rel: 'noopener' })} sx={pillSx(l.primary)}>
-    {l.label}
+const linkPill = (b, track) => (
+  <Pill key={`${b.label}${b.url}`} href={b.url} data-track={track} {...(isExternal(b.url) && { target: '_blank', rel: 'noopener' })} sx={pillSx(b.primary)}>
+    {b.label}
   </Pill>
 );
 
@@ -134,50 +136,57 @@ function Kicker({ id, n, children }) {
 }
 
 const SECTIONS = {
-  guides: ({ prefix }) => (
-    <Box component="section" aria-labelledby="guias" sx={{ mt: 6 }}>
-      <Kicker id="guias" n="01">
-        Guías de cuidado
-      </Kicker>
-      <Box sx={{ display: 'grid', gap: 1.5 }}>
-        {GUIDES.map((g) => (
-          <Box key={g.name} sx={{ display: 'grid', gap: 1.5 }}>
-            <GuideCard g={g} prefix={prefix} />
-            {g.species?.map((s) => <GuideCard key={s.sci} g={s} prefix={prefix} sub />)}
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  ),
-
-  links: ({ links, prefix }) => (
-    <Box component="nav" aria-label="Enlaces" sx={{ mt: 6, display: 'grid', gap: 1.5 }}>
-      {links.map((l) => linkPill(l, prefix))}
-    </Box>
-  ),
-
-  // Se oculta solo al día siguiente de `ends` (hora de CDMX). La ruta que lo
-  // use necesita `revalidate` para que la página se vuelva a generar.
-  event: ({ event, prefix }) =>
-    event && todayMx() <= event.ends ? (
-      <Box component="section" aria-labelledby="evento" className="od-card" sx={{ mt: 6, overflow: 'hidden' }}>
-        <Box className="od-ticks" aria-hidden />
-        <Box sx={{ p: 2.5 }}>
-          <Box id="evento" className="od-label" sx={{ color: 'var(--od-tuna)' }}>
-            Próximo evento
-          </Box>
-          <Box component="p" sx={{ m: 0, mt: 1, fontFamily: 'var(--od-font-display)', fontSize: 26, lineHeight: 1.15 }}>
-            {event.title}
-          </Box>
-          {event.href && (
-            <Box sx={{ mt: 2 }}>{linkPill({ key: 'evento', label: 'Más información', href: event.href, external: !event.href.startsWith('/') }, prefix)}</Box>
-          )}
+  guides: ({ guides, prefix }) =>
+    guides.length ? (
+      <Box component="section" aria-labelledby="guias" sx={{ mt: 6 }}>
+        <Kicker id="guias" n="01">
+          Guías de cuidado
+        </Kicker>
+        <Box sx={{ display: 'grid', gap: 1.5 }}>
+          {guides.map((g, i) => (
+            <GuideCard key={`${i}${g.name}`} g={g} prefix={prefix} />
+          ))}
         </Box>
       </Box>
     ) : null,
+
+  links: ({ page, prefix }) => (
+    <Box component="nav" aria-label="Enlaces" sx={{ mt: 6, display: 'grid', gap: 1.5 }}>
+      {page.buttons.map((b) => linkPill(b, `clic_${prefix}${buttonKey(b)}`))}
+    </Box>
+  ),
+
+  // El próximo evento que no haya pasado (hora de CDMX); sin eventos, nada.
+  // getLinkPages revalida cada minuto, así que desaparece solo.
+  event: ({ events, prefix }) => {
+    const e = nextEvent(events);
+    if (!e) return null;
+    return (
+      <Box component="section" aria-labelledby="evento" className="od-card" sx={{ mt: 6, overflow: 'hidden' }}>
+        <Box className="od-ticks" aria-hidden />
+        <Box sx={{ p: 2.5 }}>
+          <Box className="od-label" sx={{ color: 'var(--od-tuna)' }}>
+            Próximo evento
+          </Box>
+          <Box id="evento" component="p" sx={{ m: 0, mt: 1, fontFamily: 'var(--od-font-display)', fontSize: 26, lineHeight: 1.15, textWrap: 'balance' }}>
+            {e.title}
+          </Box>
+          <Box sx={{ mt: 1.25, fontSize: 14, lineHeight: 1.5, color: 'var(--od-text-muted)' }}>
+            {eventWhen(e)}
+            {e.place && <Box>{e.place}</Box>}
+          </Box>
+          <OdCountdown target={eventStart(e)} />
+          {e.url && <Box sx={{ mt: 2.5 }}>{linkPill({ label: e.url_label || 'Más información', url: e.url }, `clic_${prefix}evento`)}</Box>}
+        </Box>
+      </Box>
+    );
+  },
 };
 
-export function OdLinksPage({ visit, prefix = '', label, title, lead, sections, links, event, footer }) {
+export async function OdLinksPage({ pageKey, visit, prefix = '', sections, phone = false }) {
+  const data = await getLinkPages();
+  const page = data.pages[pageKey];
+
   return (
     <Box
       component="main"
@@ -196,38 +205,39 @@ export function OdLinksPage({ visit, prefix = '', label, title, lead, sections, 
         {/* Encabezado */}
         <Box component="header" sx={{ textAlign: 'center' }}>
           <Box component="img" src="/brand/assets/logo/sello-claro.svg" alt="Sello de Opuntia Den" width={112} height={112} sx={{ display: 'block', mx: 'auto', mb: 3 }} />
-          <Box className="od-label">{label}</Box>
+          {page.label && <Box className="od-label">{page.label}</Box>}
           <Box component="h1" sx={{ m: 0, mt: 1.5, fontFamily: 'var(--od-font-display)', fontWeight: 400, fontSize: { xs: 38, sm: 46 }, lineHeight: 1.1, textWrap: 'balance' }}>
-            {title}
+            {page.title}
           </Box>
-          <Box component="p" sx={{ m: 0, mt: 2, mx: 'auto', maxWidth: '40ch', fontSize: 16, lineHeight: 1.55, color: 'var(--od-text-muted)' }}>
-            {lead}
-          </Box>
+          {page.lead && (
+            <Box component="p" sx={{ m: 0, mt: 2, mx: 'auto', maxWidth: '40ch', fontSize: 16, lineHeight: 1.55, color: 'var(--od-text-muted)' }}>
+              {page.lead}
+            </Box>
+          )}
         </Box>
 
         {sections.map((s) => {
           const Section = SECTIONS[s];
-          return <Section key={s} links={links} event={event} prefix={prefix} />;
+          return <Section key={s} page={page} guides={data.guides} events={data.events} prefix={prefix} />;
         })}
 
         {/* Pie */}
         <Box component="footer" sx={{ mt: 7, textAlign: 'center', fontSize: 13, color: 'var(--od-text-muted)' }}>
           <Box component="img" src="/brand/ornaments/divisor-hojas.svg" alt="" width={96} height={24} sx={{ display: 'block', mx: 'auto', mb: 2.5, color: 'var(--od-tinta)' }} />
-          {footer}
+          {page.footer}
+          {phone && (
+            <>
+              {page.footer && ' · '}
+              <Box component="a" href={`tel:+${CONFIG.whatsapp}`} sx={[focusSx, { color: 'inherit' }]}>
+                {CONFIG.phone}
+              </Box>
+            </>
+          )}
           <Box sx={{ mt: 2.5 }}>
             <Star sx={{ width: 12, height: 12 }} />
           </Box>
         </Box>
       </Box>
-    </Box>
-  );
-}
-
-// Enlace de teléfono del pie, con el mismo foco que el resto
-export function PhoneLink() {
-  return (
-    <Box component="a" href={`tel:+${CONFIG.whatsapp}`} sx={[focusSx, { color: 'inherit' }]}>
-      {CONFIG.phone}
     </Box>
   );
 }
