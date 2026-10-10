@@ -166,7 +166,7 @@ export default async function Page({ params }) {
   const filtered = listingsInGroup(listings, category, groups);
 
   return (
-    <OdLayout>
+    <OdLayout sideArt={false}>
       <OdCatalogView items={filtered} category={category} />
     </OdLayout>
   );

@@ -1,5 +1,7 @@
 'use client';
 
+import { useRef } from 'react';
+
 import Box from '@mui/material/Box';
 
 import { RouterLink } from 'src/routes/components';
@@ -66,28 +68,112 @@ export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 1
 
 // ----------------------------------------------------------------------
 
+// Hover (ver .od-btn en global.css): se deja jalar por el cursor y un círculo
+// de color nace donde entra el ratón; el texto rueda hacia arriba.
 const PILL_VARIANTS = {
-  // Hover: se levanta y deja una sombra plana (BRAND.md: sin blur); la del
-  // botón oscuro es tuna, como un sello. Al presionar se hunde.
-  dark: {
-    bgcolor: 'var(--color-neutral-900)',
-    color: 'var(--color-neutral-100)',
-    '&:hover': { bgcolor: 'var(--od-noche)', transform: 'translate(-2px, -2px)', boxShadow: '4px 4px 0 var(--od-tuna)', color: 'var(--color-neutral-100)' },
-    '&:active': { transform: 'translate(0, 0)', boxShadow: '1px 1px 0 var(--od-tuna)' },
-  },
-  light: {
-    bgcolor: 'rgba(246,244,241,0.95)',
-    color: 'var(--color-neutral-900)',
-    '&:hover': { bgcolor: 'var(--od-papel)', transform: 'translate(-2px, -2px)', boxShadow: '4px 4px 0 var(--od-tuna)', color: 'var(--color-neutral-900)' },
-    '&:active': { transform: 'translate(0, 0)', boxShadow: '1px 1px 0 var(--od-tuna)' },
-  },
+  dark: { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', '--od-btn-fill': 'var(--od-tuna)', '--od-btn-ink': '#fff' },
+  light: { bgcolor: 'rgba(246,244,241,0.95)', color: 'var(--color-neutral-900)', '--od-btn-fill': 'var(--od-tuna)', '--od-btn-ink': '#fff' },
   outline: {
     color: '#eae7e7',
     border: '1px solid rgba(234,231,231,0.5)',
-    '&:hover': { bgcolor: 'rgba(234,231,231,0.12)', borderColor: '#eae7e7', transform: 'translateY(-2px)', color: '#eae7e7' },
-    '&:active': { transform: 'none' },
+    '--od-btn-fill': '#f6f4f1',
+    '--od-btn-ink': 'var(--color-neutral-900)',
+    '&:hover': { borderColor: '#f6f4f1' },
   },
 };
+
+// Contenido de un .od-btn: el texto normal y, encima, una copia en el color
+// de hover (--od-btn-ink) recortada por el MISMO círculo que el relleno. Así
+// el texto cambia de color exactamente donde pasa el relleno: no hay un
+// instante de texto claro sobre relleno claro (se veía gris, como glitch).
+export function BtnInk({ children, roll = true }) {
+  const content = roll ? <RollText>{children}</RollText> : children;
+  return (
+    <>
+      {content}
+      <span className="od-btn-ink" aria-hidden>
+        {content}
+      </span>
+    </>
+  );
+}
+
+// Lista de filas [data-row] con UN bloque oscuro que se desliza a la fila bajo
+// el cursor (antes cada fila se rellenaba por su cuenta y, al bajar, se veían
+// animaciones sueltas). Al entrar a la lista el bloque se abre en su lugar; al
+// salir se cierra. Solo con ratón: en táctil no hay hover.
+export function OdRowGroup({ children, sx }) {
+  const ref = useRef(null);
+  const hlRef = useRef(null);
+  const activeRef = useRef(null);
+
+  const activate = (row) => {
+    const hl = hlRef.current;
+    if (!hl || row === activeRef.current) return;
+    activeRef.current?.removeAttribute('data-active');
+    const box = ref.current.getBoundingClientRect();
+    const r = row.getBoundingClientRect();
+    const hidden = hl.dataset.on !== '1';
+    // primera fila: se coloca sin viajar y solo se abre
+    if (hidden) hl.style.transition = 'none';
+    hl.style.transform = `translateY(${r.top - box.top}px)`;
+    hl.style.height = `${r.height}px`;
+    if (hidden) {
+      hl.getBoundingClientRect(); // fuerza el layout antes de restaurar la transición
+      hl.style.transition = '';
+    }
+    hl.dataset.on = '1';
+    row.setAttribute('data-active', '');
+    activeRef.current = row;
+  };
+
+  const release = () => {
+    activeRef.current?.removeAttribute('data-active');
+    activeRef.current = null;
+    if (hlRef.current) hlRef.current.dataset.on = '0';
+  };
+
+  return (
+    <Box
+      ref={ref}
+      onPointerOver={(e) => {
+        if (e.pointerType !== 'mouse') return;
+        const row = e.target.closest?.('[data-row]');
+        if (row && ref.current.contains(row)) activate(row);
+      }}
+      onPointerLeave={release}
+      sx={[{ position: 'relative', isolation: 'isolate' }, ...(Array.isArray(sx) ? sx : [sx])]}
+    >
+      <Box
+        ref={hlRef}
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          zIndex: -1,
+          pointerEvents: 'none',
+          bgcolor: 'var(--color-neutral-900)',
+          clipPath: 'inset(50% 0 50% 0)',
+          transition: 'transform 550ms var(--od-ease), height 550ms var(--od-ease), clip-path 500ms var(--od-ease)',
+          '&[data-on="1"]': { clipPath: 'inset(0 0 0 0)' },
+        }}
+      />
+      {children}
+    </Box>
+  );
+}
+
+// Texto duplicado para el efecto de rodar (la copia no se lee en voz alta)
+export function RollText({ children }) {
+  return (
+    <span className="od-roll">
+      <span>{children}</span>
+      <span aria-hidden>{children}</span>
+    </span>
+  );
+}
 
 // Píldora (link o botón). El link interno usa RouterLink; externo o acción usa
 // <a>/<button> según se pase href u onClick.
@@ -102,6 +188,8 @@ export function Pill({ variant = 'dark', href, onClick, children, sx, ...other }
     <Box
       {...linkProps}
       {...other}
+      data-fx
+      className="od-btn"
       sx={[
         {
           border: 0,
@@ -115,13 +203,14 @@ export function Pill({ variant = 'dark', href, onClick, children, sx, ...other }
           py: '15px',
           borderRadius: '999px',
           textDecoration: 'none',
-          transition: 'background 250ms ease, color 250ms ease, border-color 250ms ease, transform 250ms var(--od-ease), box-shadow 250ms var(--od-ease)',
         },
         PILL_VARIANTS[variant],
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      {children}
+      {/* sin rodar: la capa de texto de hover debe quedar exactamente encima
+          de la normal; si ruedan, se ve un fantasma claro (texto "opaco") */}
+      <BtnInk roll={false}>{children}</BtnInk>
     </Box>
   );
 }
@@ -129,7 +218,7 @@ export function Pill({ variant = 'dark', href, onClick, children, sx, ...other }
 // ----------------------------------------------------------------------
 
 // Flecha circular de carrusel. `solid` la pinta oscura sólida (avance/retroceso
-// enfatizado); si no, contorno con hover en acento.
+// enfatizado); si no, contorno. Mismo hover que la píldora (.od-btn).
 export function ArrowButton({ onClick, label, size = 46, solid = false, children, sx }) {
   return (
     <Box
@@ -137,6 +226,8 @@ export function ArrowButton({ onClick, label, size = 46, solid = false, children
       type="button"
       onClick={onClick}
       aria-label={label}
+      data-fx
+      className="od-btn"
       sx={[
         {
           width: size,
@@ -148,30 +239,28 @@ export function ArrowButton({ onClick, label, size = 46, solid = false, children
           fontSize: 16,
           display: 'grid',
           placeItems: 'center',
-          transition: 'border-color 350ms, color 350ms, background 350ms, transform 350ms',
         },
         solid
           ? {
               border: '1px solid var(--color-neutral-900)',
               bgcolor: 'var(--color-neutral-900)',
               color: 'var(--color-neutral-100)',
-              '&:hover': { bgcolor: 'var(--color-neutral-800)' },
+              '--od-btn-fill': 'var(--od-tuna)',
+              '--od-btn-ink': '#fff',
+              '&:hover': { borderColor: 'var(--od-tuna)' },
             }
           : {
               border: '1px solid var(--color-divider)',
               bgcolor: 'transparent',
               color: 'inherit',
-              '&:hover': {
-                borderColor: 'var(--color-accent)',
-                color: 'var(--color-accent-700)',
-                bgcolor: 'var(--color-accent-100)',
-                transform: 'scale(1.08)',
-              },
+              '--od-btn-fill': 'var(--color-neutral-900)',
+              '--od-btn-ink': 'var(--color-neutral-100)',
+              '&:hover': { borderColor: 'var(--color-neutral-900)' },
             },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      {children}
+      <BtnInk roll={false}>{children}</BtnInk>
     </Box>
   );
 }

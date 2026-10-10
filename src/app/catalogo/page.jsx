@@ -20,7 +20,7 @@ export default async function Page() {
   ]);
 
   return (
-    <OdLayout>
+    <OdLayout sideArt={false}>
       <OdCatalogView items={buildListings(animals, taxa)} products={products} />
     </OdLayout>
   );

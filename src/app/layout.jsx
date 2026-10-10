@@ -9,6 +9,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
 import { CONFIG } from 'src/global-config';
 import { themeConfig, ThemeProvider } from 'src/theme';
+import { OdPointerFx } from 'src/layouts/od/od-pointer-fx';
 import { getSiteSettings, getNavCategories } from 'src/lib/public-api';
 import { SiteSettingsProvider } from 'src/layouts/site-settings-context';
 import { NavCategoriesProvider } from 'src/layouts/nav-categories-context';
@@ -94,6 +95,7 @@ export default async function RootLayout({ children }) {
               <MotionLazy>
                 <SiteSplash />
                 <ProgressBar />
+                <OdPointerFx />
                 <SessionProvider>
                   <AccountSync />
                   <NavCategoriesProvider categories={navCategories}>

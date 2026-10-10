@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 import { CONFIG } from 'src/global-config';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdLayout } from 'src/layouts/od/od-layout';
-import { OdImage, OdPageHead } from 'src/layouts/od/od-ui';
+import { Pill, OdImage, OdPageHead } from 'src/layouts/od/od-ui';
 
 // ----------------------------------------------------------------------
 
@@ -91,44 +91,31 @@ export default function Page() {
             </Box>
           </Box>
 
-          <Box component="aside" sx={{ p: { xs: 3, md: '30px 32px' }, border: '1px solid var(--color-divider)', borderRadius: '16px' }}>
+          {/* Misma tarjeta que en Asesoría: foco tuna e inclinación al cursor */}
+          <Box
+            component="aside"
+            data-fx
+            className="od-glow od-tilt"
+            sx={{ position: { md: 'sticky' }, top: { md: 130 }, p: { xs: 3, md: '36px 36px' }, border: '1px solid var(--color-divider)', bgcolor: 'var(--color-surface)', '--od-glow': 'rgba(168,69,92,0.16)' }}
+          >
             <Box sx={{ mb: 1.25, fontFamily: 'var(--font-heading)', fontSize: 26, lineHeight: 1.2 }}>
               ¿Primera colonia?
             </Box>
             <Box sx={{ mb: 3, fontSize: 14, lineHeight: 1.7, color: 'var(--color-neutral-700)' }}>
               Dinos qué contenedor tienes y en qué clima vives; te decimos qué especie aguanta y qué
-              necesitas comprar.
+              necesitas comprar. La asesoría es completamente gratis.
             </Box>
-            <Box
-              component="a"
-              href={WA}
-              target="_blank"
-              rel="noopener"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 52,
-                px: 4,
-                width: 1,
-                borderRadius: '999px',
-                bgcolor: 'var(--color-neutral-900)',
-                color: 'var(--color-neutral-100)',
-                fontSize: 14,
-                textDecoration: 'none',
-                transition: 'background 350ms',
-                '&:hover': { bgcolor: 'var(--color-accent-700)' },
-              }}
-            >
+            <Pill href={WA} target="_blank" rel="noopener" sx={{ width: 1, height: 52 }}>
               Abrir WhatsApp
-            </Box>
+            </Pill>
             {/* href simple: esta página es componente de servidor y no puede
                 pasarle RouterLink (una función) al Link de MUI, que es de cliente */}
             <Link
               href={paths.advisory}
-              sx={{ display: 'block', mt: 1.75, textAlign: 'center', fontSize: 13, color: 'var(--color-accent-700)', textDecoration: 'none' }}
+              className="od-link"
+              sx={{ display: 'block', width: 'fit-content', mx: 'auto', mt: 2, fontSize: 13, color: 'var(--color-accent-700)', textDecoration: 'none' }}
             >
-              Ver asesoría guiada
+              Ver asesoría gratuita →
             </Link>
           </Box>
         </Box>

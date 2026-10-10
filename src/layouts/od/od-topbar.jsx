@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { paths } from 'src/routes/paths';
+import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { SearchDialog } from 'src/layouts/components/search-dialog';
@@ -16,10 +17,11 @@ import { useCart } from 'src/sections/catalog/use-cart';
 import { useFavorites } from 'src/sections/catalog/use-favorites';
 
 import { OdMegaMenu } from './od-mega-menu';
+import { SITE_NAV, isCurrent } from './od-nav';
 
 // ----------------------------------------------------------------------
 // Barra superior estática de las vistas interiores (no el home): tira de aviso
-// + barra con nav simple, marca al centro y ES/EN · Favoritos · Carrito a la
+// + barra con las rutas principales (SITE_NAV, la misma lista que la portada), marca al centro y ES/EN · Favoritos · Carrito a la
 // derecha. La barra flotante (marquee + píldora) aparece al hacer scroll.
 // ----------------------------------------------------------------------
 
@@ -31,6 +33,7 @@ export function OdTopbar() {
   const nav = useBoolean();
   const search = useBoolean();
   const categories = useNavCategories();
+  const pathname = usePathname();
 
   return (
     <>
@@ -55,13 +58,28 @@ export function OdTopbar() {
           borderBottom: '1px solid var(--color-divider)',
         }}
       >
-        <Box component="nav" sx={{ display: { xs: 'none', md: 'flex' }, gap: '26px', fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-          <Link component={RouterLink} href={paths.catalog} sx={linkSx}>
-            Catálogo
-          </Link>
-          <Link component={RouterLink} href={paths.articles} sx={linkSx}>
-            Divulgación
-          </Link>
+        <Box component="nav" sx={{ display: { xs: 'none', md: 'flex' }, flexWrap: 'nowrap', gap: { md: '16px', xl: '20px' }, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          {SITE_NAV.map((l) => {
+            const current = isCurrent(pathname, l.href);
+            return (
+              <Link
+                key={l.href}
+                component={RouterLink}
+                href={l.href}
+                aria-current={current ? 'page' : undefined}
+                className="od-link"
+                sx={{
+                  ...linkSx,
+                  whiteSpace: 'nowrap',
+                  display: l.secondary ? { md: 'none', xl: 'inline' } : 'inline',
+                  // la página actual queda marcada en tuna
+                  ...(current && { color: 'var(--od-tuna)' }),
+                }}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
         </Box>
         {/* En móvil el hamburguesa TIENE que estar aquí: la píldora flotante
             (que es donde vive el otro) no aparece hasta pasar 320px de scroll,

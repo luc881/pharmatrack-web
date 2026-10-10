@@ -132,8 +132,8 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
                     sx={{ width: 44, height: 52, border: 0, bgcolor: 'transparent', cursor: 'pointer', fontSize: 18, color: 'inherit', borderRadius: '0 999px 999px 0', '&:hover': { bgcolor: 'var(--color-neutral-200)' } }}>+</Box>
                 </Box>
               )}
-              <Box component="button" type="button" onClick={handleAdd}
-                sx={{ flex: 1, minWidth: 220, height: 52, px: '32px', border: 0, borderRadius: '999px', cursor: 'pointer', font: 'inherit', fontSize: 14, bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', transition: 'background 350ms, transform 350ms', '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-2px)' } }}>
+              <Box component="button" type="button" onClick={handleAdd} className="od-btn" data-fx
+                sx={{ flex: 1, minWidth: 220, height: 52, px: '32px', border: 0, borderRadius: '999px', cursor: 'pointer', font: 'inherit', fontSize: 14, bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' }}>
                 {added ? 'Agregado ✓' : 'Agregar a cotización'}
               </Box>
             </Box>

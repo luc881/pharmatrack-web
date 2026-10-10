@@ -8,19 +8,16 @@ import { RouterLink } from 'src/routes/components';
 
 import { AccountButton } from 'src/layouts/components/account-button';
 
+import { SITE_NAV } from './od-nav';
+
 // ----------------------------------------------------------------------
 // Masthead editorial del home (solo en la portada): barra de enlaces simple +
 // wordmark gigante "OPUNTIA" + línea de tags y ubicación. Es estático: al hacer
 // scroll se va y aparece la barra flotante (ver revealOnScroll en OdHeader).
 // ----------------------------------------------------------------------
 
-const NAV = [
-  { label: 'Catálogo', href: paths.catalog },
-  { label: 'Especies', href: paths.catalogCategory('isopodos') },
-  { label: 'El criadero', href: paths.breeding },
-  { label: 'Divulgación', href: paths.articles },
-  { label: 'Preguntas', href: '#preguntas', anchor: true },
-];
+// Mismas rutas que la barra interior + el ancla a las preguntas del home
+const NAV = [...SITE_NAV, { label: 'Preguntas', href: '#preguntas', anchor: true }];
 
 const navLinkSx = {
   color: 'inherit',

@@ -7,6 +7,7 @@ import { OdHeader } from './od-header';
 import { OdFooter } from './od-footer';
 import { OdTopbar } from './od-topbar';
 import { OdTabBar } from './od-tab-bar';
+import { OdSideArt } from './od-contours';
 import { OdDivider3d } from './od-divider-3d';
 
 // ----------------------------------------------------------------------
@@ -23,7 +24,10 @@ import { OdDivider3d } from './od-divider-3d';
 // en flujos utilitarios como el carrito.
 // `hideTabBar` oculta la barra inferior de pestañas en móvil (la ficha pone su
 // propia barra de "Añadir" en su lugar).
-export async function OdLayout({ children, homeMasthead = false, divider3d = true, hideTabBar = false }) {
+// `sideArt` es el ancho del contenido de la página: en pantallas ≥1920px lo
+// que sobra a los lados lleva curvas de nivel animadas. `false` lo apaga (el
+// home tiene sus notas al margen; el catálogo, las suyas).
+export async function OdLayout({ children, homeMasthead = false, divider3d = true, hideTabBar = false, sideArt = 1440 }) {
   // Server component: pide la media aqui en vez de que cada pagina la herede.
   // El fetch se deduplica dentro del render y ya trae revalidate de 60 s.
   const { media } = await getSiteSettings();
@@ -34,7 +38,10 @@ export async function OdLayout({ children, homeMasthead = false, divider3d = tru
           El pb del contenedor reserva 66px abajo en móvil por la barra de pestañas. */}
       <OdHeader revealOnScroll />
       {!homeMasthead && <OdTopbar />}
-      <Box component="main">{children}</Box>
+      <Box component="main" sx={{ position: 'relative', isolation: 'isolate' }}>
+        {!homeMasthead && sideArt && <OdSideArt contentWidth={sideArt} />}
+        {children}
+      </Box>
       {!homeMasthead && divider3d && <OdDivider3d media={media} />}
       <OdFooter />
       {!hideTabBar && <OdTabBar />}

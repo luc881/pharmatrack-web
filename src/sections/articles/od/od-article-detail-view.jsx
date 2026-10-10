@@ -19,6 +19,7 @@ const pad2 = (n) => String(n).padStart(2, '0');
 
 const paraSx = { m: 0, mb: '18px', fontSize: 17, lineHeight: 1.8 };
 
+
 function BodySection({ section, id, divider }) {
   if (section.type === 'subheading') {
     return (
@@ -115,7 +116,10 @@ export function OdArticleDetailView({ article, related = [] }) {
       {article.cover_image && (
         <Box sx={{ px: { xs: '18px', md: 'var(--od-gutter)' } }}>
           <OdReveal sx={{ maxWidth: 1180, mx: 'auto' }}>
-            <OdImage src={article.cover_image} alt={article.title} ratio="16 / 9" width={1200} />
+            {/* portada grande: solo brillo (inclinarla tanto marea) */}
+            <Box data-fx className="od-glare" sx={{ position: 'relative', overflow: 'hidden' }}>
+              <OdImage src={article.cover_image} alt={article.title} ratio="16 / 9" width={1200} radius={0} />
+            </Box>
           </OdReveal>
         </Box>
       )}

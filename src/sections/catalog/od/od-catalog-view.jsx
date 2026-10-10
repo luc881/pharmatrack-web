@@ -14,8 +14,10 @@ import { RouterLink } from 'src/routes/components';
 import { fCurrency } from 'src/utils/format-number';
 
 import { Display } from 'src/layouts/od/od-ui';
+import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { HeadingMark } from 'src/layouts/od/od-ornaments';
+import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -340,24 +342,19 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
   return (
     <>
       {/* Cabecera */}
-      <Box
-        component="section"
+      <OdPanel
         className="od-rise"
-        data-dark="1"
         sx={{
-          position: 'relative',
-          overflow: 'hidden',
-          px: { xs: '18px', md: 'var(--od-gutter)' },
+          // alineado con el cuerpo, que en 2K/4K es más ancho que --od-max
+          px: { xs: '18px', md: 'max(40px, calc((100% - var(--od-catalog-max)) / 2 + 40px))' },
           pt: { xs: 5, md: 8 },
           pb: { xs: 4, md: 5 },
           // Banda oscura, el mismo tratamiento que el pie y las preguntas.
           // data-dark hace que la barra de navegacion se aclare mientras esta
           // seccion cruza por debajo (use-nav-theme.js).
-          bgcolor: 'var(--color-accent-900)',
-          color: 'var(--color-neutral-200)',
         }}
       >
-        <Box sx={{ mb: 2, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-400)' }}>
+        <Box sx={{ position: 'relative', mb: 2, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-400)' }}>
           <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-300)' } }}>
             Inicio
           </Link>
@@ -381,7 +378,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           src="/brand/assets/destacados/destacado-noche.svg"
           alt=""
           aria-hidden
-          sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: '50%', right: 'var(--od-gutter)', transform: 'translateY(-50%)', height: '78%', maxHeight: 260, width: 'auto', pointerEvents: 'none' }}
+          sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: '50%', right: 'max(40px, calc((100% - var(--od-catalog-max)) / 2 + 40px))', transform: 'translateY(-50%)', height: '78%', maxHeight: 260, width: 'auto', pointerEvents: 'none' }}
         />
 
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ position: 'relative', lineHeight: 1.02 }}>
@@ -393,7 +390,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           Todo lo que hay disponible hoy. Los ejemplares se reservan con anticipo y se entregan en
           persona en CDMX.
         </Box>
-      </Box>
+      </OdPanel>
 
       {/* Barra de filtros pegajosa (solo xs): sustituye a la columna lateral,
           que no cabe arriba del pliegue en móvil. Chips de categoría con
@@ -578,9 +575,21 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
       </Drawer>
 
       {/* Cuerpo: barra lateral fija + rejilla */}
-      {/* En 2K/4K el cuerpo se centra al ancho del contenido para que la barra
-          lateral quede alineada con el título, no pegada a la orilla */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' }, mx: 'auto', maxWidth: 'calc(var(--od-max) + 80px)' }}>
+      {/* En 2K/4K el cuerpo se centra, pero a un ancho mayor que el resto del
+          sitio (--od-catalog-max): en una tienda el espacio sobrante rinde más
+          como columnas de producto que como margen vacío. */}
+      <Box sx={{ position: 'relative' }}>
+      {/* Lo que sobra a los lados del cuerpo en 4K: número de resultados y
+          folio, como en las secciones del home */}
+      <OdGutterNote
+        n={String(cards.length).padStart(2, '0')}
+        label={category ? category.name : 'Resultados'}
+        width="max(0px, calc((100% - var(--od-catalog-max) - 80px) / 2))"
+        minScreen={2160}
+        start={120}
+        folio="Opuntia Den — Catálogo"
+      />
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' }, mx: 'auto', maxWidth: 'calc(var(--od-catalog-max) + 80px)' }}>
         {/* El color va en la celda de la rejilla, no en el <aside>: el aside es
             sticky y solo mide lo que ocupan sus filtros, asi que pintarlo a el
             dejaria el panel cortado a media pagina. */}
@@ -593,7 +602,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             borderRight: { md: '1px solid var(--color-divider)' },
             borderBottom: { xs: '1px solid var(--color-divider)', md: 'none' },
             // cuando el cuerpo ya no llega a la orilla, la columna cierra con línea
-            '@media (min-width: 1521px)': { borderLeft: '1px solid var(--color-divider)' },
+            '@media (min-width: 1921px)': { borderLeft: '1px solid var(--color-divider)' },
           }}
         >
           <Box
@@ -823,7 +832,9 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                     component="button"
                     type="button"
                     onClick={clearAll}
-                    sx={{ cursor: 'pointer', font: 'inherit', fontSize: 13, px: '30px', py: '14px', border: 0, bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', '&:hover': { bgcolor: 'var(--color-accent-700)' } }}
+                    className="od-btn"
+                    data-fx
+                    sx={{ cursor: 'pointer', font: 'inherit', fontSize: 13, px: '30px', py: '14px', border: 0, borderRadius: '999px', bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' }}
                   >
                     Limpiar filtros
                   </Box>
@@ -832,6 +843,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             </Box>
           )}
         </Box>
+      </Box>
       </Box>
     </>
   );

@@ -375,6 +375,8 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               type="button"
               onClick={soldOut ? undefined : handleAdd}
               disabled={soldOut}
+              className={soldOut ? undefined : 'od-btn'}
+              data-fx
               sx={{
                 flex: 1,
                 minWidth: 220,
@@ -387,8 +389,6 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                 fontSize: 14,
                 bgcolor: soldOut ? 'var(--color-neutral-300)' : 'var(--color-neutral-900)',
                 color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
-                transition: 'background 350ms, transform 350ms',
-                ...(!soldOut && { '&:hover': { bgcolor: 'var(--color-accent-700)', transform: 'translateY(-2px)' } }),
               }}
             >
               {soldOut ? 'Avísame' : added ? 'Agregado ✓' : 'Agregar a cotización'}
@@ -637,6 +637,8 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           type="button"
           onClick={soldOut ? undefined : handleAdd}
           disabled={soldOut}
+          className={soldOut ? undefined : 'od-btn'}
+          data-fx
           sx={{
             height: 48,
             px: '26px',
@@ -649,7 +651,6 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
             color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
             bgcolor: soldOut ? 'var(--color-neutral-300)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)',
             transition: 'background 300ms',
-            ...(!soldOut && { '&:hover': { bgcolor: 'var(--color-accent-700)' } }),
           }}
         >
           {soldOut ? 'Avísame' : added ? 'Agregado ✓' : 'Añadir'}

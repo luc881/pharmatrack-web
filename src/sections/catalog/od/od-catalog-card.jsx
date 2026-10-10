@@ -35,7 +35,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
   const code = card.codePrefix ? `${card.codePrefix}-${pad3(index + 1)}` : null;
 
   const media = (
-    <Box sx={{ position: 'relative', flexShrink: 0, width: horizontal ? { xs: 130, sm: 200 } : '100%', aspectRatio: '1 / 1', overflow: 'hidden', bgcolor: 'var(--color-neutral-200)' }}>
+    <Box className={horizontal ? undefined : 'od-tilt-lg od-glare'} data-fx={horizontal ? undefined : true} sx={{ position: 'relative', flexShrink: 0, width: horizontal ? { xs: 130, sm: 200 } : '100%', aspectRatio: '1 / 1', overflow: 'hidden', bgcolor: 'var(--color-neutral-200)' }}>
       <Box sx={{ position: 'absolute', inset: 0, opacity: soldOut ? 0.55 : 1 }}>
         <OdImage src={card.image} alt={card.title} label={card.title} ratio="1 / 1" radius={0} sx={{ width: 1, height: 1 }} />
       </Box>
@@ -206,6 +206,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
     <Box
       component={RouterLink}
       href={card.href}
+      data-fx
       sx={{
         display: 'flex',
         flexDirection: horizontal ? 'row' : 'column',

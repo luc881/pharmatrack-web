@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -8,17 +8,16 @@ import Link from '@mui/material/Link';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
 import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 
 import { articleSlug } from 'src/sections/articles/utils';
 
 // ----------------------------------------------------------------------
-// Divulgación editorial en filas (Nota · 0N). Rota automáticamente entre grupos
-// de 3 cada 8 s (pausa al pasar el cursor); cada grupo entra con odWipe en
-// cascada. Respeta prefers-reduced-motion.
+// Divulgación editorial en filas (Nota · 0N), en grupos de 3 que se cambian
+// con los puntos; cada grupo entra con odWipe en cascada. Ya no rota sola: el
+// contenido que avanza por su cuenta se pierde a media lectura.
 // ----------------------------------------------------------------------
-
-const PAGE_MS = 8000;
 
 function chunk(arr, n) {
   const out = [];
@@ -30,14 +29,6 @@ export function OdDivulgacion({ articles = [] }) {
   const rows = articles.slice(0, 6);
   const pages = chunk(rows, 3);
   const [page, setPage] = useState(0);
-  const [hold, setHold] = useState(false);
-
-  useEffect(() => {
-    if (pages.length < 2 || hold) return undefined;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const id = setInterval(() => setPage((p) => (p + 1) % pages.length), PAGE_MS);
-    return () => clearInterval(id);
-  }, [pages.length, hold]);
 
   if (!rows.length) return null;
 
@@ -45,7 +36,8 @@ export function OdDivulgacion({ articles = [] }) {
   const base = page * 3;
 
   return (
-    <Box component="section" id="divulgacion" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '40px', md: '60px' }, pb: { xs: '80px', md: '120px' } }}>
+    <Box component="section" id="divulgacion" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '40px', md: '60px' }, pb: { xs: '80px', md: '120px' } }}>
+      <OdGutterNote n="03" label="Divulgación" start={260} />
       <Display size="clamp(34px, 11.4vw, 176px)" weight={400} sx={{ lineHeight: 1, letterSpacing: '-0.015em', textTransform: 'uppercase', mb: 1.5 }}>
         Divulgación
       </Display>
@@ -98,8 +90,6 @@ export function OdDivulgacion({ articles = [] }) {
 
       <Box
         key={page}
-        onMouseEnter={() => setHold(true)}
-        onMouseLeave={() => setHold(false)}
         sx={{ borderBottom: '1px solid var(--color-divider)' }}
       >
         {current.map((article, i) => (
