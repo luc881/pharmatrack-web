@@ -77,8 +77,9 @@ export function OdScrollSeal() {
         bottom: { xs: 80, md: 28 },
         zIndex: 70,
         // grande a propósito: es de los pocos lugares donde el sello se ve completo
-        width: { xs: 84, md: 240 },
-        height: { xs: 84, md: 240 },
+        // escala con la pantalla: en laptops (900-1535px) 240px tapaba contenido
+        width: { xs: 84, md: 130, lg: 170, xl: 240 },
+        height: { xs: 84, md: 130, lg: 170, xl: 240 },
         p: 0,
         border: 0,
         borderRadius: '50%',
@@ -150,7 +151,7 @@ export function OdScrollSeal() {
       />
 
       <Box className="od-seal-arrow" sx={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: '#fff' }}>
-        <Iconify icon="eva:arrow-upward-fill" sx={{ width: { xs: 30, md: 56 }, height: { xs: 30, md: 56 } }} />
+        <Iconify icon="eva:arrow-upward-fill" sx={{ width: { xs: 30, md: 38, lg: 46, xl: 56 }, height: { xs: 30, md: 38, lg: 46, xl: 56 } }} />
       </Box>
     </Box>
   );
