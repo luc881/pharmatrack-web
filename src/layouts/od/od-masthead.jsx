@@ -106,7 +106,7 @@ export function OdMasthead() {
           sustratos y bioactivo
         </Box>
         <Box sx={{ textAlign: 'right', lineHeight: 1.35 }}>
-          Col. Roma Norte,
+          Entrega en persona,
           <br />
           Ciudad de México
         </Box>

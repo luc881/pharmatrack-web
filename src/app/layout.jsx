@@ -37,7 +37,7 @@ export const metadata = {
     template: `%s | ${CONFIG.appName}`,
   },
   description:
-    'Criadero en Col. Roma Norte, CDMX: isópodos, colémbolos, fásmidos y sustratos para terrarios bioactivos. Entrega en persona.',
+    'Criadero en la Ciudad de México: isópodos, colémbolos, fásmidos y sustratos para terrarios bioactivos. Entrega en persona.',
   icons: {
     icon: [
       { url: `${CONFIG.assetsDir}/favicon.ico`, sizes: 'any' },
