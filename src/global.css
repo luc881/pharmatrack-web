@@ -334,10 +334,12 @@ button:focus-visible,
    un pequeño acercamiento y brillo más intenso, sin cambiar de color. Va con
    `data-fx` en la propia foto para que el giro use todo su recorrido. */
 .od-tilt-lg {
-  transform: perspective(800px) rotateX(calc(var(--my, 0) * -16deg)) rotateY(calc(var(--mx, 0) * 18deg));
+  /* --od-tilt-k multiplica el giro y --od-tilt-s es el acercamiento: las
+     tarjetas anchas (insumos) necesitan más para que el movimiento se note */
+  transform: perspective(800px) rotateX(calc(var(--my, 0) * -16deg * var(--od-tilt-k, 1))) rotateY(calc(var(--mx, 0) * 18deg * var(--od-tilt-k, 1)));
   transition: transform 700ms var(--od-ease), scale 700ms var(--od-ease);
 }
-.od-tilt-lg[data-fx]:hover { scale: 1.04; }
+.od-tilt-lg[data-fx]:hover { scale: var(--od-tilt-s, 1.04); }
 .od-tilt-lg.od-glare::after {
   background: radial-gradient(circle at calc(var(--px, 0.5) * 100%) calc(var(--py, 0.5) * 100%), rgba(255, 255, 255, 0.5), transparent 60%);
 }

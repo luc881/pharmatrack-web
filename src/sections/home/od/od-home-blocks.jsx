@@ -203,7 +203,7 @@ export function OdProductRail({ items }) {
               },
             }}
           >
-            <Box className="od-tilt-lg od-glare" data-fx sx={{ position: 'relative', overflow: 'hidden' }}>
+            <Box className="od-tilt-lg od-glare" data-fx sx={{ position: 'relative', overflow: 'hidden', '--od-tilt-k': 1.8, '--od-tilt-s': 1.07 }}>
               <OdImage src={c.image} alt={c.title} label={c.title} ratio="4 / 3" radius={0} />
             </Box>
             <Box sx={{ mt: 1.75, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>{c.category}</Box>
