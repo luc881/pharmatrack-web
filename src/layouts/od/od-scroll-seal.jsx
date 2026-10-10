@@ -26,7 +26,7 @@ const STEP = C / 120;
 const TICKS = `${(STEP * 0.3).toFixed(3)} ${(STEP * 0.7).toFixed(3)}`;
 
 // franja del viewport donde vive el botón (para saber si hay fondo oscuro)
-const band = () => [window.innerHeight - 150, window.innerHeight - 30];
+const band = () => [window.innerHeight - 270, window.innerHeight - 30];
 
 export function OdScrollSeal() {
   const onDark = useNavTheme(band);
@@ -76,8 +76,8 @@ export function OdScrollSeal() {
         bottom: { xs: 80, md: 28 },
         zIndex: 70,
         // grande a propósito: es de los pocos lugares donde el sello se ve completo
-        width: { xs: 84, md: 120 },
-        height: { xs: 84, md: 120 },
+        width: { xs: 84, md: 240 },
+        height: { xs: 84, md: 240 },
         p: 0,
         border: 0,
         borderRadius: '50%',
@@ -148,7 +148,7 @@ export function OdScrollSeal() {
       />
 
       <Box className="od-seal-arrow" sx={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: '#fff' }}>
-        <Iconify icon="eva:arrow-upward-fill" width={30} />
+        <Iconify icon="eva:arrow-upward-fill" sx={{ width: { xs: 30, md: 56 }, height: { xs: 30, md: 56 } }} />
       </Box>
     </Box>
   );
