@@ -8,12 +8,14 @@ import { useState, useEffect } from 'react';
 // (crema sobre secciones oscuras, oscura sobre contenido claro). Escucha
 // scroll/resize con rAF para no disparar en cada frame.
 // ponytail: banda aproximada (58–104px); ajustar si cambia el alto del header.
+// `band` (opcional) devuelve otra franja [arriba, abajo] en px del viewport:
+// el sello de "ir arriba" la usa para mirar la parte baja de la pantalla.
 // ----------------------------------------------------------------------
 
 const BAND_TOP = 58;
 const BAND_BOTTOM = 104;
 
-export function useNavTheme() {
+export function useNavTheme(band) {
   // el home abre sobre el hero oscuro → arranca en modo "sobre oscuro" (crema)
   const [onDark, setOnDark] = useState(true);
 
@@ -22,9 +24,10 @@ export function useNavTheme() {
     const check = () => {
       raf = 0;
       let dark = false;
+      const [top, bottom] = band ? band() : [BAND_TOP, BAND_BOTTOM];
       document.querySelectorAll('[data-dark]').forEach((el) => {
         const r = el.getBoundingClientRect();
-        if (r.top < BAND_BOTTOM && r.bottom > BAND_TOP) dark = true;
+        if (r.top < bottom && r.bottom > top) dark = true;
       });
       setOnDark(dark);
     };
@@ -39,7 +42,7 @@ export function useNavTheme() {
       window.removeEventListener('resize', onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [band]);
 
   return onDark;
 }

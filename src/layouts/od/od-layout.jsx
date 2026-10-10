@@ -9,6 +9,7 @@ import { OdTopbar } from './od-topbar';
 import { OdTabBar } from './od-tab-bar';
 import { OdSideArt } from './od-contours';
 import { OdDivider3d } from './od-divider-3d';
+import { OdScrollSeal } from './od-scroll-seal';
 
 // ----------------------------------------------------------------------
 // Shell del rediseño editorial. Envuelve cada pantalla nueva con la barra
@@ -45,6 +46,7 @@ export async function OdLayout({ children, homeMasthead = false, divider3d = tru
       {!homeMasthead && divider3d && <OdDivider3d media={media} />}
       <OdFooter />
       {!hideTabBar && <OdTabBar />}
+      <OdScrollSeal />
       <CloseCursor />
     </Box>
   );
