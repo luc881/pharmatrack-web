@@ -19,6 +19,8 @@ import { useNavTheme } from './use-nav-theme';
 //  - al pasar el cursor el sello gira y se desvanece y aparece una flecha;
 //    clic → sube al inicio.
 // En móvil queda por encima de la barra de pestañas.
+// Al llegar al pie, se oculta y el sello del pie ([data-seal-dock], ver
+// OdFooterSeal) toma su lugar: el mismo sello que "aterriza" al final.
 // ----------------------------------------------------------------------
 
 // 2πr con r = 46 (viewBox de 100), 120 rayitas sin costura
@@ -29,10 +31,61 @@ const TICKS = `${(STEP * 0.3).toFixed(3)} ${(STEP * 0.7).toFixed(3)}`;
 // franja del viewport donde vive el botón (para saber si hay fondo oscuro)
 const band = () => [window.innerHeight - 270, window.innerHeight - 30];
 
+export const scrollToTop = () => {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+};
+
+// Hover compartido: el sello gira y se desvanece, aparece el disco tuna con la
+// flecha. Solo con ratón (en táctil el toque ya sube directo).
+export const sealHoverSx = {
+  '& .od-seal': { transition: 'opacity 450ms ease, transform 650ms var(--od-ease)' },
+  '& .od-seal-arrow': { opacity: 0, transform: 'translateY(10px)', transition: 'opacity 350ms ease 120ms, transform 550ms var(--od-ease) 80ms' },
+  '& .od-seal-disc': { transform: 'scale(0)', transition: 'transform 550ms var(--od-ease)' },
+  '@media (hover: hover)': {
+    '&:hover .od-seal, &:focus-visible .od-seal': { opacity: 0, transform: 'rotate(-120deg) scale(0.6)' },
+    '&:hover .od-seal-arrow, &:focus-visible .od-seal-arrow': { opacity: 1, transform: 'none' },
+    '&:hover .od-seal-disc, &:focus-visible .od-seal-disc': { transform: 'scale(1)' },
+  },
+};
+
+// Cara del sello: fondo de papel (solo con el sello claro, cuyos trazos son
+// de tinta), disco tuna de hover, el sello y la flecha.
+export function SealFace({ light, arrowSx }) {
+  return (
+    <>
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: '8%',
+          borderRadius: '50%',
+          bgcolor: 'rgba(246,244,241,0.92)',
+          opacity: light ? 1 : 0,
+          transition: 'opacity 400ms ease',
+        }}
+      />
+      <Box className="od-seal-disc" sx={{ position: 'absolute', inset: '14%', borderRadius: '50%', bgcolor: 'var(--od-tuna)' }} />
+      <Box
+        className="od-seal"
+        component="img"
+        src={light ? '/brand/assets/logo/sello-claro.svg' : '/brand/assets/logo/sello-oscuro.svg'}
+        alt=""
+        sx={{ position: 'absolute', inset: '8%', width: '84%', height: '84%' }}
+      />
+      <Box className="od-seal-arrow" sx={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: '#fff' }}>
+        <Iconify icon="eva:arrow-upward-fill" sx={arrowSx} />
+      </Box>
+    </>
+  );
+}
+
 export function OdScrollSeal() {
   const onDark = useNavTheme(band);
-  const [visible, setVisible] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [docked, setDocked] = useState(false);
   const ringRef = useRef(null);
+  const visible = scrolled && !docked;
+
 
   useEffect(() => {
     let raf = 0;
@@ -41,7 +94,10 @@ export function OdScrollSeal() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
       ringRef.current?.style.setProperty('stroke-dashoffset', String(C * (1 - p)));
-      setVisible(window.scrollY > window.innerHeight * 0.5);
+      setScrolled(window.scrollY > window.innerHeight * 0.5);
+      // el sello del pie ya asoma (un cuarto de él) → este se esconde
+      const dock = document.querySelector('[data-seal-dock]')?.getBoundingClientRect();
+      setDocked(!!dock && dock.top < window.innerHeight - dock.height * 0.25 && dock.bottom > 0);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -56,18 +112,13 @@ export function OdScrollSeal() {
     };
   }, []);
 
-  const toTop = () => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
-  };
-
   const ink = onDark ? 'var(--od-papel)' : 'var(--od-tinta)';
 
   return (
     <Box
       component="button"
       type="button"
-      onClick={toTop}
+      onClick={scrollToTop}
       aria-label="Volver arriba"
       tabIndex={visible ? 0 : -1}
       sx={{
@@ -90,14 +141,7 @@ export function OdScrollSeal() {
         transform: visible ? 'none' : 'translateY(16px) scale(0.9)',
         pointerEvents: visible ? 'auto' : 'none',
         transition: 'opacity 400ms ease, transform 500ms var(--od-ease), color 400ms ease',
-        '& .od-seal': { transition: 'opacity 450ms ease, transform 650ms var(--od-ease)' },
-        '& .od-seal-arrow': { opacity: 0, transform: 'translateY(10px)', transition: 'opacity 350ms ease 120ms, transform 550ms var(--od-ease) 80ms' },
-        '& .od-seal-disc': { transform: 'scale(0)', transition: 'transform 550ms var(--od-ease)' },
-        '@media (hover: hover)': {
-          '&:hover .od-seal, &:focus-visible .od-seal': { opacity: 0, transform: 'rotate(-120deg) scale(0.6)' },
-          '&:hover .od-seal-arrow, &:focus-visible .od-seal-arrow': { opacity: 1, transform: 'none' },
-          '&:hover .od-seal-disc, &:focus-visible .od-seal-disc': { transform: 'scale(1)' },
-        },
+        ...sealHoverSx,
       }}
     >
       {/* anillo de avance de la página */}
@@ -123,35 +167,9 @@ export function OdScrollSeal() {
         </defs>
       </Box>
 
-      {/* fondo de papel bajo el sello claro (va sobre secciones oscuras y sus
-          trazos son de tinta); el sello oscuro ya trae su propio disco */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: '8%',
-          borderRadius: '50%',
-          bgcolor: 'rgba(246,244,241,0.92)',
-          opacity: onDark ? 1 : 0,
-          transition: 'opacity 400ms ease',
-        }}
-      />
-
-      {/* disco que aparece detrás de la flecha */}
-      <Box className="od-seal-disc" sx={{ position: 'absolute', inset: '14%', borderRadius: '50%', bgcolor: 'var(--od-tuna)' }} />
-
       {/* sello en contraste (pedido del usuario): oscuro sobre fondo claro,
           claro sobre secciones oscuras */}
-      <Box
-        className="od-seal"
-        component="img"
-        src={onDark ? '/brand/assets/logo/sello-claro.svg' : '/brand/assets/logo/sello-oscuro.svg'}
-        alt=""
-        sx={{ position: 'absolute', inset: '8%', width: '84%', height: '84%' }}
-      />
-
-      <Box className="od-seal-arrow" sx={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: '#fff' }}>
-        <Iconify icon="eva:arrow-upward-fill" sx={{ width: { xs: 30, md: 38, lg: 46, xl: 56 }, height: { xs: 30, md: 38, lg: 46, xl: 56 } }} />
-      </Box>
+      <SealFace light={onDark} arrowSx={{ width: { xs: 30, md: 38, lg: 46, xl: 56 }, height: { xs: 30, md: 38, lg: 46, xl: 56 } }} />
     </Box>
   );
 }

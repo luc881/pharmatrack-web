@@ -293,23 +293,31 @@ button:focus-visible,
   justify-content: center;
   color: var(--od-fxbtn-ink, #fff);
 }
-.od-fxbtn:hover::before,
 .od-fxbtn:focus-visible::before,
-.od-fxbtn:hover .od-fxbtn-ink,
 .od-fxbtn:focus-visible .od-fxbtn-ink {
   clip-path: circle(150% at calc(var(--ex, 0.5) * 100%) calc(var(--ey, 0.5) * 100%));
+}
+/* Hovers solo con ratón: en táctil, iOS deja ":hover" pegado tras el toque y
+   el relleno se quedaba a medias en el botón. */
+@media (hover: hover) {
+  .od-fxbtn:hover::before,
+  .od-fxbtn:hover .od-fxbtn-ink {
+    clip-path: circle(150% at calc(var(--ex, 0.5) * 100%) calc(var(--ey, 0.5) * 100%));
+  }
 }
 
 /* Texto que "rueda": sale hacia arriba y entra su copia desde abajo */
 .od-roll { display: inline-grid; overflow: hidden; line-height: 1.3; vertical-align: top; }
 .od-roll > span { grid-area: 1 / 1; transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1); }
 .od-roll > span + span { transform: translateY(110%); }
-:hover > .od-roll > span:first-child,
-:focus-visible > .od-roll > span:first-child,
-.od-fxbtn:hover .od-roll > span:first-child { transform: translateY(-110%); }
-:hover > .od-roll > span + span,
-:focus-visible > .od-roll > span + span,
-.od-fxbtn:hover .od-roll > span + span { transform: none; }
+:focus-visible > .od-roll > span:first-child { transform: translateY(-110%); }
+:focus-visible > .od-roll > span + span { transform: none; }
+@media (hover: hover) {
+  :hover > .od-roll > span:first-child,
+  .od-fxbtn:hover .od-roll > span:first-child { transform: translateY(-110%); }
+  :hover > .od-roll > span + span,
+  .od-fxbtn:hover .od-roll > span + span { transform: none; }
+}
 
 /* Inclinación 3D (el elemento) y brillo que sigue al cursor (::after) */
 .od-tilt {
@@ -326,8 +334,10 @@ button:focus-visible,
   opacity: 0;
   transition: opacity 450ms ease;
 }
-[data-fx]:hover .od-glare::after,
-.od-glare[data-fx]:hover::after { opacity: 1; }
+@media (hover: hover) {
+  [data-fx]:hover .od-glare::after,
+  .od-glare[data-fx]:hover::after { opacity: 1; }
+}
 
 /* Variante marcada para fotos de tarjeta (productos, artículos): más giro,
    un pequeño acercamiento y brillo más intenso, sin cambiar de color. Va con
@@ -338,7 +348,9 @@ button:focus-visible,
   transform: perspective(800px) rotateX(calc(var(--my, 0) * -16deg * var(--od-tilt-k, 1))) rotateY(calc(var(--mx, 0) * 18deg * var(--od-tilt-k, 1)));
   transition: transform 700ms var(--od-ease), scale 700ms var(--od-ease);
 }
-.od-tilt-lg[data-fx]:hover { scale: var(--od-tilt-s, 1.04); }
+@media (hover: hover) {
+  .od-tilt-lg[data-fx]:hover { scale: var(--od-tilt-s, 1.04); }
+}
 .od-tilt-lg.od-glare::after {
   background: radial-gradient(circle at calc(var(--px, 0.5) * 100%) calc(var(--py, 0.5) * 100%), rgba(255, 255, 255, 0.5), transparent 60%);
 }
@@ -356,7 +368,9 @@ button:focus-visible,
   opacity: 0;
   transition: opacity 450ms ease;
 }
-.od-glow:hover::before { opacity: 1; }
+@media (hover: hover) {
+  .od-glow:hover::before { opacity: 1; }
+}
 
 /* Pieza que se deja jalar un poco por el cursor (íconos, flechas) */
 .od-magnet {

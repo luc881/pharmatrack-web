@@ -10,6 +10,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
 
+import { SealFace, scrollToTop, sealHoverSx } from './od-scroll-seal';
+
 // ----------------------------------------------------------------------
 // Pie del rediseño (global): fondo terracota oscuro, navegación en tipografía
 // grande, datos de la tienda, redes, barra inferior con reloj vivo y el
@@ -134,8 +136,32 @@ export function OdFooter() {
 
       {/* Wordmark a sangre */}
       <Box sx={{ mt: { xs: 4, md: '40px' }, pb: 3, textAlign: 'center' }}>
-        {/* Sello oscuro: el del fondo noche (BRAND.md §5, mínimo 96 px) */}
-        <Box component="img" src="/brand/assets/logo/sello-oscuro.svg" alt="Opuntia Den, criadero en CDMX" sx={{ display: 'block', mx: 'auto', mb: { xs: 3, md: 4 }, width: { xs: 96, md: 120 }, height: 'auto' }} />
+        {/* Sello claro y grande: es donde "aterriza" el sello flotante de la
+            esquina (que se oculta al llegar aquí) y hace lo mismo que él:
+            al pasar el cursor se vuelve flecha y sube al inicio. */}
+        <Box
+          component="button"
+          type="button"
+          data-seal-dock
+          onClick={scrollToTop}
+          aria-label="Opuntia Den, criadero en CDMX — volver arriba"
+          sx={{
+            position: 'relative',
+            display: 'block',
+            mx: 'auto',
+            mb: { xs: 3, md: 4 },
+            width: { xs: 150, md: 210, xl: 260 },
+            height: { xs: 150, md: 210, xl: 260 },
+            p: 0,
+            border: 0,
+            borderRadius: '50%',
+            bgcolor: 'transparent',
+            cursor: 'pointer',
+            ...sealHoverSx,
+          }}
+        >
+          <SealFace light arrowSx={{ width: { xs: 40, md: 52 }, height: { xs: 40, md: 52 } }} />
+        </Box>
         <Box sx={{ mb: 0.75, fontFamily: 'var(--font-body)', fontSize: 22, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'var(--color-neutral-400)' }}>Invertebrados</Box>
         <Box sx={{ fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'min(15.5vw, 224px)', lineHeight: 1.02, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-neutral-100)' }}>Opuntia</Box>
       </Box>
