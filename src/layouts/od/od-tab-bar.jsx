@@ -22,19 +22,19 @@ import { useNavTheme } from './use-nav-theme';
 // El layout reserva 66px abajo en móvil para que no tape el contenido.
 //
 //  - Borde superior con la cinta de rayitas de la marca (.od-ticks).
-//  - Un indicador tuna se desliza a la pestaña activa; el ícono activo pasa
-//    a su versión rellena. Al tocar, el ícono da un pequeño rebote.
-//  - Cambia de tono según lo que tenga detrás: crema sobre fondo claro, noche
-//    sobre secciones oscuras (misma detección data-dark que la barra de
-//    arriba).
+//  - La pestaña activa es un bloque tuna de toda la celda que se desliza;
+//    su ícono pasa a la versión sólida. Al tocar, el ícono da un rebote.
+//  - Íconos duotono (dos tonos) para que no se pierdan en el fondo.
+//  - En contraste con lo que tenga detrás (pedido del usuario): noche sobre
+//    fondo claro, crema sobre secciones oscuras (detección data-dark).
 // ----------------------------------------------------------------------
 
 const TABS = [
-  { key: 'home', label: 'Inicio', href: paths.root, icon: 'solar:home-2-linear', iconOn: 'solar:home-2-bold' },
-  { key: 'catalog', label: 'Catálogo', href: paths.catalog, icon: 'solar:widget-2-linear', iconOn: 'solar:widget-2-bold' },
-  { key: 'search', label: 'Buscar', icon: 'ri:search-line' },
-  { key: 'favorites', label: 'Favoritos', href: paths.favorites, icon: 'solar:heart-linear', iconOn: 'solar:heart-bold' },
-  { key: 'cart', label: 'Cotización', href: paths.cart, icon: 'solar:cart-plus-linear', iconOn: 'solar:cart-plus-bold' },
+  { key: 'home', label: 'Inicio', href: paths.root, icon: 'solar:home-2-bold-duotone', iconOn: 'solar:home-2-bold' },
+  { key: 'catalog', label: 'Catálogo', href: paths.catalog, icon: 'solar:widget-2-bold-duotone', iconOn: 'solar:widget-2-bold' },
+  { key: 'search', label: 'Buscar', icon: 'solar:magnifer-bold-duotone' },
+  { key: 'favorites', label: 'Favoritos', href: paths.favorites, icon: 'solar:heart-bold-duotone', iconOn: 'solar:heart-bold' },
+  { key: 'cart', label: 'Cotización', href: paths.cart, icon: 'solar:cart-plus-bold-duotone', iconOn: 'solar:cart-plus-bold' },
 ];
 
 const HEIGHT = 66;
@@ -58,7 +58,7 @@ const itemSx = (active) => ({
   fontSize: 10,
   letterSpacing: '0.06em',
   textDecoration: 'none',
-  color: active ? 'var(--tab-on)' : 'var(--tab-off)',
+  color: active ? '#fff' : 'var(--tab-off)',
   fontWeight: active ? 600 : 400,
   transition: 'color 300ms ease',
   WebkitTapHighlightColor: 'transparent',
@@ -91,11 +91,11 @@ export function OdTabBar() {
           display: { xs: 'flex', md: 'none' },
           alignItems: 'stretch',
           // tonos de las pestañas según el fondo
-          '--tab-on': onDark ? 'var(--od-papel)' : 'var(--od-tinta)',
-          '--tab-off': onDark ? 'rgba(240,235,224,0.6)' : 'var(--color-neutral-600)',
+          // invertido: barra oscura sobre fondo claro y clara sobre oscuro
+          '--tab-off': onDark ? 'var(--od-tinta)' : 'var(--od-papel)',
           // opaco: con transparencia se alcanzaban a leer los títulos de abajo
-          bgcolor: onDark ? 'rgb(46,41,36)' : 'rgb(240,235,224)',
-          color: onDark ? 'var(--od-papel)' : 'var(--od-tinta)',
+          bgcolor: onDark ? 'rgb(240,235,224)' : 'rgb(46,41,36)',
+          color: onDark ? 'var(--od-tinta)' : 'var(--od-papel)',
           transition: 'background-color 400ms ease, color 400ms ease',
           // cinta de rayitas de la marca como borde superior
           '&::before': {
@@ -128,18 +128,8 @@ export function OdTabBar() {
               pointerEvents: 'none',
             }}
           >
-            <Box sx={{ width: 28, height: 3, bgcolor: 'var(--od-tuna)' }} />
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 9,
-                width: 46,
-                height: 28,
-                borderRadius: '14px',
-                bgcolor: onDark ? 'rgba(168,69,92,0.32)' : 'rgba(168,69,92,0.14)',
-                transition: 'background-color 400ms ease',
-              }}
-            />
+            {/* bloque cuadrado de toda la celda (bajo la cinta de rayitas) */}
+            <Box sx={{ position: 'absolute', top: 5, bottom: 0, left: 0, right: 0, bgcolor: 'var(--od-tuna)' }} />
           </Box>
         )}
 
@@ -173,8 +163,9 @@ export function OdTabBar() {
                       placeItems: 'center',
                       fontSize: 10,
                       fontWeight: 600,
-                      bgcolor: 'var(--od-tuna)',
-                      color: '#fff',
+                      bgcolor: '#fff',
+                      color: 'var(--od-tuna)',
+                      boxShadow: '0 0 0 1.5px var(--od-tuna)',
                       fontVariantNumeric: 'tabular-nums',
                     }}
                   >
