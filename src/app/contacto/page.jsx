@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 import { CONFIG } from 'src/global-config';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdLayout } from 'src/layouts/od/od-layout';
-import { Pill, OdImage, OdPageHead } from 'src/layouts/od/od-ui';
+import { Pill, OdPageHead } from 'src/layouts/od/od-ui';
 
 // ----------------------------------------------------------------------
 
@@ -75,12 +75,12 @@ export default function Page() {
               <Box sx={{ m: 0, fontSize: 17 }}>Lunes a sábado, 10:00 – 19:00 h</Box>
             </Box>
             <Box sx={rowSx}>
-              <Box sx={labelSx}>Zona de entrega</Box>
-              <Box>
-                <Box sx={{ mb: 2, fontSize: 17 }}>
-                  Roma, Condesa, Coyoacán, Del Valle y Centro. Otras alcaldías por acuerdo.
-                </Box>
-                <OdImage label="Mapa de zona de entrega" ratio="16 / 9" radius={0} sx={{ maxWidth: 460 }} />
+              <Box sx={labelSx}>Entrega</Box>
+              {/* Sin zona fija: el punto cambia (muchas veces una estación del
+                  Metro), así que se acuerda en cada pedido */}
+              <Box sx={{ m: 0, fontSize: 17 }}>
+                Acordamos contigo el punto y la hora de entrega por WhatsApp, por lo general en
+                alguna estación del Metro de la CDMX.
               </Box>
             </Box>
             <Box sx={rowSx}>
