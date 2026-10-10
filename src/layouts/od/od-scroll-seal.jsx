@@ -13,7 +13,8 @@ import { useNavTheme } from './use-nav-theme';
 //  - aparece al bajar más de media pantalla (arriba no sirve de nada);
 //  - un anillo de rayitas (como el del loader) se llena con el avance de la
 //    página;
-//  - cambia entre sello claro y oscuro según la sección que tenga debajo
+//  - en contraste con la sección de abajo: sello oscuro sobre fondo claro y
+//    claro sobre fondo oscuro
 //    (misma detección data-dark que la barra flotante);
 //  - al pasar el cursor el sello gira y se desvanece y aparece una flecha;
 //    clic → sube al inicio.
@@ -121,8 +122,8 @@ export function OdScrollSeal() {
         </defs>
       </Box>
 
-      {/* fondo de papel bajo el sello claro: sobre tarjetas o fotos claras se
-          perdía (el sello oscuro ya trae su propio disco) */}
+      {/* fondo de papel bajo el sello claro (va sobre secciones oscuras y sus
+          trazos son de tinta); el sello oscuro ya trae su propio disco */}
       <Box
         sx={{
           position: 'absolute',
@@ -130,7 +131,7 @@ export function OdScrollSeal() {
           borderRadius: '50%',
           bgcolor: 'rgba(246,244,241,0.92)',
           backdropFilter: 'blur(4px)',
-          opacity: onDark ? 0 : 1,
+          opacity: onDark ? 1 : 0,
           transition: 'opacity 400ms ease',
         }}
       />
@@ -138,11 +139,12 @@ export function OdScrollSeal() {
       {/* disco que aparece detrás de la flecha */}
       <Box className="od-seal-disc" sx={{ position: 'absolute', inset: '14%', borderRadius: '50%', bgcolor: 'var(--od-tuna)' }} />
 
-      {/* sello: claro sobre fondo claro, oscuro sobre secciones oscuras */}
+      {/* sello en contraste (pedido del usuario): oscuro sobre fondo claro,
+          claro sobre secciones oscuras */}
       <Box
         className="od-seal"
         component="img"
-        src={onDark ? '/brand/assets/logo/sello-oscuro.svg' : '/brand/assets/logo/sello-claro.svg'}
+        src={onDark ? '/brand/assets/logo/sello-claro.svg' : '/brand/assets/logo/sello-oscuro.svg'}
         alt=""
         sx={{ position: 'absolute', inset: '8%', width: '84%', height: '84%' }}
       />
