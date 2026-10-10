@@ -91,7 +91,7 @@ export function OdFooter() {
             <br />
             Ciudad de México y área metropolitana
             <br />
-            {CONFIG.phone}
+            {CONFIG.phoneLabel} · {CONFIG.phone}
           </Box>
           <Box sx={{ fontSize: 14, lineHeight: 1.65, color: 'var(--color-neutral-400)' }}>
             Lun a vie 11–19 h · Sáb 11–15 h

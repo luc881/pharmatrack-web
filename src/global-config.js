@@ -11,9 +11,10 @@ export const CONFIG = {
   // URL pública del sitio (metadata OG / sitemap)
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.opuntiaden.com',
   // WhatsApp del negocio con lada de país (52 = México), solo dígitos
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || '522225392960',
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || '525562292037',
   // Contacto visible: fuente única, igual que public/brand/BRAND.md §8
-  phone: '56 2157 8388',
+  phone: '55 6229 2037',
+  phoneLabel: 'Ventas Opuntia',
   instagram: 'https://www.instagram.com/opuntia_den/',
   instagramHandle: '@opuntia_den',
   isStaticExport: JSON.parse(process.env.BUILD_STATIC_EXPORT ?? 'false'),

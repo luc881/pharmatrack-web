@@ -61,7 +61,7 @@ export default function Page() {
             <Box sx={rowSx}>
               <Box sx={labelSx}>WhatsApp</Box>
               <Link href={WA} target="_blank" rel="noopener" sx={valueSx}>
-                Escríbenos por WhatsApp ↗
+                {CONFIG.phoneLabel} · {CONFIG.phone} ↗
               </Link>
             </Box>
             <Box sx={rowSx}>
