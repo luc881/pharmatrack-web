@@ -2,10 +2,11 @@ import Box from '@mui/material/Box';
 
 import { CONFIG } from 'src/global-config';
 import { getLinkPages } from 'src/lib/public-api';
-import { Pill, Star, SciName } from 'src/layouts/od/od-ui';
+import { Pill, Star } from 'src/layouts/od/od-ui';
 
 import { slugify } from 'src/sections/catalog/utils';
 
+import { OdGuides } from './od-guides';
 import { LinksTrack } from './links-track';
 import { OdCountdown } from './od-countdown';
 
@@ -20,9 +21,6 @@ import { OdCountdown } from './od-countdown';
 // Eventos de analítica: clic_<prefix><botón> y clic_<prefix>guia_<guía>
 // (prefix '' en /gracias, 'links_' en /links).
 // ----------------------------------------------------------------------
-
-const WA = `https://wa.me/${CONFIG.whatsapp}`;
-const waGuide = (name) => `${WA}?text=${encodeURIComponent(`Hola, quiero la guía de cuidados de ${name}.`)}`;
 
 const isExternal = (url) => !url.startsWith('/');
 
@@ -61,46 +59,6 @@ const eventWhen = (e) => {
 };
 
 const focusSx = { '&:focus-visible': { outline: '2px solid var(--od-focus)', outlineOffset: '3px' } };
-
-const cardSx = {
-  ...focusSx,
-  minHeight: 56,
-  px: 2.5,
-  py: 1.5,
-  display: 'flex',
-  alignItems: 'center',
-  gap: 2,
-  bgcolor: 'var(--od-papel)',
-  border: '1px solid var(--od-linea)',
-  borderRadius: 'var(--od-radius-md)',
-  boxShadow: 'var(--od-shadow-flat)',
-  color: 'var(--od-tinta)',
-  textDecoration: 'none',
-  transition: 'transform 200ms ease, box-shadow 200ms ease',
-  '@media (hover: hover)': {
-    '&:hover': { transform: 'translate(-2px, -2px)', boxShadow: '5px 5px 0 rgba(51, 36, 20, 0.12)' },
-  },
-};
-
-// Guía sin url: todavía no hay página, se pide por WhatsApp (no se inventa
-// contenido de cuidados). Las `sub` son especies: sangría y nombre científico.
-function GuideCard({ g, prefix }) {
-  const todo = !g.url;
-  const link = todo ? { href: waGuide(g.name), target: '_blank', rel: 'noopener' } : { href: g.url };
-  return (
-    <Box component="a" {...link} data-track={`clic_${prefix}guia_${slugify(g.name).replace(/-/g, '_')}`} sx={[cardSx, g.sub && { ml: 3, minHeight: 48 }]}>
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Box sx={{ fontFamily: 'var(--od-font-display)', fontSize: g.sub ? 17 : 21, lineHeight: 1.2 }}>
-          {g.sub ? <SciName>{g.name}</SciName> : g.name}
-        </Box>
-        {todo && <Box sx={{ mt: 0.5, fontSize: 12, color: 'var(--od-text-muted)' }}>Pídela por WhatsApp</Box>}
-      </Box>
-      <Box component="span" aria-hidden sx={{ fontSize: 18 }}>
-        {todo ? '↗' : '→'}
-      </Box>
-    </Box>
-  );
-}
 
 // Píldoras a lo ancho sobre crema. Pill trae el relleno de hover (.od-fxbtn).
 const pillSx = (primary) => [
@@ -142,11 +100,7 @@ const SECTIONS = {
         <Kicker id="guias" n="01">
           Guías de cuidado
         </Kicker>
-        <Box sx={{ display: 'grid', gap: 1.5 }}>
-          {guides.map((g, i) => (
-            <GuideCard key={`${i}${g.name}`} g={g} prefix={prefix} />
-          ))}
-        </Box>
+        <OdGuides guides={guides} prefix={prefix} />
       </Box>
     ) : null,
 
