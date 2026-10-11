@@ -61,7 +61,7 @@ export default async function Page({ params }) {
 
   return (
     <OdLayout sideArt={1180}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
       <OdArticleDetailView article={article} related={related} />
     </OdLayout>
   );
