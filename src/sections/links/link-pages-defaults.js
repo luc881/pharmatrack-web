@@ -15,12 +15,12 @@ export const LINK_PAGES_DEFAULTS = {
   guides: [
     {
       name: 'Fásmidos',
-      url: '',
+      url: '/guias/phyllium-gardabagusi-argopuro',
       sub: false,
     },
     {
       name: 'Phyllium gardabagusi "Argopuro"',
-      url: '',
+      url: '/guias/phyllium-gardabagusi-argopuro',
       sub: true,
     },
     {

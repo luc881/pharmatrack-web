@@ -15,6 +15,12 @@ const isStaticExport = false;
 
 const nextConfig = {
   trailingSlash: true,
+  // Las guías se leen de src/content/guias con fs: que viajen en el deploy
+  outputFileTracingIncludes: {
+    '/guias': ['./src/content/guias/**'],
+    '/guias/[slug]': ['./src/content/guias/**'],
+    '/sitemap.xml': ['./src/content/guias/**'],
+  },
   output: isStaticExport ? 'export' : undefined,
   env: {
     BUILD_STATIC_EXPORT: JSON.stringify(isStaticExport),
