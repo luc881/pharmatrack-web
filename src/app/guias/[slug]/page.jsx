@@ -19,13 +19,6 @@ export async function generateStaticParams() {
   return (await getGuides()).map((g) => ({ slug: g.slug }));
 }
 
-const SEAL = {
-  url: '/brand/assets/logo/sello-claro-480.png',
-  width: 480,
-  height: 480,
-  alt: 'Sello de Opuntia Den',
-};
-
 export async function generateMetadata({ params }) {
   const guide = await getGuide((await params).slug);
   if (!guide) return {};
@@ -35,7 +28,7 @@ export async function generateMetadata({ params }) {
     title: { absolute: title },
     description: guide.resumen,
     alternates: { canonical: url },
-    openGraph: { type: 'article', title, description: guide.resumen, url, images: [SEAL] },
+    openGraph: { type: 'article', title, description: guide.resumen, url, images: [CONFIG.ogImage] },
   };
 }
 
@@ -63,7 +56,7 @@ export default async function Page({ params }) {
     description: guide.resumen,
     dateModified: guide.actualizado,
     inLanguage: 'es-MX',
-    image: `${CONFIG.siteUrl}${SEAL.url}`,
+    image: `${CONFIG.siteUrl}${CONFIG.ogImage.url}`,
     mainEntityOfPage: `${CONFIG.siteUrl}/guias/${guide.slug}/`,
     author: { '@type': 'Organization', name: CONFIG.appName, url: CONFIG.siteUrl },
     publisher: { '@type': 'Organization', name: CONFIG.appName, url: CONFIG.siteUrl },

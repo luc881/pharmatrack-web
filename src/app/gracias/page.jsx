@@ -1,3 +1,5 @@
+import { CONFIG } from 'src/global-config';
+
 import { OdLinksPage } from 'src/sections/links/od-links-page';
 
 // ----------------------------------------------------------------------
@@ -16,7 +18,7 @@ export const metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    images: [{ url: '/brand/assets/logo/sello-claro-480.png', width: 480, height: 480, alt: 'Sello de Opuntia Den' }],
+    images: [CONFIG.ogImage],
   },
 };
 
