@@ -37,6 +37,14 @@ resumen_rapido:
   - "Humedad relativa de 65–70 % en ninfas y de 80 % o más en adultos."
   - "Rociado 2–4 veces por semana con agua sin cloro, dejando secar entre rociados."
   - "Una sola especie por terrario y sin sobrepoblar."
+fotos:
+  - src: "https://res.cloudinary.com/dnxavfqhj/image/upload/v1791846449/cjzwsx4eq36mrmlj44ft.jpg"
+    alt: "Phyllium gardabagusi «Argopuro» sobre la mano"
+  - src: "https://res.cloudinary.com/dnxavfqhj/image/upload/v1791846450/fbyybnddvtuw69ttuidx.jpg"
+    alt: "Phyllium gardabagusi «Argopuro» sobre un control"
+video:
+  src: "https://res.cloudinary.com/dnxavfqhj/video/upload/v1791846453/nfatkhazxgorhy2xjcte.mp4"
+  alt: "Ninfas de Phyllium gardabagusi entre el follaje"
 referencias:
   - texto: "Cumming, R. T., Bank, S., Le Tirant, S. & Bradler, S. (2020). Notes on the leaf insects of the genus Phyllium of Sumatra and Java, Indonesia, including the description of two new species with purple coxae (Phasmatodea, Phylliidae). ZooKeys 913: 89–126."
     url: "https://doi.org/10.3897/zookeys.913.49044"

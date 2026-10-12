@@ -40,6 +40,9 @@ const GuideSchema = z.object({
   taxonomia: z
     .array(z.object({ rango: text, nombre: text, cursiva: z.boolean().default(false) }))
     .default([]),
+  // Fotos y video (Cloudinary); el póster del video sale solo de Cloudinary
+  fotos: z.array(z.object({ src: z.url(), alt: text })).default([]),
+  video: z.object({ src: z.url(), alt: text }).optional(),
   referencias: z.array(z.object({ texto: text, url: z.url().optional() })).default([]),
   // fecha ISO; el esquema core de js-yaml la deja como texto
   actualizado: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

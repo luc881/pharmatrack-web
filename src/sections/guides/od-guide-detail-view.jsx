@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 
 import { CONFIG } from 'src/global-config';
 import { guideSections } from 'src/lib/guides';
-import { Pill, Star } from 'src/layouts/od/od-ui';
+import { Pill, Star, OdImage } from 'src/layouts/od/od-ui';
 
 import { GuideLink } from './guide-link';
 import { renderInline, renderMarkdown } from './guide-markdown';
@@ -80,6 +80,12 @@ function Tag({ children }) {
     </Box>
   );
 }
+
+// Cuadro del segundo 2 del video como póster (Cloudinary lo genera al vuelo)
+const videoPoster = (src) =>
+  src
+    .replace('/video/upload/', '/video/upload/so_2,f_auto,q_auto,w_720/')
+    .replace(/\.mp4$/, '.jpg');
 
 const crumbSx = {
   ...focusSx,
@@ -313,6 +319,54 @@ export function OdGuideDetailView({ guide, forSale = null }) {
                 ))}
               </Box>
             </Box>
+          </Box>
+        )}
+
+        {/* Fotos y video */}
+        {(guide.fotos.length > 0 || guide.video) && (
+          <Box component="section" aria-labelledby="fotos" sx={{ mt: 5 }}>
+            <Box component="h2" id="fotos" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
+              Fotos y video
+            </Box>
+            {guide.fotos.length > 0 && (
+              <Box
+                sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1.5 }}
+              >
+                {guide.fotos.map((f) => (
+                  <OdImage
+                    key={f.src}
+                    src={f.src}
+                    alt={f.alt}
+                    ratio="3 / 4"
+                    radius={10}
+                    width={640}
+                  />
+                ))}
+              </Box>
+            )}
+            {guide.video && (
+              <Box
+                component="video"
+                controls
+                playsInline
+                preload="metadata"
+                poster={videoPoster(guide.video.src)}
+                aria-label={guide.video.alt}
+                sx={{
+                  display: 'block',
+                  width: 1,
+                  maxWidth: 360,
+                  mx: 'auto',
+                  mt: 1.5,
+                  aspectRatio: '9 / 16',
+                  objectFit: 'cover',
+                  bgcolor: 'var(--od-noche)',
+                  borderRadius: 'var(--od-radius-md)',
+                }}
+              >
+                <source src={guide.video.src} type="video/mp4" />
+              </Box>
+            )}
           </Box>
         )}
 

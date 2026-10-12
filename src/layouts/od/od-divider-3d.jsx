@@ -37,7 +37,7 @@ export function OdDivider3d({ media }) {
         <Box sx={{ display: 'grid', gap: '26px', justifyItems: 'center' }}>
           <OdScene
             scene="stack"
-            fallbackSrc={media.terrarium}
+            fallbackSrc={media.isopod_zebra}
             fallbackLabel="Cultivos por especie"
             ratio="1 / 1"
             sx={{ width: 'min(460px, 74vw)' }}
