@@ -17,10 +17,10 @@ export const CONFIG = {
   phoneLabel: 'Ventas Opuntia',
   instagram: 'https://www.instagram.com/opuntia_den/',
   instagramHandle: '@opuntia_den',
-  // Vista previa al compartir (WhatsApp…): favicon-512-claro reducido a
-  // 340 px y centrado sobre crema (ffmpeg, lanczos), 1200 × 630
+  // Vista previa al compartir (WhatsApp…): favicon-512-claro a su tamaño
+  // original (sin reescalar, para que no se pixele), centrado sobre crema en 1200 × 630
   ogImage: {
-    url: '/brand/assets/og/opuntia-den-favicon-1200x630.png',
+    url: '/brand/assets/og/opuntia-den-favicon-512-1200x630.png',
     width: 1200,
     height: 630,
     alt: 'Opuntia Den',
