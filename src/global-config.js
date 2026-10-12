@@ -17,12 +17,12 @@ export const CONFIG = {
   phoneLabel: 'Ventas Opuntia',
   instagram: 'https://www.instagram.com/opuntia_den/',
   instagramHandle: '@opuntia_den',
-  // Vista previa al compartir (WhatsApp…): el favicon de la marca tal cual,
-  // cuadrado; WhatsApp lo muestra sin recortar
+  // Vista previa al compartir (WhatsApp…): favicon-512-claro reducido a
+  // 340 px y centrado sobre crema (ffmpeg, lanczos), 1200 × 630
   ogImage: {
-    url: '/brand/assets/favicon/favicon-512-claro.png',
-    width: 512,
-    height: 512,
+    url: '/brand/assets/og/opuntia-den-favicon-1200x630.png',
+    width: 1200,
+    height: 630,
     alt: 'Opuntia Den',
   },
   isStaticExport: JSON.parse(process.env.BUILD_STATIC_EXPORT ?? 'false'),

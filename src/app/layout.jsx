@@ -55,7 +55,7 @@ export const metadata = {
     locale: 'es_MX',
     images: [CONFIG.ogImage],
   },
-  twitter: { card: 'summary' },
+  twitter: { card: 'summary_large_image' },
 };
 
 // ----------------------------------------------------------------------
