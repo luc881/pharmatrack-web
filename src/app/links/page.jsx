@@ -7,7 +7,7 @@ import { OdLinksPage } from 'src/sections/links/od-links-page';
 // (Sitio → Links y eventos).
 // ----------------------------------------------------------------------
 
-const TITLE = 'Opuntia Den · Para quien mira de cerca';
+const TITLE = 'Opuntia Den · Historia natural';
 const DESCRIPTION = 'Isópodos, colémbolos, fásmidos y bioactivo. Criadero en CDMX, entregas a convenir.';
 
 export const metadata = {

@@ -70,7 +70,7 @@ export const LINK_PAGES_DEFAULTS = {
     },
     links: {
       label: 'Criadero · CDMX',
-      title: 'Para quien mira de cerca',
+      title: 'Historia natural',
       lead: 'Isópodos, colémbolos, fásmidos y bioactivo. Entregas a convenir.',
       footer: 'CDMX · Entregas a convenir',
       buttons: [

@@ -222,7 +222,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
             size="clamp(48px, 7.4vw, 122px)"
             sx={{ lineHeight: 1, letterSpacing: '-0.01em', color: '#f6f4f1', maxWidth: '14ch' }}
           >
-            Para quien mira de cerca
+            Historia natural
           </Display>
           <Box sx={{ maxWidth: '46ch', fontSize: { xs: 15, md: 18 }, lineHeight: 1.6, color: 'rgba(246,244,241,0.9)' }}>
             Isópodos y colémbolos criados en casa, con su ficha de cuidados. Entrega en persona en la CDMX.

@@ -154,7 +154,7 @@ export function SiteSplash() {
               color: 'var(--od-tinta)',
             }}
           >
-            Para quien mira de cerca
+            Historia natural
           </Box>
         </Box>
       </Box>
