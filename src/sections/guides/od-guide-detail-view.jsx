@@ -5,7 +5,7 @@ import { guideSections } from 'src/lib/guides';
 import { Pill, Star } from 'src/layouts/od/od-ui';
 
 import { GuideLink } from './guide-link';
-import { renderMarkdown } from './guide-markdown';
+import { renderInline, renderMarkdown } from './guide-markdown';
 
 // ----------------------------------------------------------------------
 // Detalle de una guía de cuidados (src/content/guias/*.md). Columna de
@@ -142,6 +142,14 @@ export function OdGuideDetailView({ guide }) {
         >
           {guide.nombre_cientifico}
         </Box>
+        {guide.autoridad && (
+          <Box
+            component="p"
+            sx={{ m: 0, mt: 1, fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}
+          >
+            {guide.autoridad}
+          </Box>
+        )}
         {place && (
           <Box
             component="p"
@@ -191,6 +199,8 @@ export function OdGuideDetailView({ guide }) {
                   borderBottom: 'var(--od-rule)',
                   // en 2 columnas, el último dato suelto ocupa todo el renglón
                   '&:last-of-type:nth-of-type(odd)': { gridColumn: { xs: 'span 2', sm: 'auto' } },
+                  // en 3 columnas, igual si queda uno solo en el último renglón
+                  '&:last-of-type:nth-of-type(3n+1)': { gridColumn: { sm: 'span 3' } },
                 }}
               >
                 <Box component="dt" sx={LABEL}>
@@ -210,6 +220,45 @@ export function OdGuideDetailView({ guide }) {
                 </Box>
               </Box>
             ))}
+          </Box>
+        )}
+
+        {/* Ficha técnica */}
+        {guide.taxonomia.length > 0 && (
+          <Box component="section" aria-labelledby="ficha-tecnica" sx={{ mt: 5 }}>
+            <Box component="h2" id="ficha-tecnica" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
+              Ficha técnica
+            </Box>
+            <Box component="dl" sx={{ m: 0, borderTop: 'var(--od-rule)' }}>
+              {guide.taxonomia.map((t) => (
+                <Box
+                  key={t.rango}
+                  sx={{
+                    py: 1.25,
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', sm: '180px 1fr' },
+                    gap: { xs: 0.25, sm: 2 },
+                    borderBottom: 'var(--od-rule)',
+                  }}
+                >
+                  <Box component="dt" sx={LABEL}>
+                    {t.rango}
+                  </Box>
+                  <Box
+                    component="dd"
+                    sx={{
+                      m: 0,
+                      fontFamily: 'var(--od-font-display)',
+                      fontSize: 'var(--od-text-lg)',
+                      lineHeight: 1.3,
+                      fontStyle: t.cursiva ? 'italic' : 'normal',
+                    }}
+                  >
+                    {t.nombre}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
           </Box>
         )}
 
@@ -246,7 +295,7 @@ export function OdGuideDetailView({ guide }) {
                     sx={{ display: 'flex', gap: 1.5, lineHeight: 'var(--od-leading-body)' }}
                   >
                     <Star sx={{ mt: '0.45em', flexShrink: 0 }} />
-                    <span>{item}</span>
+                    <span dangerouslySetInnerHTML={{ __html: renderInline(item) }} />
                   </Box>
                 ))}
               </Box>
@@ -302,6 +351,39 @@ export function OdGuideDetailView({ guide }) {
             <Box sx={proseSx} dangerouslySetInnerHTML={{ __html: renderMarkdown(s.markdown) }} />
           </Box>
         ))}
+
+        {/* Referencias */}
+        {guide.referencias.length > 0 && (
+          <Box component="section" aria-labelledby="referencias" sx={{ mt: { xs: 6, md: 8 } }}>
+            <Box component="h2" id="referencias" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
+              Referencias
+            </Box>
+            <Box
+              component="ol"
+              sx={{
+                m: 0,
+                pl: 2.5,
+                display: 'grid',
+                gap: 1,
+                fontSize: 'var(--od-text-sm)',
+                lineHeight: 'var(--od-leading-body)',
+                color: 'var(--od-text-muted)',
+                '& a': { color: 'var(--od-text)', wordBreak: 'break-word', ...focusSx },
+              }}
+            >
+              {guide.referencias.map((r) => (
+                <li key={r.texto}>
+                  {r.texto}{' '}
+                  {r.url && (
+                    <a href={r.url} target="_blank" rel="noopener noreferrer">
+                      {r.url.replace(/^https?:\/\//, '')}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </Box>
+          </Box>
+        )}
 
         {/* Cierre */}
         <Box sx={{ mt: { xs: 6, md: 8 }, pt: 4, borderTop: 'var(--od-rule)' }}>

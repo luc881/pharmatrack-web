@@ -27,3 +27,6 @@ const md = new Marked({
 });
 
 export const renderMarkdown = (src) => md.parse(src);
+
+// Una línea (Lo básico): solo negritas, cursivas y enlaces
+export const renderInline = (src) => md.parseInline(src);

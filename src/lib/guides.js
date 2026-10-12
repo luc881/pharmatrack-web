@@ -27,6 +27,8 @@ const GuideSchema = z.object({
   grupo: z.enum(GUIDE_GROUPS.map((g) => g.key)),
   grupo_nombre: text,
   nombre_cientifico: text,
+  // quién describió la especie y el año, p. ej. "Cumming, Bank, Le Tirant & Bradler, 2020"
+  autoridad: text.optional(),
   localidad: text.optional(),
   origen: text.optional(),
   nombre_comun: text.optional(),
@@ -34,6 +36,11 @@ const GuideSchema = z.object({
   resumen: text,
   datos: z.array(z.object({ etiqueta: text, valor: text })).default([]),
   resumen_rapido: z.array(text).default([]),
+  // Ficha técnica: rango y valor; `cursiva` para nombres científicos
+  taxonomia: z
+    .array(z.object({ rango: text, nombre: text, cursiva: z.boolean().default(false) }))
+    .default([]),
+  referencias: z.array(z.object({ texto: text, url: z.url().optional() })).default([]),
   // fecha ISO; el esquema core de js-yaml la deja como texto
   actualizado: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
