@@ -215,7 +215,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           }}
         >
           <Kicker color="rgba(246,244,241,0.85)" size={12} sx={{ letterSpacing: '0.3em' }}>
-            Opuntia Den — Ciudad de México
+            Fauna y flora — Ciudad de México
           </Kicker>
           <Display
             component="h1"
