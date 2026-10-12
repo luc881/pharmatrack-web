@@ -5,6 +5,7 @@ import { OdLayout } from 'src/layouts/od/od-layout';
 import { getGuides, guideTitle, guideForSpecies } from 'src/lib/guides';
 import { getAnimal, getGroups, getAnimals, getSiteSettings, getSpeciesCatalog } from 'src/lib/public-api';
 
+import { renderInline } from 'src/sections/guides/guide-markdown';
 import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
 import { OdSpeciesDetailsView } from 'src/sections/catalog/od/od-species-details-view';
 import {
@@ -157,7 +158,19 @@ export default async function Page({ params }) {
           categoryPath={categoryPath}
           related={related}
           shippingEnabled={site.shipping_enabled !== false}
-          guide={guide && { slug: guide.slug, title: guideTitle(guide) }}
+          guide={
+            guide && {
+              slug: guide.slug,
+              title: guideTitle(guide),
+              resumen: guide.resumen,
+              origen: guide.origen ?? null,
+              dificultad: guide.dificultad ?? null,
+              datos: guide.datos,
+              taxonomia: guide.taxonomia,
+              // Lo básico admite cursivas: se pasa ya en HTML
+              basico: guide.resumen_rapido.map(renderInline),
+            }
+          }
         />
       </OdLayout>
     );

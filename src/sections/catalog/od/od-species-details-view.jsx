@@ -77,26 +77,43 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
   const excerpt = (item.description ?? '').split('\n').filter(Boolean)[0];
   const price = selectedTier ? selectedTier.price : minPrice;
 
-  const careColumns = CARE_FIELDS.filter((f) => species[f.key]);
+  // Si la especie tiene guía (src/content/guias), la ficha de cuidados sale
+  // de ahí: es la fuente principal. Sin guía, de los campos del dashboard.
+  const careColumns = guide
+    ? [
+        ...(guide.origen ? [{ label: 'Origen', value: guide.origen }] : []),
+        ...guide.datos.map((d) => ({ label: d.etiqueta, value: d.valor })),
+      ]
+    : CARE_FIELDS.filter((f) => species[f.key]).map((f) => ({ label: f.label, value: species[f.key] }));
 
   // Secciones descriptivas (solo las que tienen texto)
   // (las notas del criadero van aparte, en una nota "¿Sabías que…?")
-  const sections = [
-    { kicker: 'Lo esencial', title: 'Descripción general', text: item.description ?? species.description },
-    { kicker: 'Ambiente', title: 'Hábitat y comportamiento', text: species.habitat },
-    { kicker: 'Alimentación', title: 'Qué come', text: species.diet },
-  ].filter((s) => s.text);
+  const sections = guide
+    ? [{ kicker: 'Lo esencial', title: 'Descripción general', text: guide.resumen }]
+    : [
+        { kicker: 'Lo esencial', title: 'Descripción general', text: item.description ?? species.description },
+        { kicker: 'Ambiente', title: 'Hábitat y comportamiento', text: species.habitat },
+        { kicker: 'Alimentación', title: 'Qué come', text: species.diet },
+      ].filter((s) => s.text);
 
   const subgroup = species.genus?.group?.name;
-  const taxonomy = [
-    { label: 'Grupo', value: rootGroup?.name },
-    { label: 'Subgrupo', value: subgroup && subgroup !== rootGroup?.name ? subgroup : null },
-    { label: 'Género', value: species.genus?.name, italic: true },
-    { label: 'Especie', value: species.name, italic: true },
-    { label: 'Nombre común', value: species.common_name },
-  ].filter((r) => r.value);
+  const taxonomy = (
+    guide
+      ? [
+          ...guide.taxonomia.map((t) => ({ label: t.rango, value: t.nombre, italic: t.cursiva })),
+          { label: 'Nombre común', value: species.common_name },
+        ]
+      : [
+          { label: 'Grupo', value: rootGroup?.name },
+          { label: 'Subgrupo', value: subgroup && subgroup !== rootGroup?.name ? subgroup : null },
+          { label: 'Género', value: species.genus?.name, italic: true },
+          { label: 'Especie', value: species.name, italic: true },
+          { label: 'Nombre común', value: species.common_name },
+        ]
+  ).filter((r) => r.value);
 
-  const tags = [formatLabel, species.difficulty, species.rarity, ...morphs.map((m) => m.name)].filter(Boolean);
+  const difficulty = guide ? guide.dificultad : species.difficulty;
+  const tags = [formatLabel, difficulty, species.rarity, ...morphs.map((m) => m.name)].filter(Boolean);
 
   const handleAdd = () => {
     cart.add({
@@ -518,7 +535,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               >
                 {careColumns.map((field) => (
                   <Box
-                    key={field.key}
+                    key={field.label}
                     sx={{
                       p: { xs: '18px 16px', md: '24px 28px' },
                       // líneas internas: cada celda pinta su borde derecho e inferior;
@@ -535,7 +552,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                       {field.label}
                     </Box>
                     <Box component="dd" sx={{ m: 0, mt: '10px', fontFamily: 'var(--od-font-display)', fontSize: { xs: 21, md: 26 }, lineHeight: 1.15 }}>
-                      {species[field.key]}
+                      {field.value}
                     </Box>
                   </Box>
                 ))}
@@ -571,6 +588,20 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                   <Box sx={{ fontSize: 15, color: 'var(--od-gris)' }}>
                     Pronto agregaremos la descripción de esta especie. Pregúntanos por WhatsApp cualquier
                     duda sobre su cuidado.
+                  </Box>
+                )}
+
+                {guide?.basico.length > 0 && (
+                  <Box sx={{ mt: '44px' }}>
+                    <NumberedKicker n={sections.length + 1}>Lo básico</NumberedKicker>
+                    <Box component="ul" sx={{ m: 0, mt: '18px', p: 0, listStyle: 'none', display: 'grid', gap: 1.5, maxWidth: '68ch' }}>
+                      {guide.basico.map((html) => (
+                        <Box component="li" key={html} sx={{ display: 'flex', gap: 1.5, fontSize: 16, lineHeight: 1.7 }}>
+                          <Box component="span" className="od-star" aria-hidden sx={{ mt: '0.5em', flexShrink: 0 }} />
+                          <span dangerouslySetInnerHTML={{ __html: html }} />
+                        </Box>
+                      ))}
+                    </Box>
                   </Box>
                 )}
               </Box>
