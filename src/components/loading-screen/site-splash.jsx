@@ -135,16 +135,27 @@ export function SiteSplash() {
           />
         </Box>
 
-        <Box
-          sx={{
-            fontSize: 11,
-            letterSpacing: 'var(--od-tracking-label)',
-            textTransform: 'uppercase',
-            color: 'var(--od-gris)',
-            animation: `${show} 600ms ease 400ms both`,
-          }}
-        >
-          Vida en miniatura
+        <Box sx={{ textAlign: 'center', animation: `${show} 600ms ease 400ms both` }}>
+          <Box
+            sx={{
+              fontSize: 11,
+              letterSpacing: 'var(--od-tracking-label)',
+              textTransform: 'uppercase',
+              color: 'var(--od-gris)',
+            }}
+          >
+            Observar · criar · compartir
+          </Box>
+          <Box
+            sx={{
+              mt: 1,
+              fontFamily: 'var(--od-font-display)',
+              fontSize: 20,
+              color: 'var(--od-tinta)',
+            }}
+          >
+            Para quien mira de cerca
+          </Box>
         </Box>
       </Box>
     </Box>

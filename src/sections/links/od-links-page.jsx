@@ -178,6 +178,10 @@ export async function OdLinksPage({ pageKey, visit, prefix = '', sections, phone
         {/* Pie */}
         <Box component="footer" sx={{ mt: 7, textAlign: 'center', fontSize: 13, color: 'var(--od-text-muted)' }}>
           <Box component="img" src="/brand/ornaments/divisor-hojas.svg" alt="" width={96} height={24} sx={{ display: 'block', mx: 'auto', mb: 2.5, color: 'var(--od-tinta)' }} />
+          {/* frase de apoyo del lema (guía de marca): siempre como etiqueta */}
+          <Box sx={{ mb: 1.5, fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase' }}>
+            Observar · criar · compartir
+          </Box>
           {page.footer}
           {phone && (
             <>
