@@ -47,6 +47,15 @@ export const metadata = {
     apple: `${CONFIG.assetsDir}/brand/assets/favicon/apple-touch-icon-claro.png`,
   },
   manifest: `${CONFIG.assetsDir}/brand/assets/favicon/site.webmanifest`,
+  // Vista previa al compartir (WhatsApp, Facebook…). Sin esto WhatsApp usaba
+  // el favicon. Las páginas con imagen propia (productos, guías) la cambian.
+  openGraph: {
+    type: 'website',
+    siteName: CONFIG.appName,
+    locale: 'es_MX',
+    images: [CONFIG.ogImage],
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 // ----------------------------------------------------------------------

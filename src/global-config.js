@@ -17,5 +17,12 @@ export const CONFIG = {
   phoneLabel: 'Ventas Opuntia',
   instagram: 'https://www.instagram.com/opuntia_den/',
   instagramHandle: '@opuntia_den',
+  // Tarjeta para la vista previa al compartir (sello + lema, 1200 × 630)
+  ogImage: {
+    url: '/brand/assets/og/opuntia-den-1200x630.png',
+    width: 1200,
+    height: 630,
+    alt: 'Opuntia Den — Historia natural',
+  },
   isStaticExport: JSON.parse(process.env.BUILD_STATIC_EXPORT ?? 'false'),
 };

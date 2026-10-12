@@ -79,7 +79,7 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title,
         description,
-        ...(item.photos[0] ?? item.taxonPhoto ? { images: [item.photos[0] ?? item.taxonPhoto] } : {}),
+        images: [item.photos[0] ?? item.taxonPhoto ?? CONFIG.ogImage],
       },
     };
   }
