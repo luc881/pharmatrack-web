@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { OdLayout } from 'src/layouts/od/od-layout';
-import { getGuide, getGuides, guideTitle } from 'src/lib/guides';
+import { getAnimals, getSpeciesCatalog } from 'src/lib/public-api';
+import { getGuide, getGuides, guideTitle, guideForSpecies } from 'src/lib/guides';
 
+import { buildListings } from 'src/sections/catalog/utils';
 import { OdGuideDetailView } from 'src/sections/guides/od-guide-detail-view';
 
 // ----------------------------------------------------------------------
@@ -41,6 +43,19 @@ export default async function Page({ params }) {
   const guide = await getGuide((await params).slug);
   if (!guide) notFound();
 
+  // Ejemplares en venta de esta especie: el listado sin morph si existe,
+  // si no el primero; el conteo suma todos sus morphs
+  const [{ data: animals }, taxa] = await Promise.all([getAnimals(), getSpeciesCatalog()]);
+  const listings = buildListings(animals, taxa).filter(
+    (l) => l.count > 0 && guideForSpecies([guide], l.species) === guide
+  );
+  const forSale = listings.length
+    ? {
+        slug: (listings.find((l) => !l.morph) ?? listings[0]).slug,
+        count: listings.reduce((n, l) => n + l.count, 0),
+      }
+    : null;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -60,7 +75,7 @@ export default async function Page({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\u003c') }}
       />
-      <OdGuideDetailView guide={guide} />
+      <OdGuideDetailView guide={guide} forSale={forSale} />
     </OdLayout>
   );
 }

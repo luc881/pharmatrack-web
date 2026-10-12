@@ -2,6 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { OdLayout } from 'src/layouts/od/od-layout';
+import { getGuides, guideTitle, guideForSpecies } from 'src/lib/guides';
 import { getAnimal, getGroups, getAnimals, getSiteSettings, getSpeciesCatalog } from 'src/lib/public-api';
 
 import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
@@ -121,6 +122,7 @@ export default async function Page({ params }) {
       .slice(0, 8);
 
     const site = await getSiteSettings();
+    const guide = guideForSpecies(await getGuides(), item.species);
     const jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'Product',
@@ -155,6 +157,7 @@ export default async function Page({ params }) {
           categoryPath={categoryPath}
           related={related}
           shippingEnabled={site.shipping_enabled !== false}
+          guide={guide && { slug: guide.slug, title: guideTitle(guide) }}
         />
       </OdLayout>
     );

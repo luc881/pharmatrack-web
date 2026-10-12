@@ -88,7 +88,7 @@ const crumbSx = {
   '&:hover': { textDecoration: 'underline' },
 };
 
-export function OdGuideDetailView({ guide }) {
+export function OdGuideDetailView({ guide, forSale = null }) {
   const { intro, sections } = guideSections(guide.body);
   const place = [guide.localidad && `“${guide.localidad}”`, guide.origen]
     .filter(Boolean)
@@ -176,6 +176,19 @@ export function OdGuideDetailView({ guide }) {
         >
           {guide.resumen}
         </Box>
+
+        {forSale && (
+          <Box component="p" sx={{ m: 0, mt: 2.5, fontSize: 'var(--od-text-sm)' }}>
+            {forSale.count} {forSale.count === 1 ? 'ejemplar disponible' : 'ejemplares disponibles'}{' '}
+            ·{' '}
+            <GuideLink
+              href={`/catalogo/${forSale.slug}/`}
+              sx={{ color: 'var(--od-text)', fontWeight: 600, ...focusSx }}
+            >
+              Ver en el catálogo →
+            </GuideLink>
+          </Box>
+        )}
 
         {/* Datos rápidos */}
         {guide.datos.length > 0 && (
@@ -392,14 +405,14 @@ export function OdGuideDetailView({ guide }) {
               Escríbenos por WhatsApp
             </Pill>
             <Pill
-              href="/catalogo/"
+              href={forSale ? `/catalogo/${forSale.slug}/` : '/catalogo/'}
               sx={{
                 bgcolor: 'transparent',
                 color: 'var(--od-text)',
                 border: '1px solid var(--od-tinta)',
               }}
             >
-              Ver catálogo
+              {forSale ? 'Ver ejemplares disponibles' : 'Ver catálogo'}
             </Pill>
           </Box>
           <Box

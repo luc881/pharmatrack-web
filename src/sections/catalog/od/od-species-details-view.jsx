@@ -39,7 +39,7 @@ const CARE_FIELDS = [
 
 const paraSx = { m: 0, mb: '20px', maxWidth: '68ch', fontSize: 16, lineHeight: 1.85 };
 
-export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true }) {
+export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true, guide = null }) {
   const { species, key, slug, morph, photos, morphs, minPrice, maxPrice, compareAt = null, count = null, taxonPhoto = null } = item;
 
   // Agotado: el listado existe (fotos/descripción de la especie) pero no
@@ -475,7 +475,30 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           <OdReveal>
             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap' }}>
               <SectionHead kicker="Guía de cuidado" title="Ficha de cuidados" size="clamp(28px, 3.2vw, 44px)" />
-              <SciName sx={{ fontSize: 18, color: 'var(--od-gris)' }}>{sci}</SciName>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'flex-start', md: 'flex-end' }, gap: 1.5 }}>
+                <SciName sx={{ fontSize: 18, color: 'var(--od-gris)' }}>{sci}</SciName>
+                {/* La especie tiene guía completa (src/content/guias): se enlaza */}
+                {guide && (
+                  <Box
+                    component={RouterLink}
+                    href={`/guias/${guide.slug}/`}
+                    sx={{
+                      px: 2.5,
+                      py: 1.25,
+                      fontSize: 14,
+                      color: 'var(--od-tinta)',
+                      textDecoration: 'none',
+                      border: '1px solid var(--od-tinta)',
+                      borderRadius: 'var(--od-radius-pill)',
+                      transition: 'background-color 200ms ease, color 200ms ease',
+                      '&:hover': { bgcolor: 'var(--od-tinta)', color: 'var(--od-papel)' },
+                      '&:focus-visible': { outline: '2px solid var(--od-focus)', outlineOffset: '3px' },
+                    }}
+                  >
+                    Ver guía completa de cuidados →
+                  </Box>
+                )}
+              </Box>
             </Box>
 
             {careColumns.length > 0 && (

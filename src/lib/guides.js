@@ -68,6 +68,21 @@ export async function getGuide(slug) {
 export const guideTitle = (g) =>
   g.localidad ? `${g.nombre_cientifico} “${g.localidad}”` : g.nombre_cientifico;
 
+const fold = (s) => (s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+// Guía de una especie del catálogo (genus.name + species.name de la API):
+// mismo binomio. Si la especie trae localidad entre comillas
+// ('Klugii "Montenegro"'), se prefiere la guía de esa localidad.
+export function guideForSpecies(guides, species) {
+  const genus = species?.genus?.name;
+  const name = species?.name ?? '';
+  if (!genus || !name) return null;
+  const epithet = name.split(/[\s"“”]/)[0];
+  const locality = /["“]([^"”]+)["”]/.exec(name)?.[1];
+  const same = guides.filter((g) => fold(g.nombre_cientifico) === fold(`${genus} ${epithet}`));
+  return (locality && same.find((g) => fold(g.localidad) === fold(locality))) || same[0] || null;
+}
+
 // Cuerpo partido por "## ": cada sección lleva su kicker numerado. Lo que
 // vaya antes del primer "## " queda como intro sin título.
 export function guideSections(body) {

@@ -20,6 +20,7 @@ const nextConfig = {
     '/guias': ['./src/content/guias/**'],
     '/guias/[slug]': ['./src/content/guias/**'],
     '/sitemap.xml': ['./src/content/guias/**'],
+    '/catalogo/[id]': ['./src/content/guias/**'],
   },
   output: isStaticExport ? 'export' : undefined,
   env: {
