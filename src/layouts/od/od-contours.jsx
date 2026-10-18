@@ -159,7 +159,8 @@ function SideColumn({ side, contentWidth, minScreen }) {
         sx={{
           position: 'sticky',
           top: 96,
-          height: 'calc(100vh - 128px)',
+          // nunca más alta que la página (con pocas entradas se salía por abajo)
+          height: 'min(calc(100vh - 128px), 100%)',
           [side === 'left' ? 'borderRight' : 'borderLeft']: '1px solid var(--color-divider)',
           // se desvanece arriba y abajo para no cortar las líneas en seco
           maskImage: 'linear-gradient(transparent, #000 12%, #000 88%, transparent)',
