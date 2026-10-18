@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -10,6 +10,7 @@ import { RouterLink } from 'src/routes/components';
 import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { rowFillSx } from 'src/layouts/od/od-styles';
+import { OdHoverPreview } from 'src/layouts/od/od-hover-preview';
 import { OdImage, RollText, OdRowGroup } from 'src/layouts/od/od-ui';
 
 import { Iconify } from 'src/components/iconify';
@@ -70,24 +71,16 @@ export function OdTrustBar() {
 }
 
 // ----------------------------------------------------------------------
-// Índice de categorías en filas grandes. En escritorio, al pasar el cursor una
-// sola vista previa sigue al puntero (patrón "hover image list"); se mueve con
-// variables CSS desde un ref, sin re-render por cada pixel. En táctil no hay
-// hover: cada fila lleva su miniatura en línea.
+// Índice de categorías en filas grandes. En escritorio, al pasar el cursor
+// aparece la misma vista previa flotante del índice de fichas (sigue al
+// cursor con suavidad y se inclina con la velocidad). En táctil no hay hover:
+// cada fila lleva su miniatura en línea.
 
 export function OdCategoryIndex({ items }) {
-  const previewRef = useRef(null);
-  const [active, setActive] = useState(null);
-
-  const onMove = (e) => {
-    const el = previewRef.current;
-    if (!el) return;
-    el.style.setProperty('--x', `${e.clientX}px`);
-    el.style.setProperty('--y', `${e.clientY}px`);
-  };
+  const preview = useRef(null);
 
   return (
-    <Box onMouseMove={onMove} onMouseLeave={() => setActive(null)} sx={{ borderBottom: '1px solid var(--color-divider)' }}>
+    <Box sx={{ borderBottom: '1px solid var(--color-divider)' }}>
       <OdRowGroup>
       {items.map((c, i) => (
         <OdReveal key={c.href} delay={Math.min(i, 6) * 0.05}>
@@ -99,7 +92,8 @@ export function OdCategoryIndex({ items }) {
             underline="none"
             data-fx
             data-row
-            onMouseEnter={() => setActive(i)}
+            onMouseEnter={(e) => preview.current?.show({ key: c.href, cover: c.img, kicker: c.meta, title: c.title }, e)}
+            onMouseLeave={() => preview.current?.hide()}
             sx={{
               ...rowFillSx,
               display: 'grid',
@@ -134,42 +128,7 @@ export function OdCategoryIndex({ items }) {
         </OdReveal>
       ))}
       </OdRowGroup>
-
-      {/* Vista previa que sigue al cursor (solo con puntero fino). Cada foto
-          entra con una cortina de abajo hacia arriba y un zoom que se asienta. */}
-      <Box
-        ref={previewRef}
-        aria-hidden
-        sx={{
-          display: 'none',
-          '@media (hover: hover) and (pointer: fine)': { display: 'block' },
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          zIndex: 5,
-          width: 240,
-          aspectRatio: '4 / 5',
-          pointerEvents: 'none',
-          transform: 'translate(calc(var(--x, 0px) - 50%), calc(var(--y, 0px) - 50%))',
-          transition: 'transform 500ms var(--od-ease)',
-        }}
-      >
-        {items.map((c, i) => (
-          <Box
-            key={c.href}
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              overflow: 'hidden',
-              clipPath: i === active ? 'inset(0 0 0 0)' : 'inset(100% 0 0 0)',
-              transition: 'clip-path 650ms var(--od-ease)',
-              '& img': { transform: i === active ? 'scale(1)' : 'scale(1.3)', transition: 'transform 900ms var(--od-ease)' },
-            }}
-          >
-            <OdImage src={c.img} alt="" ratio="4 / 5" radius={0} />
-          </Box>
-        ))}
-      </Box>
+      <OdHoverPreview apiRef={preview} />
     </Box>
   );
 }

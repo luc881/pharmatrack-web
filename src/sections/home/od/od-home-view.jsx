@@ -76,19 +76,49 @@ const STATS = [
 // revés. En móvil no hay dos costados: todo cae en una columna, así que las
 // seis se ven igual (miniatura a la izquierda, texto a la izquierda) y más
 // compactas. El orden lo invierte flexDirection, no dos ramas de JSX.
+//
+// Hover (escritorio): la línea de arriba se dibuja en tuna desde el frasco, la
+// miniatura crece y se deja jalar por el cursor, el título se acerca al frasco
+// y los otros cinco ingredientes se atenúan (regla en la rejilla de abajo).
 function Ingredient({ item, align = 'right' }) {
+  const towardJar = align === 'right' ? 1 : -1;
   return (
     <Box
+      className="od-ingredient"
+      data-fx
       sx={{
+        position: 'relative',
         display: 'flex',
         flexDirection: { xs: 'row', md: align === 'right' ? 'row-reverse' : 'row' },
         alignItems: 'flex-start',
         gap: { xs: 1.75, md: 2.25 },
         py: { xs: 2, md: 3.25 },
         borderTop: '1px solid rgba(240,235,224,0.14)',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: -1,
+          height: '1px',
+          bgcolor: 'var(--od-tuna)',
+          transform: 'scaleX(0)',
+          transformOrigin: align === 'right' ? 'right' : 'left',
+          transition: 'transform 700ms var(--od-ease)',
+        },
+        '& .od-ing-thumb': { transition: 'transform 500ms var(--od-ease), box-shadow 400ms ease, scale 600ms var(--od-ease)' },
+        '& .od-ing-title, & .od-ing-body': { transition: 'transform 600ms var(--od-ease), color 400ms ease' },
+        '@media (hover: hover) and (pointer: fine)': {
+          '&:hover::before': { transform: 'scaleX(1)' },
+          '&:hover .od-ing-thumb': { scale: '1.12', boxShadow: '0 0 0 2px var(--od-tuna)' },
+          '&:hover .od-ing-title': { transform: `translateX(${towardJar * 8}px)`, color: '#fff' },
+          '&:hover .od-ing-body': { color: 'var(--color-neutral-300)' },
+          '&:hover .od-ing-n': { color: 'var(--od-tuna)' },
+        },
       }}
     >
       <Box
+        className="od-ing-thumb od-magnet"
         sx={{
           flex: 'none',
           width: { xs: 52, md: 68 },
@@ -102,13 +132,13 @@ function Ingredient({ item, align = 'right' }) {
       </Box>
 
       <Box sx={{ minWidth: 0, textAlign: { xs: 'left', md: align } }}>
-        <Box sx={{ mb: 0.5, fontSize: 11, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
+        <Box className="od-ing-n" sx={{ mb: 0.5, fontSize: 11, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums', transition: 'color 300ms' }}>
           {item.n}
         </Box>
-        <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: { xs: 18, md: 21 }, color: 'var(--color-neutral-100)' }}>
+        <Box component="h3" className="od-ing-title" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: { xs: 18, md: 21 }, color: 'var(--color-neutral-100)' }}>
           {item.title}
         </Box>
-        <Box sx={{ mt: 0.75, fontSize: { xs: 13, md: 14 }, lineHeight: 1.55, color: 'var(--color-neutral-400)' }}>{item.body}</Box>
+        <Box className="od-ing-body" sx={{ mt: 0.75, fontSize: { xs: 13, md: 14 }, lineHeight: 1.55, color: 'var(--color-neutral-400)' }}>{item.body}</Box>
       </Box>
     </Box>
   );
@@ -271,7 +301,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         <Box component="section" id="disponibles" sx={{ position: 'relative', scrollMarginTop: 80, px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '56px', md: '90px' }, pb: { xs: '48px', md: '80px' } }}>
           <OdGutterNote n="01" label="Disponibles" />
           <OdReveal>
-            <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { md: '28px' }, mb: '64px' }}>
+            <Box className="od-orn-host" sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { md: '28px' }, mb: '64px' }}>
               <StarRule sx={{ display: { xs: 'none', md: 'flex' } }} />
               <Box sx={{ textAlign: 'center' }}>
                 <Kicker sx={{ mb: '14px' }}>Del criadero</Kicker>
@@ -339,8 +369,32 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           }}
         >
           {STATS.map((s) => (
-            <Box key={s.label}>
-              <Box sx={{ mb: 1.5, fontFamily: 'var(--font-heading)', fontSize: { xs: 28, md: 40 }, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums' }}>
+            <Box
+              key={s.label}
+              sx={{
+                position: 'relative',
+                pt: 2,
+                // filete tuna corto que se extiende al pasar el cursor
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: 1,
+                  height: '1px',
+                  bgcolor: 'var(--od-tuna)',
+                  transform: 'scaleX(0.12)',
+                  transformOrigin: 'left',
+                  transition: 'transform 700ms var(--od-ease)',
+                },
+                '& .od-stat-n': { transition: 'transform 600ms var(--od-ease), color 400ms ease' },
+                '@media (hover: hover) and (pointer: fine)': {
+                  '&:hover::before': { transform: 'scaleX(1)' },
+                  '&:hover .od-stat-n': { transform: 'translateY(-4px)', color: '#fff' },
+                },
+              }}
+            >
+              <Box className="od-stat-n" sx={{ mb: 1.5, fontFamily: 'var(--font-heading)', fontSize: { xs: 28, md: 40 }, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums' }}>
                 {/^\d+$/.test(s.n) ? <OdCountUp value={Number(s.n)} /> : s.n}
               </Box>
               <Box sx={{ fontSize: { xs: 13, md: 15 }, lineHeight: 1.55, color: 'var(--color-neutral-400)' }}>{s.label}</Box>
@@ -376,12 +430,28 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           <Box component="span">(Qué necesita una colonia)</Box>
           <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' }, fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
         </Box>
-        <Box component="h2" sx={{ mx: 'auto', mt: { xs: '44px', md: '62px' }, maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
-          Seis cosas dentro del frasco. Nada más.
+        <Box className="od-orn-host" sx={{ width: 'fit-content', maxWidth: 1, mx: 'auto', pb: 1 }}>
+          <Box component="h2" sx={{ mx: 'auto', mt: { xs: '44px', md: '62px' }, maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
+            Seis cosas dentro del frasco. Nada más.
+          </Box>
+          <LeafDivider sx={{ mx: 'auto', mt: '28px', maxWidth: 360, px: 2, color: 'var(--od-arena-texto)' }} />
         </Box>
-        <LeafDivider sx={{ mx: 'auto', mt: '28px', maxWidth: 360, px: 2, color: 'var(--od-arena-texto)' }} />
 
-        <Box sx={{ mt: { xs: '32px', md: '56px' }, px: { xs: '18px', md: 'var(--od-gutter)' }, display: 'grid', gap: { xs: 2.5, md: '46px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)' } }}>
+        <Box
+          sx={{
+            mt: { xs: '32px', md: '56px' },
+            px: { xs: '18px', md: 'var(--od-gutter)' },
+            display: 'grid',
+            gap: { xs: 2.5, md: '46px' },
+            alignItems: 'center',
+            gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1fr) minmax(280px, 1.05fr) minmax(240px, 1fr)' },
+            // el ingrediente bajo el cursor se queda al frente
+            '@media (hover: hover) and (pointer: fine)': {
+              '& .od-ingredient': { transition: 'opacity 450ms ease' },
+              '&:has(.od-ingredient:hover) .od-ingredient:not(:hover)': { opacity: 0.4 },
+            },
+          }}
+        >
           <Box>
             {INGREDIENTS.slice(0, 3).map((item) => (
               <Ingredient key={item.n} item={item} align="right" />

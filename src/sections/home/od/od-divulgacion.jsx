@@ -17,7 +17,60 @@ import { articleSlug } from 'src/sections/articles/utils';
 // Divulgación editorial en filas (Nota · 0N), en grupos de 3 que se cambian
 // con los puntos; cada grupo entra con odWipe en cascada. Ya no rota sola: el
 // contenido que avanza por su cuenta se pierde a media lectura.
+//
+// Escritorio: el titular entra letra por letra con el scroll y hace una ola al
+// pasar el cursor; en las filas, la nota bajo el cursor se queda al frente (las
+// demás se atenúan), una línea tuna se dibuja arriba, el título se corre y
+// aparece «Leer nota →», y la foto se recorta hacia adentro con un acercamiento.
 // ----------------------------------------------------------------------
+
+const TITLE = 'Divulgación';
+
+const titleSx = {
+  '& .od-letter': {
+    display: 'inline-block',
+    transition: 'transform 700ms var(--od-ease), color 400ms ease',
+  },
+  '@supports (animation-timeline: view())': {
+    '& .od-letter': { animation: 'odRise linear both', animationTimeline: 'view()' },
+  },
+  '@media (hover: hover) and (pointer: fine)': {
+    '&:hover .od-letter': { transform: 'translateY(-0.07em)', color: 'var(--od-tuna)' },
+  },
+};
+
+const rowSx = {
+  position: 'relative',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: -1,
+    height: '1px',
+    bgcolor: 'var(--od-tuna)',
+    transform: 'scaleX(0)',
+    transformOrigin: 'left',
+    transition: 'transform 700ms var(--od-ease)',
+  },
+  '& .od-note-num, & .od-note-title, & .od-note-cta': {
+    transition: 'transform 600ms var(--od-ease), opacity 400ms ease, color 300ms ease',
+  },
+  '& .od-note-cta': { opacity: 0, transform: 'translateX(-10px)' },
+  '& .od-note-media': {
+    overflow: 'hidden',
+    clipPath: 'inset(0 0 0 0 round 0px)',
+    transition: 'clip-path 800ms var(--od-ease)',
+  },
+  '@media (hover: hover) and (pointer: fine)': {
+    '&:hover::before': { transform: 'scaleX(1)' },
+    '&:hover .od-note-num': { color: 'var(--od-tuna)' },
+    '&:hover .od-note-title': { transform: 'translateX(12px)' },
+    '&:hover .od-note-cta': { opacity: 1, transform: 'none' },
+    '&:hover .od-note-media': { clipPath: 'inset(3% 3% 3% 3% round 14px)' },
+    '&:hover .od-note-media .od-img-zoom': { transform: 'scale(1.12)' },
+  },
+};
 
 function chunk(arr, n) {
   const out = [];
@@ -38,8 +91,25 @@ export function OdDivulgacion({ articles = [] }) {
   return (
     <Box component="section" id="divulgacion" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '40px', md: '60px' }, pb: { xs: '80px', md: '120px' } }}>
       <OdGutterNote n="03" label="Divulgación" start={260} />
-      <Display size="clamp(34px, 11.4vw, 176px)" weight={400} sx={{ lineHeight: 1, letterSpacing: '-0.015em', textTransform: 'uppercase', mb: 1.5 }}>
-        Divulgación
+      <Display size="clamp(34px, 11.4vw, 176px)" weight={400} sx={{ lineHeight: 1, letterSpacing: '-0.015em', textTransform: 'uppercase', mb: 1.5, ...titleSx }}>
+        <Box component="span" sx={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}>
+          {TITLE}
+        </Box>
+        <Box component="span" aria-hidden>
+          {[...TITLE].map((ch, i) => (
+            <Box
+              key={i}
+              component="span"
+              className="od-letter"
+              sx={{
+                transitionDelay: `${i * 35}ms`,
+                animationRange: `entry ${i * 3}% entry ${45 + i * 3}%`,
+              }}
+            >
+              {ch}
+            </Box>
+          ))}
+        </Box>
       </Display>
       <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3.75, flexWrap: 'wrap', mb: { xs: 5, md: 7 } }}>
         <Box sx={{ fontSize: 15, lineHeight: 1.75, maxWidth: '52ch', color: 'var(--color-neutral-700)' }}>
@@ -90,13 +160,22 @@ export function OdDivulgacion({ articles = [] }) {
 
       <Box
         key={page}
-        sx={{ borderBottom: '1px solid var(--color-divider)' }}
+        sx={{
+          borderBottom: '1px solid var(--color-divider)',
+          // la nota bajo el cursor se queda al frente
+          '@media (hover: hover) and (pointer: fine)': {
+            // en el enlace y no en .od-note: el odWipe (fill both) fija la opacidad de .od-note
+            '& .od-note > a': { transition: 'opacity 450ms ease' },
+            '&:has(.od-note:hover) .od-note:not(:hover) > a': { opacity: 0.45 },
+          },
+        }}
       >
         {current.map((article, i) => (
-          <Box key={article.id} className="od-wipe" sx={{ animation: `odWipe 1000ms var(--od-ease) ${i * 0.38}s both` }}>
+          <Box key={article.id} className="od-wipe od-note" sx={{ animation: `odWipe 1000ms var(--od-ease) ${i * 0.38}s both` }}>
             <Link
               component={RouterLink}
               href={paths.article(articleSlug(article))}
+              underline="none"
               sx={{
                 display: 'grid',
                 gap: { xs: 2, md: '40px' },
@@ -106,12 +185,10 @@ export function OdDivulgacion({ articles = [] }) {
                 color: 'inherit',
                 textDecoration: 'none',
                 gridTemplateColumns: { xs: '1fr', md: 'minmax(90px, 0.5fr) minmax(240px, 1.5fr) minmax(280px, 2fr)' },
-                transition: 'color 300ms',
-                '&:hover': { color: 'var(--color-accent-700)' },
-                '&:hover .od-img-zoom': { transform: 'scale(1.06)' },
+                ...rowSx,
               }}
             >
-              <Box sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
+              <Box className="od-note-num" sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
                 Nota · {String(base + i + 1).padStart(2, '0')}
               </Box>
               <Box sx={{ pb: { md: '34px' } }}>
@@ -119,7 +196,7 @@ export function OdDivulgacion({ articles = [] }) {
                   ART-{String(article.id).padStart(3, '0')}
                   {article.category ? ` · ${article.category}` : ''}
                 </Kicker>
-                <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'clamp(22px, 2.1vw, 30px)', lineHeight: 1.2, maxWidth: '22ch', textWrap: 'pretty' }}>
+                <Box component="h3" className="od-note-title" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'clamp(22px, 2.1vw, 30px)', lineHeight: 1.2, maxWidth: '22ch', textWrap: 'pretty' }}>
                   {article.title}
                 </Box>
                 {article.excerpt && (
@@ -127,11 +204,16 @@ export function OdDivulgacion({ articles = [] }) {
                     {article.excerpt}
                   </Box>
                 )}
-                {article.reading_minutes != null && (
-                  <Box sx={{ mt: 2.5, fontSize: 13, color: 'var(--color-neutral-600)' }}>{article.reading_minutes} min de lectura</Box>
-                )}
+                <Box sx={{ mt: 2.5, display: 'flex', alignItems: 'center', gap: 2.5, fontSize: 13 }}>
+                  {article.reading_minutes != null && (
+                    <Box component="span" sx={{ color: 'var(--color-neutral-600)' }}>{article.reading_minutes} min de lectura</Box>
+                  )}
+                  <Box component="span" aria-hidden className="od-note-cta" sx={{ display: { xs: 'none', md: 'inline' }, letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: 12, color: 'var(--od-tuna)' }}>
+                    Leer nota →
+                  </Box>
+                </Box>
               </Box>
-              <Box sx={{ mb: { md: '34px' } }}>
+              <Box className="od-note-media" sx={{ mb: { md: '34px' } }}>
                 <OdImage src={article.cover_image} alt={article.title} label={article.title} ratio="16 / 10" radius={0} />
               </Box>
             </Link>

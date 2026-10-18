@@ -8,7 +8,8 @@ import Box from '@mui/material/Box';
 import { cdnImage } from 'src/lib/cdn-image';
 
 // ----------------------------------------------------------------------
-// Vista previa flotante del índice /fichas (idea de PhasmaMX, más pulida):
+// Vista previa flotante para listas en filas (idea de PhasmaMX, más pulida;
+// la usan el índice /fichas y «Compra por categoría» del home):
 // al pasar el cursor por una fila aparece una tarjeta con la foto que sigue
 // al cursor con suavidad (lerp), se inclina un poco con la velocidad y se
 // voltea al otro lado si no cabe. Al cambiar de fila solo cambia la foto.
@@ -16,8 +17,9 @@ import { cdnImage } from 'src/lib/cdn-image';
 // Solo con mouse (pointer fino); con movimiento reducido se queda quieta
 // donde entró el cursor.
 //
-// Uso: const api = useRef(null); <SheetHoverPreview apiRef={api} />
-//      fila: onMouseEnter={(e) => api.current?.show(sheet, e)}, onMouseLeave={() => api.current?.hide()}
+// Uso: const api = useRef(null); <OdHoverPreview apiRef={api} />
+//      fila: onMouseEnter={(e) => api.current?.show({ key, cover, kicker, title }, e)},
+//            onMouseLeave={() => api.current?.hide()}
 // ----------------------------------------------------------------------
 
 const W = 240;
@@ -27,7 +29,7 @@ const MARGIN = 12;
 const LERP = 0.16;
 const TILT = 5; // grados máximos
 
-export function SheetHoverPreview({ apiRef }) {
+export function OdHoverPreview({ apiRef }) {
   const elRef = useRef(null);
   const [item, setItem] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -69,10 +71,10 @@ export function SheetHoverPreview({ apiRef }) {
     const move = (e) => Object.assign(target, place(e.clientX, e.clientY));
 
     apiRef.current = {
-      show(sheet, e) {
+      show(next, e) {
         if (!fine) return;
         window.clearTimeout(hideTimer);
-        setItem(sheet);
+        setItem(next);
         setVisible(true);
         if (e) {
           Object.assign(target, place(e.clientX, e.clientY));
@@ -169,7 +171,7 @@ export function SheetHoverPreview({ apiRef }) {
           )}
         </Box>
         {item && (
-          <Box key={item.slug} sx={{ px: 1.75, py: 1.25, animation: 'odFade 0.35s ease both' }}>
+          <Box key={item.key} sx={{ px: 1.75, py: 1.25, animation: 'odFade 0.35s ease both' }}>
             <Box
               sx={{
                 fontSize: 10,
@@ -178,7 +180,7 @@ export function SheetHoverPreview({ apiRef }) {
                 color: 'var(--od-text-muted)',
               }}
             >
-              {item.group?.name}
+              {item.kicker}
             </Box>
             <Box
               sx={{
@@ -189,8 +191,7 @@ export function SheetHoverPreview({ apiRef }) {
                 color: 'var(--od-text)',
               }}
             >
-              <em>{item.scientific_name}</em>
-              {item.locality && ` “${item.locality}”`}
+              {item.title}
             </Box>
           </Box>
         )}

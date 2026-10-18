@@ -211,6 +211,31 @@ input[type='number']::-webkit-inner-spin-button {
   .od-reveal-bar { transform-origin: top; animation: odGrowY linear both; animation-timeline: view(); animation-range: entry 20% cover 35%; }
 }
 
+/* Divisores al pasar el cursor (por encima, o por su contenedor .od-orn-host):
+   las hojas se abren, las líneas se encienden en tuna y los puntos crecen; el
+   destello del filete da un cuarto de vuelta. `rotate`/`scale` sueltos para no
+   pisar el transform de las animaciones de entrada. */
+.od-leafdiv .od-leaf-l,
+.od-leafdiv .od-leaf-r { transform-box: fill-box; transition: rotate 700ms var(--od-ease); }
+.od-leafdiv .od-leaf-l { transform-origin: right center; }
+.od-leafdiv .od-leaf-r { transform-origin: left center; }
+.od-leafdiv .od-div-line-l,
+.od-leafdiv .od-div-line-r,
+.od-starrule .od-div-line-l,
+.od-starrule .od-div-line-r { transition: background-color 500ms ease, opacity 500ms ease; }
+.od-leafdiv .od-mark-dot,
+.od-starrule .od-star { transition: scale 600ms var(--od-ease), rotate 900ms var(--od-ease), background-color 400ms ease; }
+@media (hover: hover) and (pointer: fine) {
+  :is(.od-leafdiv, .od-orn-host):hover .od-leaf-l { rotate: -16deg; }
+  :is(.od-leafdiv, .od-orn-host):hover .od-leaf-r { rotate: 16deg; }
+  :is(.od-leafdiv, .od-orn-host):hover :is(.od-div-line-l, .od-div-line-r),
+  :is(.od-starrule, .od-orn-host):hover .od-starrule :is(.od-div-line-l, .od-div-line-r),
+  .od-starrule:hover :is(.od-div-line-l, .od-div-line-r) { background-color: var(--od-tuna); opacity: 0.85; }
+  :is(.od-leafdiv, .od-orn-host):hover .od-leafdiv .od-mark-dot,
+  .od-leafdiv:hover .od-mark-dot { scale: 1.7; background-color: var(--od-tuna); }
+  :is(.od-starrule, .od-orn-host):hover .od-star { scale: 1.35; rotate: 90deg; }
+}
+
 /* Destellos de las marquesinas que giran despacio */
 .od-star-spin { animation: odSpin 10s linear infinite; }
 

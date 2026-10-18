@@ -10,8 +10,7 @@ import { RouterLink } from 'src/routes/components';
 import { CONFIG } from 'src/global-config';
 import { OdImage } from 'src/layouts/od/od-ui';
 import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
-
-import { SheetHoverPreview } from './sheet-hover-preview';
+import { OdHoverPreview } from 'src/layouts/od/od-hover-preview';
 
 // ----------------------------------------------------------------------
 // Índice /fichas (estilo catálogo sistemático, como PhasmaMX): buscador,
@@ -39,6 +38,18 @@ const fold = (s) =>
     .toLowerCase();
 
 const href = (s) => `/fichas/${s.slug}/`;
+
+const previewItem = (s) => ({
+  key: s.slug,
+  cover: s.cover,
+  kicker: s.group?.name,
+  title: (
+    <>
+      <em>{s.scientific_name}</em>
+      {s.locality && ` “${s.locality}”`}
+    </>
+  ),
+});
 
 function SciName({ sheet, size = 'var(--od-text-lg)' }) {
   return (
@@ -117,7 +128,7 @@ function IndexView({ groups, preview }) {
                 <Box
                   component={RouterLink}
                   href={href(s)}
-                  onMouseEnter={(e) => preview.current?.show(s, e)}
+                  onMouseEnter={(e) => preview.current?.show(previewItem(s), e)}
                   onMouseLeave={() => preview.current?.hide()}
                   sx={{
                     ...focusSx,
@@ -288,7 +299,7 @@ export function OdCareSheetsIndexView({ sheets }) {
         label="Fichas publicadas"
         start={320}
       />
-      <SheetHoverPreview apiRef={preview} />
+      <OdHoverPreview apiRef={preview} />
 
       {/* Encabezado */}
       <Box

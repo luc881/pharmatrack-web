@@ -60,15 +60,22 @@ export function SectionHead({ n, kicker, title, size = 'clamp(30px, 3.4vw, 46px)
 }
 
 // Divisor: línea fina con puntos en los extremos y dos hojas al centro.
+// Con el cursor encima (o sobre un contenedor .od-orn-host) las hojas se abren,
+// las líneas se encienden en tuna y los puntos crecen (global.css).
 export function LeafDivider({ sx }) {
   return (
-    <Box aria-hidden sx={[{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--od-tinta)' }, ...asArray(sx)]}>
+    <Box aria-hidden className="od-leafdiv" sx={[{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--od-tinta)' }, ...asArray(sx)]}>
       <Box className="od-mark-dot" sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: 'currentColor', opacity: 0.55 }} />
       <Box className="od-div-line-l" sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.35 }} />
       <Box component="svg" className="od-div-leaf" viewBox="0 0 64 16" sx={{ width: 64, height: 16, flexShrink: 0 }} fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round">
-        <path d="M30 8 C26 3, 18 3, 12 8 C18 13, 26 13, 30 8 Z" fill="var(--od-crema-lino)" />
-        <path d="M34 8 C38 3, 46 3, 52 8 C46 13, 38 13, 34 8 Z" fill="var(--od-crema-lino)" />
-        <path d="M30 8 H12 M34 8 H52" strokeWidth=".6" />
+        <g className="od-leaf-l">
+          <path d="M30 8 C26 3, 18 3, 12 8 C18 13, 26 13, 30 8 Z" fill="var(--od-crema-lino)" />
+          <path d="M30 8 H12" strokeWidth=".6" />
+        </g>
+        <g className="od-leaf-r">
+          <path d="M34 8 C38 3, 46 3, 52 8 C46 13, 38 13, 34 8 Z" fill="var(--od-crema-lino)" />
+          <path d="M34 8 H52" strokeWidth=".6" />
+        </g>
         <circle cx="32" cy="8" r="1.6" fill="currentColor" stroke="none" />
       </Box>
       <Box className="od-div-line-r" sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.35 }} />
@@ -147,6 +154,7 @@ export function StarRule({ flip = false, width = 140, sx }) {
   return (
     <Box
       aria-hidden
+      className="od-starrule"
       sx={[
         { display: 'flex', alignItems: 'center', gap: '12px', width, flexDirection: flip ? 'row-reverse' : 'row', color: 'var(--od-tinta)' },
         ...asArray(sx),
