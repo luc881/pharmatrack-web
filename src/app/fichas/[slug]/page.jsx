@@ -63,7 +63,7 @@ export default async function Page({ params }) {
   };
 
   return (
-    <OdLayout sideArt={760}>
+    <OdLayout>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}

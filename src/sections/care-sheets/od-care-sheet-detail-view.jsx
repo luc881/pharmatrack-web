@@ -1,16 +1,25 @@
 import Box from '@mui/material/Box';
 
 import { CONFIG } from 'src/global-config';
-import { sheetSections } from 'src/lib/care-sheets';
 import { Pill, Star, OdImage } from 'src/layouts/od/od-ui';
+import { videoPoster, sheetSections } from 'src/lib/care-sheets';
 
 import { SheetLink } from './sheet-link';
+import { SheetHeroMedia } from './sheet-hero-media';
 import { renderInline, renderMarkdown } from './sheet-markdown';
 
 // ----------------------------------------------------------------------
-// Detalle de una ficha de cuidados (API /public/care-sheets). Columna de
-// ~680 px sobre papel: la tuna sobre crema queda en 4.49:1 y no pasa AA en
-// texto chico; sobre papel da 5:1.
+// Detalle de una ficha de cuidados (API /public/care-sheets), estilo ficha de
+// especie de PhasmaMX con la marca:
+//  - Portada oscura a todo lo ancho: video o foto de fondo con velo, nombre
+//    científico grande, nombre común, autoridad, localidad y etiquetas.
+//  - Debajo, en pantallas grandes, dos columnas: el contenido (descripción,
+//    morfología, hábitat, lo básico, secciones del cuerpo, galería) y una
+//    barra lateral fija con tarjetas (ficha técnica, datos rápidos, origen,
+//    etiquetas, en venta). En celular todo en una columna, los datos rápidos
+//    arriba.
+// Texto en tuna solo sobre papel/noche (sobre crema queda en 4.49:1): aquí la
+// tuna es decorativa (barras, destellos) y los números van en tinta.
 // ----------------------------------------------------------------------
 
 const LABEL = {
@@ -34,26 +43,27 @@ export const fDay = (iso) =>
     timeZone: 'UTC',
   });
 
+// entrada escalonada de la portada
+const rise = (i) => ({ animation: `odRise 0.9s var(--od-ease) ${0.15 + i * 0.1}s both` });
+
 // Estilos del HTML del Markdown (párrafos, listas, tabla)
 const proseSx = {
-  fontSize: 'var(--od-text-base)',
-  lineHeight: 'var(--od-leading-body)',
+  maxWidth: '72ch',
+  fontSize: { xs: 'var(--od-text-base)', md: 17 },
+  lineHeight: 1.75,
   color: 'var(--od-text)',
   '& p': { m: 0, mb: 2 },
   '& strong': { fontWeight: 600 },
   '& ul, & ol': { m: 0, mb: 2, pl: 3 },
   '& li': { mb: 1, pl: 0.5 },
   '& ul > li::marker': { color: 'var(--od-text-muted)' },
-  '& ol > li::marker': {
-    color: 'var(--od-tuna)',
-    fontWeight: 600,
-    fontVariantNumeric: 'tabular-nums',
-  },
+  '& ol > li::marker': { fontWeight: 600, fontVariantNumeric: 'tabular-nums' },
   '& > :last-child': { mb: 0 },
   '& .od-guide-table': {
     ...focusSx,
     overflowX: 'auto',
     mb: 2,
+    bgcolor: 'var(--od-papel)',
     border: 'var(--od-rule)',
     borderRadius: 'var(--od-radius-sm)',
   },
@@ -64,28 +74,149 @@ const proseSx = {
   '& tbody th': { fontWeight: 600 },
 };
 
-function Tag({ children }) {
+// «01 ——— DESCRIPCIÓN GENERAL» con la línea a todo lo ancho
+function SectionHead({ n, id, children }) {
+  return (
+    <Box
+      component="h2"
+      id={id}
+      sx={{
+        ...LABEL,
+        m: 0,
+        mb: 3,
+        pb: 1.5,
+        fontSize: 12,
+        color: 'var(--od-text)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '14px',
+        borderBottom: 'var(--od-rule)',
+      }}
+    >
+      <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>
+        {String(n).padStart(2, '0')}
+      </Box>
+      <Box
+        component="span"
+        aria-hidden
+        sx={{ width: 28, height: '1px', bgcolor: 'var(--od-tuna)' }}
+      />
+      <span>{children}</span>
+    </Box>
+  );
+}
+
+function Section({ n, id, title, children }) {
+  return (
+    <Box
+      component="section"
+      aria-labelledby={id}
+      className="od-reveal"
+      sx={{ mt: { xs: 6, md: 8 }, '&:first-of-type': { mt: 0 } }}
+    >
+      <SectionHead n={n} id={id}>
+        {title}
+      </SectionHead>
+      {children}
+    </Box>
+  );
+}
+
+// Tarjeta de la barra lateral: rótulo arriba, filas abajo
+function Card({ title, children, dark = false, sx }) {
+  return (
+    <Box
+      component="section"
+      aria-label={title}
+      sx={[
+        {
+          bgcolor: dark ? 'var(--od-noche)' : 'var(--od-papel)',
+          color: dark ? 'var(--od-papel)' : 'var(--od-text)',
+          border: dark ? 0 : 'var(--od-rule)',
+          borderRadius: 'var(--od-radius-md)',
+          overflow: 'hidden',
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
+      <Box
+        sx={{
+          ...LABEL,
+          px: 2.5,
+          py: 1.75,
+          color: dark ? 'var(--od-arena-texto)' : 'var(--od-text-muted)',
+          borderBottom: dark ? '1px solid rgba(240,235,224,0.16)' : 'var(--od-rule)',
+        }}
+      >
+        {title}
+      </Box>
+      {children}
+    </Box>
+  );
+}
+
+// Filas etiqueta / valor (ficha técnica, datos rápidos)
+function Rows({ rows }) {
+  return (
+    <Box component="dl" sx={{ m: 0 }}>
+      {rows.map((r) => {
+        // valores largos (localidades, autoridad) van debajo de la etiqueta a todo lo ancho
+        const stack = String(r.value).length > 22;
+        return (
+          <Box
+            key={r.label}
+            sx={{
+              px: 2.5,
+              py: 1.5,
+              display: 'flex',
+              flexDirection: stack ? 'column' : 'row',
+              alignItems: stack ? 'flex-start' : 'baseline',
+              justifyContent: 'space-between',
+              gap: stack ? 0.5 : 2,
+              '& + &': { borderTop: 'var(--od-rule)' },
+            }}
+          >
+            <Box component="dt" sx={{ ...LABEL, flexShrink: 0 }}>
+              {r.label}
+            </Box>
+            <Box
+              component="dd"
+              sx={{
+                m: 0,
+                textAlign: stack ? 'left' : 'right',
+                fontFamily: 'var(--od-font-display)',
+                fontSize: 17,
+                lineHeight: 1.3,
+                fontStyle: r.italic ? 'italic' : 'normal',
+              }}
+            >
+              {r.value}
+            </Box>
+          </Box>
+        );
+      })}
+    </Box>
+  );
+}
+
+function Chip({ children, dark = false }) {
   return (
     <Box
       component="span"
       sx={{
-        px: 1.25,
+        px: 1.5,
         py: 0.5,
-        fontSize: 'var(--od-text-sm)',
-        border: 'var(--od-rule)',
+        fontSize: 13,
+        border: '1px solid',
+        borderColor: dark ? 'rgba(240,235,224,0.35)' : 'var(--od-linea)',
         borderRadius: 'var(--od-radius-pill)',
+        whiteSpace: 'nowrap',
       }}
     >
       {children}
     </Box>
   );
 }
-
-// Cuadro del segundo 2 del video como póster (Cloudinary lo genera al vuelo)
-const videoPoster = (src) =>
-  src
-    .replace('/video/upload/', '/video/upload/so_2,f_auto,q_auto,w_720/')
-    .replace(/\.mp4$/, '.jpg');
 
 const crumbSx = {
   ...focusSx,
@@ -95,261 +226,326 @@ const crumbSx = {
 };
 
 export function OdCareSheetDetailView({ guide, forSale = null }) {
-  // «Actualizado»: fecha de la última edición de la ficha
   const updated = (guide.updated_at ?? '').slice(0, 10);
   const { intro, sections } = sheetSections(guide.body ?? '');
-  const place = [guide.locality && `“${guide.locality}”`, guide.origin].filter(Boolean).join(' · ');
+  const facts = [
+    ...(guide.difficulty ? [{ label: 'Dificultad', value: guide.difficulty }] : []),
+    ...guide.facts,
+  ];
+  const taxonomy = guide.taxonomy.map((t) => ({ label: t.rank, value: t.name, italic: t.italic }));
+  const morphology = guide.morphology ?? [];
+  const tags = guide.tags ?? [];
+
+  // numeración continua de las secciones del contenido
+  let n = 0;
+  const next = () => {
+    n += 1;
+    return n;
+  };
 
   return (
-    // en celular el papel llena la pantalla; desde md es una hoja sobre crema
-    // y a los lados quedan las curvas de nivel (OdLayout sideArt={760})
-    <Box
-      sx={{
-        color: 'var(--od-text)',
-        bgcolor: { xs: 'var(--od-papel)', md: 'transparent' },
-        py: { md: 4 },
-      }}
-    >
+    <>
+      {/* ── Portada ─────────────────────────────────────────────── */}
       <Box
-        component="article"
+        component="header"
         sx={{
-          maxWidth: 680,
-          mx: 'auto',
-          px: { xs: '18px', md: '40px' },
-          pt: { xs: 4, md: 6 },
-          pb: { xs: 6, md: 9 },
-          bgcolor: 'var(--od-papel)',
-          border: { md: 'var(--od-rule)' },
-          borderRadius: { md: 'var(--od-radius-md)' },
-          boxShadow: { md: 'var(--od-shadow-flat)' },
-          boxSizing: 'content-box',
+          position: 'relative',
+          isolation: 'isolate',
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'flex-end',
+          minHeight: { xs: '64vh', md: '72vh' },
+          bgcolor: 'var(--od-noche)',
+          color: 'var(--od-papel)',
         }}
       >
-        {/* Encabezado */}
-        <Box
-          component="nav"
-          aria-label="Migas de pan"
-          sx={{ fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}
-        >
-          <Box
-            component="ol"
-            sx={{ m: 0, p: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 1 }}
-          >
-            <li>
-              <SheetLink href="/fichas/" sx={crumbSx}>
-                Fichas de cuidados
-              </SheetLink>
-            </li>
-            <li aria-hidden>/</li>
-            <li>
-              <SheetLink href={`/fichas/?grupo=${guide.group?.id}`} sx={crumbSx}>
-                {guide.group?.name}
-              </SheetLink>
-            </li>
-          </Box>
-        </Box>
-
-        <Box component="p" sx={{ ...LABEL, m: 0, mt: 4, color: 'var(--od-tuna)' }}>
-          {guide.group?.name}
+        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2 }}>
+          <SheetHeroMedia video={guide.video} photo={guide.photos[0]} />
         </Box>
         <Box
-          component="h1"
+          aria-hidden
           sx={{
-            m: 0,
-            mt: 1.5,
-            fontFamily: 'var(--od-font-display)',
-            fontStyle: 'italic',
-            fontWeight: 400,
-            fontSize: 'clamp(2.25rem, 7vw, var(--od-text-3xl))',
-            lineHeight: 'var(--od-leading-tight)',
-            textWrap: 'balance',
+            position: 'absolute',
+            inset: 0,
+            zIndex: -1,
+            background:
+              'linear-gradient(180deg, rgba(46,41,36,0.45) 0%, rgba(46,41,36,0.55) 45%, rgba(46,41,36,0.94) 100%)',
+          }}
+        />
+        <Box
+          sx={{
+            width: 1,
+            px: { xs: '18px', md: 'var(--od-gutter)' },
+            pt: 14,
+            pb: { xs: 5, md: 8 },
           }}
         >
-          {guide.scientific_name}
-        </Box>
-        {guide.authority && (
           <Box
-            component="p"
-            sx={{ m: 0, mt: 1, fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}
+            component="nav"
+            aria-label="Migas de pan"
+            sx={{ fontSize: 'var(--od-text-sm)', color: 'var(--od-arena-texto)', ...rise(0) }}
           >
-            {guide.authority}
-          </Box>
-        )}
-        {place && (
-          <Box
-            component="p"
-            sx={{ m: 0, mt: 1.5, fontSize: 'var(--od-text-lg)', color: 'var(--od-text-muted)' }}
-          >
-            {place}
-          </Box>
-        )}
-        {(guide.common_name || guide.difficulty) && (
-          <Box sx={{ mt: 2.5, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {guide.common_name && <Tag>{guide.common_name}</Tag>}
-            {guide.difficulty && <Tag>Dificultad: {guide.difficulty}</Tag>}
-          </Box>
-        )}
-        <Box
-          component="p"
-          sx={{
-            m: 0,
-            mt: 3,
-            fontSize: 'var(--od-text-lg)',
-            lineHeight: 'var(--od-leading-body)',
-            textWrap: 'pretty',
-          }}
-        >
-          {guide.summary}
-        </Box>
-
-        {forSale && (
-          <Box component="p" sx={{ m: 0, mt: 2.5, fontSize: 'var(--od-text-sm)' }}>
-            {forSale.count} {forSale.count === 1 ? 'ejemplar disponible' : 'ejemplares disponibles'}{' '}
-            ·{' '}
-            <SheetLink
-              href={`/catalogo/${forSale.slug}/`}
-              sx={{ color: 'var(--od-text)', fontWeight: 600, ...focusSx }}
+            <Box
+              component="ol"
+              sx={{ m: 0, p: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 1 }}
             >
-              Ver en el catálogo →
-            </SheetLink>
+              <li>
+                <SheetLink href="/fichas/" sx={crumbSx}>
+                  Fichas de cuidados
+                </SheetLink>
+              </li>
+              <li aria-hidden>/</li>
+              <li>
+                <SheetLink href={`/fichas/?grupo=${guide.group?.id}`} sx={crumbSx}>
+                  {guide.group?.name}
+                </SheetLink>
+              </li>
+            </Box>
           </Box>
-        )}
 
-        {/* Datos rápidos */}
-        {guide.facts.length > 0 && (
           <Box
-            component="dl"
+            component="h1"
             sx={{
               m: 0,
-              mt: 5,
-              display: 'grid',
-              gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' },
-              borderTop: 'var(--od-rule)',
-              borderLeft: 'var(--od-rule)',
+              mt: { xs: 3, md: 4 },
+              fontFamily: 'var(--od-font-display)',
+              fontStyle: 'italic',
+              fontWeight: 400,
+              fontSize: 'clamp(2.75rem, 8.6vw, 8.75rem)',
+              lineHeight: 0.98,
+              letterSpacing: '-0.01em',
+              textWrap: 'balance',
+              ...rise(1),
             }}
           >
-            {guide.facts.map((d) => (
-              <Box
-                key={d.label}
-                sx={{
-                  p: 2,
-                  borderRight: 'var(--od-rule)',
-                  borderBottom: 'var(--od-rule)',
-                  // en 2 columnas, el último dato suelto ocupa todo el renglón
-                  '&:last-of-type:nth-of-type(odd)': { gridColumn: { xs: 'span 2', sm: 'auto' } },
-                  // en 3 columnas, igual si queda uno solo en el último renglón
-                  '&:last-of-type:nth-of-type(3n+1)': { gridColumn: { sm: 'span 3' } },
-                }}
-              >
-                <Box component="dt" sx={LABEL}>
-                  {d.label}
+            {guide.scientific_name}
+          </Box>
+
+          <Box
+            sx={{
+              mt: { xs: 2.5, md: 3.5 },
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              gap: 3,
+              ...rise(2),
+            }}
+          >
+            <Box>
+              {guide.common_name && (
+                <Box component="p" sx={{ m: 0, fontSize: { xs: 20, md: 26 }, lineHeight: 1.3 }}>
+                  {guide.common_name}
+                  {guide.locality && (
+                    <Box component="span" sx={{ color: 'var(--od-arena-texto)' }}>
+                      {' '}
+                      · “{guide.locality}”
+                    </Box>
+                  )}
                 </Box>
+              )}
+              {guide.authority && (
                 <Box
-                  component="dd"
+                  component="p"
                   sx={{
                     m: 0,
-                    mt: 0.75,
-                    fontFamily: 'var(--od-font-display)',
-                    fontSize: 'var(--od-text-lg)',
-                    lineHeight: 1.25,
+                    mt: 1,
+                    fontSize: 13,
+                    letterSpacing: '0.04em',
+                    color: 'var(--od-arena-texto)',
                   }}
                 >
-                  {d.value}
+                  {guide.authority}
                 </Box>
-              </Box>
-            ))}
-          </Box>
-        )}
-
-        {/* Ficha técnica */}
-        {guide.taxonomy.length > 0 && (
-          <Box component="section" aria-labelledby="ficha-tecnica" sx={{ mt: 5 }}>
-            <Box component="h2" id="ficha-tecnica" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
-              Ficha técnica
+              )}
             </Box>
-            <Box component="dl" sx={{ m: 0, borderTop: 'var(--od-rule)' }}>
-              {guide.taxonomy.map((t) => (
-                <Box
-                  key={t.rank}
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {guide.difficulty && <Chip dark>Dificultad: {guide.difficulty}</Chip>}
+              {guide.origin && <Chip dark>{guide.origin}</Chip>}
+              {forSale && (
+                <SheetLink
+                  href={`/catalogo/${forSale.slug}/`}
                   sx={{
-                    py: 1.25,
-                    display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', sm: '180px 1fr' },
-                    gap: { xs: 0.25, sm: 2 },
-                    borderBottom: 'var(--od-rule)',
+                    ...focusSx,
+                    px: 1.75,
+                    py: 0.5,
+                    fontSize: 13,
+                    color: 'var(--od-noche)',
+                    bgcolor: 'var(--od-papel)',
+                    borderRadius: 'var(--od-radius-pill)',
+                    textDecoration: 'none',
+                    whiteSpace: 'nowrap',
                   }}
                 >
-                  <Box component="dt" sx={LABEL}>
-                    {t.rank}
-                  </Box>
-                  <Box
-                    component="dd"
-                    sx={{
-                      m: 0,
-                      fontFamily: 'var(--od-font-display)',
-                      fontSize: 'var(--od-text-lg)',
-                      lineHeight: 1.3,
-                      fontStyle: t.italic ? 'italic' : 'normal',
-                    }}
-                  >
-                    {t.name}
-                  </Box>
-                </Box>
-              ))}
+                  {forSale.count} en venta →
+                </SheetLink>
+              )}
             </Box>
           </Box>
-        )}
+        </Box>
+      </Box>
 
-        {/* Lo básico */}
-        {guide.basics.length > 0 && (
-          <Box
-            component="section"
-            aria-labelledby="lo-basico"
-            className="od-card"
-            sx={{ mt: 5, overflow: 'hidden' }}
-          >
-            <div className="od-ticks" />
-            <Box sx={{ p: { xs: 2.5, sm: 3.5 } }}>
-              <Box
-                component="h2"
-                id="lo-basico"
-                sx={{
-                  m: 0,
-                  fontFamily: 'var(--od-font-display)',
-                  fontWeight: 400,
-                  fontSize: 'var(--od-text-xl)',
-                }}
-              >
-                Lo básico
-              </Box>
-              <Box
-                component="ul"
-                sx={{ m: 0, mt: 2, p: 0, listStyle: 'none', display: 'grid', gap: 1.5 }}
-              >
-                {guide.basics.map((item) => (
-                  <Box
-                    component="li"
-                    key={item}
-                    sx={{ display: 'flex', gap: 1.5, lineHeight: 'var(--od-leading-body)' }}
-                  >
-                    <Star sx={{ mt: '0.45em', flexShrink: 0 }} />
-                    <span dangerouslySetInnerHTML={{ __html: renderInline(item) }} />
+      {/* ── Contenido + barra lateral ───────────────────────────── */}
+      <Box
+        sx={{
+          px: { xs: '18px', md: 'var(--od-gutter)' },
+          pt: { xs: 5, md: 9 },
+          pb: { xs: 7, md: 11 },
+          display: 'grid',
+          gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: 'minmax(0, 1fr) 380px' },
+          gap: { xs: 6, lg: '72px' },
+          color: 'var(--od-text)',
+        }}
+      >
+        <Box component="article" sx={{ minWidth: 0 }}>
+          <Section n={next()} id="descripcion" title="Descripción general">
+            <Box
+              component="p"
+              sx={{
+                m: 0,
+                maxWidth: '62ch',
+                fontSize: { xs: 19, md: 22 },
+                lineHeight: 1.6,
+                textWrap: 'pretty',
+              }}
+            >
+              {guide.summary}
+            </Box>
+            {/* en celular los datos rápidos van aquí; en escritorio, a la derecha */}
+            {facts.length > 0 && (
+              <Card title="Datos rápidos" sx={{ mt: 4, display: { lg: 'none' } }}>
+                <Rows rows={facts} />
+              </Card>
+            )}
+          </Section>
+
+          {morphology.length > 0 && (
+            <Section n={next()} id="morfologia" title="Morfología">
+              <Box sx={{ display: 'grid', gap: 3.5 }}>
+                {morphology.map((m) => (
+                  <Box key={m.label} sx={{ position: 'relative', pl: 3 }}>
+                    {/* la barra se dibuja al entrar en pantalla */}
+                    <Box
+                      aria-hidden
+                      className="od-reveal-bar"
+                      sx={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 4,
+                        bottom: 4,
+                        width: 2,
+                        bgcolor: 'var(--od-tuna)',
+                      }}
+                    />
+                    <Box sx={{ ...LABEL, color: 'var(--od-text)', fontWeight: 600 }}>{m.label}</Box>
+                    <Box
+                      component="p"
+                      sx={{
+                        m: 0,
+                        mt: 1,
+                        maxWidth: '68ch',
+                        fontSize: { xs: 16, md: 17 },
+                        lineHeight: 1.7,
+                      }}
+                    >
+                      {m.text}
+                    </Box>
                   </Box>
                 ))}
               </Box>
-            </Box>
-          </Box>
-        )}
+            </Section>
+          )}
 
-        {/* Fotos y video */}
-        {(guide.photos.length > 0 || guide.video) && (
-          <Box component="section" aria-labelledby="fotos" sx={{ mt: 5 }}>
-            <Box component="h2" id="fotos" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
-              Fotos y video
-            </Box>
-            {guide.photos.length > 0 && (
+          {guide.habitat && (
+            <Section n={next()} id="habitat" title="Hábitat y comportamiento">
               <Box
-                sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1.5 }}
+                component="p"
+                sx={{ m: 0, maxWidth: '62ch', fontSize: { xs: 19, md: 22 }, lineHeight: 1.6 }}
+              >
+                {guide.habitat}
+              </Box>
+            </Section>
+          )}
+
+          {guide.basics.length > 0 && (
+            <Box
+              component="section"
+              aria-labelledby="lo-basico"
+              className="od-card od-reveal"
+              sx={{ mt: { xs: 6, md: 8 }, overflow: 'hidden' }}
+            >
+              <div className="od-ticks" />
+              <Box sx={{ p: { xs: 2.5, sm: 3.5 } }}>
+                <Box
+                  component="h2"
+                  id="lo-basico"
+                  sx={{
+                    m: 0,
+                    fontFamily: 'var(--od-font-display)',
+                    fontWeight: 400,
+                    fontSize: 'var(--od-text-xl)',
+                  }}
+                >
+                  Lo básico
+                </Box>
+                <Box
+                  component="ul"
+                  sx={{
+                    m: 0,
+                    mt: 2,
+                    p: 0,
+                    listStyle: 'none',
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                    gap: '14px 32px',
+                  }}
+                >
+                  {guide.basics.map((item) => (
+                    <Box
+                      component="li"
+                      key={item}
+                      sx={{ display: 'flex', gap: 1.5, lineHeight: 'var(--od-leading-body)' }}
+                    >
+                      <Star sx={{ mt: '0.45em', flexShrink: 0 }} />
+                      <span dangerouslySetInnerHTML={{ __html: renderInline(item) }} />
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            </Box>
+          )}
+
+          {intro && (
+            <Box
+              className="od-reveal"
+              sx={[proseSx, { mt: 6 }]}
+              dangerouslySetInnerHTML={{ __html: renderMarkdown(intro) }}
+            />
+          )}
+
+          {sections.map((s) => {
+            const num = next();
+            return (
+              <Section key={s.title} n={num} id={`sec-${num}`} title={s.title}>
+                <Box
+                  sx={proseSx}
+                  dangerouslySetInnerHTML={{ __html: renderMarkdown(s.markdown) }}
+                />
+              </Section>
+            );
+          })}
+
+          {(guide.photos.length > 0 || guide.video) && (
+            <Section n={next()} id="fotos" title="Fotos y video">
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: 'repeat(2, minmax(0, 1fr))',
+                    md: 'repeat(3, minmax(0, 1fr))',
+                  },
+                  gap: 1.5,
+                }}
               >
                 {guide.photos.map((f) => (
                   <OdImage
@@ -361,141 +557,164 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
                     width={640}
                   />
                 ))}
+                {guide.video && (
+                  <Box
+                    component="video"
+                    controls
+                    playsInline
+                    preload="metadata"
+                    poster={videoPoster(guide.video.src, 720)}
+                    aria-label={guide.video.alt}
+                    sx={{
+                      display: 'block',
+                      width: 1,
+                      aspectRatio: '3 / 4',
+                      objectFit: 'cover',
+                      bgcolor: 'var(--od-noche)',
+                      borderRadius: '10px',
+                    }}
+                  >
+                    <source src={guide.video.src} type="video/mp4" />
+                  </Box>
+                )}
               </Box>
-            )}
-            {guide.video && (
+            </Section>
+          )}
+
+          {guide.references.length > 0 && (
+            <Section n={next()} id="referencias" title="Referencias">
               <Box
-                component="video"
-                controls
-                playsInline
-                preload="metadata"
-                poster={videoPoster(guide.video.src)}
-                aria-label={guide.video.alt}
+                component="ol"
                 sx={{
-                  display: 'block',
-                  width: 1,
-                  maxWidth: 360,
-                  mx: 'auto',
-                  mt: 1.5,
-                  aspectRatio: '9 / 16',
-                  objectFit: 'cover',
-                  bgcolor: 'var(--od-noche)',
-                  borderRadius: 'var(--od-radius-md)',
+                  m: 0,
+                  pl: 2.5,
+                  display: 'grid',
+                  gap: 1,
+                  fontSize: 'var(--od-text-sm)',
+                  lineHeight: 'var(--od-leading-body)',
+                  color: 'var(--od-text-muted)',
+                  '& a': { color: 'var(--od-text)', wordBreak: 'break-word', ...focusSx },
                 }}
               >
-                <source src={guide.video.src} type="video/mp4" />
+                {guide.references.map((r) => (
+                  <li key={r.text}>
+                    {r.text}{' '}
+                    {r.url && (
+                      <a href={r.url} target="_blank" rel="noopener noreferrer">
+                        {r.url.replace(/^https?:\/\//, '')}
+                      </a>
+                    )}
+                  </li>
+                ))}
               </Box>
-            )}
-          </Box>
-        )}
+            </Section>
+          )}
 
-        {/* Cuerpo */}
-        {intro && (
-          <Box
-            sx={[proseSx, { mt: 5 }]}
-            dangerouslySetInnerHTML={{ __html: renderMarkdown(intro) }}
-          />
-        )}
-        {sections.map((s, i) => (
-          <Box component="section" key={s.title} aria-labelledby={`sec-${i + 1}`}>
-            <Box
-              component="img"
-              src="/brand/ornaments/divisor-hojas.svg"
-              alt=""
-              width={96}
-              height={24}
-              sx={{ display: 'block', mx: 'auto', my: { xs: 5, md: 6 } }}
-            />
-            {/* "01 —— LO ESENCIAL", el número en tuna (como NumberedKicker,
-                pero el h2 solo admite contenido en línea) */}
-            <Box
-              component="h2"
-              id={`sec-${i + 1}`}
-              sx={{
-                ...LABEL,
-                m: 0,
-                mb: 2.5,
-                fontSize: 12,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '14px',
-              }}
-            >
-              <Box
-                component="span"
-                sx={{ color: 'var(--od-tuna)', fontVariantNumeric: 'tabular-nums' }}
-              >
-                {String(i + 1).padStart(2, '0')}
-              </Box>
-              <Box
-                component="span"
-                aria-hidden
-                sx={{ width: 36, height: '1px', bgcolor: 'currentColor', opacity: 0.6 }}
-              />
-              <span>{s.title}</span>
-            </Box>
-            <Box sx={proseSx} dangerouslySetInnerHTML={{ __html: renderMarkdown(s.markdown) }} />
-          </Box>
-        ))}
-
-        {/* Referencias */}
-        {guide.references.length > 0 && (
-          <Box component="section" aria-labelledby="referencias" sx={{ mt: { xs: 6, md: 8 } }}>
-            <Box component="h2" id="referencias" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
-              Referencias
-            </Box>
-            <Box
-              component="ol"
-              sx={{
-                m: 0,
-                pl: 2.5,
-                display: 'grid',
-                gap: 1,
-                fontSize: 'var(--od-text-sm)',
-                lineHeight: 'var(--od-leading-body)',
-                color: 'var(--od-text-muted)',
-                '& a': { color: 'var(--od-text)', wordBreak: 'break-word', ...focusSx },
-              }}
-            >
-              {guide.references.map((r) => (
-                <li key={r.text}>
-                  {r.text}{' '}
-                  {r.url && (
-                    <a href={r.url} target="_blank" rel="noopener noreferrer">
-                      {r.url.replace(/^https?:\/\//, '')}
-                    </a>
-                  )}
-                </li>
-              ))}
-            </Box>
-          </Box>
-        )}
-
-        {/* Cierre */}
-        <Box sx={{ mt: { xs: 6, md: 8 }, pt: 4, borderTop: 'var(--od-rule)' }}>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-            <Pill href={`https://wa.me/${CONFIG.whatsapp}`} target="_blank" rel="noopener">
-              Escríbenos por WhatsApp
-            </Pill>
-            <Pill
-              href={forSale ? `/catalogo/${forSale.slug}/` : '/catalogo/'}
-              sx={{
-                bgcolor: 'transparent',
-                color: 'var(--od-text)',
-                border: '1px solid var(--od-tinta)',
-              }}
-            >
-              {forSale ? 'Ver ejemplares disponibles' : 'Ver catálogo'}
-            </Pill>
-          </Box>
           <Box
             component="p"
-            sx={{ m: 0, mt: 3, fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}
+            sx={{
+              m: 0,
+              mt: { xs: 6, md: 8 },
+              fontSize: 'var(--od-text-sm)',
+              color: 'var(--od-text-muted)',
+            }}
           >
             Actualizado: <time dateTime={updated}>{fDay(updated)}</time>
           </Box>
         </Box>
+
+        {/* Barra lateral: corre con la página (es más alta que la pantalla); la tarjeta
+            de venta/contacto queda fija al final mientras se lee */}
+        <Box
+          component="aside"
+          aria-label="Datos de la especie"
+          sx={{ display: 'grid', alignContent: 'start', gap: 2.5 }}
+        >
+          {taxonomy.length > 0 && (
+            <Card title="Ficha técnica" sx={{ animation: 'odSlide 0.8s var(--od-ease) 0.3s both' }}>
+              <Rows rows={taxonomy} />
+            </Card>
+          )}
+          {facts.length > 0 && (
+            <Card
+              title="Datos rápidos"
+              sx={{
+                display: { xs: 'none', lg: 'block' },
+                animation: 'odSlide 0.8s var(--od-ease) 0.4s both',
+              }}
+            >
+              <Rows rows={facts} />
+            </Card>
+          )}
+          {(guide.origin || guide.locality) && (
+            <Card title="Origen" sx={{ animation: 'odSlide 0.8s var(--od-ease) 0.5s both' }}>
+              <Box sx={{ px: 2.5, py: 2, display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
+                <Box
+                  component="svg"
+                  viewBox="0 0 24 24"
+                  aria-hidden
+                  sx={{ width: 18, height: 18, mt: '3px', flexShrink: 0 }}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                >
+                  <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z" />
+                  <circle cx="12" cy="9.5" r="2.4" />
+                </Box>
+                <Box>
+                  {guide.origin && <Box sx={{ fontSize: 16 }}>{guide.origin}</Box>}
+                  {guide.locality && (
+                    <Box sx={{ mt: 0.5, fontSize: 14, color: 'var(--od-text-muted)' }}>
+                      Población «{guide.locality}»
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            </Card>
+          )}
+          {tags.length > 0 && (
+            <Card title="Etiquetas" sx={{ animation: 'odSlide 0.8s var(--od-ease) 0.6s both' }}>
+              <Box sx={{ px: 2.5, py: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {tags.map((t) => (
+                  <Chip key={t}>{t}</Chip>
+                ))}
+              </Box>
+            </Card>
+          )}
+          <Card
+            dark
+            title={forSale ? 'En venta' : '¿Dudas de cuidado?'}
+            sx={{
+              position: { lg: 'sticky' },
+              top: { lg: 112 },
+              animation: 'odSlide 0.8s var(--od-ease) 0.7s both',
+            }}
+          >
+            <Box sx={{ px: 2.5, py: 2.5, display: 'grid', gap: 2 }}>
+              <Box sx={{ fontFamily: 'var(--od-font-display)', fontSize: 22, lineHeight: 1.25 }}>
+                {forSale
+                  ? `${forSale.count} ${forSale.count === 1 ? 'ejemplar disponible' : 'ejemplares disponibles'}`
+                  : 'Te ayudamos por WhatsApp.'}
+              </Box>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {forSale && (
+                  <Pill variant="light" href={`/catalogo/${forSale.slug}/`}>
+                    Ver ejemplares
+                  </Pill>
+                )}
+                <Pill
+                  href={`https://wa.me/${CONFIG.whatsapp}`}
+                  target="_blank"
+                  rel="noopener"
+                  variant={forSale ? 'outline' : 'light'}
+                >
+                  Escríbenos
+                </Pill>
+              </Box>
+            </Box>
+          </Card>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
