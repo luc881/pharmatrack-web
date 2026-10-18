@@ -167,6 +167,32 @@ export async function getArticle(id) {
   }
 }
 
+// ----------------------------------------------------------------------
+// Fichas de cuidados (solo publicadas, de cualquier grupo; ver /fichas)
+
+const CARE_SHEETS = `${CONFIG.serverUrl}/api/v1/public/care-sheets`;
+
+// Índice: una fila por ficha, sin cuerpo (trae available_count)
+export async function getCareSheets() {
+  try {
+    const res = await fetch(CARE_SHEETS, { next: { revalidate: 60 } });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+export async function getCareSheet(slug) {
+  try {
+    const res = await fetch(`${CARE_SHEETS}/${encodeURIComponent(slug)}`, { next: { revalidate: 60 } });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
 // Productos con show_online (insumos de terrario, granel, etc.)
 export async function getProducts() {
   try {

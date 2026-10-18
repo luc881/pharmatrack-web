@@ -1,14 +1,14 @@
 import Box from '@mui/material/Box';
 
 import { CONFIG } from 'src/global-config';
-import { guideSections } from 'src/lib/guides';
+import { sheetSections } from 'src/lib/care-sheets';
 import { Pill, Star, OdImage } from 'src/layouts/od/od-ui';
 
-import { GuideLink } from './guide-link';
-import { renderInline, renderMarkdown } from './guide-markdown';
+import { SheetLink } from './sheet-link';
+import { renderInline, renderMarkdown } from './sheet-markdown';
 
 // ----------------------------------------------------------------------
-// Detalle de una guía de cuidados (src/content/guias/*.md). Columna de
+// Detalle de una ficha de cuidados (API /public/care-sheets). Columna de
 // ~680 px sobre papel: la tuna sobre crema queda en 4.49:1 y no pasa AA en
 // texto chico; sobre papel da 5:1.
 // ----------------------------------------------------------------------
@@ -94,11 +94,11 @@ const crumbSx = {
   '&:hover': { textDecoration: 'underline' },
 };
 
-export function OdGuideDetailView({ guide, forSale = null }) {
-  const { intro, sections } = guideSections(guide.body);
-  const place = [guide.localidad && `“${guide.localidad}”`, guide.origen]
-    .filter(Boolean)
-    .join(' · ');
+export function OdCareSheetDetailView({ guide, forSale = null }) {
+  // «Actualizado»: fecha de la última edición de la ficha
+  const updated = (guide.updated_at ?? '').slice(0, 10);
+  const { intro, sections } = sheetSections(guide.body ?? '');
+  const place = [guide.locality && `“${guide.locality}”`, guide.origin].filter(Boolean).join(' · ');
 
   return (
     <Box sx={{ bgcolor: 'var(--od-papel)', color: 'var(--od-text)' }}>
@@ -117,21 +117,21 @@ export function OdGuideDetailView({ guide, forSale = null }) {
             sx={{ m: 0, p: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 1 }}
           >
             <li>
-              <GuideLink href="/guias/" sx={crumbSx}>
-                Guías
-              </GuideLink>
+              <SheetLink href="/fichas/" sx={crumbSx}>
+                Fichas de cuidados
+              </SheetLink>
             </li>
             <li aria-hidden>/</li>
             <li>
-              <GuideLink href={`/guias/#${guide.grupo}`} sx={crumbSx}>
-                {guide.grupo_nombre}
-              </GuideLink>
+              <SheetLink href={`/fichas/?grupo=${guide.group?.id}`} sx={crumbSx}>
+                {guide.group?.name}
+              </SheetLink>
             </li>
           </Box>
         </Box>
 
         <Box component="p" sx={{ ...LABEL, m: 0, mt: 4, color: 'var(--od-tuna)' }}>
-          {guide.grupo_nombre}
+          {guide.group?.name}
         </Box>
         <Box
           component="h1"
@@ -146,14 +146,14 @@ export function OdGuideDetailView({ guide, forSale = null }) {
             textWrap: 'balance',
           }}
         >
-          {guide.nombre_cientifico}
+          {guide.scientific_name}
         </Box>
-        {guide.autoridad && (
+        {guide.authority && (
           <Box
             component="p"
             sx={{ m: 0, mt: 1, fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}
           >
-            {guide.autoridad}
+            {guide.authority}
           </Box>
         )}
         {place && (
@@ -164,10 +164,10 @@ export function OdGuideDetailView({ guide, forSale = null }) {
             {place}
           </Box>
         )}
-        {(guide.nombre_comun || guide.dificultad) && (
+        {(guide.common_name || guide.difficulty) && (
           <Box sx={{ mt: 2.5, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {guide.nombre_comun && <Tag>{guide.nombre_comun}</Tag>}
-            {guide.dificultad && <Tag>Dificultad: {guide.dificultad}</Tag>}
+            {guide.common_name && <Tag>{guide.common_name}</Tag>}
+            {guide.difficulty && <Tag>Dificultad: {guide.difficulty}</Tag>}
           </Box>
         )}
         <Box
@@ -180,24 +180,24 @@ export function OdGuideDetailView({ guide, forSale = null }) {
             textWrap: 'pretty',
           }}
         >
-          {guide.resumen}
+          {guide.summary}
         </Box>
 
         {forSale && (
           <Box component="p" sx={{ m: 0, mt: 2.5, fontSize: 'var(--od-text-sm)' }}>
             {forSale.count} {forSale.count === 1 ? 'ejemplar disponible' : 'ejemplares disponibles'}{' '}
             ·{' '}
-            <GuideLink
+            <SheetLink
               href={`/catalogo/${forSale.slug}/`}
               sx={{ color: 'var(--od-text)', fontWeight: 600, ...focusSx }}
             >
               Ver en el catálogo →
-            </GuideLink>
+            </SheetLink>
           </Box>
         )}
 
         {/* Datos rápidos */}
-        {guide.datos.length > 0 && (
+        {guide.facts.length > 0 && (
           <Box
             component="dl"
             sx={{
@@ -209,9 +209,9 @@ export function OdGuideDetailView({ guide, forSale = null }) {
               borderLeft: 'var(--od-rule)',
             }}
           >
-            {guide.datos.map((d) => (
+            {guide.facts.map((d) => (
               <Box
-                key={d.etiqueta}
+                key={d.label}
                 sx={{
                   p: 2,
                   borderRight: 'var(--od-rule)',
@@ -223,7 +223,7 @@ export function OdGuideDetailView({ guide, forSale = null }) {
                 }}
               >
                 <Box component="dt" sx={LABEL}>
-                  {d.etiqueta}
+                  {d.label}
                 </Box>
                 <Box
                   component="dd"
@@ -235,7 +235,7 @@ export function OdGuideDetailView({ guide, forSale = null }) {
                     lineHeight: 1.25,
                   }}
                 >
-                  {d.valor}
+                  {d.value}
                 </Box>
               </Box>
             ))}
@@ -243,15 +243,15 @@ export function OdGuideDetailView({ guide, forSale = null }) {
         )}
 
         {/* Ficha técnica */}
-        {guide.taxonomia.length > 0 && (
+        {guide.taxonomy.length > 0 && (
           <Box component="section" aria-labelledby="ficha-tecnica" sx={{ mt: 5 }}>
             <Box component="h2" id="ficha-tecnica" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
               Ficha técnica
             </Box>
             <Box component="dl" sx={{ m: 0, borderTop: 'var(--od-rule)' }}>
-              {guide.taxonomia.map((t) => (
+              {guide.taxonomy.map((t) => (
                 <Box
-                  key={t.rango}
+                  key={t.rank}
                   sx={{
                     py: 1.25,
                     display: 'grid',
@@ -261,7 +261,7 @@ export function OdGuideDetailView({ guide, forSale = null }) {
                   }}
                 >
                   <Box component="dt" sx={LABEL}>
-                    {t.rango}
+                    {t.rank}
                   </Box>
                   <Box
                     component="dd"
@@ -270,10 +270,10 @@ export function OdGuideDetailView({ guide, forSale = null }) {
                       fontFamily: 'var(--od-font-display)',
                       fontSize: 'var(--od-text-lg)',
                       lineHeight: 1.3,
-                      fontStyle: t.cursiva ? 'italic' : 'normal',
+                      fontStyle: t.italic ? 'italic' : 'normal',
                     }}
                   >
-                    {t.nombre}
+                    {t.name}
                   </Box>
                 </Box>
               ))}
@@ -282,7 +282,7 @@ export function OdGuideDetailView({ guide, forSale = null }) {
         )}
 
         {/* Lo básico */}
-        {guide.resumen_rapido.length > 0 && (
+        {guide.basics.length > 0 && (
           <Box
             component="section"
             aria-labelledby="lo-basico"
@@ -307,7 +307,7 @@ export function OdGuideDetailView({ guide, forSale = null }) {
                 component="ul"
                 sx={{ m: 0, mt: 2, p: 0, listStyle: 'none', display: 'grid', gap: 1.5 }}
               >
-                {guide.resumen_rapido.map((item) => (
+                {guide.basics.map((item) => (
                   <Box
                     component="li"
                     key={item}
@@ -323,16 +323,16 @@ export function OdGuideDetailView({ guide, forSale = null }) {
         )}
 
         {/* Fotos y video */}
-        {(guide.fotos.length > 0 || guide.video) && (
+        {(guide.photos.length > 0 || guide.video) && (
           <Box component="section" aria-labelledby="fotos" sx={{ mt: 5 }}>
             <Box component="h2" id="fotos" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
               Fotos y video
             </Box>
-            {guide.fotos.length > 0 && (
+            {guide.photos.length > 0 && (
               <Box
                 sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1.5 }}
               >
-                {guide.fotos.map((f) => (
+                {guide.photos.map((f) => (
                   <OdImage
                     key={f.src}
                     src={f.src}
@@ -420,7 +420,7 @@ export function OdGuideDetailView({ guide, forSale = null }) {
         ))}
 
         {/* Referencias */}
-        {guide.referencias.length > 0 && (
+        {guide.references.length > 0 && (
           <Box component="section" aria-labelledby="referencias" sx={{ mt: { xs: 6, md: 8 } }}>
             <Box component="h2" id="referencias" sx={{ ...LABEL, m: 0, mb: 1.5, fontSize: 12 }}>
               Referencias
@@ -438,9 +438,9 @@ export function OdGuideDetailView({ guide, forSale = null }) {
                 '& a': { color: 'var(--od-text)', wordBreak: 'break-word', ...focusSx },
               }}
             >
-              {guide.referencias.map((r) => (
-                <li key={r.texto}>
-                  {r.texto}{' '}
+              {guide.references.map((r) => (
+                <li key={r.text}>
+                  {r.text}{' '}
                   {r.url && (
                     <a href={r.url} target="_blank" rel="noopener noreferrer">
                       {r.url.replace(/^https?:\/\//, '')}
@@ -473,7 +473,7 @@ export function OdGuideDetailView({ guide, forSale = null }) {
             component="p"
             sx={{ m: 0, mt: 3, fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}
           >
-            Actualizado: <time dateTime={guide.actualizado}>{fDay(guide.actualizado)}</time>
+            Actualizado: <time dateTime={updated}>{fDay(updated)}</time>
           </Box>
         </Box>
       </Box>

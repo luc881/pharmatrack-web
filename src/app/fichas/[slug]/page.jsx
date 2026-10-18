@@ -1,46 +1,46 @@
 import { notFound } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
+import { sheetTitle } from 'src/lib/care-sheets';
 import { OdLayout } from 'src/layouts/od/od-layout';
-import { getAnimals, getSpeciesCatalog } from 'src/lib/public-api';
-import { getGuide, getGuides, guideTitle, guideForSpecies } from 'src/lib/guides';
+import { getAnimals, getCareSheet, getSpeciesCatalog } from 'src/lib/public-api';
 
 import { buildListings } from 'src/sections/catalog/utils';
-import { OdGuideDetailView } from 'src/sections/guides/od-guide-detail-view';
+import { OdCareSheetDetailView } from 'src/sections/care-sheets/od-care-sheet-detail-view';
 
 // ----------------------------------------------------------------------
-// /guias/[slug] — una guía de cuidados. Solo existen los slugs de los .md;
-// cualquier otro da 404.
+// /fichas/[slug] — una ficha de cuidados (API /public/care-sheets/{slug}).
+// Las direcciones viejas /guias/… redirigen aquí (next.config.mjs).
 // ----------------------------------------------------------------------
-
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-  return (await getGuides()).map((g) => ({ slug: g.slug }));
-}
 
 export async function generateMetadata({ params }) {
-  const guide = await getGuide((await params).slug);
-  if (!guide) return {};
-  const title = `Guía de cuidados: ${guideTitle(guide)} · Opuntia Den`;
-  const url = `${CONFIG.siteUrl}/guias/${guide.slug}/`;
+  const sheet = await getCareSheet((await params).slug);
+  if (!sheet) return { title: 'Ficha no encontrada' };
+  const title = `Ficha de cuidados: ${sheetTitle(sheet)} · Opuntia Den`;
+  const url = `${CONFIG.siteUrl}/fichas/${sheet.slug}/`;
   return {
     title: { absolute: title },
-    description: guide.resumen,
+    description: sheet.summary,
     alternates: { canonical: url },
-    openGraph: { type: 'article', title, description: guide.resumen, url, images: [CONFIG.ogImage] },
+    openGraph: {
+      type: 'article',
+      title,
+      description: sheet.summary,
+      url,
+      images: [sheet.photos?.[0]?.src ?? CONFIG.ogImage],
+    },
   };
 }
 
 export default async function Page({ params }) {
-  const guide = await getGuide((await params).slug);
-  if (!guide) notFound();
+  const sheet = await getCareSheet((await params).slug);
+  if (!sheet) notFound();
 
   // Ejemplares en venta de esta especie: el listado sin morph si existe,
   // si no el primero; el conteo suma todos sus morphs
   const [{ data: animals }, taxa] = await Promise.all([getAnimals(), getSpeciesCatalog()]);
   const listings = buildListings(animals, taxa).filter(
-    (l) => l.count > 0 && guideForSpecies([guide], l.species) === guide
+    (l) => l.count > 0 && l.species.id === sheet.species_id
   );
   const forSale = listings.length
     ? {
@@ -52,12 +52,12 @@ export default async function Page({ params }) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: `Guía de cuidados: ${guideTitle(guide)}`,
-    description: guide.resumen,
-    dateModified: guide.actualizado,
+    headline: `Ficha de cuidados: ${sheetTitle(sheet)}`,
+    description: sheet.summary,
+    dateModified: sheet.updated_at,
     inLanguage: 'es-MX',
-    image: `${CONFIG.siteUrl}${CONFIG.ogImage.url}`,
-    mainEntityOfPage: `${CONFIG.siteUrl}/guias/${guide.slug}/`,
+    image: sheet.photos?.[0]?.src ?? `${CONFIG.siteUrl}${CONFIG.ogImage.url}`,
+    mainEntityOfPage: `${CONFIG.siteUrl}/fichas/${sheet.slug}/`,
     author: { '@type': 'Organization', name: CONFIG.appName, url: CONFIG.siteUrl },
     publisher: { '@type': 'Organization', name: CONFIG.appName, url: CONFIG.siteUrl },
   };
@@ -66,9 +66,9 @@ export default async function Page({ params }) {
     <OdLayout>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\u003c') }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
-      <OdGuideDetailView guide={guide} forSale={forSale} />
+      <OdCareSheetDetailView guide={sheet} forSale={forSale} />
     </OdLayout>
   );
 }

@@ -2,10 +2,18 @@ import { notFound, permanentRedirect } from 'next/navigation';
 
 import { CONFIG } from 'src/global-config';
 import { OdLayout } from 'src/layouts/od/od-layout';
-import { getGuides, guideTitle, guideForSpecies } from 'src/lib/guides';
-import { getAnimal, getGroups, getAnimals, getSiteSettings, getSpeciesCatalog } from 'src/lib/public-api';
+import { sheetTitle, sheetForSpecies } from 'src/lib/care-sheets';
+import {
+  getAnimal,
+  getGroups,
+  getAnimals,
+  getCareSheet,
+  getCareSheets,
+  getSiteSettings,
+  getSpeciesCatalog,
+} from 'src/lib/public-api';
 
-import { renderInline } from 'src/sections/guides/guide-markdown';
+import { renderInline } from 'src/sections/care-sheets/sheet-markdown';
 import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
 import { OdSpeciesDetailsView } from 'src/sections/catalog/od/od-species-details-view';
 import {
@@ -123,7 +131,9 @@ export default async function Page({ params }) {
       .slice(0, 8);
 
     const site = await getSiteSettings();
-    const guide = guideForSpecies(await getGuides(), item.species);
+    // Si la especie tiene ficha de cuidados, la sección de cuidados sale de ahí
+    const sheetRow = sheetForSpecies(await getCareSheets(), item.species.id);
+    const guide = sheetRow && (await getCareSheet(sheetRow.slug));
     const jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'Product',
@@ -161,14 +171,14 @@ export default async function Page({ params }) {
           guide={
             guide && {
               slug: guide.slug,
-              title: guideTitle(guide),
-              resumen: guide.resumen,
-              origen: guide.origen ?? null,
-              dificultad: guide.dificultad ?? null,
-              datos: guide.datos,
-              taxonomia: guide.taxonomia,
+              title: sheetTitle(guide),
+              summary: guide.summary,
+              origin: guide.origin ?? null,
+              difficulty: guide.difficulty ?? null,
+              facts: guide.facts,
+              taxonomy: guide.taxonomy,
               // Lo básico admite cursivas: se pasa ya en HTML
-              basico: guide.resumen_rapido.map(renderInline),
+              basics: guide.basics.map(renderInline),
             }
           }
         />

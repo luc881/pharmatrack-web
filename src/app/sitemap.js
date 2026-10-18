@@ -1,6 +1,12 @@
 import { CONFIG } from 'src/global-config';
-import { getGuides } from 'src/lib/guides';
-import { getGroups, getAnimals, getProducts, getArticles, getSpeciesCatalog } from 'src/lib/public-api';
+import {
+  getGroups,
+  getAnimals,
+  getProducts,
+  getArticles,
+  getCareSheets,
+  getSpeciesCatalog,
+} from 'src/lib/public-api';
 
 import { articleSlug } from 'src/sections/articles/utils';
 import { productSlug, buildListings, buildCategories } from 'src/sections/catalog/utils';
@@ -8,13 +14,13 @@ import { productSlug, buildListings, buildCategories } from 'src/sections/catalo
 // ----------------------------------------------------------------------
 
 export default async function sitemap() {
-  const [{ data: animals }, groups, articles, products, taxa, guides] = await Promise.all([
+  const [{ data: animals }, groups, articles, products, taxa, sheets] = await Promise.all([
     getAnimals(),
     getGroups(),
     getArticles(),
     getProducts(),
     getSpeciesCatalog(),
-    getGuides(),
+    getCareSheets(),
   ]);
 
   return [
@@ -33,10 +39,10 @@ export default async function sitemap() {
       url: `${CONFIG.siteUrl}/articulos/${articleSlug(article)}`,
       changeFrequency: 'weekly',
     })),
-    { url: `${CONFIG.siteUrl}/guias/`, changeFrequency: 'monthly' },
-    ...guides.map((guide) => ({
-      url: `${CONFIG.siteUrl}/guias/${guide.slug}/`,
-      lastModified: guide.actualizado,
+    { url: `${CONFIG.siteUrl}/fichas/`, changeFrequency: 'weekly' },
+    ...sheets.map((sheet) => ({
+      url: `${CONFIG.siteUrl}/fichas/${sheet.slug}/`,
+      lastModified: sheet.updated_at,
       changeFrequency: 'monthly',
     })),
     ...products.map((product) => ({

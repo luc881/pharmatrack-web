@@ -10,6 +10,8 @@ export const paths = {
   favorites: '/favoritos',
   cart: '/carrito',
   articles: '/articulos',
+  careSheets: '/fichas',
+  careSheet: (slug) => `/fichas/${slug}`,
   // Cuenta de cliente (login con Google en el propio sitio)
   account: '/cuenta',
   orders: '/mis-pedidos',

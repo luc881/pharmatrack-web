@@ -77,19 +77,19 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
   const excerpt = (item.description ?? '').split('\n').filter(Boolean)[0];
   const price = selectedTier ? selectedTier.price : minPrice;
 
-  // Si la especie tiene guía (src/content/guias), la ficha de cuidados sale
-  // de ahí: es la fuente principal. Sin guía, de los campos del dashboard.
+  // Si la especie tiene ficha de cuidados (/fichas), la sección de cuidados
+  // sale de ahí: es la fuente principal. Sin ficha, de los campos de la especie.
   const careColumns = guide
     ? [
-        ...(guide.origen ? [{ label: 'Origen', value: guide.origen }] : []),
-        ...guide.datos.map((d) => ({ label: d.etiqueta, value: d.valor })),
+        ...(guide.origin ? [{ label: 'Origen', value: guide.origin }] : []),
+        ...guide.facts.map((d) => ({ label: d.label, value: d.value })),
       ]
     : CARE_FIELDS.filter((f) => species[f.key]).map((f) => ({ label: f.label, value: species[f.key] }));
 
   // Secciones descriptivas (solo las que tienen texto)
   // (las notas del criadero van aparte, en una nota "¿Sabías que…?")
   const sections = guide
-    ? [{ kicker: 'Lo esencial', title: 'Descripción general', text: guide.resumen }]
+    ? [{ kicker: 'Lo esencial', title: 'Descripción general', text: guide.summary }]
     : [
         { kicker: 'Lo esencial', title: 'Descripción general', text: item.description ?? species.description },
         { kicker: 'Ambiente', title: 'Hábitat y comportamiento', text: species.habitat },
@@ -100,7 +100,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
   const taxonomy = (
     guide
       ? [
-          ...guide.taxonomia.map((t) => ({ label: t.rango, value: t.nombre, italic: t.cursiva })),
+          ...guide.taxonomy.map((t) => ({ label: t.rank, value: t.name, italic: t.italic })),
           { label: 'Nombre común', value: species.common_name },
         ]
       : [
@@ -112,7 +112,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
         ]
   ).filter((r) => r.value);
 
-  const difficulty = guide ? guide.dificultad : species.difficulty;
+  const difficulty = guide ? guide.difficulty : species.difficulty;
   const tags = [formatLabel, difficulty, species.rarity, ...morphs.map((m) => m.name)].filter(Boolean);
 
   const handleAdd = () => {
@@ -494,11 +494,11 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               <SectionHead kicker="Guía de cuidado" title="Ficha de cuidados" size="clamp(28px, 3.2vw, 44px)" />
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'flex-start', md: 'flex-end' }, gap: 1.5 }}>
                 <SciName sx={{ fontSize: 18, color: 'var(--od-gris)' }}>{sci}</SciName>
-                {/* La especie tiene guía completa (src/content/guias): se enlaza */}
+                {/* La especie tiene ficha de cuidados completa (/fichas): se enlaza */}
                 {guide && (
                   <Box
                     component={RouterLink}
-                    href={`/guias/${guide.slug}/`}
+                    href={`/fichas/${guide.slug}/`}
                     sx={{
                       px: 2.5,
                       py: 1.25,
@@ -512,7 +512,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                       '&:focus-visible': { outline: '2px solid var(--od-focus)', outlineOffset: '3px' },
                     }}
                   >
-                    Ver guía completa de cuidados →
+                    Ver ficha de cuidados completa →
                   </Box>
                 )}
               </Box>
@@ -591,11 +591,11 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                   </Box>
                 )}
 
-                {guide?.basico.length > 0 && (
+                {guide?.basics.length > 0 && (
                   <Box sx={{ mt: '44px' }}>
                     <NumberedKicker n={sections.length + 1}>Lo básico</NumberedKicker>
                     <Box component="ul" sx={{ m: 0, mt: '18px', p: 0, listStyle: 'none', display: 'grid', gap: 1.5, maxWidth: '68ch' }}>
-                      {guide.basico.map((html) => (
+                      {guide.basics.map((html) => (
                         <Box component="li" key={html} sx={{ display: 'flex', gap: 1.5, fontSize: 16, lineHeight: 1.7 }}>
                           <Box component="span" className="od-star" aria-hidden sx={{ mt: '0.5em', flexShrink: 0 }} />
                           <span dangerouslySetInnerHTML={{ __html: html }} />

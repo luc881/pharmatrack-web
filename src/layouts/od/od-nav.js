@@ -11,6 +11,7 @@ export const SITE_NAV = [
   { label: 'Catálogo', href: paths.catalog },
   { label: 'El criadero', href: paths.breeding },
   { label: 'Divulgación', href: paths.articles },
+  { label: 'Fichas de cuidados', href: paths.careSheets },
   { label: 'Asesoría', href: paths.advisory },
   { label: 'Envíos', href: paths.shipping, secondary: true },
   { label: 'Contacto', href: paths.contact, secondary: true },

@@ -15,12 +15,12 @@ const isStaticExport = false;
 
 const nextConfig = {
   trailingSlash: true,
-  // Las guías se leen de src/content/guias con fs: que viajen en el deploy
-  outputFileTracingIncludes: {
-    '/guias': ['./src/content/guias/**'],
-    '/guias/[slug]': ['./src/content/guias/**'],
-    '/sitemap.xml': ['./src/content/guias/**'],
-    '/catalogo/[id]': ['./src/content/guias/**'],
+  // Las guías de cuidado pasaron a /fichas (y a la base de datos)
+  async redirects() {
+    return [
+      { source: '/guias', destination: '/fichas/', permanent: true },
+      { source: '/guias/:slug*', destination: '/fichas/:slug*', permanent: true },
+    ];
   },
   output: isStaticExport ? 'export' : undefined,
   env: {
