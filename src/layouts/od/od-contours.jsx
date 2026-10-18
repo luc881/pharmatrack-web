@@ -19,13 +19,13 @@ const SIGMA = 70; // radio del bulto (px)
 const INK = '46,41,36';
 const TUNA = '168,69,92';
 
-export function OdContours({ sx }) {
+export function OdContours({ sx, minScreen = 1920 }) {
   const ref = useRef(null);
 
   useEffect(() => {
     const canvas = ref.current;
-    // las columnas solo se muestran desde 1920px: debajo ni se arranca
-    if (!canvas || !window.matchMedia('(min-width: 1920px)').matches) return undefined;
+    // las columnas solo se muestran desde minScreen: debajo ni se arranca
+    if (!canvas || !window.matchMedia(`(min-width: ${minScreen}px)`).matches) return undefined;
     const ctx = canvas.getContext('2d');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -124,25 +124,28 @@ export function OdContours({ sx }) {
       window.removeEventListener('pointermove', move);
       document.documentElement.removeEventListener('pointerleave', leave);
     };
-  }, []);
+  }, [minScreen]);
 
   return <Box component="canvas" ref={ref} aria-hidden sx={[{ display: 'block', width: 1, height: 1 }, ...(Array.isArray(sx) ? sx : [sx])]} />;
 }
 
 // ----------------------------------------------------------------------
-// Columnas laterales con curvas de nivel para pantallas muy anchas (≥1920px):
-// ocupan lo que sobra a los lados de un contenido de `contentWidth` px. Van
+// Columnas laterales con curvas de nivel: ocupan lo que sobra a los lados de
+// un contenido de `contentWidth` px y aparecen cuando de cada lado quedan al
+// menos SIDE_MIN px (1440 → 1920px de pantalla; la ficha de 760 → 1240px). Van
 // detrás del contenido (z-index -1 dentro de <main>, que aísla), así que las
 // bandas oscuras a todo lo ancho las tapan y solo se ven sobre fondo claro.
 // Se quedan pegadas a la pantalla mientras se hace scroll.
 
-function SideColumn({ side, contentWidth }) {
+const SIDE_MIN = 240;
+
+function SideColumn({ side, contentWidth, minScreen }) {
   return (
     <Box
       aria-hidden
       sx={{
         display: 'none',
-        '@media (min-width: 1920px)': { display: 'block' },
+        [`@media (min-width: ${minScreen}px)`]: { display: 'block' },
         position: 'absolute',
         top: 0,
         bottom: 0,
@@ -163,17 +166,18 @@ function SideColumn({ side, contentWidth }) {
           WebkitMaskImage: 'linear-gradient(transparent, #000 12%, #000 88%, transparent)',
         }}
       >
-        <OdContours />
+        <OdContours minScreen={minScreen} />
       </Box>
     </Box>
   );
 }
 
 export function OdSideArt({ contentWidth = 1440 }) {
+  const minScreen = contentWidth + 2 * SIDE_MIN;
   return (
     <>
-      <SideColumn side="left" contentWidth={contentWidth} />
-      <SideColumn side="right" contentWidth={contentWidth} />
+      <SideColumn side="left" contentWidth={contentWidth} minScreen={minScreen} />
+      <SideColumn side="right" contentWidth={contentWidth} minScreen={minScreen} />
     </>
   );
 }

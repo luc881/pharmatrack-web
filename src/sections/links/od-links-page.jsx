@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { CONFIG } from 'src/global-config';
 import { getLinkPages } from 'src/lib/public-api';
 import { Pill, Star } from 'src/layouts/od/od-ui';
+import { OdSideArt } from 'src/layouts/od/od-contours';
 
 import { slugify } from 'src/sections/catalog/utils';
 
@@ -145,6 +146,8 @@ export async function OdLinksPage({ pageKey, visit, prefix = '', sections, phone
     <Box
       component="main"
       sx={{
+        position: 'relative',
+        isolation: 'isolate',
         minHeight: '100dvh',
         bgcolor: 'var(--od-crema)',
         color: 'var(--od-tinta)',
@@ -154,6 +157,8 @@ export async function OdLinksPage({ pageKey, visit, prefix = '', sections, phone
       }}
     >
       <LinksTrack visit={visit} />
+      {/* curvas de nivel a los lados en pantallas anchas (columna de 560px) */}
+      <OdSideArt contentWidth={640} />
 
       <Box sx={{ maxWidth: 560, mx: 'auto' }}>
         {/* Encabezado */}

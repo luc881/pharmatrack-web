@@ -101,10 +101,29 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
   const place = [guide.locality && `“${guide.locality}”`, guide.origin].filter(Boolean).join(' · ');
 
   return (
-    <Box sx={{ bgcolor: 'var(--od-papel)', color: 'var(--od-text)' }}>
+    // en celular el papel llena la pantalla; desde md es una hoja sobre crema
+    // y a los lados quedan las curvas de nivel (OdLayout sideArt={760})
+    <Box
+      sx={{
+        color: 'var(--od-text)',
+        bgcolor: { xs: 'var(--od-papel)', md: 'transparent' },
+        py: { md: 4 },
+      }}
+    >
       <Box
         component="article"
-        sx={{ maxWidth: 680, mx: 'auto', px: '18px', pt: { xs: 4, md: 6 }, pb: { xs: 6, md: 9 } }}
+        sx={{
+          maxWidth: 680,
+          mx: 'auto',
+          px: { xs: '18px', md: '40px' },
+          pt: { xs: 4, md: 6 },
+          pb: { xs: 6, md: 9 },
+          bgcolor: 'var(--od-papel)',
+          border: { md: 'var(--od-rule)' },
+          borderRadius: { md: 'var(--od-radius-md)' },
+          boxShadow: { md: 'var(--od-shadow-flat)' },
+          boxSizing: 'content-box',
+        }}
       >
         {/* Encabezado */}
         <Box

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import Box from '@mui/material/Box';
@@ -9,6 +9,9 @@ import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
 import { OdImage } from 'src/layouts/od/od-ui';
+import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
+
+import { SheetHoverPreview } from './sheet-hover-preview';
 
 // ----------------------------------------------------------------------
 // Índice /fichas (estilo catálogo sistemático, como PhasmaMX): buscador,
@@ -88,7 +91,7 @@ function Chip({ active, onClick, children }) {
 }
 
 // Vista índice: un bloque por grupo, una fila por ficha
-function IndexView({ groups }) {
+function IndexView({ groups, preview }) {
   return (
     <Box component="ul" sx={{ m: 0, p: 0, listStyle: 'none' }}>
       {groups.map((g) => (
@@ -114,6 +117,8 @@ function IndexView({ groups }) {
                 <Box
                   component={RouterLink}
                   href={href(s)}
+                  onMouseEnter={(e) => preview.current?.show(s, e)}
+                  onMouseLeave={() => preview.current?.hide()}
                   sx={{
                     ...focusSx,
                     display: 'grid',
@@ -129,9 +134,15 @@ function IndexView({ groups }) {
                     textDecoration: 'none',
                     transition: 'background-color 200ms ease',
                     '&:hover': { bgcolor: 'var(--od-crema-hueso)' },
+                    // al pasar: el nombre se corre y la flecha avanza
+                    '& .od-row-name, & .od-row-arrow': {
+                      transition: 'transform 400ms var(--od-ease)',
+                    },
+                    '&:hover .od-row-name': { transform: 'translateX(6px)' },
+                    '&:hover .od-row-arrow': { transform: 'translateX(4px)' },
                   }}
                 >
-                  <Box sx={{ minWidth: 0 }}>
+                  <Box className="od-row-name" sx={{ minWidth: 0 }}>
                     <SciName sheet={s} />
                     {/* en celular, el nombre común va debajo */}
                     <Box
@@ -161,6 +172,7 @@ function IndexView({ groups }) {
                     <ForSale n={s.available_count} />
                   </Box>
                   <Box
+                    className="od-row-arrow"
                     component="span"
                     aria-hidden
                     sx={{ display: { xs: 'none', md: 'block' }, textAlign: 'right' }}
@@ -235,6 +247,7 @@ export function OdCareSheetsIndexView({ sheets }) {
   const [q, setQ] = useState('');
   const [groupId, setGroupId] = useState(() => Number(params.get('grupo')) || null);
   const [view, setView] = useState('index');
+  const preview = useRef(null);
 
   // grupos con al menos una ficha publicada, en orden alfabético
   const allGroups = [
@@ -263,11 +276,20 @@ export function OdCareSheetsIndexView({ sheets }) {
   return (
     <Box
       sx={{
+        position: 'relative',
         px: { xs: '18px', md: 'var(--od-gutter)' },
         pt: { xs: 4, md: 6 },
         pb: { xs: 6, md: 10 },
       }}
     >
+      {/* notas al margen en pantallas anchas, como en Divulgación */}
+      <OdGutterNote
+        n={String(sheets.length).padStart(2, '0')}
+        label="Fichas publicadas"
+        start={320}
+      />
+      <SheetHoverPreview apiRef={preview} />
+
       {/* Encabezado */}
       <Box
         sx={{
@@ -420,7 +442,11 @@ export function OdCareSheetsIndexView({ sheets }) {
       )}
 
       {shown.length > 0 &&
-        (view === 'index' ? <IndexView groups={groups} /> : <GridView sheets={shown} />)}
+        (view === 'index' ? (
+          <IndexView groups={groups} preview={preview} />
+        ) : (
+          <GridView sheets={shown} />
+        ))}
 
       {!shown.length && (
         <Box sx={{ mt: 5, color: 'var(--od-text-muted)' }}>

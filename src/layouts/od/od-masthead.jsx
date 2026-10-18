@@ -16,8 +16,13 @@ import { SITE_NAV } from './od-nav';
 // scroll se va y aparece la barra flotante (ver revealOnScroll en OdHeader).
 // ----------------------------------------------------------------------
 
-// Mismas rutas que la barra interior + el ancla a las preguntas del home
-const NAV = [...SITE_NAV, { label: 'Preguntas', href: '#preguntas', anchor: true }];
+// Mismas rutas que la barra interior (sin Contacto: es el botón de la
+// derecha) + el ancla a las preguntas del home. Las `secondary` solo caben
+// en pantallas anchas; antes todo se partía en dos renglones.
+const NAV = [
+  ...SITE_NAV.filter((l) => l.href !== paths.contact),
+  { label: 'Preguntas', href: '#preguntas', anchor: true, secondary: true },
+];
 
 const navLinkSx = {
   color: 'inherit',
@@ -30,7 +35,7 @@ const navLinkSx = {
 export function OdMasthead() {
   return (
     <Box component="header" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: '18px' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: { xs: 1.5, md: 3 }, flexWrap: { xs: 'nowrap', md: 'wrap' } }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: { xs: 1.5, md: 3 }, flexWrap: 'nowrap' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0, gap: { xs: 2.5, md: '34px' } }}>
           <Box
             component={RouterLink}
@@ -48,8 +53,8 @@ export function OdMasthead() {
             component="nav"
             sx={{
               display: 'flex',
-              gap: { xs: 2, md: '30px' },
-              flexWrap: { xs: 'nowrap', md: 'wrap' },
+              gap: { xs: 2, md: '14px', lg: '26px', xl: '30px' },
+              flexWrap: 'nowrap',
               minWidth: 0,
               overflowX: { xs: 'auto', md: 'visible' },
               scrollbarWidth: 'none',
@@ -59,17 +64,20 @@ export function OdMasthead() {
               WebkitMaskImage: { xs: 'linear-gradient(to right, #000 calc(100% - 24px), transparent)', md: 'none' },
             }}
           >
-            {NAV.map((l) =>
-              l.anchor ? (
-                <Link key={l.label} href={l.href} sx={navLinkSx}>
+            {NAV.map((l) => {
+              // en movil todo cabe deslizando; en escritorio las secundarias
+              // desde lg (medido: a 900px ya no caben, a 1200 sobran 300px)
+              const sx = { ...navLinkSx, display: l.secondary ? { xs: 'inline', md: 'none', lg: 'inline' } : 'inline' };
+              return l.anchor ? (
+                <Link key={l.label} href={l.href} sx={sx}>
                   {l.label}
                 </Link>
               ) : (
-                <Link key={l.label} component={RouterLink} href={l.href} sx={navLinkSx}>
+                <Link key={l.label} component={RouterLink} href={l.href} sx={sx}>
                   {l.label}
                 </Link>
-              )
-            )}
+              );
+            })}
           </Box>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
@@ -78,7 +86,7 @@ export function OdMasthead() {
             href={paths.contact}
             sx={{ display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 2, color: 'inherit', fontSize: 15, textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}
           >
-            Apartar ejemplar
+            Contacto
             <Box component="span" sx={{ flexShrink: 0, display: 'inline-grid', placeItems: 'center', width: 30, height: 30, border: '1px solid var(--color-text)', borderRadius: '4px' }}>
               →
             </Box>

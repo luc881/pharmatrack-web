@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <OdLayout>
+    <OdLayout sideArt={1200}>
       <OrdersView />
     </OdLayout>
   );
