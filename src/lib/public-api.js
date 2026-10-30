@@ -214,15 +214,15 @@ export async function getProduct(id) {
   }
 }
 
-// Contenido de /gracias y /links (se edita en el dashboard). Si el API no
-// responde o devuelve algo raro, el contenido con el que se publicaron: el QR
-// del sticker no puede quedarse en blanco.
+// Contenido de /links (se edita en el dashboard). Si el API no responde o
+// devuelve algo raro, el contenido con el que se publicó: el QR del ticket no
+// puede quedarse en blanco.
 export async function getLinkPages() {
   try {
     const res = await fetch(`${CONFIG.serverUrl}/api/v1/settings/link-pages`, { next: { revalidate: 60 } });
     if (!res.ok) return LINK_PAGES_DEFAULTS;
     const data = await res.json();
-    return data?.pages?.gracias && data?.pages?.links ? data : LINK_PAGES_DEFAULTS;
+    return data?.pages?.links ? data : LINK_PAGES_DEFAULTS;
   } catch {
     return LINK_PAGES_DEFAULTS;
   }

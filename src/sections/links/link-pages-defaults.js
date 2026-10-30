@@ -1,5 +1,5 @@
 // Copia de LINK_PAGES_DEFAULTS del API (routes/settings.py): se usa si el API no
-// responde, para que el QR del sticker nunca muestre una página rota.
+// responde, para que el QR del ticket nunca muestre una página rota.
 export const LINK_PAGES_DEFAULTS = {
   events: [
     {
@@ -40,34 +40,6 @@ export const LINK_PAGES_DEFAULTS = {
     },
   ],
   pages: {
-    gracias: {
-      label: 'Criadero · Ciudad de México',
-      title: 'Gracias por tu compra',
-      lead: 'Gracias por llevarte un pedacito de nuestro criadero. Aquí tienes todo para que tus animales estén bien.',
-      footer: 'Ciudad de México',
-      buttons: [
-        {
-          label: 'Ver catálogo',
-          url: '/catalogo',
-          primary: true,
-        },
-        {
-          label: 'Instagram · @opuntia_den',
-          url: 'https://www.instagram.com/opuntia_den/',
-          primary: false,
-        },
-        {
-          label: 'WhatsApp · Ventas Opuntia',
-          url: 'https://wa.me/525562292037',
-          primary: false,
-        },
-        {
-          label: 'Sitio web',
-          url: '/',
-          primary: false,
-        },
-      ],
-    },
     links: {
       label: 'Criadero · CDMX',
       title: 'Historia natural',

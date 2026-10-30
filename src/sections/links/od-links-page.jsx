@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 
-import { CONFIG } from 'src/global-config';
 import { getLinkPages } from 'src/lib/public-api';
 import { Pill, Star } from 'src/layouts/od/od-ui';
 import { OdSideArt } from 'src/layouts/od/od-contours';
@@ -12,15 +11,13 @@ import { LinksTrack } from './links-track';
 import { OdCountdown } from './od-countdown';
 
 // ----------------------------------------------------------------------
-// Página tipo "linktree" propia, compartida por /gracias (QR del sticker, ya
-// compró) y /links (bio de Instagram, todavía no compra). Textos, botones,
-// guías y eventos se editan en el dashboard (Sitio → Links y eventos) y llegan
-// por getLinkPages(); cada ruta solo elige su página y el orden de secciones.
+// Página tipo "linktree" propia de /links (bio de Instagram, QR del ticket,
+// tarjetas). Textos, botones, guías y eventos se editan en el dashboard
+// (Sitio → Links y eventos) y llegan por getLinkPages().
 // Página sin el layout del sitio (barra, pestañas, sello flotante): ligera y
 // pensada para el celular.
 //
-// Eventos de analítica: clic_<prefix><botón> y clic_<prefix>guia_<guía>
-// (prefix '' en /gracias, 'links_' en /links).
+// Eventos de analítica: clic_<prefix><botón> y clic_<prefix>guia_<guía>.
 // ----------------------------------------------------------------------
 
 const isExternal = (url) => !url.startsWith('/');
@@ -138,7 +135,7 @@ const SECTIONS = {
   },
 };
 
-export async function OdLinksPage({ pageKey, visit, prefix = '', sections, phone = false }) {
+export async function OdLinksPage({ pageKey, visit, prefix = '', sections }) {
   const data = await getLinkPages();
   const page = data.pages[pageKey];
 
@@ -188,14 +185,6 @@ export async function OdLinksPage({ pageKey, visit, prefix = '', sections, phone
             Observar · criar · compartir
           </Box>
           {page.footer}
-          {phone && (
-            <>
-              {page.footer && ' · '}
-              <Box component="a" href={`tel:+${CONFIG.whatsapp}`} sx={[focusSx, { color: 'inherit' }]}>
-                {CONFIG.phone}
-              </Box>
-            </>
-          )}
           <Box sx={{ mt: 2.5 }}>
             <Star sx={{ width: 12, height: 12 }} />
           </Box>
