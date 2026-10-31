@@ -106,7 +106,7 @@ export default function Page() {
             component="aside"
             data-fx
             className="od-glow od-tilt"
-            sx={{ position: { md: 'sticky' }, top: { md: 130 }, p: { xs: 3, md: '36px 36px' }, border: '1px solid var(--color-divider)', bgcolor: 'var(--color-surface)', '--od-glow': 'rgba(168,69,92,0.16)' }}
+            sx={{ position: { md: 'sticky' }, top: { md: 130 }, p: { xs: 3, md: '36px 36px' }, border: '1px solid var(--color-divider)', bgcolor: 'var(--color-surface)', '--od-glow': 'rgba(85,184,149,0.16)' }}
           >
             <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 40, fontVariantNumeric: 'tabular-nums' }}>
               Gratis

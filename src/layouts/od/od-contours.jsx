@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 // ----------------------------------------------------------------------
 // Curvas de nivel: líneas finas apiladas, como un mapa topográfico, que
 // ondean muy despacio. El cursor las aparta con suavidad (un bulto que se
-// desvanece) y las cercanas se entintan de tuna. Pensado como fondo tranquilo
+// desvanece) y las cercanas se entintan del acento. Pensado como fondo tranquilo
 // para leer: sin partículas ni saltos, todo con movimiento lento.
 // Solo anima mientras está en pantalla; con movimiento reducido queda quieto.
 // ----------------------------------------------------------------------
@@ -16,8 +16,8 @@ const GAP = 16; // separación entre líneas (px)
 const STEP = 6; // resolución horizontal (px)
 const BUMP = 34; // cuánto aparta el cursor (px)
 const SIGMA = 70; // radio del bulto (px)
-const INK = '46,41,36';
-const TUNA = '168,69,92';
+const INK = '23,62,54';
+const ACCENT = '36,116,101'; // acento musgo
 
 export function OdContours({ sx, minScreen = 1920 }) {
   const ref = useRef(null);
@@ -85,7 +85,7 @@ export function OdContours({ sx, minScreen = 1920 }) {
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = near > 0.05 ? `rgba(${TUNA},${0.16 + near * 0.5})` : `rgba(${INK},0.14)`;
+        ctx.strokeStyle = near > 0.05 ? `rgba(${ACCENT},${0.16 + near * 0.5})` : `rgba(${INK},0.14)`;
         ctx.stroke();
       }
     };

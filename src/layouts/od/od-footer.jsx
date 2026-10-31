@@ -36,7 +36,7 @@ const REDES = [
   { label: 'Cómo llegar ↗', href: paths.contact },
 ];
 
-const navBd = '1px solid rgba(240,235,224,0.14)';
+const navBd = '1px solid rgba(229,241,205,0.14)';
 
 function useClock() {
   const [now, setNow] = useState(null);
@@ -77,12 +77,12 @@ export function OdFooter() {
         {/* Datos de la tienda */}
         <Box>
           <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>(Datos de la tienda)</Box>
-          <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, px: 1.875, py: 1, borderRadius: '999px', bgcolor: 'rgba(240,235,224,0.08)', fontSize: 13, color: 'var(--color-neutral-200)' }}>
+          <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, px: 1.875, py: 1, borderRadius: '999px', bgcolor: 'rgba(229,241,205,0.08)', fontSize: 13, color: 'var(--color-neutral-200)' }}>
             <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-accent-400)' }} />
             Apartados abiertos
           </Box>
           <Box sx={{ mt: 3, mb: 2.25 }}>
-            <Link href={`mailto:${EMAIL}`} sx={{ fontSize: 15, color: 'var(--color-neutral-100)', borderBottom: '1px solid rgba(240,235,224,0.4)', pb: '2px', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-300)' } }}>
+            <Link href={`mailto:${EMAIL}`} sx={{ fontSize: 15, color: 'var(--color-neutral-100)', borderBottom: '1px solid rgba(229,241,205,0.4)', pb: '2px', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-300)' } }}>
               {EMAIL}
             </Link>
           </Box>

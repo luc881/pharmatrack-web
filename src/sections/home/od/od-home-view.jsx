@@ -93,7 +93,7 @@ function Ingredient({ item, align = 'right' }) {
         alignItems: 'flex-start',
         gap: { xs: 1.75, md: 2.25 },
         py: { xs: 2, md: 3.25 },
-        borderTop: '1px solid rgba(240,235,224,0.14)',
+        borderTop: '1px solid rgba(229,241,205,0.14)',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -244,7 +244,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
             textAlign: 'center',
           }}
         >
-          <Kicker color="rgba(246,244,241,0.85)" size={12} sx={{ letterSpacing: '0.3em' }}>
+          <Kicker color="rgba(247,247,238,0.85)" size={12} sx={{ letterSpacing: '0.3em' }}>
             Fauna y flora — Ciudad de México
           </Kicker>
           <Display
@@ -254,7 +254,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           >
             Historia natural
           </Display>
-          <Box sx={{ maxWidth: '46ch', fontSize: { xs: 15, md: 18 }, lineHeight: 1.6, color: 'rgba(246,244,241,0.9)' }}>
+          <Box sx={{ maxWidth: '46ch', fontSize: { xs: 15, md: 18 }, lineHeight: 1.6, color: 'rgba(247,247,238,0.9)' }}>
             Isópodos y colémbolos criados en casa, con su ficha de cuidados. Entrega en persona en la CDMX.
           </Box>
           <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -282,13 +282,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
             fontSize: 11,
             letterSpacing: '0.24em',
             textTransform: 'uppercase',
-            color: 'rgba(246,244,241,0.85)',
+            color: 'rgba(247,247,238,0.85)',
             textDecoration: 'none',
             '&:hover': { color: '#fff' },
           }}
         >
           Disponibles
-          <Box component="span" sx={{ position: 'relative', width: '1px', height: 34, overflow: 'hidden', bgcolor: 'rgba(246,244,241,0.25)' }}>
+          <Box component="span" sx={{ position: 'relative', width: '1px', height: 34, overflow: 'hidden', bgcolor: 'rgba(247,247,238,0.25)' }}>
             <Box component="span" sx={{ position: 'absolute', inset: 0, bgcolor: '#f6f4f1', animation: 'odCue 1.8s var(--od-ease) infinite' }} />
           </Box>
         </Box>
@@ -426,7 +426,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
           6 ingredientes con el frasco 3D al centro (placeholder por ahora) */}
       <OdPanel sx={{ py: { xs: '64px', md: '96px' } }}>
         <OdGutterNote dark n="02" label="El frasco" start={160} />
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(240,235,224,0.18)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(229,241,205,0.18)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
           <Box component="span">(Qué necesita una colonia)</Box>
           <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' }, fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
         </Box>

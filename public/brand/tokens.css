@@ -9,26 +9,41 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"); */
 
 :root {
-  /* ---- Color: base ---------------------------------------------------- */
-  --od-crema:   #EAE3D7;  /* fondo principal de la web                      */
-  --od-papel:   #F4F0E9;  /* superficies claras, tarjetas, botones claros   */
-  --od-tinta:   #3A3029;  /* texto principal, líneas, nopal a línea         */
-  --od-noche:   #2E2924;  /* fondos oscuros, bandas, sello oscuro           */
-  --od-tuna:    #A8455C;  /* acento — SOLO como chispa (estrellas, tunas,
-                             kickers). Nunca en bloques grandes            */
-  --od-gris:    #6E6359;  /* texto secundario                               */
-  --od-linea:   #CBBFAE;  /* divisores, bordes finos                        */
-  --od-arena-texto: #C9C0B2; /* texto secundario sobre noche                */
-  --od-punto-oscuro: #6B6158; /* anillo de puntos sobre noche               */
+  /* ---- Color: paleta Musgo (2026-10-31; sustituye a tinta café + tuna) -- */
+  --od-musgo-900: #173E36;  /* tinta, campos oscuros                        */
+  --od-musgo-700: #247465;  /* acento: la acción principal, foco, chispas   */
+  --od-musgo-500: #55B895;  /* brillos sobre oscuro, degradados             */
+  --od-musgo-300: #ACDDB5;  /* campos claros, degradados                    */
+  --od-musgo-100: #E5F1CD;  /* texto claro sobre campos oscuros             */
+
+  /* ---- Color: neutro (desactivado, agotado, vacío, error, 404) -------- */
+  --od-neutro-900: #303840;
+  --od-neutro-700: #67767C;
+  --od-neutro-500: #A6B6B7;
+  --od-neutro-300: #D4DDDA;
+  --od-neutro-100: #F1F0EA;
+
+  /* ---- Color: base (nombres de siempre, valores Musgo) ---------------- */
+  --od-crema:   #EFF0E2;  /* fondo principal: crema verdoso                 */
+  --od-papel:   #F7F7EE;  /* superficies claras, tarjetas, botones claros   */
+  --od-tinta:   var(--od-musgo-900); /* texto principal, líneas            */
+  --od-noche:   #133129;  /* fondos oscuros, bandas (un paso bajo la tinta) */
+  /* ponytail: alias legado; ~40 usos de var(--od-tuna) ahora pintan musgo.
+     Renombrarlos a --od-accent cuando se toquen esas piezas. */
+  --od-tuna:    var(--od-musgo-700);
+  --od-gris:    #4E6660;  /* texto secundario                               */
+  --od-linea:   #C7D1C0;  /* divisores, bordes finos                        */
+  --od-arena-texto: #ACC4B8; /* texto secundario sobre noche                */
+  --od-punto-oscuro: #3E5E55; /* anillo de puntos sobre noche               */
   --od-kraft:   #C4A47C;  /* empaque (solo impresos)                        */
-  --od-olivo:   #5C6449;  /* banda verde de la web (el lema)    */
+  --od-olivo:   var(--od-musgo-700); /* banda del lema                      */
 
   /* ---- Color: familia de cremas (destacados, fondos alternos) --------- */
-  --od-crema-papel: #F4F0E9;
-  --od-crema-hueso: #EFE8DC;
-  --od-crema-base:  #EAE3D7;
-  --od-crema-lino:  #E3D8C6;
-  --od-crema-arena: #D8CBB5;
+  --od-crema-papel: #F7F7EE;
+  --od-crema-hueso: #F3F4E8;
+  --od-crema-base:  #EFF0E2;
+  --od-crema-lino:  #E2E8D2;
+  --od-crema-arena: #D2DCC4;
 
   /* ---- Roles semánticos (usar estos en componentes) ------------------- */
   --od-bg:            var(--od-crema);
@@ -39,8 +54,10 @@
   --od-text-on-dark:  var(--od-papel);
   --od-text-muted-on-dark: var(--od-arena-texto);
   --od-border:        var(--od-linea);
-  --od-accent:        var(--od-tuna);
-  --od-focus:         var(--od-tuna);
+  --od-accent:        var(--od-musgo-700);
+  --od-focus:         var(--od-musgo-700);
+  --od-disabled-bg:   var(--od-neutro-300);
+  --od-disabled-text: var(--od-neutro-700);
 
   /* ---- Tipografía ----------------------------------------------------- */
   --od-font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
@@ -69,16 +86,16 @@
   --od-radius-md: 10px;
   --od-radius-pill: 999px;     /* botones tipo "Ver catálogo" */
   --od-rule: 1px solid var(--od-border);
-  --od-shadow-flat: 3px 3px 0 rgba(51, 36, 20, 0.10); /* sombra plana, sin blur */
+  --od-shadow-flat: 3px 3px 0 rgba(23, 62, 54, 0.10); /* sombra plana, sin blur */
 }
 
 /* Tema oscuro opcional (secciones .od-dark o modo oscuro del sistema) */
 .od-dark {
   --od-bg: var(--od-noche);
-  --od-surface: #3A3430;
+  --od-surface: #1F4A41;
   --od-text: var(--od-papel);
   --od-text-muted: var(--od-arena-texto);
-  --od-border: #5A5148;
+  --od-border: #3E5E55;
 }
 
 /* ==========================================================================
@@ -94,7 +111,7 @@
   font-size: var(--od-text-xs); letter-spacing: var(--od-tracking-label);
   text-transform: uppercase; color: var(--od-text-muted);
 }
-/* Kicker de sección: número + línea + etiqueta, el número en tuna */
+/* Kicker de sección: número + línea + etiqueta, el número en el acento */
 .od-kicker { display: inline-flex; align-items: center; gap: 0.75rem; }
 .od-kicker__num { color: var(--od-accent); }
 .od-kicker__rule { width: 1.5rem; height: 1px; background: var(--od-border); }
@@ -124,7 +141,7 @@
   border-bottom: 1px solid var(--od-text);
 }
 
-/* Destello de 4 puntas en tuna (usa ornaments/destello.svg como máscara) */
+/* Destello de 4 puntas en el acento (usa ornaments/destello.svg como máscara) */
 .od-star { display: inline-block; width: .75em; height: .75em; background: var(--od-accent);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0 L11.9 8.1 L20 10 L11.9 11.9 L10 20 L8.1 11.9 L0 10 L8.1 8.1 Z'/%3E%3C/svg%3E") center/contain no-repeat;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0 L11.9 8.1 L20 10 L11.9 11.9 L10 20 L8.1 11.9 L0 10 L8.1 8.1 Z'/%3E%3C/svg%3E") center/contain no-repeat; vertical-align: -0.05em; }

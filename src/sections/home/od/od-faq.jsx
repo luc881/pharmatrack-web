@@ -39,7 +39,7 @@ export function OdFaq({ mossTall }) {
         <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 respuestas</Box>
       </Box>
 
-      <Box sx={{ py: 3.25, borderTop: '1px solid rgba(240,235,224,0.18)', borderBottom: '1px solid rgba(240,235,224,0.18)', overflow: 'hidden' }}>
+      <Box sx={{ py: 3.25, borderTop: '1px solid rgba(229,241,205,0.18)', borderBottom: '1px solid rgba(229,241,205,0.18)', overflow: 'hidden' }}>
         <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: { xs: 'clamp(24px, 7vw, 40px)', md: 'clamp(46px, 7.6vw, 118px)' }, lineHeight: 1.06, letterSpacing: '-0.01em', textTransform: 'uppercase', color: 'var(--color-neutral-100)', animation: 'odMarqueeR 70s linear infinite' }}>
           <Box component="span">{NAMES.repeat(6)}</Box>
           <Box component="span">{NAMES.repeat(6)}</Box>
@@ -48,7 +48,7 @@ export function OdFaq({ mossTall }) {
 
       <Box sx={{ display: 'grid', alignItems: 'stretch', px: { md: 'var(--od-gutter-extra)' }, gridTemplateColumns: { xs: '1fr', md: 'minmax(260px, 0.75fr) minmax(340px, 1.65fr)' } }}>
         {/* Izquierda: escena del tronco + WhatsApp */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', p: { xs: '40px 18px 0', md: '62px 46px 0 40px' }, borderRight: { md: '1px solid rgba(240,235,224,0.14)' } }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', p: { xs: '40px 18px 0', md: '62px 46px 0 40px' }, borderRight: { md: '1px solid rgba(229,241,205,0.14)' } }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, fontSize: 13, color: 'var(--color-neutral-400)' }}>
             <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-neutral-500)' }} />
             Antes de tu primer ejemplar
@@ -81,17 +81,17 @@ export function OdFaq({ mossTall }) {
           <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(34px, 4vw, 58px)', lineHeight: 1.08, color: 'var(--color-neutral-100)', maxWidth: '18ch', textWrap: 'pretty' }}>
             Esto es lo que conviene saber antes de tu primer ejemplar.
           </Box>
-          <Box sx={{ mt: { xs: 5, md: 8 }, borderTop: '1px solid rgba(240,235,224,0.14)' }}>
+          <Box sx={{ mt: { xs: 5, md: 8 }, borderTop: '1px solid rgba(229,241,205,0.14)' }}>
             {FAQS.map((item, i) => {
               const isOpen = open === i;
               return (
-                <Box key={item.q} sx={{ borderBottom: '1px solid rgba(240,235,224,0.14)', bgcolor: `rgba(240,235,224,${0.014 + i * 0.011})` }}>
+                <Box key={item.q} sx={{ borderBottom: '1px solid rgba(229,241,205,0.14)', bgcolor: `rgba(229,241,205,${0.014 + i * 0.011})` }}>
                   <Box
                     component="button"
                     type="button"
                     onClick={() => setOpen(isOpen ? -1 : i)}
                     aria-expanded={isOpen}
-                    sx={{ width: 1, display: 'grid', gridTemplateColumns: { xs: '34px 1fr auto', md: '62px 1fr auto' }, alignItems: 'center', gap: 2.5, p: { xs: '20px 4px', md: '24px 26px' }, bgcolor: 'transparent', border: 0, cursor: 'pointer', font: 'inherit', color: 'var(--color-neutral-100)', textAlign: 'left', transition: 'background 260ms, color 260ms', '&:hover': { bgcolor: 'rgba(240,235,224,0.08)', color: 'var(--color-accent-300)' } }}
+                    sx={{ width: 1, display: 'grid', gridTemplateColumns: { xs: '34px 1fr auto', md: '62px 1fr auto' }, alignItems: 'center', gap: 2.5, p: { xs: '20px 4px', md: '24px 26px' }, bgcolor: 'transparent', border: 0, cursor: 'pointer', font: 'inherit', color: 'var(--color-neutral-100)', textAlign: 'left', transition: 'background 260ms, color 260ms', '&:hover': { bgcolor: 'rgba(229,241,205,0.08)', color: 'var(--color-accent-300)' } }}
                   >
                     <Box component="span" sx={{ fontFamily: 'var(--font-heading)', fontSize: 15, letterSpacing: '0.14em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
                       {String(i + 1).padStart(2, '0')}

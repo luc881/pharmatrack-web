@@ -136,7 +136,7 @@ export function OdHeader({ revealOnScroll = false }) {
   const onDark = useNavTheme();
   const nt = onDark
     ? { bg: 'color-mix(in srgb, var(--color-bg) 94%, transparent)', fg: 'var(--color-text)', bd: 'var(--color-divider)' }
-    : { bg: 'rgba(28,26,24,0.9)', fg: 'var(--color-neutral-100)', bd: 'rgba(240,235,224,0.24)' };
+    : { bg: 'rgba(19,49,41,0.9)', fg: 'var(--color-neutral-100)', bd: 'rgba(229,241,205,0.24)' };
   // píldora de contador: contrasta con el fondo de la barra
   const navPill = onDark
     ? { bg: 'var(--color-neutral-900)', fg: 'var(--color-neutral-100)' }

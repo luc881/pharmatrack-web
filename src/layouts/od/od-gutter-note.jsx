@@ -75,7 +75,7 @@ export function OdGutterNote({
   folio = 'Opuntia Den — Criadero en CDMX',
 }) {
   const tone = dark ? 'var(--color-neutral-500)' : 'var(--color-neutral-600)';
-  const line = dark ? 'rgba(240,235,224,0.22)' : 'var(--color-divider)';
+  const line = dark ? 'rgba(229,241,205,0.22)' : 'var(--color-divider)';
 
   const refs = { lh: useRef(null), lt: useRef(null), rh: useRef(null), rt: useRef(null) };
   const [fit, setFit] = useState({ left: 'full', right: 'full' });

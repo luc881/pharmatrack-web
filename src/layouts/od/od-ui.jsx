@@ -72,7 +72,7 @@ export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 1
 // de color nace donde entra el ratón; el texto rueda hacia arriba.
 const PILL_VARIANTS = {
   dark: { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', '--od-fxbtn-fill': 'var(--od-tuna)', '--od-fxbtn-ink': '#fff' },
-  light: { bgcolor: 'rgba(246,244,241,0.95)', color: 'var(--color-neutral-900)', '--od-fxbtn-fill': 'var(--od-tuna)', '--od-fxbtn-ink': '#fff' },
+  light: { bgcolor: 'rgba(247,247,238,0.95)', color: 'var(--color-neutral-900)', '--od-fxbtn-fill': 'var(--od-tuna)', '--od-fxbtn-ink': '#fff' },
   outline: {
     color: '#eae7e7',
     border: '1px solid rgba(234,231,231,0.5)',

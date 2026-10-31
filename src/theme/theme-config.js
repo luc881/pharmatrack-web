@@ -27,15 +27,15 @@ export const themeConfig = {
    * Palette
    *************************************** */
   palette: {
-    // Marca: el primario es tinta (botones "tinta sobre crema"); la tuna
-    // queda solo como acento. Valores de public/brand/tokens.css.
+    // Marca (paleta Musgo): el primario es la tinta musgo (botones "tinta
+    // sobre crema"). Valores de public/brand/tokens.css.
     primary: {
-      lighter: '#EFE8DC',
-      light: '#6E6359',
-      main: '#3A3029',
-      dark: '#2E2924',
-      darker: '#2E2924',
-      contrastText: '#F4F0E9',
+      lighter: '#F3F4E8',
+      light: '#4E6660',
+      main: '#173E36',
+      dark: '#133129',
+      darker: '#133129',
+      contrastText: '#F7F7EE',
     },
     secondary: {
       lighter: '#EFD6FF',
@@ -78,16 +78,16 @@ export const themeConfig = {
       contrastText: '#FFFFFF',
     },
     grey: {
-      50: '#FDFBF7',
-      100: '#F9F5EC',
-      200: '#F2EDE1',
-      300: '#E3DDCD',
-      400: '#C8C3B2',
-      500: '#8A8578',
-      600: '#57544B',
-      700: '#4C4A43',
-      800: '#26251F',
-      900: '#1A1A15',
+      50: '#FBFBF6',
+      100: '#F7F7EE',
+      200: '#EEF0E6',
+      300: '#D6DCCD',
+      400: '#B7C2B3',
+      500: '#8E9D93',
+      600: '#4E6660',
+      700: '#2F4A43',
+      800: '#1F3B34',
+      900: '#133129',
     },
     common: {
       black: '#000000',

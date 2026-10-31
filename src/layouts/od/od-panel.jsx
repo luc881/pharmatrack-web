@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 // ----------------------------------------------------------------------
 // Sección oscura del home con un campo de puntos interactivo de fondo
 // (patrón "magnetic dot grid"): una retícula en canvas que se aparta del
-// cursor con física de resorte, se entinta de tuna cerca del puntero y, al
+// cursor con física de resorte, se entinta de musgo cerca del puntero y, al
 // hacer clic, lanza una onda que empuja los puntos hacia afuera.
 // El ciclo de animación solo corre mientras hay energía (cursor encima o
 // puntos regresando a su lugar); en reposo no consume nada.
@@ -21,8 +21,8 @@ const RADIUS = 170; // alcance del cursor (px)
 const PUSH = 26; // desplazamiento máximo (px)
 const SPRING = 0.08;
 const DAMP = 0.82;
-const TUNA = [168, 69, 92];
-const PAPER = [240, 235, 224];
+const GLOW = [85, 184, 149]; // brillo musgo
+const PAPER = [229, 241, 205];
 
 function OdDotField() {
   const ref = useRef(null);
@@ -68,7 +68,7 @@ function OdDotField() {
         const moved = Math.min(1, Math.hypot(d.x - d.ox, d.y - d.oy) / PUSH);
         const t = Math.max(near, moved * 0.8);
         const size = 1.1 + t * 2.1;
-        const c = PAPER.map((p, k) => Math.round(p + (TUNA[k] - p) * t));
+        const c = PAPER.map((p, k) => Math.round(p + (GLOW[k] - p) * t));
         ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${0.11 + t * 0.75})`;
         ctx.beginPath();
         ctx.arc(d.x, d.y, size, 0, Math.PI * 2);
@@ -182,7 +182,7 @@ function OdDotField() {
 
 // Retícula estática (mismo paso y tono que el canvas en reposo)
 const STATIC_DOTS = {
-  backgroundImage: 'radial-gradient(rgba(240,235,224,0.11) 1.1px, transparent 1.6px)',
+  backgroundImage: 'radial-gradient(rgba(229,241,205,0.11) 1.1px, transparent 1.6px)',
   backgroundSize: `${GAP}px ${GAP}px`,
   backgroundPosition: `${GAP / 2 - 13}px ${GAP / 2 - 13}px`,
 };

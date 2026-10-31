@@ -59,7 +59,7 @@ export function SealFace({ light, arrowSx }) {
           position: 'absolute',
           inset: '8%',
           borderRadius: '50%',
-          bgcolor: 'rgba(246,244,241,0.92)',
+          bgcolor: 'rgba(247,247,238,0.92)',
           opacity: light ? 1 : 0,
           transition: 'opacity 400ms ease',
         }}

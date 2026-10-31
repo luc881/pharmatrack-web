@@ -27,25 +27,30 @@
 | `assets/instagram/` | Portadas de destacados en 6 colores (1080 × 1080). |
 | `assets/print/` | PDFs de imprenta (tarjetas, etiquetas de precio, letrero, manta). No se usan en la web. |
 
-## 3. Color
+## 3. Color — paleta Musgo (desde 2026-10-31)
 
 | Token | HEX | Uso |
 |---|---|---|
-| `--od-crema` | `#EAE3D7` | Fondo principal de la página |
-| `--od-papel` | `#F4F0E9` | Tarjetas, botones claros, superficies |
-| `--od-tinta` | `#3A3029` | Texto, líneas, iconos |
-| `--od-noche` | `#2E2924` | Fondos oscuros, footer, bandas |
-| `--od-tuna` | `#A8455C` | **Acento puntual**: estrellas, número de kicker, foco |
-| `--od-gris` | `#6E6359` | Texto secundario |
-| `--od-linea` | `#CBBFAE` | Divisores y bordes de 1 px |
-| `--od-olivo` | `#5C6449` | Banda verde (lema) |
-| `--od-arena-texto` | `#C9C0B2` | Texto secundario sobre noche |
+| `--od-crema` | `#EFF0E2` | Fondo principal: crema verdoso |
+| `--od-papel` | `#F7F7EE` | Tarjetas, botones claros, superficies |
+| `--od-tinta` (`--od-musgo-900`) | `#173E36` | Texto, líneas, iconos, campos oscuros |
+| `--od-noche` | `#133129` | Fondos oscuros, footer, bandas |
+| `--od-accent` (`--od-musgo-700`) | `#247465` | **Acento**: la acción principal, foco, destellos |
+| `--od-musgo-500` | `#55B895` | Brillos sobre oscuro, degradados |
+| `--od-musgo-300` / `-100` | `#ACDDB5` / `#E5F1CD` | Campos claros, texto claro sobre oscuro |
+| `--od-gris` | `#4E6660` | Texto secundario |
+| `--od-linea` | `#C7D1C0` | Divisores y bordes de 1 px |
+| `--od-arena-texto` | `#ACC4B8` | Texto secundario sobre noche |
 
-**Familia de cremas** para alternar fondos o tarjetas: papel `#F4F0E9`, hueso `#EFE8DC`, crema `#EAE3D7`, lino `#E3D8C6` y arena `#D8CBB5`.
+**Neutro para lo no disponible** (desactivado, agotado, vacío, error, 404), igual con cualquier tema: `--od-neutro-900 #303840`, `-700 #67767C`, `-500 #A6B6B7`, `-300 #D4DDDA`, `-100 #F1F0EA`. El color de la marca queda solo para lo que sí se puede hacer.
 
-**Proporción:** alrededor de 65 % cremas, 20 % tinta (texto), 10 % noche y 5 % tuna. La tuna nunca va como fondo de bloques grandes ni en párrafos de texto.
+**Familia de cremas:** papel `#F7F7EE`, hueso `#F3F4E8`, crema `#EFF0E2`, lino `#E2E8D2` y arena `#D2DCC4`.
 
-**Contraste:** tinta sobre crema y papel sobre noche cumplen AA. No pongas texto gris sobre arena.
+**Sin rojo:** la tuna ya no es acento. `--od-tuna` queda como alias del acento musgo mientras se renombran sus usos. Las tunas rosas del sello y el favicon se quedan: son el logo.
+
+**Degradados:** sí, pero solo en una o dos secciones grandes por página (portada o cierre), hechos en Feral Gradient Builder con los colores Musgo. Nunca en botones, tarjetas ni texto.
+
+**Contraste:** tinta sobre crema, papel sobre noche y papel sobre acento cumplen AA.
 
 ## 4. Tipografía
 
@@ -73,9 +78,9 @@ Salen del sello y conviene usarlos con moderación, a lo mucho uno o dos por sec
 
 1. **Anillo de rayitas** (`anillo-rayitas.svg`) y **borde de rayitas** (`.od-ticks`). Sirven para cintas superiores de tarjetas, etiquetas y separadores de sección.
 2. **Anillo de puntos** (`anillo-puntos.svg`). Va detrás de imágenes circulares o del sello.
-3. **Destello de 4 puntas** (`destello.svg` / `.od-star`) en tuna. Se usa como viñeta, separador de metadatos (“Isópodos ✦ Colémbolos”) o junto a precios.
+3. **Destello de 4 puntas** (`destello.svg` / `.od-star`) en el acento. Se usa como viñeta, separador de metadatos (“Isópodos ✦ Colémbolos”) o junto a precios.
 4. **Divisor con hojitas** (`divisor-hojas.svg`). Va entre secciones de texto largo.
-5. **Kicker numerado** (`.od-kicker`): `02 —— LO ESENCIAL`, con el número en tuna. Úsalo solo cuando el orden importa, como en pasos o guías.
+5. **Kicker numerado** (`.od-kicker`): `02 —— LO ESENCIAL`, con el número en el acento. Úsalo solo cuando el orden importa, como en pasos o guías.
 
 ## 7. Componentes base
 
@@ -106,7 +111,7 @@ Para las reglas de UI:
 - **Tarjetas:** fondo papel, borde de 1 px en línea y sombra plana (`--od-shadow-flat`). Sin sombras difusas ni degradados.
 - **Bordes:** 1 px en `--od-linea`. Radios chicos (4–10 px), salvo los botones.
 - **Fotos:** naturales, de musgo, sustrato y animales. Si llevan texto encima, agrega un velo noche de 30–45 %.
-- **Foco:** contorno de 2 px en tuna con `outline-offset: 3px`.
+- **Foco:** contorno de 2 px en el acento con `outline-offset: 3px`.
 - **Movimiento:** sutil (150–250 ms, `ease`). Respeta `prefers-reduced-motion`.
 
 ## 8. Datos de contacto (fuente única)

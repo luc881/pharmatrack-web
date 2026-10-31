@@ -222,15 +222,15 @@ export function OdHowToBuy({ bg }) {
               data-fx
               className="od-glow od-tilt"
               sx={{
-                '--od-glow': 'rgba(168,69,92,0.45)',
+                '--od-glow': 'rgba(85,184,149,0.45)',
                 height: 1,
                 p: { xs: '24px 22px', md: '34px 30px' },
-                bgcolor: 'rgba(246,244,241,0.08)',
-                border: '1px solid rgba(246,244,241,0.22)',
+                bgcolor: 'rgba(247,247,238,0.08)',
+                border: '1px solid rgba(247,247,238,0.22)',
                 // el desenfoque cuesta en cada cuadro del scroll: solo escritorio
                 backdropFilter: { md: 'blur(6px)' },
                 '& .od-step-n': { transition: 'color 300ms' },
-                '&:hover': { borderColor: 'rgba(246,244,241,0.5)' },
+                '&:hover': { borderColor: 'rgba(247,247,238,0.5)' },
                 '&:hover .od-step-n': { color: 'var(--od-tuna)' },
               }}
             >

@@ -17,7 +17,7 @@ import { useFavorites } from '../use-favorites';
 // ----------------------------------------------------------------------
 
 const BADGE_VARIANTS = {
-  accent: { bgcolor: 'var(--color-accent-400)', color: 'var(--color-accent-900)' },
+  accent: { bgcolor: 'var(--od-accent)', color: 'var(--od-papel)' },
   neutral: { bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)' },
   outline: { bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)', border: '1px solid var(--color-divider)' },
 };
@@ -36,7 +36,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
 
   const media = (
     <Box className={horizontal ? undefined : 'od-tilt-lg od-glare'} data-fx={horizontal ? undefined : true} sx={{ position: 'relative', flexShrink: 0, width: horizontal ? { xs: 130, sm: 200 } : '100%', aspectRatio: '1 / 1', overflow: 'hidden', bgcolor: 'var(--color-neutral-200)' }}>
-      <Box sx={{ position: 'absolute', inset: 0, opacity: soldOut ? 0.55 : 1 }}>
+      <Box sx={{ position: 'absolute', inset: 0, opacity: soldOut ? 0.55 : 1, filter: soldOut ? 'grayscale(1)' : 'none' }}>
         <OdImage src={card.image} alt={card.title} label={card.title} ratio="1 / 1" radius={0} sx={{ width: 1, height: 1 }} />
       </Box>
 
@@ -73,8 +73,9 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
             right: -34,
             width: 140,
             transform: 'rotate(45deg)',
-            bgcolor: 'var(--od-tuna)', // acento de marca en vez de rojo de error
-            color: '#fff',
+            // lo no disponible va en el neutro, no en el color de la marca
+            bgcolor: 'var(--od-neutro-700)',
+            color: 'var(--od-neutro-100)',
             textAlign: 'center',
             py: '5px',
             fontSize: 11,

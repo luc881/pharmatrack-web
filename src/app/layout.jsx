@@ -27,7 +27,7 @@ import { AccountSync } from 'src/sections/account/account-sync';
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#2E2924', // noche, igual que brand/assets/favicon/site.webmanifest
+  themeColor: '#173E36', // musgo, igual que brand/assets/favicon/site.webmanifest
 };
 
 export const metadata = {

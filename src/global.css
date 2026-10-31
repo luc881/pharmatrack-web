@@ -108,18 +108,18 @@ input[type='number']::-webkit-inner-spin-button {
   --color-surface: var(--od-papel);
   --color-text: var(--od-tinta);
   /* Tuna: solo acento puntual (puntos de estado, bordes activos, foco) */
-  --color-accent: var(--od-tuna);
-  --color-divider: rgba(58, 50, 43, 0.17);
+  --color-accent: var(--od-accent);
+  --color-divider: rgba(23, 62, 54, 0.17);
 
   --color-neutral-100: var(--od-papel);
-  --color-neutral-200: #f0ebe0;
-  --color-neutral-300: #ddd6c8;
-  --color-neutral-400: #c3b9a8;
-  --color-neutral-500: #a1968a;
-  --color-neutral-600: #7d7469;
-  --color-neutral-700: #5e574e;
-  --color-neutral-800: #453f38;
-  --color-neutral-900: #332d27;
+  --color-neutral-200: #eef0e6;
+  --color-neutral-300: #d6dccd;
+  --color-neutral-400: #b7c2b3;
+  --color-neutral-500: #8e9d93;
+  --color-neutral-600: #687a72;
+  --color-neutral-700: #4e6660;
+  --color-neutral-800: #2f4a43;
+  --color-neutral-900: #1f3b34;
 
   /* Antes era una escala terracota. La marca no usa terracota: los tonos
      claros son la familia de cremas, los oscuros tinta/noche, y solo
@@ -127,17 +127,17 @@ input[type='number']::-webkit-inner-spin-button {
   --color-accent-100: var(--od-crema-hueso);
   --color-accent-200: var(--od-crema-lino);
   --color-accent-300: var(--od-arena-texto);
-  --color-accent-400: var(--od-tuna);
-  --color-accent-500: var(--od-tuna);
+  --color-accent-400: var(--od-accent);
+  --color-accent-500: var(--od-accent);
   --color-accent-600: var(--od-tinta);
   --color-accent-700: var(--od-tinta);
   --color-accent-800: var(--od-noche);
   --color-accent-900: var(--od-noche);
 
   /* Sombras planas, sin blur (BRAND.md: "sin sombras difusas") */
-  --shadow-sm: 2px 2px 0 rgba(51, 36, 20, 0.08);
+  --shadow-sm: 2px 2px 0 rgba(23, 62, 54, 0.08);
   --shadow-md: var(--od-shadow-flat);
-  --shadow-lg: 4px 4px 0 rgba(51, 36, 20, 0.12);
+  --shadow-lg: 4px 4px 0 rgba(23, 62, 54, 0.12);
 
   --od-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -421,7 +421,7 @@ button:focus-visible,
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(420px circle at calc(var(--px, 0.5) * 100%) calc(var(--py, 0.5) * 100%), var(--od-glow, rgba(168, 69, 92, 0.28)), transparent 65%);
+  background: radial-gradient(420px circle at calc(var(--px, 0.5) * 100%) calc(var(--py, 0.5) * 100%), var(--od-glow, rgba(85, 184, 149, 0.28)), transparent 65%);
   opacity: 0;
   transition: opacity 450ms ease;
 }

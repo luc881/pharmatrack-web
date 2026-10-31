@@ -140,7 +140,7 @@ export function OdHoverPreview({ apiRef }) {
           bgcolor: 'var(--od-papel)',
           border: '1px solid var(--od-linea)',
           borderRadius: 'var(--od-radius-md)',
-          boxShadow: '6px 6px 0 rgba(51, 36, 20, 0.10)',
+          boxShadow: '6px 6px 0 rgba(23,62,54,0.10)',
           transformOrigin: 'left center',
         }}
       >
