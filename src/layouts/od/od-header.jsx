@@ -20,7 +20,7 @@ import { OdMegaMenu } from './od-mega-menu';
 import { useNavTheme } from './use-nav-theme';
 
 // ----------------------------------------------------------------------
-// Barra del rediseño editorial: marquee oscuro + barra flotante en píldora.
+// Barra del rediseño editorial: barra plana a todo lo ancho, fija arriba al bajar.
 // Reutiliza tal cual los botones con lógica (carrito→Mercado Pago, favoritos,
 // cuenta con Google, búsqueda) — solo cambia la piel, no el comportamiento.
 // ----------------------------------------------------------------------
@@ -53,13 +53,6 @@ function CountPill({ n, pill }) {
   );
 }
 
-const MARQUEE = [
-  'Entrega en persona en CDMX',
-  'Coordinamos por WhatsApp',
-  'Reservas con anticipo',
-  'Camadas criadas con parámetros medidos',
-];
-
 // enlace de texto con subrayado que crece de 0% a 100% al hover
 const linkSx = {
   color: 'inherit',
@@ -76,38 +69,6 @@ const linkSx = {
   transition: 'background-size 450ms var(--od-ease), color 350ms',
   '&:hover': { color: 'var(--color-accent-700)', backgroundSize: '100% 1px' },
 };
-
-function Marquee() {
-  const items = [...MARQUEE, ...MARQUEE]; // duplicado 2× para el bucle continuo
-  return (
-    <Box
-      sx={{
-        overflow: 'hidden',
-        py: '11px',
-        bgcolor: 'var(--color-neutral-900)',
-        color: 'var(--color-neutral-200)',
-      }}
-    >
-      <Box
-        className="od-marquee"
-        sx={{
-          display: 'flex',
-          width: 'max-content',
-          whiteSpace: 'nowrap',
-          fontSize: 13,
-          letterSpacing: '0.05em',
-          animation: 'odMarquee 26s linear infinite',
-        }}
-      >
-        {items.map((text, i) => (
-          <Box component="span" key={i} sx={{ px: '40px' }}>
-            {text}
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  );
-}
 
 // ----------------------------------------------------------------------
 
@@ -135,8 +96,8 @@ export function OdHeader({ revealOnScroll = false }) {
   // Inversión de la barra según la sección de fondo (ver useNavTheme).
   const onDark = useNavTheme();
   const nt = onDark
-    ? { bg: 'color-mix(in srgb, var(--color-bg) 94%, transparent)', fg: 'var(--color-text)', bd: 'var(--color-divider)' }
-    : { bg: 'rgba(19,49,41,0.9)', fg: 'var(--color-neutral-100)', bd: 'rgba(229,241,205,0.24)' };
+    ? { bg: 'var(--color-bg)', fg: 'var(--color-text)', bd: 'var(--color-divider)' }
+    : { bg: 'var(--od-noche)', fg: 'var(--color-neutral-100)', bd: 'rgba(229,241,205,0.24)' };
   // píldora de contador: contrasta con el fondo de la barra
   const navPill = onDark
     ? { bg: 'var(--color-neutral-900)', fg: 'var(--color-neutral-100)' }
@@ -156,7 +117,7 @@ export function OdHeader({ revealOnScroll = false }) {
 
   return (
     <>
-      {/* fija arriba: marquee y píldora viajan juntos al hacer scroll */}
+      {/* fija arriba al bajar: barra plana a todo lo ancho (sin píldora ni cinta) */}
       <Box
         sx={{
           // Oculta en movil: ahi esta barra solo repetia lo que ya dan la barra
@@ -172,13 +133,18 @@ export function OdHeader({ revealOnScroll = false }) {
           transform: revealed ? 'translateY(0)' : 'translateY(-110%)',
           opacity: revealed ? 1 : 0,
           pointerEvents: revealed ? 'auto' : 'none',
-          transition: 'transform 500ms var(--od-ease), opacity 400ms var(--od-ease)',
+          // toma el color de la sección que tiene debajo (ver useNavTheme)
+          '--od-nav-bd': nt.bd,
+          bgcolor: nt.bg,
+          color: nt.fg,
+          borderBottom: '1px solid',
+          borderColor: nt.bd,
+          transition:
+            'transform 500ms var(--od-ease), opacity 400ms var(--od-ease), background-color 300ms ease, color 300ms ease, border-color 300ms ease',
         }}
       >
-        <Marquee />
-
-        {/* En 2K/4K la barra no pasa del ancho del contenido */}
-        <Box sx={{ px: '18px', pt: '14px', mx: 'auto', maxWidth: 'calc(var(--od-max) + 116px)' }}>
+        {/* En 2K/4K el contenido de la barra no pasa del ancho del contenido */}
+        <Box sx={{ mx: 'auto', maxWidth: 'calc(var(--od-max) + 80px)' }}>
           <Box
             sx={{
               display: 'grid',
@@ -187,16 +153,6 @@ export function OdHeader({ revealOnScroll = false }) {
               gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)',
               alignItems: 'center',
               overflow: 'hidden',
-              borderRadius: '14px',
-              border: '1px solid',
-              boxShadow: 'var(--shadow-sm)',
-              backdropFilter: 'blur(10px)',
-              // inversión suave según la sección de fondo
-              '--od-nav-bd': nt.bd,
-              bgcolor: nt.bg,
-              color: nt.fg,
-              borderColor: nt.bd,
-              transition: 'background-color 450ms var(--od-ease), color 450ms var(--od-ease), border-color 450ms var(--od-ease)',
             }}
           >
             {/* Izquierda: menú + enlaces (ocultos en móvil por espacio) */}

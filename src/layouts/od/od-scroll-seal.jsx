@@ -127,10 +127,11 @@ export function OdScrollSeal() {
         // en móvil, encima de la barra de pestañas (66px)
         bottom: { xs: 80, md: 28 },
         zIndex: 70,
-        // grande a propósito: es de los pocos lugares donde el sello se ve completo
-        // escala con la pantalla: en laptops (900-1535px) 240px tapaba contenido
-        width: { xs: 84, md: 130, lg: 170, xl: 240 },
-        height: { xs: 84, md: 130, lg: 170, xl: 240 },
+        // rediseño Musgo: chico para no tapar contenido (96px = mínimo del sello
+        // en BRAND.md); en móvil no se muestra, ahí estorbaba más
+        display: { xs: 'none', md: 'block' },
+        width: { md: 96, lg: 104, xl: 120 },
+        height: { md: 96, lg: 104, xl: 120 },
         p: 0,
         border: 0,
         borderRadius: '50%',
@@ -169,7 +170,7 @@ export function OdScrollSeal() {
 
       {/* sello en contraste (pedido del usuario): oscuro sobre fondo claro,
           claro sobre secciones oscuras */}
-      <SealFace light={onDark} arrowSx={{ width: { xs: 30, md: 38, lg: 46, xl: 56 }, height: { xs: 30, md: 38, lg: 46, xl: 56 } }} />
+      <SealFace light={onDark} arrowSx={{ width: { md: 30, lg: 32, xl: 36 }, height: { md: 30, lg: 32, xl: 36 } }} />
     </Box>
   );
 }

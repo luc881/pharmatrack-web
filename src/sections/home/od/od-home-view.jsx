@@ -393,9 +393,10 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         </Box>
       </OdPanel>
 
-      {/* Explora por categoría: índice con vista previa al hover */}
+      {/* Explora por categoría: índice con vista previa al hover.
+          Capítulo verde claro (paleta Musgo: cada sección con su campo) */}
       {catItems.length > 0 && (
-        <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
+        <Box component="section" sx={{ position: 'relative', bgcolor: 'var(--od-musgo-100)', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', pb: 3.75 }}>
             <SectionHead title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalog} className="od-link" sx={{ fontSize: 13, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
@@ -408,7 +409,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
       {/* Bloque oscuro del frasco: "Seis cosas dentro del frasco" +
           6 ingredientes con el frasco 3D al centro (placeholder por ahora) */}
-      <OdPanel sx={{ py: { xs: '64px', md: '96px' } }}>
+      <OdPanel sx={{ bgcolor: 'var(--od-musgo-900)', py: { xs: '64px', md: '96px' } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(229,241,205,0.18)', fontSize: 13, color: 'var(--color-neutral-500)' }}>
           <Box component="span">(Qué necesita una colonia)</Box>
           <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' }, fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>

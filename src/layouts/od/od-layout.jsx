@@ -28,7 +28,7 @@ import { OdScrollSeal } from './od-scroll-seal';
 // `sideArt` es el ancho del contenido de la página: en pantallas ≥1920px lo
 // que sobra a los lados lleva curvas de nivel animadas. `false` lo apaga (el
 // home tiene sus notas al margen; el catálogo, las suyas).
-export async function OdLayout({ children, homeMasthead = false, divider3d = true, hideTabBar = false, sideArt = 1440 }) {
+export async function OdLayout({ children, homeMasthead = false, divider3d = true, hideTabBar = false, sideArt = 1840 }) {
   // Server component: pide la media aqui en vez de que cada pagina la herede.
   // El fetch se deduplica dentro del render y ya trae revalidate de 60 s.
   const { media } = await getSiteSettings();

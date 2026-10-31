@@ -116,7 +116,7 @@ input[type='number']::-webkit-inner-spin-button {
   --color-neutral-300: #d6dccd;
   --color-neutral-400: #b7c2b3;
   --color-neutral-500: #8e9d93;
-  --color-neutral-600: #687a72;
+  --color-neutral-600: #5a6c64; /* AA (4.5:1) sobre crema y verdes claros */
   --color-neutral-700: #4e6660;
   --color-neutral-800: #2f4a43;
   --color-neutral-900: #1f3b34;
@@ -143,9 +143,10 @@ input[type='number']::-webkit-inner-spin-button {
 
   /* Ancho máximo del contenido en monitores grandes (2K/4K). Las bandas de
      fondo siguen a sangre; el contenido se centra con este margen lateral,
-     que vale 40px hasta que la pantalla pasa de 1440 + 80. El % se resuelve
-     contra el ancho del padre donde se usa (padding). */
-  --od-max: 1440px;
+     que vale 40px hasta que la pantalla pasa de 1840 + 80. El % se resuelve
+     contra el ancho del padre donde se usa (padding). Rediseño Musgo: antes
+     1440, la skill pide dejar crecer el diseño hasta ~1760–1920px. */
+  --od-max: 1840px;
   --od-gutter: max(40px, calc((100% - var(--od-max)) / 2));
   /* Solo lo que excede a 40px (0 en pantallas normales), para bloques que
      ya traen su propio padding interno de 40px */

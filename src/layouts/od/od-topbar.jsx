@@ -48,11 +48,6 @@ export function OdTopbar() {
   return (
     <>
     <Box sx={{ position: 'relative', zIndex: 60 }}>
-      {/* Tira de aviso */}
-      <Box sx={{ bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-200)', fontSize: 13, textAlign: 'center', px: 2.5, py: '9px' }}>
-        Entrega en persona en CDMX — coordinamos por WhatsApp
-      </Box>
-
       {/* Barra estática. Columnas laterales iguales que no crecen
           (minmax(0, 1fr)): la marca queda SIEMPRE al centro real. Antes la
           columna izquierda crecía con los 7 enlaces y la empujaba a la derecha.
