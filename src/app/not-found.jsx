@@ -5,7 +5,7 @@ import { NotFoundView } from 'src/sections/error';
 
 // ----------------------------------------------------------------------
 
-export const metadata = { title: `404 page not found! | Error - ${CONFIG.appName}` };
+export const metadata = { title: `Página no encontrada | ${CONFIG.appName}` };
 
 // El layout vive en la ruta (server component) y no dentro de NotFoundView,
 // que es cliente: OdLayout es async y un componente cliente no puede

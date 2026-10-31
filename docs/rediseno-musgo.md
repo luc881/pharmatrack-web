@@ -1,94 +1,95 @@
-# Rediseño con la paleta Musgo — recomendaciones de la skill (taste-skill v2.1.5)
+# Rediseño del sitio: plan acordado (taste-skill v2.1.5)
 
-Fecha: 2026-10-31. Dirección dealt: **Colour chapters** (seed 1711916268), con `--keep palette,type`.
-Prueba visual: `/prueba-paletas/#musgo` (borrar al terminar).
+Iniciado el 2026-10-31 y ajustado el mismo día con las referencias del usuario (aldena.framer.media,
+reelio.framer.media, monopo.london). Prueba de paletas: `/prueba-paletas/` (se borra al terminar).
 
-## Paleta
+## Hecho
 
-| Rol | Hex |
-|---|---|
-| Fondo (crema verdoso) | #EFF0E2 |
-| Superficie | #F7F7EE |
-| Tinta | #173E36 |
-| Tinta secundaria | #4E6660 |
-| Acento (solo la acción principal) | #247465 |
-| Campos de capítulo | #173E36 · #247465 · #55B895 · #ACDDB5 · #E5F1CD |
-| Neutro (desactivado, agotado, vacío, error) | #303840 · #67767C · #A6B6B7 · #D4DDDA · #F1F0EA |
+1. **Paleta (paso 1).** Primero Musgo; luego se cambió a la **opción A**, con dos paletas:
+   - página en neutros: fondo hueso #EEECE6, tinta #1C2320, oscuros #161B19;
+   - el verde musgo solo en el acento #247465 y en los degradados de Feral.
+   - Sin rojo. Ver `public/brand/BRAND.md` §3.
+2. **Tipografía y limpieza (paso 2).** Sin etiquetitas en mayúsculas, sin numeración 01/02/03, sin
+   emojis de interfaz y con texto de 13px como mínimo.
+3. **Marco (paso 3).**
+   - El contenido crece hasta 1840px.
+   - Barra flotante plana, sin cinta que corre ni franja de aviso.
+   - Sello flotante más chico.
+   - La cinta de novedades se edita en el dashboard (Links y eventos).
+   - Degradado «aurora» en la banda del criadero.
 
-Sin tuna/rojo en ningún lado. Degradados de Feral solo en 1–2 capítulos (portada o cierre).
+## Pendiente
 
-## La idea
+4. **Estados en neutro.** Desactivado, agotado, vacío, errores de formulario y avisos, y la 404 con el
+   degradado neutro (sin la ilustración genérica).
+5. **Secciones** (dirección de la skill: «dark room», solo en algunas secciones; el catálogo y las fichas
+   siguen en hueso).
+   - a. **Fotos libres de ambiente.**
+     - 8 a 12 fotos de Wikimedia, CC0 o CC BY (evitar BY-SA), bajadas con `assets.mjs --get`.
+     - Créditos en el pie.
+     - Mismo tratamiento en todas: grano CSS y un leve oscurecido.
+     - Van en los espacios de imagen del sitio para cambiarlas desde el dashboard.
+     - **Nunca en tarjetas ni fichas de producto:** una foto encontrada no se presenta como el animal
+       que se vende.
+   - b. **Portada estilo Aldena.** Foto de ambiente a sangre con grano, «OPUNTIA» gigante encima en
+     Playfair crema, «Historia natural» y un botón abajo a la izquierda.
+   - c. **Especies destacadas como escena fija.**
+     - Al bajar, la sección se queda fija.
+     - Fondo desenfocado a sangre: un degradado de Feral musgo mientras no haya foto propia, y la foto
+       propia desenfocada cuando exista.
+     - Foto nítida al centro.
+     - El nombre en Playfair gigante y tenue corre detrás.
+   - d. **«Todo para tu terrario» en carrusel en perspectiva.**
+     - Las tarjetas laterales van inclinadas y se enderezan al centro.
+     - Precio «Desde $…».
+     - Scroll nativo con scroll-snap y CSS.
+   - e. **El criadero en dos columnas.** Título corto a la izquierda y texto grande a la derecha, que
+     se entinta al bajar.
+   - f. **Cierre con degradado.** Prisma musgo antes del pie: «¿Dudas antes de comprar?» + WhatsApp.
+6. **Movimiento** (framer-motion y CSS, sin dependencias nuevas, con respaldo para movimiento reducido):
+   - texto que se entinta al bajar;
+   - la escena fija con el nombre que corre;
+   - el carrusel que se endereza;
+   - fotos que entran con un leve zoom;
+   - «OPUNTIA» que se encoge al hacer scroll;
+   - la barra que toma el color de la sección.
 
-«En esta página, las capas del frasco bioactivo (luz, musgo, hojarasca, sustrato) se vuelven los
-capítulos de color»: arriba lo más claro, al bajar cada sección es un estrato más profundo, y el pie es
-el sustrato oscuro (#173E36).
+## Reglas
 
-Cosa viva: en «Nuestra selección», tocar el nombre de una especie cambia la foto y el dato (humedad,
-tamaño adulto, dificultad).
-
-## Recomendaciones por sección del inicio
-
-1. Portada: el video de musgo en un panel grande con «Historia natural» y un botón; a la derecha, una
-   columna de 5 bloques con los colores de la paleta que son la navegación (cada bloque lleva a la
-   sección de ese color). En el teléfono, los bloques pasan a barras debajo del video.
-2. Nuestra selección: «objeto sobre un disco»: un círculo grande verde musgo con la foto recortada del
-   animal encima; a la izquierda la lista de 4–6 especies; al tocar una cambia foto, color del disco y
-   el dato.
-3. Compra por categoría: pestañas por categoría (Isópodos, Colémbolos, Fásmidos, Insumos) y debajo
-   bandas alternas con las especies (nombre, precio, disponibilidad).
-4. El criadero: sin estadísticas en cajas; el texto grande en dos columnas con 5–6 palabras clave
-   resaltadas en tonos musgo (CDMX, colonias, parámetros medidos, entrega en persona); la última frase
-   resaltada es el enlace a WhatsApp.
-5. Seis cosas dentro del frasco: hojas de color apiladas que se deslizan una sobre otra al bajar
-   (sticky), una por elemento, como estratos del terrario; cada una con su foto.
-6. Tres pasos: palabras grandes (Elige / Paga o aparta / Recibe), sin 01/02/03 ni vidrio.
-7. Preguntas: una banda por pregunta, alternando dos tonos musgo, todas las respuestas visibles.
-8. Cierre: una fila de tres mosaicos: el central con el degradado de Feral y «¿Dudas antes de
-   comprar?» + WhatsApp; a los lados una foto y un bloque de color.
-9. Pie: «OPUNTIA DEN» a todo lo ancho (recortado abajo, nunca arriba), debajo WhatsApp, Instagram y
-   CDMX grandes, y los enlaces chicos a la derecha; fondo #173E36.
-
-## Reglas generales
-
-- Quitar: el rojo, etiquetitas en mayúsculas sobre los títulos (máximo 1–2 en toda la página),
-  numeración 01/02/03, paneles de vidrio, la franja de 4 íconos en círculo, la cinta de texto corriendo,
-  la doble barra de navegación, emojis de interfaz (✓ ✕ ♥) y el sello flotante encima del contenido.
-- Tipografía: Playfair + Inter; cinco tamaños como máximo; texto de cuerpo 18px; títulos de 2 líneas
-  como máximo en cualquier ancho.
-- Excepciones a la skill que se quedan por marca: itálica en nombres científicos, el sello y el
-  divisor de hojas (con medida), los degradados en 1–2 capítulos.
-- Movimiento: la barra de arriba cambia de color según el capítulo que tiene debajo (300ms); entrada
-  escalonada de título, texto y foto en cada sección; respuesta al pasar el cursor en botones y
-  tarjetas; el video de la portada como imagen en movimiento. Todo respeta movimiento reducido.
-- Fotos: lo que más falta. Mínimo 4 fotos reales por página (ideal 6–12). Fotos recortadas de los
-  animales para el disco. Para huecos: láminas antiguas de historia natural de colecciones abiertas
-  (Wikimedia, Met) con crédito en el pie. Corregir la portada equivocada de «Cómo elegir tu primer
-  gecko».
-- Catálogo y ficha: misma paleta; agotado en neutro con la foto en gris, sin cinta.
-
-## Orden de trabajo (de más efecto y menos riesgo a menos)
-
-1. Tokens: paleta Musgo + neutro en `public/brand/tokens.css` y el tema; quitar tuna.
-2. Tipos y escala; quitar etiquetitas, numeración y emojis.
-3. Marco: márgenes, ritmo de secciones, capítulos de color.
-4. Estados: desactivado, agotado, vacío, error, 404.
-5. Secciones nuevas (portada con columna de colores, disco, hojas apiladas, bandas, pie).
-6. Movimiento.
+- **Degradados.**
+  - 2 o 3 momentos por página.
+  - Nunca foto y degradado en la misma sección.
+  - Nunca en botones, tarjetas ni texto.
+  - Con el mismo grano que las fotos.
+  - Los elegidos se guardan en `public/brand/degradados/`.
+- **No copiar de las referencias:**
+  - la pantalla de carga y el cursor personalizado de Aldena (la skill los prohíbe);
+  - la cuadrícula de líneas con crucecitas y las etiquetitas «• Intro» de Reelio;
+  - las métricas inventadas.
+- **Letras que se deshacen en pixeles** (canvas, Aldena): opcional al final.
+- **Excepciones a la skill por marca:**
+  - itálica en nombres científicos;
+  - el sello y el divisor de hojas, con medida;
+  - los degradados.
+- **Fotos propias de los animales:** lo que más mejorará el sitio cuando existan.
 
 ## Pendientes marcados
 
 - **Huecos a los lados en pantallas de 1920px o más.** Las notas verticales de los márgenes
-  («01 / Disponibles», «Opuntia Den — Criadero en CDMX») se quitaron en el paso 2 (commit cc5121e,
-  componente `OdGutterNote`). Las había puesto el usuario para tapar ese hueco. Se revisa al terminar
-  todos los pasos: la skill lo resuelve dejando crecer secciones, fotos y títulos hasta ~1760–1920px.
-  Si aún queda hueco, se restauran desde ese commit.
+  (`OdGutterNote`) se quitaron en el paso 2 (commit cc5121e). Las había puesto el usuario para tapar
+  ese hueco. El contenido ya crece hasta 1840px; en 2560px quedan 360px por lado. Se revisa al terminar
+  todos los pasos y, si aún molesta, se restauran desde ese commit.
+- **Destacado del nopal** en la cabecera del catálogo (`destacado-noche.svg`): trae fondo propio. Falta
+  una versión de marca con fondo #161B19 o transparente.
+- **Logo y favicon:** el usuario puede aprobar copias recoloreadas (mismo trazo) para la paleta nueva.
 
 ## ¿Versión oscura?
 
 La skill no contempla un interruptor claro/oscuro: trata «clara u oscura» como una decisión de
-composición (59% de los sitios estudiados son claros, 41% oscuros). Con esta dirección los capítulos
-profundos (#173E36, #247465) ya dan los momentos oscuros. Recomendación: no hacer interruptor por
-ahora (duplica todas las revisiones: catálogo, fichas, carrito, formularios, fotos de producto); si se
-hace después, sus reglas: `color-scheme: dark`, fondo musgo muy profundo (no negro), tinta crema suave
-(no blanco puro), revisar el texto secundario a 4.5:1, profundidad con una superficie un paso más
-clara (sin brillos) y pesos de letra más ligeros.
+composición. Recomendación: no hacerlo por ahora, porque duplica todas las revisiones. Si se hace
+después:
+- `color-scheme: dark`;
+- fondo muy profundo con un tinte (no negro puro);
+- tinta clara suave (no blanco puro);
+- texto secundario a 4.5:1;
+- profundidad con superficies un paso más claras, sin brillos.

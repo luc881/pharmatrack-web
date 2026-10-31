@@ -242,7 +242,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
           type="button"
           onClick={soldOut ? undefined : handleAdd}
           disabled={soldOut}
-          sx={{ height: 48, px: '26px', border: 0, cursor: soldOut ? 'default' : 'pointer', font: 'inherit', fontSize: 13, color: 'var(--color-neutral-100)', bgcolor: soldOut ? 'var(--color-neutral-500)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)', transition: 'background 300ms', '&:hover': { bgcolor: soldOut ? 'var(--color-neutral-500)' : 'var(--color-accent-700)' } }}
+          sx={{ height: 48, px: '26px', border: 0, cursor: soldOut ? 'not-allowed' : 'pointer', font: 'inherit', fontSize: 13, color: soldOut ? 'var(--od-disabled-text)' : 'var(--color-neutral-100)', bgcolor: soldOut ? 'var(--od-disabled-bg)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)', transition: 'background 300ms', '&:hover': { bgcolor: soldOut ? 'var(--od-disabled-bg)' : 'var(--color-accent-700)' } }}
         >
           {soldOut ? 'Agotado' : added ? 'Agregado' : 'Añadir'}
         </Box>

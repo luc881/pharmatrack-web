@@ -360,3 +360,23 @@ export function Display({ children, component = 'h2', size, weight = 300, sx }) 
     </Box>
   );
 }
+
+// ----------------------------------------------------------------------
+
+// Estado vacío del sitio (carrito, favoritos, búsquedas sin resultados, sin
+// pedidos…): siempre en la paleta neutra, que es la de lo no disponible.
+export function OdEmpty({ title, children, action, sx }) {
+  return (
+    <Box
+      sx={[
+        { py: { xs: 6, md: 8 }, px: 3, textAlign: 'center', borderRadius: '6px', bgcolor: 'var(--od-neutro-100)', color: 'var(--od-neutro-900)' },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
+      <Box component="img" src="/brand/assets/logo/isotipo-claro.svg" alt="" sx={{ width: 56, height: 56, opacity: 0.4, filter: 'grayscale(1)' }} />
+      <Box sx={{ mt: 2, fontFamily: 'var(--font-heading)', fontSize: 24 }}>{title}</Box>
+      {children && <Box sx={{ mt: 1, mx: 'auto', maxWidth: '46ch', fontSize: 15, lineHeight: 1.6, color: 'var(--od-neutro-700)' }}>{children}</Box>}
+      {action && <Box sx={{ mt: 3.5, display: 'flex', justifyContent: 'center', gap: 1.5, flexWrap: 'wrap' }}>{action}</Box>}
+    </Box>
+  );
+}

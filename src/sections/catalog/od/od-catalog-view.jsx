@@ -13,9 +13,9 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { Display } from 'src/layouts/od/od-ui';
 import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdReveal } from 'src/layouts/od/od-motion';
+import { Display, OdEmpty } from 'src/layouts/od/od-ui';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -806,10 +806,10 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
               )}
             </>
           ) : (
-            <Box sx={{ py: 12, textAlign: 'center', color: 'var(--color-neutral-500)' }}>
-              No hay resultados con estos filtros.
-              {chips.length > 0 && (
-                <Box sx={{ mt: 3 }}>
+            <OdEmpty
+              title="Sin resultados con estos filtros"
+              action={
+                chips.length > 0 && (
                   <Box
                     component="button"
                     type="button"
@@ -820,9 +820,9 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                   >
                     Limpiar filtros
                   </Box>
-                </Box>
-              )}
-            </Box>
+                )
+              }
+            />
           )}
         </Box>
       </Box>

@@ -16,7 +16,7 @@ import { RouterLink } from 'src/routes/components';
 import { fCurrency } from 'src/utils/format-number';
 
 import { CONFIG } from 'src/global-config';
-import { Display } from 'src/layouts/od/od-ui';
+import { Pill, Display, OdEmpty } from 'src/layouts/od/od-ui';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -353,15 +353,9 @@ export function OdCartView() {
       </Display>
 
       {items.length === 0 ? (
-        <Box sx={{ py: 8, textAlign: 'center' }}>
-          <Box sx={{ mb: 1, fontFamily: 'var(--font-heading)', fontSize: 24 }}>Tu cotización está vacía</Box>
-          <Box sx={{ mb: 4, fontSize: 15, color: 'var(--color-neutral-600)' }}>
-            Agrega animales y productos desde su página con «Agregar a cotización».
-          </Box>
-          <Button component={RouterLink} href={paths.catalog} variant="contained" color="primary" size="large" sx={{ borderRadius: '999px' }}>
-            Ver catálogo
-          </Button>
-        </Box>
+        <OdEmpty title="Tu cotización está vacía" action={<Pill href={paths.catalog}>Ver catálogo</Pill>}>
+          Agrega animales y productos desde su página con «Agregar a cotización».
+        </OdEmpty>
       ) : (
         <>
           <StepIndicator step={step} onGo={setStep} />

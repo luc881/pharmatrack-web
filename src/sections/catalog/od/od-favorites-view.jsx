@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { paths } from 'src/routes/paths';
 
 import { OdReveal } from 'src/layouts/od/od-motion';
-import { Pill, Display } from 'src/layouts/od/od-ui';
+import { Pill, Display, OdEmpty } from 'src/layouts/od/od-ui';
 
 import { useFavorites } from '../use-favorites';
 import { animalToCard } from './od-catalog-view';
@@ -36,15 +36,9 @@ export function OdFavoritesView({ items = [] }) {
           ))}
         </Box>
       ) : (
-        <Box sx={{ py: 10, textAlign: 'center' }}>
-          <Box sx={{ mb: 1, fontFamily: 'var(--font-heading)', fontSize: 24 }}>Aún no tienes favoritos</Box>
-          <Box sx={{ mb: 4, fontSize: 15, color: 'var(--color-neutral-600)' }}>
-            Toca el corazón de cualquier especie del catálogo para guardarla aquí.
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Pill href={paths.catalog}>Ver catálogo</Pill>
-          </Box>
-        </Box>
+        <OdEmpty title="Aún no tienes favoritos" action={<Pill href={paths.catalog}>Ver catálogo</Pill>}>
+          Toca el corazón de cualquier especie del catálogo para guardarla aquí.
+        </OdEmpty>
       )}
     </Box>
   );

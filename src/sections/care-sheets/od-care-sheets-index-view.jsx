@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
-import { OdImage } from 'src/layouts/od/od-ui';
+import { OdEmpty, OdImage } from 'src/layouts/od/od-ui';
 import { OdHoverPreview } from 'src/layouts/od/od-hover-preview';
 
 // ----------------------------------------------------------------------
@@ -452,10 +452,9 @@ export function OdCareSheetsIndexView({ sheets }) {
         ))}
 
       {!shown.length && (
-        <Box sx={{ mt: 5, color: 'var(--od-text-muted)' }}>
-          {sheets.length
-            ? 'No encontramos esa especie. '
-            : 'Pronto publicaremos las primeras fichas. '}
+        <OdEmpty
+          title={sheets.length ? 'No encontramos esa especie' : 'Pronto publicaremos las primeras fichas'}
+          action={
           <Box
             component="a"
             href={`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(`Hola, busco la ficha de cuidados de ${q.trim() || 'una especie'}.`)}`}
@@ -465,7 +464,9 @@ export function OdCareSheetsIndexView({ sheets }) {
           >
             Pregúntanos por WhatsApp
           </Box>
-        </Box>
+          }
+          sx={{ mt: 5 }}
+        />
       )}
     </Box>
   );

@@ -15,13 +15,13 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
+import { Pill, OdEmpty } from 'src/layouts/od/od-ui';
+
 import { Label } from 'src/components/label';
-import { EmptyContent } from 'src/components/empty-content';
 
 import { SignInPrompt } from './account-view';
 
@@ -281,16 +281,9 @@ export function OrdersView() {
           </Stack>
         ) : (
           orders && (
-            <EmptyContent
-              filled
-              title="Todavía no tienes pedidos"
-              description="Cuando mandes una cotización desde el carrito, aparecerá aquí."
-              action={
-                <Button component={RouterLink} href={paths.catalog} variant="contained" sx={{ mt: 3 }}>
-                  Ver catálogo
-                </Button>
-              }
-            />
+            <OdEmpty title="Todavía no tienes pedidos" action={<Pill href={paths.catalog}>Ver catálogo</Pill>}>
+              Cuando mandes una cotización desde el carrito, aparecerá aquí.
+            </OdEmpty>
           )
         ))}
     </Container>

@@ -6,8 +6,8 @@ import Box from '@mui/material/Box';
 
 import { RouterLink } from 'src/routes/components';
 
-import { Display } from 'src/layouts/od/od-ui';
 import { OdReveal } from 'src/layouts/od/od-motion';
+import { Display, OdEmpty } from 'src/layouts/od/od-ui';
 import { BrandSeal } from 'src/layouts/od/od-ornaments';
 
 import { OdArticleCard } from './od-article-card';
@@ -214,17 +214,13 @@ export function OdArticlesView({ articles = [] }) {
       )}
 
       {articles.length === 0 ? (
-        <Box sx={{ py: 12, textAlign: 'center', color: 'var(--color-neutral-500)' }}>
-          Aún no hay artículos publicados.
-        </Box>
+        <OdEmpty title="Aún no hay artículos publicados" />
       ) : filtering ? (
         // con búsqueda o categoría: rejilla simple con lo que coincide
         shown.length ? (
           <Grid items={shown} ratio="3 / 2" />
         ) : (
-          <Box sx={{ py: 8, color: 'var(--od-text-muted)' }}>
-            No hay artículos con esa búsqueda.
-          </Box>
+          <OdEmpty title="Sin artículos con esa búsqueda">Prueba con otra palabra o quita la categoría.</OdEmpty>
         )
       ) : (
         <>

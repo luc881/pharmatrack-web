@@ -400,8 +400,8 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                 cursor: soldOut ? 'not-allowed' : 'pointer',
                 font: 'inherit',
                 fontSize: 14,
-                bgcolor: soldOut ? 'var(--color-neutral-300)' : 'var(--color-neutral-900)',
-                color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
+                bgcolor: soldOut ? 'var(--od-disabled-bg)' : 'var(--color-neutral-900)',
+                color: soldOut ? 'var(--od-disabled-text)' : 'var(--color-neutral-100)',
               }}
             >
               {soldOut ? 'Avísame' : added ? 'Agregado' : 'Agregar a cotización'}
@@ -696,8 +696,8 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
             cursor: soldOut ? 'not-allowed' : 'pointer',
             font: 'inherit',
             fontSize: 13,
-            color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
-            bgcolor: soldOut ? 'var(--color-neutral-300)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)',
+            color: soldOut ? 'var(--od-disabled-text)' : 'var(--color-neutral-100)',
+            bgcolor: soldOut ? 'var(--od-disabled-bg)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)',
             transition: 'background 300ms',
           }}
         >
