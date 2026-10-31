@@ -9,8 +9,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"); */
 
 :root {
-  /* ---- Color: paleta Musgo (2026-10-31; sustituye a tinta café + tuna) -- */
-  --od-musgo-900: #173E36;  /* tinta, campos oscuros                        */
+  /* ---- Color: paleta Musgo (2026-10-31). Para adornos: degradados, acento,
+     brillos. La página en sí va en neutros (hueso + negro verdoso, abajo). */
+  --od-musgo-900: #173E36;  /* musgo profundo (degradados)                  */
   --od-musgo-700: #247465;  /* acento: la acción principal, foco, chispas   */
   --od-musgo-500: #55B895;  /* brillos sobre oscuro, degradados             */
   --od-musgo-300: #ACDDB5;  /* campos claros, degradados                    */
@@ -23,27 +24,27 @@
   --od-neutro-300: #D4DDDA;
   --od-neutro-100: #F1F0EA;
 
-  /* ---- Color: base (nombres de siempre, valores Musgo) ---------------- */
-  --od-crema:   #EFF0E2;  /* fondo principal: crema verdoso                 */
-  --od-papel:   #F7F7EE;  /* superficies claras, tarjetas, botones claros   */
-  --od-tinta:   var(--od-musgo-900); /* texto principal, líneas            */
-  --od-noche:   #133129;  /* fondos oscuros, bandas (un paso bajo la tinta) */
+  /* ---- Color: página (opción A: hueso + negro verdoso, 2026-10-31) ----- */
+  --od-crema:   #EEECE6;  /* fondo principal: hueso neutro (poca saturación) */
+  --od-papel:   #F6F5F1;  /* superficies claras, tarjetas, botones claros   */
+  --od-tinta:   #1C2320;  /* texto principal, líneas: negro verdoso        */
+  --od-noche:   #161B19;  /* fondos oscuros, bandas, pie                    */
   /* ponytail: alias legado; ~40 usos de var(--od-tuna) ahora pintan musgo.
      Renombrarlos a --od-accent cuando se toquen esas piezas. */
   --od-tuna:    var(--od-musgo-700);
-  --od-gris:    #4E6660;  /* texto secundario                               */
-  --od-linea:   #C7D1C0;  /* divisores, bordes finos                        */
-  --od-arena-texto: #ACC4B8; /* texto secundario sobre noche                */
-  --od-punto-oscuro: #3E5E55; /* anillo de puntos sobre noche               */
+  --od-gris:    #5B5F5A;  /* texto secundario                               */
+  --od-linea:   #D6D2C8;  /* divisores, bordes finos                        */
+  --od-arena-texto: #B4B6B0; /* texto secundario sobre noche                */
+  --od-punto-oscuro: #3A403D; /* anillo de puntos sobre noche               */
   --od-kraft:   #C4A47C;  /* empaque (solo impresos)                        */
   --od-olivo:   var(--od-musgo-700); /* banda del lema                      */
 
   /* ---- Color: familia de cremas (destacados, fondos alternos) --------- */
-  --od-crema-papel: #F7F7EE;
-  --od-crema-hueso: #F3F4E8;
-  --od-crema-base:  #EFF0E2;
-  --od-crema-lino:  #E2E8D2;
-  --od-crema-arena: #D2DCC4;
+  --od-crema-papel: #F6F5F1;
+  --od-crema-hueso: #F2F1EC;
+  --od-crema-base:  #EEECE6;
+  --od-crema-lino:  #E4E1D9;
+  --od-crema-arena: #D7D3C9;
 
   /* ---- Roles semánticos (usar estos en componentes) ------------------- */
   --od-bg:            var(--od-crema);
@@ -86,16 +87,16 @@
   --od-radius-md: 10px;
   --od-radius-pill: 999px;     /* botones tipo "Ver catálogo" */
   --od-rule: 1px solid var(--od-border);
-  --od-shadow-flat: 3px 3px 0 rgba(23, 62, 54, 0.10); /* sombra plana, sin blur */
+  --od-shadow-flat: 3px 3px 0 rgba(28, 35, 32, 0.10); /* sombra plana, sin blur */
 }
 
 /* Tema oscuro opcional (secciones .od-dark o modo oscuro del sistema) */
 .od-dark {
   --od-bg: var(--od-noche);
-  --od-surface: #1F4A41;
+  --od-surface: #222826;
   --od-text: var(--od-papel);
   --od-text-muted: var(--od-arena-texto);
-  --od-border: #3E5E55;
+  --od-border: #3A403D;
 }
 
 /* ==========================================================================

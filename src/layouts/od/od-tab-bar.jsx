@@ -93,7 +93,7 @@ export function OdTabBar() {
           // invertido: barra oscura sobre fondo claro y clara sobre oscuro
           '--tab-off': onDark ? 'var(--od-tinta)' : 'var(--od-papel)',
           // opaco: con transparencia se alcanzaban a leer los títulos de abajo
-          bgcolor: onDark ? 'rgb(229,241,205)' : 'rgb(23,62,54)',
+          bgcolor: onDark ? 'rgb(238,236,230)' : 'rgb(28,35,32)',
           color: onDark ? 'var(--od-tinta)' : 'var(--od-papel)',
           transition: 'background-color 400ms ease, color 400ms ease',
           // cinta de rayitas de la marca como borde superior

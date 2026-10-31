@@ -27,15 +27,15 @@ export const themeConfig = {
    * Palette
    *************************************** */
   palette: {
-    // Marca (paleta Musgo): el primario es la tinta musgo (botones "tinta
-    // sobre crema"). Valores de public/brand/tokens.css.
+    // Marca (opción A): el primario es la tinta negro verdoso (botones "tinta
+    // sobre hueso"). Valores de public/brand/tokens.css.
     primary: {
-      lighter: '#F3F4E8',
-      light: '#4E6660',
-      main: '#173E36',
-      dark: '#133129',
-      darker: '#133129',
-      contrastText: '#F7F7EE',
+      lighter: '#F2F1EC',
+      light: '#5B5F5A',
+      main: '#1C2320',
+      dark: '#161B19',
+      darker: '#161B19',
+      contrastText: '#F6F5F1',
     },
     secondary: {
       lighter: '#EFD6FF',
@@ -78,16 +78,16 @@ export const themeConfig = {
       contrastText: '#FFFFFF',
     },
     grey: {
-      50: '#FBFBF6',
-      100: '#F7F7EE',
-      200: '#EEF0E6',
-      300: '#D6DCCD',
-      400: '#B7C2B3',
-      500: '#8E9D93',
-      600: '#4E6660',
-      700: '#2F4A43',
-      800: '#1F3B34',
-      900: '#133129',
+      50: '#FAF9F6',
+      100: '#F6F5F1',
+      200: '#EFEDE8',
+      300: '#DAD7D0',
+      400: '#BDBAB2',
+      500: '#8F918B',
+      600: '#5B5F5A',
+      700: '#464A46',
+      800: '#2C302D',
+      900: '#161B19',
     },
     common: {
       black: '#000000',

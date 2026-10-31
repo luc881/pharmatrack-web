@@ -16,7 +16,7 @@ const GAP = 16; // separación entre líneas (px)
 const STEP = 6; // resolución horizontal (px)
 const BUMP = 34; // cuánto aparta el cursor (px)
 const SIGMA = 70; // radio del bulto (px)
-const INK = '23,62,54';
+const INK = '28,35,32';
 const ACCENT = '36,116,101'; // acento musgo
 
 export function OdContours({ sx, minScreen = 1920 }) {

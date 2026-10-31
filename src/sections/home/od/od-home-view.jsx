@@ -92,7 +92,7 @@ function Ingredient({ item, align = 'right' }) {
         alignItems: 'flex-start',
         gap: { xs: 1.75, md: 2.25 },
         py: { xs: 2, md: 3.25 },
-        borderTop: '1px solid rgba(229,241,205,0.14)',
+        borderTop: '1px solid rgba(238,236,230,0.14)',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -247,7 +247,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           >
             Historia natural
           </Display>
-          <Box sx={{ maxWidth: '46ch', fontSize: { xs: 15, md: 18 }, lineHeight: 1.6, color: 'rgba(247,247,238,0.9)' }}>
+          <Box sx={{ maxWidth: '46ch', fontSize: { xs: 15, md: 18 }, lineHeight: 1.6, color: 'rgba(246,245,241,0.9)' }}>
             Isópodos y colémbolos criados en casa, con su ficha de cuidados. Entrega en persona en la CDMX.
           </Box>
           <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -273,13 +273,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
             alignItems: 'center',
             gap: 1.25,
             fontSize: 13,
-            color: 'rgba(247,247,238,0.85)',
+            color: 'rgba(246,245,241,0.85)',
             textDecoration: 'none',
             '&:hover': { color: '#fff' },
           }}
         >
           Disponibles
-          <Box component="span" sx={{ position: 'relative', width: '1px', height: 34, overflow: 'hidden', bgcolor: 'rgba(247,247,238,0.25)' }}>
+          <Box component="span" sx={{ position: 'relative', width: '1px', height: 34, overflow: 'hidden', bgcolor: 'rgba(246,245,241,0.25)' }}>
             <Box component="span" sx={{ position: 'absolute', inset: 0, bgcolor: '#f6f4f1', animation: 'odCue 1.8s var(--od-ease) infinite' }} />
           </Box>
         </Box>
@@ -316,8 +316,10 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         </Box>
       )}
 
-      {/* Banda "El criadero": marquesina de nombres + cifras (fondo terracota) */}
-      <OdPanel sx={{ color: 'var(--color-neutral-100)', py: { xs: '56px', md: '88px' } }}>
+      {/* Banda "El criadero": marquesina de nombres + cifras */}
+      {/* El degradado (Feral, paleta de adorno) es el momento de color de la
+          página: el resto va en neutros */}
+      <OdPanel sx={{ color: 'var(--color-neutral-100)', py: { xs: '56px', md: '88px' }, backgroundImage: 'url(/brand/degradados/aurora-musgo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <Box sx={{ mx: 'auto', maxWidth: '30ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3.1vw, 46px)', lineHeight: 1.24 }}>
           Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.
         </Box>
@@ -393,10 +395,9 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         </Box>
       </OdPanel>
 
-      {/* Explora por categoría: índice con vista previa al hover.
-          Capítulo verde claro (paleta Musgo: cada sección con su campo) */}
+      {/* Explora por categoría: índice con vista previa al hover */}
       {catItems.length > 0 && (
-        <Box component="section" sx={{ position: 'relative', bgcolor: 'var(--od-musgo-100)', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
+        <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', pb: 3.75 }}>
             <SectionHead title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalog} className="od-link" sx={{ fontSize: 13, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
@@ -409,8 +410,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
       {/* Bloque oscuro del frasco: "Seis cosas dentro del frasco" +
           6 ingredientes con el frasco 3D al centro (placeholder por ahora) */}
-      <OdPanel sx={{ bgcolor: 'var(--od-musgo-900)', py: { xs: '64px', md: '96px' } }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(229,241,205,0.18)', fontSize: 13, color: 'var(--color-neutral-500)' }}>
+      <OdPanel sx={{ py: { xs: '64px', md: '96px' } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(238,236,230,0.18)', fontSize: 13, color: 'var(--color-neutral-500)' }}>
           <Box component="span">(Qué necesita una colonia)</Box>
           <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' }, fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
         </Box>

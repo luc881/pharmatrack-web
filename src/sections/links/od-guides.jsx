@@ -37,7 +37,7 @@ const cardSx = {
   textDecoration: 'none',
   transition: 'transform 200ms ease, box-shadow 200ms ease',
   '@media (hover: hover)': {
-    '&:hover': { transform: 'translate(-2px, -2px)', boxShadow: '5px 5px 0 rgba(23,62,54,0.12)' },
+    '&:hover': { transform: 'translate(-2px, -2px)', boxShadow: '5px 5px 0 rgba(28,35,32,0.12)' },
   },
 };
 

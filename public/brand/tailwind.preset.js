@@ -7,10 +7,10 @@ module.exports = {
     extend: {
       colors: {
         od: {
-          crema: "#EFF0E2", papel: "#F7F7EE", tinta: "#173E36", noche: "#133129",
-          tuna: "#247465", gris: "#4E6660", linea: "#C7D1C0", "arena-texto": "#ACC4B8",
+          crema: "#EEECE6", papel: "#F6F5F1", tinta: "#1C2320", noche: "#161B19",
+          tuna: "#247465", gris: "#5B5F5A", linea: "#D6D2C8", "arena-texto": "#B4B6B0",
           "punto-oscuro": "#6B6158", kraft: "#C4A47C", olivo: "#247465",
-          hueso: "#F3F4E8", lino: "#E2E8D2", arena: "#D2DCC4",
+          hueso: "#F2F1EC", lino: "#E4E1D9", arena: "#D7D3C9",
         },
       },
       fontFamily: {

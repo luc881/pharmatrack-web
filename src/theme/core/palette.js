@@ -36,7 +36,7 @@ export const background = {
   // sobre el crema el blanco saltaba demasiado.
   // Rediseño editorial: arena (--color-bg) de fondo, tarjetas en crema
   // (--color-neutral-100) y neutral cálido para huecos de imagen.
-  light: createPaletteChannel({ paper: '#F7F7EE', default: '#EFF0E2', neutral: '#F3F4E8' }), // papel / crema / hueso (Musgo)
+  light: createPaletteChannel({ paper: '#F6F5F1', default: '#EEECE6', neutral: '#F2F1EC' }), // papel / hueso (opción A)
   dark: createPaletteChannel({ paper: grey[800], default: grey[900], neutral: '#28323D' }),
 };
 

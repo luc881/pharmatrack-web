@@ -27,30 +27,26 @@
 | `assets/instagram/` | Portadas de destacados en 6 colores (1080 × 1080). |
 | `assets/print/` | PDFs de imprenta (tarjetas, etiquetas de precio, letrero, manta). No se usan en la web. |
 
-## 3. Color — paleta Musgo (desde 2026-10-31)
+## 3. Color: dos paletas (desde 2026-10-31)
+
+**Paleta de página (neutra, opción A: hueso + negro verdoso).** Es lo que hace ver la tienda profesional.
 
 | Token | HEX | Uso |
 |---|---|---|
-| `--od-crema` | `#EFF0E2` | Fondo principal: crema verdoso |
-| `--od-papel` | `#F7F7EE` | Tarjetas, botones claros, superficies |
-| `--od-tinta` (`--od-musgo-900`) | `#173E36` | Texto, líneas, iconos, campos oscuros |
-| `--od-noche` | `#133129` | Fondos oscuros, footer, bandas |
-| `--od-accent` (`--od-musgo-700`) | `#247465` | **Acento**: la acción principal, foco, destellos |
-| `--od-musgo-500` | `#55B895` | Brillos sobre oscuro, degradados |
-| `--od-musgo-300` / `-100` | `#ACDDB5` / `#E5F1CD` | Campos claros, texto claro sobre oscuro |
-| `--od-gris` | `#4E6660` | Texto secundario |
-| `--od-linea` | `#C7D1C0` | Divisores y bordes de 1 px |
-| `--od-arena-texto` | `#ACC4B8` | Texto secundario sobre noche |
+| `--od-crema` | `#EEECE6` | Fondo principal: hueso de poca saturación |
+| `--od-papel` | `#F6F5F1` | Tarjetas, botones claros, superficies |
+| `--od-tinta` | `#1C2320` | Texto, líneas, iconos (negro verdoso) |
+| `--od-noche` | `#161B19` | Secciones oscuras, pie |
+| `--od-gris` | `#5B5F5A` | Texto secundario (AA sobre hueso) |
+| `--od-linea` | `#D6D2C8` | Divisores y bordes de 1 px |
+| `--od-arena-texto` | `#B4B6B0` | Texto secundario sobre noche |
+| `--od-accent` | `#247465` | **El único color de la interfaz**: botón principal, enlaces, foco |
 
-**Neutro para lo no disponible** (desactivado, agotado, vacío, error, 404), igual con cualquier tema: `--od-neutro-900 #303840`, `-700 #67767C`, `-500 #A6B6B7`, `-300 #D4DDDA`, `-100 #F1F0EA`. El color de la marca queda solo para lo que sí se puede hacer.
+**Paleta de adorno (Musgo).** Solo para degradados, brillos y momentos de color: `--od-musgo-900 #173E36`, `-700 #247465`, `-500 #55B895`, `-300 #ACDDB5`, `-100 #E5F1CD`. Los degradados se hacen en Feral Gradient Builder y se guardan en `public/brand/degradados/` (p. ej. `aurora-musgo.jpg`, banda del criadero). Van en dos o tres secciones grandes por página, de preferencia sobre oscuro. Nunca en botones, tarjetas ni texto, y sin fondos de sección verde claro.
 
-**Familia de cremas:** papel `#F7F7EE`, hueso `#F3F4E8`, crema `#EFF0E2`, lino `#E2E8D2` y arena `#D2DCC4`.
+**Neutro para lo no disponible** (desactivado, agotado, vacío, error, 404): `--od-neutro-900 #303840`, `-700 #67767C`, `-500 #A6B6B7`, `-300 #D4DDDA`, `-100 #F1F0EA`.
 
-**Sin rojo:** la tuna ya no es acento. `--od-tuna` queda como alias del acento musgo mientras se renombran sus usos. Las tunas rosas del sello y el favicon se quedan: son el logo.
-
-**Degradados:** sí, pero solo en una o dos secciones grandes por página (portada o cierre), hechos en Feral Gradient Builder con los colores Musgo. Nunca en botones, tarjetas ni texto.
-
-**Contraste:** tinta sobre crema, papel sobre noche y papel sobre acento cumplen AA.
+**Sin rojo:** la tuna ya no es acento (`--od-tuna` es alias del acento musgo mientras se renombran sus usos). Las tunas rosas del sello y el favicon se quedan: son el logo.
 
 ## 4. Tipografía
 

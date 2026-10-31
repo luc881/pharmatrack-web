@@ -222,11 +222,11 @@ export function OdHowToBuy({ bg }) {
                 '--od-glow': 'rgba(85,184,149,0.45)',
                 height: 1,
                 p: { xs: '24px 22px', md: '34px 30px' },
-                bgcolor: 'rgba(247,247,238,0.08)',
-                border: '1px solid rgba(247,247,238,0.22)',
+                bgcolor: 'rgba(246,245,241,0.08)',
+                border: '1px solid rgba(246,245,241,0.22)',
                 // el desenfoque cuesta en cada cuadro del scroll: solo escritorio
                 backdropFilter: { md: 'blur(6px)' },
-                '&:hover': { borderColor: 'rgba(247,247,238,0.5)' },
+                '&:hover': { borderColor: 'rgba(246,245,241,0.5)' },
               }}
             >
               <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 24 }}>{s.title}</Box>

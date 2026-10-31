@@ -133,7 +133,7 @@ function Card({ title, children, dark = false, sx }) {
           px: 2.5,
           py: 1.75,
           color: dark ? 'var(--od-arena-texto)' : 'var(--od-text-muted)',
-          borderBottom: dark ? '1px solid rgba(229,241,205,0.16)' : 'var(--od-rule)',
+          borderBottom: dark ? '1px solid rgba(238,236,230,0.16)' : 'var(--od-rule)',
         }}
       >
         {title}
@@ -196,7 +196,7 @@ function Chip({ children, dark = false }) {
         py: 0.5,
         fontSize: 13,
         border: '1px solid',
-        borderColor: dark ? 'rgba(229,241,205,0.35)' : 'var(--od-linea)',
+        borderColor: dark ? 'rgba(238,236,230,0.35)' : 'var(--od-linea)',
         borderRadius: 'var(--od-radius-pill)',
         whiteSpace: 'nowrap',
       }}
@@ -257,7 +257,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
             inset: 0,
             zIndex: -1,
             background:
-              'linear-gradient(180deg, rgba(23,62,54,0.45) 0%, rgba(23,62,54,0.55) 45%, rgba(23,62,54,0.94) 100%)',
+              'linear-gradient(180deg, rgba(28,35,32,0.45) 0%, rgba(28,35,32,0.55) 45%, rgba(28,35,32,0.94) 100%)',
           }}
         />
         <Box

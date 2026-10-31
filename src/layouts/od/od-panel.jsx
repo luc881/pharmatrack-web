@@ -22,7 +22,7 @@ const PUSH = 26; // desplazamiento máximo (px)
 const SPRING = 0.08;
 const DAMP = 0.82;
 const GLOW = [85, 184, 149]; // brillo musgo
-const PAPER = [229, 241, 205];
+const PAPER = [238, 236, 230];
 
 function OdDotField() {
   const ref = useRef(null);
@@ -182,7 +182,7 @@ function OdDotField() {
 
 // Retícula estática (mismo paso y tono que el canvas en reposo)
 const STATIC_DOTS = {
-  backgroundImage: 'radial-gradient(rgba(229,241,205,0.11) 1.1px, transparent 1.6px)',
+  backgroundImage: 'radial-gradient(rgba(238,236,230,0.11) 1.1px, transparent 1.6px)',
   backgroundSize: `${GAP}px ${GAP}px`,
   backgroundPosition: `${GAP / 2 - 13}px ${GAP / 2 - 13}px`,
 };

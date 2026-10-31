@@ -97,7 +97,7 @@ export function OdHeader({ revealOnScroll = false }) {
   const onDark = useNavTheme();
   const nt = onDark
     ? { bg: 'var(--color-bg)', fg: 'var(--color-text)', bd: 'var(--color-divider)' }
-    : { bg: 'var(--od-noche)', fg: 'var(--color-neutral-100)', bd: 'rgba(229,241,205,0.24)' };
+    : { bg: 'var(--od-noche)', fg: 'var(--color-neutral-100)', bd: 'rgba(238,236,230,0.24)' };
   // píldora de contador: contrasta con el fondo de la barra
   const navPill = onDark
     ? { bg: 'var(--color-neutral-900)', fg: 'var(--color-neutral-100)' }

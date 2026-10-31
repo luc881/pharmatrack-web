@@ -24,7 +24,7 @@ import { useFavorites } from 'src/sections/catalog/use-favorites';
 // Con prefers-reduced-motion la regla global apaga las animaciones.
 // ----------------------------------------------------------------------
 
-const LINE = '1px solid rgba(229,241,205,0.16)';
+const LINE = '1px solid rgba(238,236,230,0.16)';
 const CLOSE_MS = 320;
 
 const MAIN = [
@@ -241,7 +241,7 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
                       flexShrink: 0,
                       width: 44,
                       height: 44,
-                      border: '1px solid rgba(229,241,205,0.24)',
+                      border: '1px solid rgba(238,236,230,0.24)',
                       borderRadius: '50%',
                       bgcolor: 'transparent',
                       cursor: 'pointer',
