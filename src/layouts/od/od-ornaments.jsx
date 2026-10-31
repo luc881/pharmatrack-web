@@ -68,15 +68,16 @@ export function LeafDivider({ sx }) {
       <Box className="od-mark-dot" sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: 'currentColor', opacity: 0.55 }} />
       <Box className="od-div-line-l" sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.35 }} />
       <Box component="svg" className="od-div-leaf" viewBox="0 0 64 16" sx={{ width: 64, height: 16, flexShrink: 0 }} fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round">
+        {/* pathLength=1: el trazo se entinta desde el centro (global.css, .od-ink) */}
         <g className="od-leaf-l">
-          <path d="M30 8 C26 3, 18 3, 12 8 C18 13, 26 13, 30 8 Z" fill="var(--od-crema-lino)" />
-          <path d="M30 8 H12" strokeWidth=".6" />
+          <path className="od-ink" pathLength="1" d="M30 8 C26 3, 18 3, 12 8 C18 13, 26 13, 30 8 Z" fill="var(--od-crema-lino)" />
+          <path className="od-ink" pathLength="1" d="M30 8 H12" strokeWidth=".6" />
         </g>
         <g className="od-leaf-r">
-          <path d="M34 8 C38 3, 46 3, 52 8 C46 13, 38 13, 34 8 Z" fill="var(--od-crema-lino)" />
-          <path d="M34 8 H52" strokeWidth=".6" />
+          <path className="od-ink" pathLength="1" d="M34 8 C38 3, 46 3, 52 8 C46 13, 38 13, 34 8 Z" fill="var(--od-crema-lino)" />
+          <path className="od-ink" pathLength="1" d="M34 8 H52" strokeWidth=".6" />
         </g>
-        <circle cx="32" cy="8" r="1.6" fill="currentColor" stroke="none" />
+        <circle className="od-leaf-seed" cx="32" cy="8" r="1.6" fill="currentColor" stroke="none" />
       </Box>
       <Box className="od-div-line-r" sx={{ flex: 1, height: '1px', bgcolor: 'currentColor', opacity: 0.35 }} />
       <Box className="od-mark-dot" sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: 'currentColor', opacity: 0.55 }} />

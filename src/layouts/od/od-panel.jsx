@@ -205,7 +205,9 @@ export function OdPanel({ children, sx, ...other }) {
         {
           position: 'relative',
           isolation: 'isolate',
-          overflow: 'hidden',
+          // clip y no hidden: hidden lo vuelve contenedor de scroll y congela las
+          // animaciones con animation-timeline: view() de adentro
+          overflow: 'clip',
           bgcolor: 'var(--color-accent-900)',
           color: 'var(--color-neutral-200)',
         },
