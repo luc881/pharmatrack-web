@@ -75,6 +75,14 @@ tamaño adulto, dificultad).
 5. Secciones nuevas (portada con columna de colores, disco, hojas apiladas, bandas, pie).
 6. Movimiento.
 
+## Pendientes marcados
+
+- **Huecos a los lados en pantallas de 1920px o más.** Las notas verticales de los márgenes
+  («01 / Disponibles», «Opuntia Den — Criadero en CDMX») se quitaron en el paso 2 (commit cc5121e,
+  componente `OdGutterNote`). Las había puesto el usuario para tapar ese hueco. Se revisa al terminar
+  todos los pasos: la skill lo resuelve dejando crecer secciones, fotos y títulos hasta ~1760–1920px.
+  Si aún queda hueco, se restauran desde ese commit.
+
 ## ¿Versión oscura?
 
 La skill no contempla un interruptor claro/oscuro: trata «clara u oscura» como una decisión de
