@@ -142,7 +142,7 @@ function Ingredient({ item, align = 'right' }) {
 
 const firstLine = (text) => (text ?? '').split('\n').filter(Boolean)[0] ?? '';
 
-export function OdHomeView({ species = [], products = [], articles = [], media }) {
+export function OdHomeView({ species = [], products = [], articles = [], media, ticker }) {
   const categories = useNavCategories();
   const IMG = buildImg(media);
 
@@ -495,7 +495,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       <OdFaq mossTall={IMG.mossTall} />
 
       {/* Novedades / suscripción */}
-      <OdNovedades mossWide={IMG.mossWide} />
+      <OdNovedades mossWide={IMG.mossWide} ticker={ticker} />
     </>
   );
 }

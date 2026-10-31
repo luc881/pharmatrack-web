@@ -3,6 +3,7 @@
 import Box from '@mui/material/Box';
 
 import { OdScene } from './od-scene';
+import { OdTicker } from './od-ticker';
 
 // ----------------------------------------------------------------------
 // Divisor 3D de las vistas interiores (no el home): marquesina de avisos, la
@@ -10,27 +11,10 @@ import { OdScene } from './od-scene';
 // inversa. Degrada a imagen de respaldo en móvil / motion reducido.
 // ----------------------------------------------------------------------
 
-const TICKER = ['Nueva camada — Cubaris Rubber Ducky', 'Entrega en persona en CDMX', 'Camada de julio disponible', 'Apartas con el 50%'];
-
-function Ticker({ reverse = false }) {
-  const items = [...TICKER, ...TICKER, ...TICKER, ...TICKER];
-  return (
-    <Box data-dark="1" sx={{ bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-200)', py: '11px', overflow: 'hidden' }}>
-      <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontSize: 13, letterSpacing: '0.05em', animation: `${reverse ? 'odMarqueeR' : 'odMarquee'} 52s linear infinite` }}>
-        {items.map((t, i) => (
-          <Box component="span" key={i} sx={{ px: '40px' }}>
-            {t}
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  );
-}
-
-export function OdDivider3d({ media }) {
+export function OdDivider3d({ media, ticker }) {
   return (
     <>
-      <Ticker />
+      <OdTicker items={ticker} />
       <Box component="section" data-dark="1" sx={{ position: 'relative', display: 'grid', placeItems: 'center', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '96px' }, overflow: 'hidden', isolation: 'isolate' }}>
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${media.moss_tall})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.22)' }} />
@@ -47,7 +31,7 @@ export function OdDivider3d({ media }) {
           </Box>
         </Box>
       </Box>
-      <Ticker reverse />
+      <OdTicker items={ticker} reverse />
     </>
   );
 }

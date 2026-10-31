@@ -31,7 +31,7 @@ import { OdScrollSeal } from './od-scroll-seal';
 export async function OdLayout({ children, homeMasthead = false, divider3d = true, hideTabBar = false, sideArt = 1840 }) {
   // Server component: pide la media aqui en vez de que cada pagina la herede.
   // El fetch se deduplica dentro del render y ya trae revalidate de 60 s.
-  const { media } = await getSiteSettings();
+  const { media, ticker } = await getSiteSettings();
 
   return (
     <Box sx={{ bgcolor: 'var(--color-bg)', color: 'var(--color-text)', overflowX: 'clip', pb: { xs: '66px', md: 0 } }}>
@@ -43,7 +43,7 @@ export async function OdLayout({ children, homeMasthead = false, divider3d = tru
         {!homeMasthead && sideArt && <OdSideArt contentWidth={sideArt} />}
         {children}
       </Box>
-      {!homeMasthead && divider3d && <OdDivider3d media={media} />}
+      {!homeMasthead && divider3d && <OdDivider3d media={media} ticker={ticker} />}
       <OdFooter />
       {!hideTabBar && <OdTabBar />}
       <OdScrollSeal />

@@ -19,7 +19,7 @@ export default async function Page() {
 
   return (
     <OdLayout homeMasthead>
-      <OdHomeView species={listings} products={products} articles={articles} media={site.media} />
+      <OdHomeView species={listings} products={products} articles={articles} media={site.media} ticker={site.ticker} />
     </OdLayout>
   );
 }

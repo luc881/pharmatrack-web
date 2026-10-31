@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 
+import { OdTicker } from 'src/layouts/od/od-ticker';
+
 // ----------------------------------------------------------------------
 // "Novedades" (sección del home): tarjeta crema sobre foto de naturaleza entre
 // dos marquesinas de avisos. Suscripción por correo.
@@ -11,30 +13,13 @@ import Box from '@mui/material/Box';
 // endpoint que guarde el correo (audiencia de Resend).
 // ----------------------------------------------------------------------
 
-const TICKER = ['Nueva camada — Cubaris Rubber Ducky', 'Entrega en persona en CDMX', 'Camada de julio disponible', 'Apartas con el 50%'];
-
-function Ticker({ reverse = false }) {
-  const items = [...TICKER, ...TICKER, ...TICKER, ...TICKER];
-  return (
-    <Box data-dark="1" sx={{ bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-200)', py: '11px', overflow: 'hidden' }}>
-      <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontSize: 13, letterSpacing: '0.05em', animation: `${reverse ? 'odMarqueeR' : 'odMarquee'} 52s linear infinite` }}>
-        {items.map((t, i) => (
-          <Box component="span" key={i} sx={{ px: '40px' }}>
-            {t}
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  );
-}
-
-export function OdNovedades({ mossWide }) {
+export function OdNovedades({ mossWide, ticker }) {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
 
   return (
     <>
-      <Ticker />
+      <OdTicker items={ticker} />
       <Box component="section" data-dark="1" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '40px', md: '54px' }, overflow: 'hidden', isolation: 'isolate' }}>
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${mossWide})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.28)' }} />
@@ -91,7 +76,7 @@ export function OdNovedades({ mossWide }) {
           )}
         </Box>
       </Box>
-      <Ticker reverse />
+      <OdTicker items={ticker} reverse />
     </>
   );
 }

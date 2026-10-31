@@ -97,6 +97,8 @@ const SITE_DEFAULTS = {
   show_category_browse: true,
   shipping_enabled: true,
   media: SITE_MEDIA_DEFAULTS,
+  // cinta de novedades: mismo default que el API (por si no responde)
+  ticker: ['Entrega en persona en CDMX', 'Coordinamos por WhatsApp', 'Apartas con el 50%'],
 };
 
 // Pasa las 9 URLs de media por la optimización de Cloudinary (f_auto, q_auto,
