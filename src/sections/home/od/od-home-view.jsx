@@ -11,11 +11,10 @@ import { RouterLink } from 'src/routes/components';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
-import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
 import { OdReveal, OdCountUp } from 'src/layouts/od/od-motion';
+import { Star, Pill, OdImage, Display } from 'src/layouts/od/od-ui';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
-import { Star, Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
-import { StarRule, HeadingMark, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
+import { StarRule, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 
 import { OdCatalogCard } from 'src/sections/catalog/od/od-catalog-card';
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
@@ -132,9 +131,6 @@ function Ingredient({ item, align = 'right' }) {
       </Box>
 
       <Box sx={{ minWidth: 0, textAlign: { xs: 'left', md: align } }}>
-        <Box className="od-ing-n" sx={{ mb: 0.5, fontSize: 11, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums', transition: 'color 300ms' }}>
-          {item.n}
-        </Box>
         <Box component="h3" className="od-ing-title" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: { xs: 18, md: 21 }, color: 'var(--color-neutral-100)' }}>
           {item.title}
         </Box>
@@ -152,12 +148,12 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
   // Los 6 elementos del bloque oscuro "Seis cosas dentro del frasco".
   const INGREDIENTS = [
-    { n: '01', title: 'Sustrato húmedo', body: 'Coco, tierra y carbón: sostienen el gradiente de humedad sin encharcarse.', img: IMG.mossTall },
-    { n: '02', title: 'Hojarasca curada', body: 'Roble y magnolia secos: alimento base y refugio donde mudan tranquilos.', img: IMG.leafLitter },
-    { n: '03', title: 'Madera blanda', body: 'Piezas en descomposición que aportan celulosa y estructura al montaje.', img: IMG.terrarium },
-    { n: '04', title: 'Calcio', body: 'Sepia molida o cáscara: sin ella la muda falla y la colonia deja de crecer.', img: IMG.isopodCubaris },
-    { n: '05', title: 'Proteína', body: 'Una pizca cada dos semanas. Más que eso y aparecen ácaros.', img: IMG.isopodZebra },
-    { n: '06', title: 'Colémbolos', body: 'El copiloto invisible: consumen el moho antes de que llegue a la camada.', img: IMG.mossWide },
+    { title: 'Sustrato húmedo', body: 'Coco, tierra y carbón: sostienen el gradiente de humedad sin encharcarse.', img: IMG.mossTall },
+    { title: 'Hojarasca curada', body: 'Roble y magnolia secos: alimento base y refugio donde mudan tranquilos.', img: IMG.leafLitter },
+    { title: 'Madera blanda', body: 'Piezas en descomposición que aportan celulosa y estructura al montaje.', img: IMG.terrarium },
+    { title: 'Calcio', body: 'Sepia molida o cáscara: sin ella la muda falla y la colonia deja de crecer.', img: IMG.isopodCubaris },
+    { title: 'Proteína', body: 'Una pizca cada dos semanas. Más que eso y aparecen ácaros.', img: IMG.isopodZebra },
+    { title: 'Colémbolos', body: 'El copiloto invisible: consumen el moho antes de que llegue a la camada.', img: IMG.mossWide },
   ];
 
   const CAT_IMAGES = [IMG.isopodCubaris, IMG.mossTall, IMG.leafLitter, IMG.terrarium, IMG.isopodZebra, IMG.mossWide];
@@ -244,9 +240,6 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
             textAlign: 'center',
           }}
         >
-          <Kicker color="rgba(247,247,238,0.85)" size={12} sx={{ letterSpacing: '0.3em' }}>
-            Fauna y flora — Ciudad de México
-          </Kicker>
           <Display
             component="h1"
             size="clamp(48px, 7.4vw, 122px)"
@@ -279,9 +272,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
             flexDirection: 'column',
             alignItems: 'center',
             gap: 1.25,
-            fontSize: 11,
-            letterSpacing: '0.24em',
-            textTransform: 'uppercase',
+            fontSize: 13,
             color: 'rgba(247,247,238,0.85)',
             textDecoration: 'none',
             '&:hover': { color: '#fff' },
@@ -299,16 +290,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {/* Disponibles ahora (lo primero que se busca: qué hay en existencia) */}
       {selection.length > 0 && (
         <Box component="section" id="disponibles" sx={{ position: 'relative', scrollMarginTop: 80, px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '56px', md: '90px' }, pb: { xs: '48px', md: '80px' } }}>
-          <OdGutterNote n="01" label="Disponibles" />
           <OdReveal>
             <Box className="od-orn-host" sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { md: '28px' }, mb: '64px' }}>
               <StarRule sx={{ display: { xs: 'none', md: 'flex' } }} />
               <Box sx={{ textAlign: 'center' }}>
-                <Kicker sx={{ mb: '14px' }}>Del criadero</Kicker>
                 <Display size="clamp(34px, 4.4vw, 66px)" sx={{ maxWidth: '16ch', mx: 'auto' }}>
                   {inStock.length ? 'Disponibles ahora' : 'Nuestra selección'}
                 </Display>
-                <HeadingMark sx={{ mt: '22px', justifyContent: 'center' }} />
               </Box>
               <StarRule flip sx={{ display: { xs: 'none', md: 'flex' } }} />
             </Box>
@@ -330,9 +318,6 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
 
       {/* Banda "El criadero": marquesina de nombres + cifras (fondo terracota) */}
       <OdPanel sx={{ color: 'var(--color-neutral-100)', py: { xs: '56px', md: '88px' } }}>
-        <Kicker color="var(--color-neutral-500)" sx={{ textAlign: 'center', mb: 3.5 }}>
-          (El criadero)
-        </Kicker>
         <Box sx={{ mx: 'auto', maxWidth: '30ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3.1vw, 46px)', lineHeight: 1.24 }}>
           Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.
         </Box>
@@ -349,7 +334,6 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               fontSize: { xs: 'clamp(24px, 7vw, 40px)', md: 'clamp(48px, 9.4vw, 148px)' },
               lineHeight: 1.06,
               letterSpacing: '-0.01em',
-              textTransform: 'uppercase',
               animation: 'odMarquee 110s linear infinite',
             }}
           >
@@ -413,8 +397,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {catItems.length > 0 && (
         <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', pb: 3.75 }}>
-            <SectionHead kicker="Explora" title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
-            <Link component={RouterLink} href={paths.catalog} className="od-link" sx={{ fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+            <SectionHead title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
+            <Link component={RouterLink} href={paths.catalog} className="od-link" sx={{ fontSize: 13, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todo el catálogo →
             </Link>
           </Box>
@@ -425,8 +409,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {/* Bloque oscuro del frasco: "Seis cosas dentro del frasco" +
           6 ingredientes con el frasco 3D al centro (placeholder por ahora) */}
       <OdPanel sx={{ py: { xs: '64px', md: '96px' } }}>
-        <OdGutterNote dark n="02" label="El frasco" start={160} />
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(229,241,205,0.18)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(229,241,205,0.18)', fontSize: 13, color: 'var(--color-neutral-500)' }}>
           <Box component="span">(Qué necesita una colonia)</Box>
           <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' }, fontVariantNumeric: 'tabular-nums' }}>06 elementos</Box>
         </Box>
@@ -454,7 +437,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
         >
           <Box>
             {INGREDIENTS.slice(0, 3).map((item) => (
-              <Ingredient key={item.n} item={item} align="right" />
+              <Ingredient key={item.title} item={item} align="right" />
             ))}
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2.25 }}>
@@ -469,13 +452,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
               // media pantalla para una foto de apoyo.
               sx={{ maxWidth: { xs: 240, md: 380 } }}
             />
-            <Box sx={{ fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
+            <Box sx={{ fontSize: 13, color: 'var(--color-neutral-500)' }}>
               Cultivo Opuntia Den · 1 L
             </Box>
           </Box>
           <Box>
             {INGREDIENTS.slice(3, 6).map((item) => (
-              <Ingredient key={item.n} item={item} align="left" />
+              <Ingredient key={item.title} item={item} align="left" />
             ))}
           </Box>
         </Box>
@@ -491,8 +474,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media }
       {terrario.length > 0 && (
         <Box component="section" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
-            <SectionHead kicker="Insumos" title="Todo para tu terrario" size="clamp(26px, 3vw, 40px)" />
-            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} className="od-link" sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+            <SectionHead title="Todo para tu terrario" size="clamp(26px, 3vw, 40px)" />
+            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} className="od-link" sx={{ fontSize: 13, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todos los insumos →
             </Link>
           </Box>

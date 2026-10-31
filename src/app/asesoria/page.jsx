@@ -40,7 +40,6 @@ export default function Page() {
   return (
     <OdLayout>
       <OdPageHead
-        kicker="Asesoría"
         title="Te ayudamos a montar el terrario antes de comprar el animal"
         intro="Una sesión gratuita por videollamada o WhatsApp: revisamos tu contenedor, el sustrato y la especie que te conviene según el clima de tu casa. Sin costo y sin compromiso."
         introWidth="60ch"
@@ -82,7 +81,7 @@ export default function Page() {
                   borderBottom: '1px solid var(--color-divider)',
                 }}
               >
-                <Box className="od-row-num" sx={{ fontSize: 12, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
+                <Box className="od-row-num" sx={{ fontSize: 13, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
                   {s.n}
                 </Box>
                 <Box>

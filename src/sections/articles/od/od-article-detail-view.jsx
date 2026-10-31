@@ -3,8 +3,8 @@
 import Box from '@mui/material/Box';
 
 import { OdReveal } from 'src/layouts/od/od-motion';
+import { SectionHead } from 'src/layouts/od/od-ornaments';
 import { Star, OdImage, Display } from 'src/layouts/od/od-ui';
-import { HeadingMark, SectionHead } from 'src/layouts/od/od-ornaments';
 
 import { OdArticleCard } from './od-article-card';
 import { fArticleDate, parseArticleBody } from '../utils';
@@ -63,7 +63,7 @@ function BodySection({ section, id, divider }) {
       <Box component="figure" sx={{ m: '30px 0' }}>
         <OdImage src={section.src} alt={section.caption || ''} label={section.caption || ''} ratio="16 / 9" />
         {section.caption && (
-          <Box component="figcaption" sx={{ mt: 1, fontSize: 12, fontStyle: 'italic', color: 'var(--color-neutral-600)' }}>
+          <Box component="figcaption" sx={{ mt: 1, fontSize: 13, fontStyle: 'italic', color: 'var(--color-neutral-600)' }}>
             {section.caption}
           </Box>
         )}
@@ -89,7 +89,7 @@ export function OdArticleDetailView({ article, related = [] }) {
       <Box className="od-progress" aria-hidden />
       {/* Encabezado centrado */}
       <Box component="section" className="od-rise" sx={{ maxWidth: 900, mx: 'auto', px: { xs: '18px', md: '40px' }, pt: { xs: 5, md: 8 }, pb: 4, textAlign: 'center' }}>
-        <Box sx={{ mb: 2.5, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>
+        <Box sx={{ mb: 2.5, fontSize: 13, color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>
           ART-{String(article.id).padStart(3, '0')}
           {article.category && (
             <>
@@ -101,13 +101,12 @@ export function OdArticleDetailView({ article, related = [] }) {
         <Display component="h1" size="clamp(36px, 5vw, 68px)" sx={{ lineHeight: 1.04 }}>
           {article.title}
         </Display>
-        <HeadingMark sx={{ mt: '24px', justifyContent: 'center' }} />
         {article.excerpt && (
           <Box sx={{ mt: '26px', mx: 'auto', maxWidth: '54ch', fontSize: 17, lineHeight: 1.7, opacity: 0.78 }}>
             {article.excerpt}
           </Box>
         )}
-        <Box sx={{ mt: '28px', fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+        <Box sx={{ mt: '28px', fontSize: 13, color: 'var(--color-neutral-600)' }}>
           {metaBits.join(' · ')}
         </Box>
       </Box>
@@ -145,9 +144,7 @@ export function OdArticleDetailView({ article, related = [] }) {
             sx={{
               position: { md: 'sticky' },
               top: { md: 130 },
-              fontSize: 12,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
+              fontSize: 13,
               color: 'var(--color-neutral-600)',
               display: { xs: 'none', md: 'block' },
             }}
@@ -196,7 +193,7 @@ export function OdArticleDetailView({ article, related = [] }) {
           component="section"
           sx={{ maxWidth: 1180, mx: 'auto', mt: { xs: 4, md: 5 }, px: { xs: '18px', md: '40px' }, pt: { xs: 7, md: '70px' }, pb: { xs: 8, md: 12 }, borderTop: '1px solid var(--color-divider)' }}
         >
-          <SectionHead kicker="Más notas de cría" title="Sigue leyendo" size="clamp(26px, 3vw, 40px)" />
+          <SectionHead title="Sigue leyendo" size="clamp(26px, 3vw, 40px)" />
           <Box sx={{ pt: '34px', display: 'grid', gap: '28px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
             {related.map((item, i) => (
               <OdReveal key={item.id} delay={i * 0.08}>

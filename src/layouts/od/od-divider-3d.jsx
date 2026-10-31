@@ -42,7 +42,7 @@ export function OdDivider3d({ media }) {
             ratio="1 / 1"
             sx={{ width: 'min(460px, 74vw)' }}
           />
-          <Box sx={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-100)' }}>
+          <Box sx={{ fontSize: 13, color: 'var(--color-neutral-100)' }}>
             Opuntia Den · Cultivos por especie
           </Box>
         </Box>

@@ -97,7 +97,7 @@ export function OdCategoryIndex({ items }) {
             sx={{
               ...rowFillSx,
               display: 'grid',
-              gridTemplateColumns: { xs: '56px 1fr auto', md: '64px 1fr auto 48px' },
+              gridTemplateColumns: { xs: '56px 1fr auto', md: '1fr auto 48px' },
               alignItems: 'center',
               gap: { xs: 2, md: 3 },
               py: { xs: 2, md: 3 },
@@ -105,9 +105,6 @@ export function OdCategoryIndex({ items }) {
               borderTop: '1px solid var(--color-divider)',
             }}
           >
-            <Box className="od-row-num" sx={{ display: { xs: 'none', md: 'block' }, fontSize: 12, letterSpacing: '0.2em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
-              {String(i + 1).padStart(2, '0')}
-            </Box>
             {/* miniatura en línea solo en táctil/móvil */}
             <Box sx={{ display: { xs: 'block', md: 'none' }, width: 56 }}>
               <OdImage src={c.img} alt="" ratio="1 / 1" radius={6} />
@@ -115,7 +112,7 @@ export function OdCategoryIndex({ items }) {
             <Box sx={{ minWidth: 0, fontFamily: 'var(--font-heading)', fontSize: { xs: 24, md: 'clamp(34px, 3.6vw, 56px)' }, lineHeight: 1.05 }}>
               <RollText>{c.title}</RollText>
             </Box>
-            <Box className="od-row-meta" sx={{ fontSize: { xs: 12, md: 13 }, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', whiteSpace: 'nowrap', textAlign: 'right' }}>
+            <Box className="od-row-meta" sx={{ fontSize: { xs: 13, md: 13 }, color: 'var(--color-neutral-600)', whiteSpace: 'nowrap', textAlign: 'right' }}>
               {c.meta}
             </Box>
             <Box
@@ -165,7 +162,7 @@ export function OdProductRail({ items }) {
             <Box className="od-tilt-lg od-glare" data-fx sx={{ position: 'relative', overflow: 'hidden', '--od-tilt-k': 1.8, '--od-tilt-s': 1.07 }}>
               <OdImage src={c.image} alt={c.title} label={c.title} ratio="4 / 3" radius={0} />
             </Box>
-            <Box sx={{ mt: 1.75, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>{c.category}</Box>
+            <Box sx={{ mt: 1.75, fontSize: 13, color: 'var(--color-neutral-600)' }}>{c.category}</Box>
             <Box sx={{ mt: 0.5, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 2 }}>
               <Box component="span" sx={{ fontFamily: 'var(--font-heading)', fontSize: 18 }}>{c.title}</Box>
               <Box component="span" sx={{ fontSize: 14, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{c.price}</Box>
@@ -173,7 +170,7 @@ export function OdProductRail({ items }) {
             {c.description && (
               <Box sx={{ mt: 0.75, fontSize: 13, lineHeight: 1.55, color: 'var(--color-neutral-600)', maxWidth: '34ch' }}>{c.description}</Box>
             )}
-            <Box className="od-rail-cta" sx={{ mt: 1.25, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>
+            <Box className="od-rail-cta" sx={{ mt: 1.25, fontSize: 13, color: 'var(--color-accent-700)' }}>
               Ver producto →
             </Box>
           </Link>
@@ -187,9 +184,9 @@ export function OdProductRail({ items }) {
 // Cómo comprar: tres pasos sobre la foto a sangre (antes solo un titular).
 
 const STEPS = [
-  { n: '01', title: 'Elige', body: 'Explora el catálogo y abre la ficha: precio, existencias y cuidados de cada especie.' },
-  { n: '02', title: 'Paga o aparta', body: 'Con Mercado Pago en línea, o cierra por WhatsApp y aparta con el 50%.' },
-  { n: '03', title: 'Recibe', body: 'Te llega la confirmación por correo y coordinamos la entrega en persona en CDMX.' },
+  { title: 'Elige', body: 'Explora el catálogo y abre la ficha: precio, existencias y cuidados de cada especie.' },
+  { title: 'Paga o aparta', body: 'Con Mercado Pago en línea, o cierra por WhatsApp y aparta con el 50%.' },
+  { title: 'Recibe', body: 'Te llega la confirmación por correo y coordinamos la entrega en persona en CDMX.' },
 ];
 
 export function OdHowToBuy({ bg }) {
@@ -209,7 +206,7 @@ export function OdHowToBuy({ bg }) {
       <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, background: 'linear-gradient(180deg, rgba(32,31,29,0.72), rgba(32,31,29,0.5))' }} />
 
       <OdReveal sx={{ textAlign: 'center', mb: { xs: 5, md: 7 } }}>
-        <Box sx={{ mb: 1.5, fontSize: 12, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.8 }}>Cómo comprar</Box>
+        <Box sx={{ mb: 1.5, fontSize: 13, opacity: 0.8 }}>Cómo comprar</Box>
         <Box component="h2" sx={{ m: 0, mx: 'auto', maxWidth: '18ch', fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(32px, 4.2vw, 58px)', lineHeight: 1.08 }}>
           Tres pasos, sin sorpresas
         </Box>
@@ -217,7 +214,7 @@ export function OdHowToBuy({ bg }) {
 
       <Box sx={{ display: 'grid', gap: { xs: 2, md: 3 }, gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' }, maxWidth: 1200, mx: 'auto' }}>
         {STEPS.map((s, i) => (
-          <OdReveal key={s.n} delay={i * 0.1}>
+          <OdReveal key={s.title} delay={i * 0.1}>
             <Box
               data-fx
               className="od-glow od-tilt"
@@ -229,13 +226,10 @@ export function OdHowToBuy({ bg }) {
                 border: '1px solid rgba(247,247,238,0.22)',
                 // el desenfoque cuesta en cada cuadro del scroll: solo escritorio
                 backdropFilter: { md: 'blur(6px)' },
-                '& .od-step-n': { transition: 'color 300ms' },
                 '&:hover': { borderColor: 'rgba(247,247,238,0.5)' },
-                '&:hover .od-step-n': { color: 'var(--od-tuna)' },
               }}
             >
-              <Box className="od-step-n" sx={{ fontFamily: 'var(--font-heading)', fontSize: 44, lineHeight: 1, opacity: 0.9, fontVariantNumeric: 'tabular-nums' }}>{s.n}</Box>
-              <Box component="h3" sx={{ m: 0, mt: 2, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 24 }}>{s.title}</Box>
+              <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 24 }}>{s.title}</Box>
               <Box sx={{ mt: 1, fontSize: 15, lineHeight: 1.65, opacity: 0.85 }}>{s.body}</Box>
             </Box>
           </OdReveal>

@@ -40,7 +40,6 @@ export default function Page() {
   return (
     <OdLayout>
       <OdPageHead
-        kicker="Envíos y entregas"
         title="Cómo llega tu pedido"
         intro="Los invertebrados viajan mal con calor y con demora. Por eso solo salen a inicio de semana y en caja térmica, o se entregan en persona el mismo día."
         introWidth="60ch"
@@ -61,10 +60,8 @@ export default function Page() {
                         px: 2,
                         py: 1.25,
                         borderBottom: '1px solid var(--color-text)',
-                        fontSize: 11,
+                        fontSize: 13,
                         fontWeight: 400,
-                        letterSpacing: '0.14em',
-                        textTransform: 'uppercase',
                         color: 'var(--color-neutral-600)',
                       }}
                     >

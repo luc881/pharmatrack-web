@@ -107,7 +107,7 @@ export function OdMasthead() {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, m: '22px 0 26px', fontSize: 'clamp(12px, 1.05vw, 16px)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-neutral-800)' }}>
+      <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, m: '22px 0 26px', fontSize: 'clamp(12px, 1.05vw, 16px)', color: 'var(--color-neutral-800)' }}>
         <Box sx={{ lineHeight: 1.35 }}>
           Isópodos, colémbolos,
           <br />

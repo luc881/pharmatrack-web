@@ -50,9 +50,8 @@ export function OdArticleCard({ article, featured = false, ratio = '4 / 5' }) {
       </Box>
 
       <Box>
-        <Kicker sx={{ mt: featured ? 0 : '16px', mb: featured ? '14px' : '6px', fontSize: 11, letterSpacing: '0.18em', fontVariantNumeric: 'tabular-nums' }}>
-          {featured ? 'Lo más reciente · ' : ''}ART-{String(article.id).padStart(3, '0')}
-          {article.category ? ` · ${article.category}` : ''}
+        <Kicker sx={{ mt: featured ? 0 : '16px', mb: featured ? '14px' : '6px', }}>
+          {[featured && 'Lo más reciente', article.category].filter(Boolean).join(' · ') || 'Nota de cría'}
         </Kicker>
 
         <Box
@@ -69,7 +68,7 @@ export function OdArticleCard({ article, featured = false, ratio = '4 / 5' }) {
 
         <Box sx={{ mt: featured ? 3 : '8px', display: 'flex', alignItems: 'center', gap: 2, fontSize: 13, color: 'var(--color-neutral-600)' }}>
           {article.reading_minutes != null && <span>{article.reading_minutes} min de lectura</span>}
-          <Box component="span" className="od-art-more" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-neutral-900)', transition: 'color 300ms', '& svg': { transition: 'transform 400ms var(--od-ease)' } }}>
+          <Box component="span" className="od-art-more" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75, fontSize: 13, color: 'var(--color-neutral-900)', transition: 'color 300ms', '& svg': { transition: 'transform 400ms var(--od-ease)' } }}>
             Leer
             <Iconify icon="eva:arrow-forward-fill" width={14} />
           </Box>

@@ -11,50 +11,20 @@ import Box from '@mui/material/Box';
 const asArray = (sx) => (Array.isArray(sx) ? sx : [sx]);
 
 const LABEL = {
-  fontSize: 11,
-  letterSpacing: 'var(--od-tracking-label)',
-  textTransform: 'uppercase',
+  fontSize: 13,
 };
 
-// "02 ——— LO ESENCIAL". El número va en tuna (BRAND.md §6.5); solo se usa
-// cuando el orden importa (secciones de una guía, preguntas).
-export function NumberedKicker({ n, children, sx }) {
-  return (
-    <Box sx={[{ ...LABEL, display: 'flex', alignItems: 'center', gap: '14px', color: 'var(--od-text-muted)' }, ...asArray(sx)]}>
-      {n != null && (
-        <Box component="span" sx={{ color: 'var(--od-tuna)', fontVariantNumeric: 'tabular-nums' }}>
-          {String(n).padStart(2, '0')}
-        </Box>
-      )}
-      {n != null && <Box component="span" aria-hidden sx={{ width: 36, height: '1px', bgcolor: 'currentColor', opacity: 0.6 }} />}
-      <Box component="span">{children}</Box>
-    </Box>
-  );
+// Rótulo corto de una sección de la ficha (en tipo oración, sin número: la
+// numeración decorativa salió con el rediseño Musgo).
+export function NumberedKicker({ children, sx }) {
+  return <Box sx={[{ ...LABEL, color: 'var(--od-text-muted)' }, ...asArray(sx)]}>{children}</Box>;
 }
 
-// Barra corta + dos puntos bajo un título (como en el tríptico).
-export function HeadingMark({ sx }) {
+// Título de sección (sin rótulo encima ni marca debajo: rediseño Musgo).
+export function SectionHead({ title, size = 'clamp(30px, 3.4vw, 46px)', sx }) {
   return (
-    <Box aria-hidden sx={[{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--od-tinta)' }, ...asArray(sx)]}>
-      <Box className="od-mark-bar" sx={{ width: 34, height: 3, bgcolor: 'currentColor' }} />
-      <Box className="od-mark-dot" sx={{ width: 4, height: 4, ml: '4px', borderRadius: '50%', bgcolor: 'var(--od-gris)' }} />
-      <Box className="od-mark-dot" sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: 'var(--od-gris)' }} />
-    </Box>
-  );
-}
-
-// Título de sección completo: kicker (numerado si hay `n`), título y la
-// marca de barra con puntos.
-export function SectionHead({ n, kicker, title, size = 'clamp(30px, 3.4vw, 46px)', sx }) {
-  return (
-    <Box sx={[{ position: 'relative' }, ...asArray(sx)]}>
-      {kicker && <NumberedKicker n={n}>{kicker}</NumberedKicker>}
-      <Box sx={{ mt: kicker ? '18px' : 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2 }}>
-        <Box component="h2" sx={{ m: 0, fontFamily: 'var(--od-font-display)', fontWeight: 400, fontSize: size, lineHeight: 1.08, textWrap: 'balance' }}>
-          {title}
-        </Box>
-      </Box>
-      <HeadingMark sx={{ mt: '18px' }} />
+    <Box component="h2" sx={[{ m: 0, fontFamily: 'var(--od-font-display)', fontWeight: 400, fontSize: size, lineHeight: 1.08, textWrap: 'balance' }, ...asArray(sx)]}>
+      {title}
     </Box>
   );
 }

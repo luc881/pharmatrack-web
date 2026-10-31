@@ -57,7 +57,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
       <Box
         component="nav"
         className="od-rise"
-        sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 3, md: 4 }, display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}
+        sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 3, md: 4 }, display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: 13, color: 'var(--color-neutral-600)' }}
       >
         <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
           Inicio
@@ -78,7 +78,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
         <OdReveal sx={{ minWidth: 0, position: 'relative' }}>
           <OdImage src={product.image} alt={product.title} label={product.title} ratio="1 / 1" />
           {soldOut && (
-            <Box sx={{ position: 'absolute', top: 12, left: 12, px: '14px', py: '5px', fontSize: 12, borderRadius: '999px', bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)' }}>
+            <Box sx={{ position: 'absolute', top: 12, left: 12, px: '14px', py: '5px', fontSize: 13, borderRadius: '999px', bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)' }}>
               Agotado
             </Box>
           )}
@@ -86,7 +86,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
 
         <Box sx={{ minWidth: 0, position: { md: 'sticky' }, top: { md: 130 }, pb: { md: 5 } }}>
           {product.category && (
-            <Box component="span" sx={{ display: 'inline-block', px: '14px', py: '5px', borderRadius: '999px', border: '1px solid var(--color-divider)', fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
+            <Box component="span" sx={{ display: 'inline-block', px: '14px', py: '5px', borderRadius: '999px', border: '1px solid var(--color-divider)', fontSize: 13, color: 'var(--color-neutral-700)' }}>
               {product.category}
             </Box>
           )}
@@ -134,7 +134,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
               )}
               <Box component="button" type="button" onClick={handleAdd} className="od-fxbtn" data-fx
                 sx={{ flex: 1, minWidth: 220, height: 52, px: '32px', border: 0, borderRadius: '999px', cursor: 'pointer', font: 'inherit', fontSize: 14, bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)' }}>
-                {added ? 'Agregado ✓' : 'Agregar a cotización'}
+                {added ? 'Agregado' : 'Agregar a cotización'}
               </Box>
             </Box>
           )}
@@ -232,7 +232,7 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
         }}
       >
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <Box sx={{ fontSize: 13, color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {product.title}
           </Box>
           <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>{fCurrency(product.price_retail)}</Box>
@@ -242,9 +242,9 @@ export function OdProductDetailsView({ product, related = [], shippingEnabled = 
           type="button"
           onClick={soldOut ? undefined : handleAdd}
           disabled={soldOut}
-          sx={{ height: 48, px: '26px', border: 0, cursor: soldOut ? 'default' : 'pointer', font: 'inherit', fontSize: 13, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-neutral-100)', bgcolor: soldOut ? 'var(--color-neutral-500)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)', transition: 'background 300ms', '&:hover': { bgcolor: soldOut ? 'var(--color-neutral-500)' : 'var(--color-accent-700)' } }}
+          sx={{ height: 48, px: '26px', border: 0, cursor: soldOut ? 'default' : 'pointer', font: 'inherit', fontSize: 13, color: 'var(--color-neutral-100)', bgcolor: soldOut ? 'var(--color-neutral-500)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)', transition: 'background 300ms', '&:hover': { bgcolor: soldOut ? 'var(--color-neutral-500)' : 'var(--color-accent-700)' } }}
         >
-          {soldOut ? 'Agotado' : added ? 'Agregado ✓' : 'Añadir'}
+          {soldOut ? 'Agotado' : added ? 'Agregado' : 'Añadir'}
         </Box>
       </Box>
     </>

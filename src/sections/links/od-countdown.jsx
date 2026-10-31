@@ -49,7 +49,7 @@ export function OdCountdown({ target }) {
               <Box sx={{ fontFamily: 'var(--od-font-display)', fontSize: 28, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
                 {String(value).padStart(2, '0')}
               </Box>
-              <Box className="od-label" sx={{ mt: 0.75, fontSize: 10 }}>
+              <Box className="od-label" sx={{ mt: 0.75, fontSize: 13 }}>
                 {label}
               </Box>
             </Box>

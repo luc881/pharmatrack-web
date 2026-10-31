@@ -27,9 +27,7 @@ const rowSx = {
 };
 const labelSx = {
   m: 0,
-  fontSize: 11,
-  letterSpacing: '0.2em',
-  textTransform: 'uppercase',
+  fontSize: 13,
   color: 'var(--color-neutral-600)',
 };
 const valueSx = { m: 0, fontSize: 17, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } };
@@ -38,7 +36,6 @@ export default function Page() {
   return (
     <OdLayout>
       <OdPageHead
-        kicker="Contacto"
         title="Escríbenos y coordinamos la entrega"
         intro="Todo se coordina por WhatsApp: te decimos qué hay disponible esta semana y acordamos punto y hora. Respondemos el mismo día."
         introWidth="58ch"

@@ -8,7 +8,6 @@ import Link from '@mui/material/Link';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
 import { Pill, Kicker, OdImage, Display } from 'src/layouts/od/od-ui';
 
 import { articleSlug } from 'src/sections/articles/utils';
@@ -86,11 +85,9 @@ export function OdDivulgacion({ articles = [] }) {
   if (!rows.length) return null;
 
   const current = pages[page] ?? [];
-  const base = page * 3;
 
   return (
     <Box component="section" id="divulgacion" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '40px', md: '60px' }, pb: { xs: '80px', md: '120px' } }}>
-      <OdGutterNote n="03" label="Divulgación" start={260} />
       <Display size="clamp(34px, 11.4vw, 176px)" weight={400} sx={{ lineHeight: 1, letterSpacing: '-0.015em', textTransform: 'uppercase', mb: 1.5, ...titleSx }}>
         <Box component="span" sx={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}>
           {TITLE}
@@ -184,17 +181,13 @@ export function OdDivulgacion({ articles = [] }) {
                 borderTop: '1px solid var(--color-divider)',
                 color: 'inherit',
                 textDecoration: 'none',
-                gridTemplateColumns: { xs: '1fr', md: 'minmax(90px, 0.5fr) minmax(240px, 1.5fr) minmax(280px, 2fr)' },
+                gridTemplateColumns: { xs: '1fr', md: 'minmax(240px, 1.5fr) minmax(280px, 2fr)' },
                 ...rowSx,
               }}
             >
-              <Box className="od-note-num" sx={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
-                Nota · {String(base + i + 1).padStart(2, '0')}
-              </Box>
               <Box sx={{ pb: { md: '34px' } }}>
-                <Kicker sx={{ mb: 1.5, fontSize: 11, letterSpacing: '0.18em', fontVariantNumeric: 'tabular-nums' }}>
-                  ART-{String(article.id).padStart(3, '0')}
-                  {article.category ? ` · ${article.category}` : ''}
+                <Kicker sx={{ mb: 1.5 }}>
+                  {article.category || 'Nota de cría'}
                 </Kicker>
                 <Box component="h3" className="od-note-title" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 'clamp(22px, 2.1vw, 30px)', lineHeight: 1.2, maxWidth: '22ch', textWrap: 'pretty' }}>
                   {article.title}
@@ -208,7 +201,7 @@ export function OdDivulgacion({ articles = [] }) {
                   {article.reading_minutes != null && (
                     <Box component="span" sx={{ color: 'var(--color-neutral-600)' }}>{article.reading_minutes} min de lectura</Box>
                   )}
-                  <Box component="span" aria-hidden className="od-note-cta" sx={{ display: { xs: 'none', md: 'inline' }, letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: 12, color: 'var(--od-tuna)' }}>
+                  <Box component="span" aria-hidden className="od-note-cta" sx={{ display: { xs: 'none', md: 'inline' }, fontSize: 13, color: 'var(--od-tuna)' }}>
                     Leer nota →
                   </Box>
                 </Box>

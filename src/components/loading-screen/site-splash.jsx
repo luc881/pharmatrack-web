@@ -138,9 +138,7 @@ export function SiteSplash() {
         <Box sx={{ textAlign: 'center', animation: `${show} 600ms ease 400ms both` }}>
           <Box
             sx={{
-              fontSize: 11,
-              letterSpacing: 'var(--od-tracking-label)',
-              textTransform: 'uppercase',
+              fontSize: 13,
               color: 'var(--od-gris)',
             }}
           >

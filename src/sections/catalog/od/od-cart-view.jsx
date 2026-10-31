@@ -157,7 +157,7 @@ function StepIndicator({ step, onGo }) {
                   borderRadius: '999px',
                   display: 'grid',
                   placeItems: 'center',
-                  fontSize: 12,
+                  fontSize: 13,
                   fontVariantNumeric: 'tabular-nums',
                   border: '1px solid',
                   borderColor: active || done ? 'var(--color-accent)' : 'var(--color-divider)',
@@ -165,7 +165,7 @@ function StepIndicator({ step, onGo }) {
                   color: done ? 'var(--color-neutral-100)' : 'inherit',
                 }}
               >
-                {done ? '✓' : i + 1}
+                {done ? <Iconify icon="eva:checkmark-fill" width={14} /> : i + 1}
               </Box>
               <Box component="span" sx={{ fontSize: 13, letterSpacing: '0.04em', display: { xs: active ? 'inline' : 'none', sm: 'inline' } }}>
                 {label}
@@ -321,7 +321,7 @@ export function OdCartView() {
   if (confirmed) {
     return (
       <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 6, md: 10 }, pb: { xs: 10, md: 16 }, textAlign: 'center' }}>
-        <Box sx={{ mb: 2, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>
+        <Box sx={{ mb: 2, fontSize: 13, color: 'var(--color-accent-700)' }}>
           Pedido confirmado
         </Box>
         <Display component="h1" size="clamp(36px, 5vw, 72px)" sx={{ lineHeight: 1.05 }}>
@@ -503,7 +503,7 @@ export function OdCartView() {
                       <Iconify icon="eva:arrow-forward-outline" width={20} />
                     </Box>
                   </Box>
-                  {promoMsg && <Box sx={{ mt: 1, fontSize: 12, color: 'var(--color-neutral-600)' }}>{promoMsg}</Box>}
+                  {promoMsg && <Box sx={{ mt: 1, fontSize: 13, color: 'var(--color-neutral-600)' }}>{promoMsg}</Box>}
 
                   {error && <Alert severity="error" sx={{ mt: 2, typography: 'caption' }}>{error}</Alert>}
 

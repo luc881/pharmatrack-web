@@ -8,7 +8,6 @@ import Collapse from '@mui/material/Collapse';
 import { CONFIG } from 'src/global-config';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdPanel } from 'src/layouts/od/od-panel';
-import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
 
 // ----------------------------------------------------------------------
 // Preguntas frecuentes (sección del home, ancla #preguntas). Fondo terracota,
@@ -33,8 +32,7 @@ export function OdFaq({ mossTall }) {
 
   return (
     <OdPanel id="preguntas" sx={{ pt: { xs: '56px', md: '72px' }, pb: { xs: '72px', md: '110px' } }}>
-      <OdGutterNote dark n="04" label="Preguntas" start={300} />
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 13, color: 'var(--color-neutral-500)' }}>
         <Box component="span">(Preguntas frecuentes)</Box>
         <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 respuestas</Box>
       </Box>
@@ -91,16 +89,13 @@ export function OdFaq({ mossTall }) {
                     type="button"
                     onClick={() => setOpen(isOpen ? -1 : i)}
                     aria-expanded={isOpen}
-                    sx={{ width: 1, display: 'grid', gridTemplateColumns: { xs: '34px 1fr auto', md: '62px 1fr auto' }, alignItems: 'center', gap: 2.5, p: { xs: '20px 4px', md: '24px 26px' }, bgcolor: 'transparent', border: 0, cursor: 'pointer', font: 'inherit', color: 'var(--color-neutral-100)', textAlign: 'left', transition: 'background 260ms, color 260ms', '&:hover': { bgcolor: 'rgba(229,241,205,0.08)', color: 'var(--color-accent-300)' } }}
+                    sx={{ width: 1, display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 2.5, p: { xs: '20px 4px', md: '24px 26px' }, bgcolor: 'transparent', border: 0, cursor: 'pointer', font: 'inherit', color: 'var(--color-neutral-100)', textAlign: 'left', transition: 'background 260ms, color 260ms', '&:hover': { bgcolor: 'rgba(229,241,205,0.08)', color: 'var(--color-accent-300)' } }}
                   >
-                    <Box component="span" sx={{ fontFamily: 'var(--font-heading)', fontSize: 15, letterSpacing: '0.14em', color: 'var(--color-neutral-500)', fontVariantNumeric: 'tabular-nums' }}>
-                      {String(i + 1).padStart(2, '0')}
-                    </Box>
                     <Box component="span" sx={{ fontSize: { xs: 16, md: 18 }, fontWeight: 500 }}>{item.q}</Box>
                     <Box component="span" sx={{ flexShrink: 0, width: 10, height: 10, borderRadius: '50%', border: '1px solid var(--color-neutral-500)', bgcolor: isOpen ? 'var(--color-accent-400)' : 'transparent', transition: 'background 260ms' }} />
                   </Box>
                   <Collapse in={isOpen}>
-                    <Box sx={{ m: 0, p: { xs: '0 4px 24px 42px', md: '0 80px 28px 108px' }, fontSize: 15, lineHeight: 1.8, color: 'var(--color-neutral-400)' }}>
+                    <Box sx={{ m: 0, p: { xs: '0 4px 24px', md: '0 80px 28px 26px' }, fontSize: 15, lineHeight: 1.8, color: 'var(--color-neutral-400)' }}>
                       {item.a}
                     </Box>
                   </Collapse>

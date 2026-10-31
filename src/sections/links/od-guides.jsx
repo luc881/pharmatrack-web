@@ -52,7 +52,7 @@ function GuideCard({ g, prefix }) {
         <Box sx={{ fontFamily: 'var(--od-font-display)', fontSize: g.sub ? 17 : 21, lineHeight: 1.2 }}>
           {g.sub ? <SciName>{g.name}</SciName> : g.name}
         </Box>
-        {todo && <Box sx={{ mt: 0.5, fontSize: 12, color: 'var(--od-text-muted)' }}>Pídela por WhatsApp</Box>}
+        {todo && <Box sx={{ mt: 0.5, fontSize: 13, color: 'var(--od-text-muted)' }}>Pídela por WhatsApp</Box>}
       </Box>
       <Box component="span" aria-hidden sx={{ fontSize: 18 }}>
         {todo ? '↗' : '→'}

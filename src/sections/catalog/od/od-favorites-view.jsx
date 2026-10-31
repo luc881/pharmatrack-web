@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { paths } from 'src/routes/paths';
 
 import { OdReveal } from 'src/layouts/od/od-motion';
-import { Pill, Kicker, Display } from 'src/layouts/od/od-ui';
+import { Pill, Display } from 'src/layouts/od/od-ui';
 
 import { useFavorites } from '../use-favorites';
 import { animalToCard } from './od-catalog-view';
@@ -22,7 +22,6 @@ export function OdFavoritesView({ items = [] }) {
   return (
     <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
       <Box className="od-rise">
-        <Kicker sx={{ mb: 2.5 }}>Tu selección</Kicker>
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02, mb: { xs: 4, md: 6 } }}>
           Favoritos
         </Display>

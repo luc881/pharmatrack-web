@@ -49,7 +49,7 @@ export function OdTopbar() {
     <>
     <Box sx={{ position: 'relative', zIndex: 60 }}>
       {/* Tira de aviso */}
-      <Box sx={{ bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-200)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', textAlign: 'center', px: 2.5, py: '9px' }}>
+      <Box sx={{ bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-200)', fontSize: 13, textAlign: 'center', px: 2.5, py: '9px' }}>
         Entrega en persona en CDMX — coordinamos por WhatsApp
       </Box>
 
@@ -72,7 +72,7 @@ export function OdTopbar() {
           borderBottom: '1px solid var(--color-divider)',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: { md: '18px', xl: '22px' }, minWidth: 0, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { md: '18px', xl: '22px' }, minWidth: 0, fontSize: 13 }}>
           {/* En móvil el hamburguesa TIENE que estar aquí: la píldora flotante
               no aparece hasta pasar 320px de scroll. En escritorio lleva texto. */}
           <Box
@@ -142,7 +142,7 @@ export function OdTopbar() {
           Opuntia Den
         </Link>
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: { xs: 1.5, md: 2.5 }, minWidth: 0, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: { xs: 1.5, md: 2.5 }, minWidth: 0, fontSize: 13 }}>
           <Box component="span" sx={{ display: { xs: 'none', xl: 'inline-flex' }, gap: 1, color: 'var(--color-neutral-600)' }}>
             <Box component="span" sx={{ color: 'var(--color-text)' }}>ES</Box>/EN
           </Box>

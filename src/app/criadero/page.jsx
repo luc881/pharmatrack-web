@@ -35,7 +35,6 @@ export default async function Page() {
   return (
     <OdLayout>
       <OdPageHead
-        kicker="El criadero"
         title="Criamos invertebrados en la Ciudad de México desde 2019."
         intro="Opuntia Den empezó como cuatro frascos en una repisa. Hoy son 38 colonias con registro individual de temperatura, humedad y camadas. Todo lo que vendemos nació aquí: no revendemos importaciones ni ejemplares capturados."
       />

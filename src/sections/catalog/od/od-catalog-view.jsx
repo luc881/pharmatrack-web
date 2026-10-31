@@ -16,8 +16,6 @@ import { fCurrency } from 'src/utils/format-number';
 import { Display } from 'src/layouts/od/od-ui';
 import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdReveal } from 'src/layouts/od/od-motion';
-import { HeadingMark } from 'src/layouts/od/od-ornaments';
-import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -50,8 +48,6 @@ const SORT_OPTIONS = [
 // (control segmentado de categoría + rango de precio) y rejilla. Datos reales;
 // el filtro de categoría alterna entre listados de animales y productos.
 // ----------------------------------------------------------------------
-
-const pad2 = (n) => String(n).padStart(2, '0');
 
 // Paginación por scroll infinito: 8 iniciales, +6 al acercarse al final.
 const PAGE = 8;
@@ -146,7 +142,7 @@ function LevelFilter({ levels, level, setLevel }) {
   if (!levels.length) return null;
   return (
     <>
-      <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+      <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 13, color: 'var(--color-neutral-600)' }}>
         Nivel
       </Box>
       <Box role="radiogroup" aria-label="Nivel" sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' }, flexDirection: { md: 'column' }, gap: { xs: '8px', md: '10px' }, fontSize: 13 }}>
@@ -197,7 +193,7 @@ function LevelFilter({ levels, level, setLevel }) {
 function PriceFilter({ range, setRange, maxPrice }) {
   return (
     <>
-      <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+      <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 13, color: 'var(--color-neutral-600)' }}>
         Precio
       </Box>
       <Slider
@@ -209,7 +205,7 @@ function PriceFilter({ range, setRange, maxPrice }) {
         valueLabelDisplay="off"
         sx={{ color: 'var(--color-accent-700)', maxWidth: { xs: 260, md: '100%' } }}
       />
-      <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
+      <Box sx={{ fontSize: 13, color: 'var(--color-neutral-600)', fontVariantNumeric: 'tabular-nums' }}>
         {fCurrency(range[0])} – {fCurrency(range[1])} MXN
       </Box>
     </>
@@ -354,7 +350,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           // seccion cruza por debajo (use-nav-theme.js).
         }}
       >
-        <Box sx={{ position: 'relative', mb: 2, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-400)' }}>
+        <Box sx={{ position: 'relative', mb: 2, fontSize: 13, color: 'var(--color-neutral-400)' }}>
           <Link component={RouterLink} href={paths.root} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-300)' } }}>
             Inicio
           </Link>
@@ -384,7 +380,6 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ position: 'relative', lineHeight: 1.02 }}>
           {title}
         </Display>
-        <HeadingMark sx={{ mt: '20px', color: 'var(--od-papel)' }} />
 
         <Box sx={{ mt: 2.5, maxWidth: '52ch', fontSize: 15, lineHeight: 1.6, opacity: 0.8 }}>
           Todo lo que hay disponible hoy. Los ejemplares se reservan con anticipo y se entregan en
@@ -444,7 +439,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                   flexShrink: 0,
                   cursor: 'pointer',
                   font: 'inherit',
-                  fontSize: 12,
+                  fontSize: 13,
                   letterSpacing: '0.04em',
                   whiteSpace: 'nowrap',
                   minHeight: 44,
@@ -471,7 +466,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             flexShrink: 0,
             cursor: 'pointer',
             font: 'inherit',
-            fontSize: 12,
+            fontSize: 13,
             letterSpacing: '0.04em',
             whiteSpace: 'nowrap',
             minHeight: 44,
@@ -510,7 +505,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-          <Box sx={{ fontSize: 14, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Filtros</Box>
+          <Box sx={{ fontSize: 14 }}>Filtros</Box>
           <Box
             component="button"
             type="button"
@@ -525,7 +520,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
         <LevelFilter levels={levels} level={level} setLevel={setLevel} />
         <PriceFilter range={range} setRange={setRange} maxPrice={maxPrice} />
 
-        <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+        <Box sx={{ mt: 4.5, mb: 1.5, fontSize: 13, color: 'var(--color-neutral-600)' }}>
           Orden
         </Box>
         <Box
@@ -559,7 +554,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
             component="button"
             type="button"
             onClick={clearAll}
-            sx={{ minHeight: 44, px: 1, border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}
+            sx={{ minHeight: 44, px: 1, border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', fontSize: 13, color: 'var(--color-neutral-600)' }}
           >
             Limpiar todo
           </Box>
@@ -579,16 +574,6 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           sitio (--od-catalog-max): en una tienda el espacio sobrante rinde más
           como columnas de producto que como margen vacío. */}
       <Box sx={{ position: 'relative' }}>
-      {/* Lo que sobra a los lados del cuerpo en 4K: número de resultados y
-          folio, como en las secciones del home */}
-      <OdGutterNote
-        n={String(cards.length).padStart(2, '0')}
-        label={category ? category.name : 'Resultados'}
-        width="max(0px, calc((100% - var(--od-catalog-max) - 80px) / 2))"
-        minScreen={2160}
-        start={120}
-        folio="Opuntia Den — Catálogo"
-      />
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '232px minmax(0, 1fr)' }, mx: 'auto', maxWidth: 'calc(var(--od-catalog-max) + 80px)' }}>
         {/* El color va en la celda de la rejilla, no en el <aside>: el aside es
             sticky y solo mide lo que ocupan sus filtros, asi que pintarlo a el
@@ -615,7 +600,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
               top: { md: 130 },
             }}
           >
-          <Box sx={{ mb: 2, fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+          <Box sx={{ mb: 2, fontSize: 13, color: 'var(--color-neutral-600)' }}>
             Categoría
           </Box>
           <Box
@@ -640,10 +625,8 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                   sx={{
                     cursor: 'pointer',
                     font: 'inherit',
-                    fontSize: 12,
+                    fontSize: 13,
                     textAlign: 'left',
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
                     px: '14px',
                     py: '11px',
                     borderRadius: { xs: '999px', md: 0 },
@@ -674,14 +657,12 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
               justifyContent: 'space-between',
               pb: 2.5,
               borderBottom: '1px solid var(--color-divider)',
-              fontSize: 12,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
+              fontSize: 13,
               color: 'var(--color-neutral-600)',
             }}
           >
             <Box sx={{ fontVariantNumeric: 'tabular-nums' }}>
-              {pad2(cards.length)} resultado{cards.length === 1 ? '' : 's'}
+              {cards.length} resultado{cards.length === 1 ? '' : 's'}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2.5 } }}>
               {/* Orden: en xs vive en la hoja inferior de filtros (evita
@@ -695,7 +676,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                 sx={{
                   display: { xs: 'none', md: 'inline-block' },
                   font: 'inherit',
-                  fontSize: 12,
+                  fontSize: 13,
                   letterSpacing: '0.04em',
                   textTransform: 'none',
                   color: 'inherit',
@@ -749,7 +730,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
           {/* Chips activos */}
           {chips.length > 0 && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexWrap: 'wrap', pt: 2.5 }}>
-              <Box component="span" sx={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+              <Box component="span" sx={{ fontSize: 13, color: 'var(--color-neutral-600)' }}>
                 Filtros
               </Box>
               {chips.map((c) => (
@@ -764,7 +745,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                     gap: 1,
                     cursor: 'pointer',
                     font: 'inherit',
-                    fontSize: 12,
+                    fontSize: 13,
                     px: 1.75,
                     py: 0.875,
                     border: '1px solid var(--color-divider)',
@@ -775,14 +756,15 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                     '&:hover': { borderColor: 'var(--color-accent)', color: 'var(--color-accent-700)' },
                   }}
                 >
-                  {c.label} ✕
+                  {c.label}
+                  <Iconify icon="mingcute:close-line" width={14} sx={{ ml: 0.75, verticalAlign: '-2px' }} />
                 </Box>
               ))}
               <Box
                 component="button"
                 type="button"
                 onClick={clearAll}
-                sx={{ border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-neutral-600)', '&:hover': { color: 'var(--color-accent-700)' } }}
+                sx={{ border: 0, bgcolor: 'transparent', cursor: 'pointer', font: 'inherit', fontSize: 13, color: 'var(--color-neutral-600)', '&:hover': { color: 'var(--color-accent-700)' } }}
               >
                 Limpiar todo
               </Box>
@@ -815,9 +797,7 @@ export function OdCatalogView({ items = [], products = [], category = null }) {
                     display: 'flex',
                     justifyContent: 'center',
                     mt: { xs: 6, md: 8 },
-                    fontSize: 11,
-                    letterSpacing: '0.16em',
-                    textTransform: 'uppercase',
+                    fontSize: 13,
                     color: 'var(--color-neutral-500)',
                   }}
                 >

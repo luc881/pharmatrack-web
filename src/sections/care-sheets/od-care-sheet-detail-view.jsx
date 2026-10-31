@@ -26,8 +26,6 @@ const LABEL = {
   fontFamily: 'var(--od-font-body)',
   fontWeight: 500,
   fontSize: 'var(--od-text-xs)',
-  letterSpacing: 'var(--od-tracking-label)',
-  textTransform: 'uppercase',
   color: 'var(--od-text-muted)',
 };
 
@@ -75,7 +73,7 @@ const proseSx = {
 };
 
 // «01 ——— DESCRIPCIÓN GENERAL» con la línea a todo lo ancho
-function SectionHead({ n, id, children }) {
+function SectionHead({ id, children }) {
   return (
     <Box
       component="h2"
@@ -85,28 +83,18 @@ function SectionHead({ n, id, children }) {
         m: 0,
         mb: 3,
         pb: 1.5,
-        fontSize: 12,
+        fontSize: 15,
+        fontWeight: 500,
         color: 'var(--od-text)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '14px',
         borderBottom: 'var(--od-rule)',
       }}
     >
-      <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>
-        {String(n).padStart(2, '0')}
-      </Box>
-      <Box
-        component="span"
-        aria-hidden
-        sx={{ width: 28, height: '1px', bgcolor: 'var(--od-tuna)' }}
-      />
-      <span>{children}</span>
+      {children}
     </Box>
   );
 }
 
-function Section({ n, id, title, children }) {
+function Section({ id, title, children }) {
   return (
     <Box
       component="section"
@@ -114,7 +102,7 @@ function Section({ n, id, title, children }) {
       className="od-reveal"
       sx={{ mt: { xs: 6, md: 8 }, '&:first-of-type': { mt: 0 } }}
     >
-      <SectionHead n={n} id={id}>
+      <SectionHead id={id}>
         {title}
       </SectionHead>
       {children}
@@ -236,7 +224,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
   const morphology = guide.morphology ?? [];
   const tags = guide.tags ?? [];
 
-  // numeración continua de las secciones del contenido
+  // contador para ids estables de las secciones del contenido (#sec-N)
   let n = 0;
   const next = () => {
     n += 1;
@@ -398,7 +386,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
         }}
       >
         <Box component="article" sx={{ minWidth: 0 }}>
-          <Section n={next()} id="descripcion" title="Descripción general">
+          <Section id="descripcion" title="Descripción general">
             <Box
               component="p"
               sx={{
@@ -420,7 +408,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
           </Section>
 
           {morphology.length > 0 && (
-            <Section n={next()} id="morfologia" title="Morfología">
+            <Section id="morfologia" title="Morfología">
               <Box sx={{ display: 'grid', gap: 3.5 }}>
                 {morphology.map((m) => (
                   <Box key={m.label} sx={{ position: 'relative', pl: 3 }}>
@@ -457,7 +445,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
           )}
 
           {guide.habitat && (
-            <Section n={next()} id="habitat" title="Hábitat y comportamiento">
+            <Section id="habitat" title="Hábitat y comportamiento">
               <Box
                 component="p"
                 sx={{ m: 0, maxWidth: '62ch', fontSize: { xs: 19, md: 22 }, lineHeight: 1.6 }}
@@ -526,7 +514,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
           {sections.map((s) => {
             const num = next();
             return (
-              <Section key={s.title} n={num} id={`sec-${num}`} title={s.title}>
+              <Section key={s.title} id={`sec-${num}`} title={s.title}>
                 <Box
                   sx={proseSx}
                   dangerouslySetInnerHTML={{ __html: renderMarkdown(s.markdown) }}
@@ -536,7 +524,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
           })}
 
           {(guide.photos.length > 0 || guide.video) && (
-            <Section n={next()} id="fotos" title="Fotos y video">
+            <Section id="fotos" title="Fotos y video">
               <Box
                 sx={{
                   display: 'grid',
@@ -582,7 +570,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
           )}
 
           {guide.references.length > 0 && (
-            <Section n={next()} id="referencias" title="Referencias">
+            <Section id="referencias" title="Referencias">
               <Box
                 component="ol"
                 sx={{

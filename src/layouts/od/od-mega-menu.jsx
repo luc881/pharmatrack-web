@@ -10,6 +10,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
 
+import { Iconify } from 'src/components/iconify';
+
 import { useCart } from 'src/sections/catalog/use-cart';
 import { useFavorites } from 'src/sections/catalog/use-favorites';
 
@@ -78,29 +80,13 @@ const selectionSx = { ...smallLinkSx, fontFamily: 'var(--font-heading)', fontSiz
 
 const labelSx = {
   mb: 1.5,
-  fontSize: 11,
-  letterSpacing: '0.22em',
-  textTransform: 'uppercase',
+  fontSize: 13,
   color: 'var(--color-neutral-500)',
 };
 
 function BigLink({ n, href, onClick, children, sx }) {
   return (
     <Link component={RouterLink} href={href} onClick={onClick} sx={[bigLinkSx, ...(Array.isArray(sx) ? sx : [sx])]}>
-      <Box
-        component="span"
-        aria-hidden
-        sx={{
-          minWidth: 22,
-          fontFamily: 'var(--od-font-body)',
-          fontSize: 12,
-          letterSpacing: '0.12em',
-          color: 'var(--color-neutral-500)',
-          fontVariantNumeric: 'tabular-nums',
-        }}
-      >
-        {String(n).padStart(2, '0')}
-      </Box>
       <Box component="span" className="od-mm-text" sx={{ flex: 1 }}>
         {children}
       </Box>
@@ -218,9 +204,7 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
             cursor: 'pointer',
             font: 'inherit',
             color: 'inherit',
-            fontSize: 12,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
+            fontSize: 13,
             transition: 'color 300ms',
             '&:hover': { color: 'var(--color-accent-300)' },
             '&:hover .od-mm-x': { transform: 'rotate(90deg)' },
@@ -231,9 +215,9 @@ export function OdMegaMenu({ open, onClose, onSearch, categories }) {
             component="span"
             className="od-mm-x"
             aria-hidden
-            sx={{ display: 'inline-block', transition: 'transform 400ms var(--od-ease)' }}
+            sx={{ display: 'inline-flex', transition: 'transform 400ms var(--od-ease)' }}
           >
-            ✕
+            <Iconify icon="mingcute:close-line" width={16} />
           </Box>
         </Box>
 

@@ -174,9 +174,7 @@ export function OdHoverPreview({ apiRef }) {
           <Box key={item.key} sx={{ px: 1.75, py: 1.25, animation: 'odFade 0.35s ease both' }}>
             <Box
               sx={{
-                fontSize: 10,
-                letterSpacing: 'var(--od-tracking-label)',
-                textTransform: 'uppercase',
+                fontSize: 13,
                 color: 'var(--od-text-muted)',
               }}
             >

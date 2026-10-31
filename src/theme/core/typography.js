@@ -122,7 +122,6 @@ export const typography = {
     fontWeight: baseTypography.fontWeightBold,
     lineHeight: 1.5,
     fontSize: pxToRem(12),
-    textTransform: 'uppercase',
   },
   button: {
     fontWeight: baseTypography.fontWeightBold,

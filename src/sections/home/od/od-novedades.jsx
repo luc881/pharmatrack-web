@@ -39,7 +39,7 @@ export function OdNovedades({ mossWide }) {
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${mossWide})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.28)' }} />
         <Box sx={{ maxWidth: 1040, mx: 'auto', bgcolor: 'var(--color-neutral-100)', color: 'var(--color-text)', p: { xs: '28px 22px', md: '38px 46px 36px' }, boxShadow: 'var(--shadow-md)' }}>
-          <Box sx={{ mb: 1.5, fontSize: 10, letterSpacing: '0.26em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>Novedades</Box>
+          <Box sx={{ mb: 1.5, fontSize: 13, color: 'var(--color-accent-700)' }}>Novedades</Box>
           <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(28px, 3.2vw, 42px)', lineHeight: 1.08, maxWidth: '22ch' }}>
             Avisamos cuando sale camada nueva
           </Box>
@@ -62,7 +62,7 @@ export function OdNovedades({ mossWide }) {
                 sx={{ mt: 3.25, display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'flex-end' }}
               >
                 <Box sx={{ flex: 1, minWidth: 240 }}>
-                  <Box component="label" htmlFor="od-news-mail" sx={{ display: 'block', mb: 0.75, fontSize: 12, color: 'var(--color-neutral-600)' }}>
+                  <Box component="label" htmlFor="od-news-mail" sx={{ display: 'block', mb: 0.75, fontSize: 13, color: 'var(--color-neutral-600)' }}>
                     Correo electrónico
                   </Box>
                   <Box
@@ -79,12 +79,12 @@ export function OdNovedades({ mossWide }) {
                 <Box
                   component="button"
                   type="submit"
-                  sx={{ height: 46, px: 3.5, border: '1px solid var(--color-neutral-900)', bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', cursor: 'pointer', font: 'inherit', fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', transition: 'background 300ms', '&:hover': { bgcolor: 'var(--color-accent-700)', borderColor: 'var(--color-accent-700)' } }}
+                  sx={{ height: 46, px: 3.5, border: '1px solid var(--color-neutral-900)', bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', cursor: 'pointer', font: 'inherit', fontSize: 13, transition: 'background 300ms', '&:hover': { bgcolor: 'var(--color-accent-700)', borderColor: 'var(--color-accent-700)' } }}
                 >
                   Suscribirme
                 </Box>
               </Box>
-              <Box sx={{ mt: 1.75, fontSize: 12, color: 'var(--color-neutral-600)' }}>
+              <Box sx={{ mt: 1.75, fontSize: 13, color: 'var(--color-neutral-600)' }}>
                 Sin spam. Puedes darte de baja en cualquier momento.
               </Box>
             </>

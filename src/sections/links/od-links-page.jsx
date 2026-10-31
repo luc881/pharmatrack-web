@@ -81,11 +81,9 @@ const linkPill = (b, track) => (
   </Pill>
 );
 
-function Kicker({ id, n, children }) {
+function Kicker({ id, children }) {
   return (
-    <Box id={id} component="h2" className="od-label" sx={{ m: 0, mb: 2, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-      <Box component="span" sx={{ color: 'var(--od-tuna)' }}>{n}</Box>
-      <Box component="span" aria-hidden sx={{ width: 32, height: '1px', bgcolor: 'currentColor' }} />
+    <Box id={id} component="h2" className="od-label" sx={{ m: 0, mb: 2 }}>
       {children}
     </Box>
   );
@@ -95,7 +93,7 @@ const SECTIONS = {
   guides: ({ guides, prefix }) =>
     guides.length ? (
       <Box component="section" aria-labelledby="guias" sx={{ mt: 6 }}>
-        <Kicker id="guias" n="01">
+        <Kicker id="guias">
           Guías de cuidado
         </Kicker>
         <OdGuides guides={guides} prefix={prefix} />
@@ -181,7 +179,7 @@ export async function OdLinksPage({ pageKey, visit, prefix = '', sections }) {
         <Box component="footer" sx={{ mt: 7, textAlign: 'center', fontSize: 13, color: 'var(--od-text-muted)' }}>
           <Box component="img" src="/brand/ornaments/divisor-hojas.svg" alt="" width={96} height={24} sx={{ display: 'block', mx: 'auto', mb: 2.5, color: 'var(--od-tinta)' }} />
           {/* frase de apoyo del lema (guía de marca): siempre como etiqueta */}
-          <Box sx={{ mb: 1.5, fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase' }}>
+          <Box sx={{ mb: 1.5, fontSize: 13 }}>
             Observar · criar · compartir
           </Box>
           {page.footer}

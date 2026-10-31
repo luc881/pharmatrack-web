@@ -9,7 +9,6 @@ import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
 import { OdImage } from 'src/layouts/od/od-ui';
-import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
 import { OdHoverPreview } from 'src/layouts/od/od-hover-preview';
 
 // ----------------------------------------------------------------------
@@ -22,8 +21,6 @@ const LABEL = {
   fontFamily: 'var(--od-font-body)',
   fontWeight: 500,
   fontSize: 'var(--od-text-xs)',
-  letterSpacing: 'var(--od-tracking-label)',
-  textTransform: 'uppercase',
   color: 'var(--od-text-muted)',
 };
 
@@ -294,11 +291,6 @@ export function OdCareSheetsIndexView({ sheets }) {
       }}
     >
       {/* notas al margen en pantallas anchas, como en Divulgación */}
-      <OdGutterNote
-        n={String(sheets.length).padStart(2, '0')}
-        label="Fichas publicadas"
-        start={320}
-      />
       <OdHoverPreview apiRef={preview} />
 
       {/* Encabezado */}

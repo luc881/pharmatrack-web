@@ -76,7 +76,7 @@ export function OdFooter() {
 
         {/* Datos de la tienda */}
         <Box>
-          <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>(Datos de la tienda)</Box>
+          <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 13, color: 'var(--color-neutral-500)' }}>(Datos de la tienda)</Box>
           <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, px: 1.875, py: 1, borderRadius: '999px', bgcolor: 'rgba(229,241,205,0.08)', fontSize: 13, color: 'var(--color-neutral-200)' }}>
             <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-accent-400)' }} />
             Apartados abiertos
@@ -102,7 +102,7 @@ export function OdFooter() {
 
         {/* Redes */}
         <Box>
-          <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' }}>(Redes)</Box>
+          <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 13, color: 'var(--color-neutral-500)' }}>(Redes)</Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25, fontSize: 17 }}>
             {REDES.map((r) => (
               <Link

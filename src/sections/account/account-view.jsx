@@ -262,7 +262,7 @@ export function AccountView() {
               </Button>
               {saved && (
                 <Typography variant="caption" sx={{ color: 'success.main' }}>
-                  Guardado ✓
+                  Guardado
                 </Typography>
               )}
               <Button component={RouterLink} href={paths.orders} color="inherit" sx={{ ml: 'auto' }}>

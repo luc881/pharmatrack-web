@@ -6,6 +6,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { Star, OdImage } from 'src/layouts/od/od-ui';
 
+import { Iconify } from 'src/components/iconify';
+
 import { useFavorites } from '../use-favorites';
 
 // ----------------------------------------------------------------------
@@ -22,17 +24,13 @@ const BADGE_VARIANTS = {
   outline: { bgcolor: 'rgba(243,242,242,0.92)', color: 'var(--color-neutral-900)', border: '1px solid var(--color-divider)' },
 };
 
-const pad3 = (n) => String(n).padStart(3, '0');
-
-export function OdCatalogCard({ card, index = 0, horizontal = false }) {
+export function OdCatalogCard({ card, horizontal = false }) {
   const { ids, toggle } = useFavorites();
   const isFavorite = card.favKey ? ids.includes(card.favKey) : false;
   // `card.soldOut` es un booleano propio del card (no se deduce de `card.badge`):
   // el badge es texto de presentación con prioridades ("Nuevo" gana sobre
   // "Agotado" en animalToCard), así que no puede llevar el estado real.
   const soldOut = !!card.soldOut;
-
-  const code = card.codePrefix ? `${card.codePrefix}-${pad3(index + 1)}` : null;
 
   const media = (
     <Box className={horizontal ? undefined : 'od-tilt-lg od-glare'} data-fx={horizontal ? undefined : true} sx={{ position: 'relative', flexShrink: 0, width: horizontal ? { xs: 130, sm: 200 } : '100%', aspectRatio: '1 / 1', overflow: 'hidden', bgcolor: 'var(--color-neutral-200)' }}>
@@ -60,7 +58,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
       )}
 
       {card.badge && (
-        <Box sx={{ position: 'absolute', top: 12, left: 12, px: '12px', py: '5px', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', ...BADGE_VARIANTS[card.badgeVariant ?? 'neutral'] }}>
+        <Box sx={{ position: 'absolute', top: 12, left: 12, px: '12px', py: '5px', fontSize: 13, ...BADGE_VARIANTS[card.badgeVariant ?? 'neutral'] }}>
           {card.badge}
         </Box>
       )}
@@ -78,9 +76,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
             color: 'var(--od-neutro-100)',
             textAlign: 'center',
             py: '5px',
-            fontSize: 11,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
+            fontSize: 13,
             pointerEvents: 'none',
             zIndex: 2,
           }}
@@ -125,7 +121,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
             '&:hover': { color: 'var(--color-accent-700)' },
           }}
         >
-          {isFavorite ? '♥' : '♡'}
+          <Iconify icon={isFavorite ? 'solar:heart-bold' : 'solar:heart-outline'} width={18} />
         </Box>
       )}
 
@@ -140,9 +136,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
             px: '14px',
             py: '12px',
             textAlign: 'center',
-            fontSize: 12,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
+            fontSize: 13,
             bgcolor: 'rgba(243,242,242,0.94)',
             color: 'var(--color-neutral-900)',
             transform: 'translateY(calc((1 - var(--od-h, 0)) * 100%))',
@@ -175,8 +169,7 @@ export function OdCatalogCard({ card, index = 0, horizontal = false }) {
           />
         </Box>
       )}
-      <Box sx={{ mb: '10px', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
-        {code && <Box component="span" sx={{ color: 'var(--color-accent-700)', fontVariantNumeric: 'tabular-nums' }}>{code}&nbsp;&nbsp;|&nbsp;&nbsp;</Box>}
+      <Box sx={{ mb: '10px', fontSize: 13 }}>
         <Box component="span" sx={{ color: 'var(--color-neutral-600)' }}>{card.category}</Box>
         {card.taxonLabel && (
           <Box component="span" sx={{ opacity: 0.7 }}><Star sx={{ mx: '0.6em', verticalAlign: '0' }} />{card.taxonLabel}</Box>

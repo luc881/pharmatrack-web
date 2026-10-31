@@ -6,10 +6,9 @@ import Box from '@mui/material/Box';
 
 import { RouterLink } from 'src/routes/components';
 
+import { Display } from 'src/layouts/od/od-ui';
 import { OdReveal } from 'src/layouts/od/od-motion';
-import { Kicker, Display } from 'src/layouts/od/od-ui';
-import { OdGutterNote } from 'src/layouts/od/od-gutter-note';
-import { BrandSeal, HeadingMark } from 'src/layouts/od/od-ornaments';
+import { BrandSeal } from 'src/layouts/od/od-ornaments';
 
 import { OdArticleCard } from './od-article-card';
 
@@ -21,8 +20,6 @@ import { OdArticleCard } from './od-article-card';
 const LABEL = {
   fontWeight: 500,
   fontSize: 'var(--od-text-xs)',
-  letterSpacing: 'var(--od-tracking-label)',
-  textTransform: 'uppercase',
 };
 
 const focusSx = {
@@ -108,11 +105,6 @@ export function OdArticlesView({ articles = [] }) {
         pb: { xs: 8, md: 12 },
       }}
     >
-      <OdGutterNote
-        n={String(articles.length).padStart(2, '0')}
-        label="Notas publicadas"
-        start={320}
-      />
       <BrandSeal
         size={132}
         sx={{
@@ -123,11 +115,9 @@ export function OdArticlesView({ articles = [] }) {
         }}
       />
       <Box className="od-rise" sx={{ position: 'relative' }}>
-        <Kicker sx={{ mb: 2.5 }}>Notas de cría</Kicker>
         <Display component="h1" size="clamp(40px, 5.4vw, 76px)" sx={{ lineHeight: 1.02 }}>
           Divulgación
         </Display>
-        <HeadingMark sx={{ mt: '22px' }} />
         <Box
           sx={{
             mt: 2.5,

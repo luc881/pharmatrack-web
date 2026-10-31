@@ -15,6 +15,8 @@ import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdImage, SciName, Display } from 'src/layouts/od/od-ui';
 import { NoteBox, LeafDivider, SectionHead, NumberedKicker } from 'src/layouts/od/od-ornaments';
 
+import { Iconify } from 'src/components/iconify';
+
 import { useCart } from '../use-cart';
 import { shopInfoFor } from '../shop-info';
 import { useFavorites } from '../use-favorites';
@@ -141,9 +143,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
           display: 'flex',
           flexWrap: 'wrap',
           gap: '10px',
-          fontSize: 12,
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
+          fontSize: 13,
           color: 'var(--color-neutral-600)',
         }}
       >
@@ -193,7 +193,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                   borderRadius: '999px',
                   bgcolor: 'rgba(51,45,39,0.72)',
                   color: 'var(--color-neutral-100)',
-                  fontSize: 12,
+                  fontSize: 13,
                   fontVariantNumeric: 'tabular-nums',
                 }}
               >
@@ -240,9 +240,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                 py: '5px',
                 borderRadius: '999px',
                 border: '1px solid var(--color-divider)',
-                fontSize: 12,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
+                fontSize: 13,
                 color: 'var(--color-neutral-700)',
               }}
             >
@@ -262,9 +260,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                   py: '4px',
                   borderRadius: '999px',
                   border: '1px solid var(--color-divider)',
-                  fontSize: 11,
-                  letterSpacing: '0.16em',
-                  textTransform: 'uppercase',
+                  fontSize: 13,
                   color: 'var(--color-neutral-600)',
                 }}
               >
@@ -408,7 +404,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                 color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
               }}
             >
-              {soldOut ? 'Avísame' : added ? 'Agregado ✓' : 'Agregar a cotización'}
+              {soldOut ? 'Avísame' : added ? 'Agregado' : 'Agregar a cotización'}
             </Box>
           </Box>
 
@@ -461,7 +457,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                 '&:hover': { borderColor: 'var(--color-accent)', color: 'var(--color-accent-700)' },
               }}
             >
-              {isFavorite ? '♥' : '♡'}
+              <Iconify icon={isFavorite ? 'solar:heart-bold' : 'solar:heart-outline'} width={18} />
             </Box>
           </Box>
 
@@ -491,7 +487,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
         <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 7, md: '100px' } }}>
           <OdReveal>
             <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap' }}>
-              <SectionHead kicker="Guía de cuidado" title="Ficha de cuidados" size="clamp(28px, 3.2vw, 44px)" />
+              <SectionHead title="Ficha de cuidados" size="clamp(28px, 3.2vw, 44px)" />
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'flex-start', md: 'flex-end' }, gap: 1.5 }}>
                 <SciName sx={{ fontSize: 18, color: 'var(--od-gris)' }}>{sci}</SciName>
                 {/* La especie tiene ficha de cuidados completa (/fichas): se enlaza */}
@@ -548,7 +544,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                       '&:hover': { bgcolor: 'var(--od-crema-hueso)' },
                     }}
                   >
-                    <Box component="dt" sx={{ fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase', color: 'var(--od-text-muted)' }}>
+                    <Box component="dt" sx={{ fontSize: 13, color: 'var(--od-text-muted)' }}>
                       {field.label}
                     </Box>
                     <Box component="dd" sx={{ m: 0, mt: '10px', fontFamily: 'var(--od-font-display)', fontSize: { xs: 21, md: 26 }, lineHeight: 1.15 }}>
@@ -575,7 +571,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                 {sections.length > 0 ? (
                   sections.map((section, i) => (
                     <Box key={section.title} sx={{ mb: '44px', '&:last-of-type': { mb: 0 } }}>
-                      <NumberedKicker n={i + 1}>{section.kicker}</NumberedKicker>
+                      <NumberedKicker>{section.kicker}</NumberedKicker>
                       <Box component="h3" sx={{ m: 0, mt: '12px', mb: '18px', fontFamily: 'var(--od-font-display)', fontWeight: 400, fontSize: { xs: 24, md: 28 }, lineHeight: 1.2 }}>
                         {section.title}
                       </Box>
@@ -593,7 +589,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
 
                 {guide?.basics.length > 0 && (
                   <Box sx={{ mt: '44px' }}>
-                    <NumberedKicker n={sections.length + 1}>Lo básico</NumberedKicker>
+                    <NumberedKicker>Lo básico</NumberedKicker>
                     <Box component="ul" sx={{ m: 0, mt: '18px', p: 0, listStyle: 'none', display: 'grid', gap: 1.5, maxWidth: '68ch' }}>
                       {guide.basics.map((html) => (
                         <Box component="li" key={html} sx={{ display: 'flex', gap: 1.5, fontSize: 16, lineHeight: 1.7 }}>
@@ -609,7 +605,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               <Box component="aside" sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: '20px', position: { md: 'sticky' }, top: { md: 120 } }}>
                 {taxonomy.length > 0 && (
                   <Box sx={{ p: '22px 24px', bgcolor: 'var(--od-papel)', border: '1px solid var(--od-linea)', borderRadius: 'var(--od-radius-md)', boxShadow: 'var(--od-shadow-flat)' }}>
-                    <Box sx={{ fontSize: 11, letterSpacing: 'var(--od-tracking-label)', textTransform: 'uppercase', color: 'var(--od-text-muted)' }}>
+                    <Box sx={{ fontSize: 13, color: 'var(--od-text-muted)' }}>
                       De un vistazo
                     </Box>
                     <Box component="table" sx={{ mt: '14px', width: 1, borderCollapse: 'collapse', fontSize: 14 }}>
@@ -627,7 +623,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
                     {tags.length > 0 && (
                       <Box sx={{ mt: '16px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {tags.map((tag) => (
-                          <Box key={tag} sx={{ px: '12px', py: '5px', borderRadius: '999px', fontSize: 12, border: '1px solid var(--od-linea)' }}>
+                          <Box key={tag} sx={{ px: '12px', py: '5px', borderRadius: '999px', fontSize: 13, border: '1px solid var(--od-linea)' }}>
                             {tag}
                           </Box>
                         ))}
@@ -650,7 +646,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
       {/* Suele ir con */}
       {related.length > 0 && (
         <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 5, md: 6 }, pb: { xs: 8, md: 12 } }}>
-          <SectionHead kicker="Para el mismo terrario" title="Suele ir con" size="clamp(26px, 3vw, 40px)" />
+          <SectionHead title="Suele ir con" size="clamp(26px, 3vw, 40px)" />
           <Box sx={{ pt: '34px', display: 'grid', gap: '22px', gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' } }}>
             {related.slice(0, 4).map((rel, i) => (
               <OdReveal key={rel.key} delay={i * 0.08}>
@@ -681,7 +677,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
         }}
       >
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Box sx={{ fontSize: 12, color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <Box sx={{ fontSize: 13, color: 'var(--color-neutral-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {title}
           </Box>
           <Box sx={{ fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>{price == null ? 'Consultar' : fCurrency(price)}</Box>
@@ -700,14 +696,12 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
             cursor: soldOut ? 'not-allowed' : 'pointer',
             font: 'inherit',
             fontSize: 13,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
             color: soldOut ? 'var(--color-neutral-600)' : 'var(--color-neutral-100)',
             bgcolor: soldOut ? 'var(--color-neutral-300)' : added ? 'var(--color-accent-700)' : 'var(--color-neutral-900)',
             transition: 'background 300ms',
           }}
         >
-          {soldOut ? 'Avísame' : added ? 'Agregado ✓' : 'Añadir'}
+          {soldOut ? 'Avísame' : added ? 'Agregado' : 'Añadir'}
         </Box>
       </Box>
     </>
