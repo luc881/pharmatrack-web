@@ -25,15 +25,19 @@ export function OdCierre({ ticker }) {
         data-dark="1"
         className="od-grain"
         sx={{
-          minHeight: { xs: 560, md: '82svh' },
+          // compacto y con el texto centrado en el alto (antes 82% de pantalla)
+          minHeight: { xs: 440, md: 'clamp(420px, 52svh, 600px)' },
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
           px: { xs: '18px', md: 'var(--od-gutter)' },
-          pt: { xs: '88px', md: '120px' },
+          py: { xs: '72px', md: '96px' },
           textAlign: 'center',
           color: 'var(--od-papel)',
           bgcolor: 'var(--od-noche)',
           backgroundImage: 'url(/brand/degradados/cierre-prisma.jpg)',
           backgroundSize: 'cover',
-          backgroundPosition: 'center top',
+          backgroundPosition: 'center 40%',
         }}
       >
         <Box component="h2" sx={{ m: 0, mx: 'auto', maxWidth: '16ch', fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(40px, 5.4vw, 84px)', lineHeight: 1.04 }}>
