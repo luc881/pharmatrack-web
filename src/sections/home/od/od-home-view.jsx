@@ -524,7 +524,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           ninguna sección queda junto a otra del mismo tono */}
       <OdHowToBuy />
 
-      {/* Todo para tu terrario: carrusel en perspectiva sobre la foto de hojas */}
+      {/* Todo para tu terrario: carrusel 3D de tarjetas anchas sobre la foto de hojas */}
       {terrario.length > 0 && (
         <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'clip', color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
           <Box aria-hidden data-parallax sx={{ position: 'absolute', inset: '-12% 0', zIndex: -2, backgroundImage: `url(${FOTOS.terrario.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />

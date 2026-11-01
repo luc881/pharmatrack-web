@@ -457,21 +457,6 @@ button:focus-visible,
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.4 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Carrusel en perspectiva (Todo para tu terrario): cada tarjeta se inclina
-   al acercarse a los lados del carrusel y se endereza al centro. Ligado al
-   scroll horizontal; sin soporte o con movimiento reducido, quedan planas. */
-@keyframes odCover {
-  0% { transform: perspective(1400px) rotateY(28deg) scale(0.86); opacity: 0.6; }
-  50% { transform: none; opacity: 1; }
-  100% { transform: perspective(1400px) rotateY(-28deg) scale(0.86); opacity: 0.6; }
-}
-@supports (animation-timeline: view(inline)) {
-  @media (prefers-reduced-motion: no-preference) {
-    .od-cover-card { animation: odCover linear both; animation-timeline: view(inline); animation-range: cover; }
-  }
-}
-
-
 /* Cursor de punto (OdCursor): con mouse, el cursor nativo se oculta y lo
    sustituye el punto; en campos de texto vuelve el cursor de texto. */
 html.od-cursor-on,

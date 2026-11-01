@@ -1,12 +1,13 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
 import { RouterLink } from 'src/routes/components';
 
+import { cdnImage } from 'src/lib/cdn-image';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { rowFillSx } from 'src/layouts/od/od-styles';
 import { MaskLines } from 'src/layouts/od/od-mask-lines';
@@ -135,88 +136,146 @@ export function OdCategoryIndex({ items }) {
 // cursor; la sección padre pausa `.od-band`. Movimiento reducido: la regla
 // global de prefers-reduced-motion la detiene.
 
+// Carrusel 3D de insumos (estilo Reelio): tarjetas anchas, la del centro de
+// frente y las de los lados giradas hacia atrás, como flotando. Es scroll
+// nativo con scroll-snap (deslizar en táctil, flechas en escritorio); el giro
+// lo calcula useCoverflow según la distancia de cada tarjeta al centro. Al
+// pasar el mouse la foto se encoge sobre un fondo desenfocado de sí misma.
+const CARD_W = 'min(88vw, 980px)';
+const CARD_HALF = 'min(44vw, 490px)';
+
+function useCoverflow(ref) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const cards = [...el.querySelectorAll('[data-card]')];
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const mid = el.scrollLeft + el.clientWidth / 2;
+      cards.forEach((c) => {
+        const d = Math.max(-1.2, Math.min(1.2, (c.offsetLeft + c.offsetWidth / 2 - mid) / c.offsetWidth));
+        // se gira el hijo, no el elemento con scroll-snap: el navegador ancla
+        // con la caja ya girada y se detenía antes del centro
+        const card = c.firstElementChild;
+        card.style.transformOrigin = d > 0 ? 'left center' : 'right center';
+        card.style.transform = `perspective(1600px) rotateY(${d * 34}deg) scale(${1 - Math.min(Math.abs(d), 1) * 0.12})`;
+      });
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    el.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [ref]);
+}
+
+const railArrowSx = { bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', borderColor: 'var(--od-papel)', '&:hover': { borderColor: 'var(--od-papel)' } };
+const eyebrowSx = { fontSize: 12, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' };
+const sansSx = { fontFamily: 'var(--od-font-body)', fontWeight: 600, letterSpacing: '-0.03em' };
+
 export function OdProductRail({ items }) {
   const ref = useRef(null);
+  useCoverflow(ref);
   // flechas para escritorio: avanzan una tarjeta (el scroll-snap la centra)
   const step = (dir) => {
     const el = ref.current;
     const card = el?.querySelector('[data-card]');
-    if (el && card) el.scrollBy({ left: dir * (card.offsetWidth + 24), behavior: 'smooth' });
+    if (el && card) el.scrollBy({ left: dir * (card.offsetWidth + 48), behavior: 'smooth' });
   };
 
   return (
     <Box sx={{ position: 'relative' }}>
-      {/* Carrusel en perspectiva (paso 5d): scroll nativo con scroll-snap; la
-          inclinación de los lados sale de una animación ligada al scroll
-          horizontal (.od-cover-card en global.css). Sin soporte: tarjetas
-          planas. */}
       <Box
         ref={ref}
         tabIndex={0}
         aria-label="Insumos para tu terrario"
         sx={{
+          position: 'relative',
           display: 'flex',
-          gap: '24px',
+          gap: '48px',
           overflowX: 'auto',
           scrollSnapType: 'x mandatory',
           scrollbarWidth: 'none',
           '&::-webkit-scrollbar': { display: 'none' },
           // relleno para que la primera y la última puedan quedar al centro
-          px: 'calc(50% - min(43vw, 300px))',
-          py: 3,
+          px: `calc(50% - ${CARD_HALF})`,
+          py: 4,
           '&:focus-visible': { outline: '2px solid var(--od-papel)', outlineOffset: -4 },
         }}
       >
         {items.map((c) => (
+          <Box key={c.key} data-card sx={{ flex: `0 0 ${CARD_W}`, scrollSnapAlign: 'center', display: 'flex' }}>
           <Link
-            key={c.key}
-            data-card
-            className="od-cover-card"
             component={RouterLink}
             href={c.href}
             underline="none"
             sx={{
-              flex: '0 0 min(86vw, 600px)',
-              scrollSnapAlign: 'center',
+              flex: 1,
               display: 'grid',
-              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-              gap: { xs: 2, sm: 3 },
-              p: { xs: 2, sm: 2.5 },
-              borderRadius: '4px',
+              gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+              gap: { xs: 0, md: 3 },
+              p: { xs: 1.5, md: 2 },
+              borderRadius: '2px',
               bgcolor: 'var(--od-papel)',
               color: 'var(--od-tinta)',
-              '&:hover .od-img-zoom': { transform: 'scale(1.05)' },
+              '@media (hover: hover)': {
+                '&:hover .od-terr-bg': { opacity: 1 },
+                '&:hover .od-terr-label': { color: '#f6f4f1' },
+                '&:hover .od-terr-img': { transform: 'scale(0.62)', boxShadow: '0 22px 44px rgba(0,0,0,0.4)' },
+              },
               '&:focus-visible': { outline: '2px solid var(--od-accent)', outlineOffset: 3 },
             }}
           >
-            <Box sx={{ order: { xs: 2, sm: 1 }, display: 'flex', flexDirection: 'column', minHeight: { sm: 300 } }}>
-              <Box sx={{ fontSize: 13, color: 'var(--color-neutral-600)' }}>{c.category}</Box>
-              <Box sx={{ mt: 0.75, fontFamily: 'var(--font-heading)', fontSize: { xs: 24, md: 28 }, lineHeight: 1.12 }}>{c.title}</Box>
-              {c.description && <Box sx={{ mt: 1.5, fontSize: 15, lineHeight: 1.6, color: 'var(--color-neutral-700)' }}>{c.description}</Box>}
-              <Box sx={{ mt: 'auto', pt: 2.5, display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 2 }}>
-                <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: { xs: 24, md: 30 }, fontVariantNumeric: 'tabular-nums', color: c.soldOut ? 'var(--od-neutro-700)' : 'inherit' }}>
+            <Box sx={{ order: { xs: 2, md: 1 }, display: 'flex', flexDirection: 'column', p: { xs: 1, md: 1.5 }, pt: { xs: 2.5, md: 1.5 }, minHeight: { md: 380 } }}>
+              <Box sx={eyebrowSx}>{c.category}</Box>
+              <Box sx={{ ...sansSx, mt: 1, fontSize: 'clamp(26px, 2.6vw, 40px)', lineHeight: 1.05 }}>{c.title}</Box>
+              {c.description && <Box sx={{ mt: 2.5, maxWidth: '44ch', fontSize: 16, lineHeight: 1.55, color: 'var(--color-neutral-700)' }}>{c.description}</Box>}
+              <Box sx={{ mt: 'auto', pt: 3 }}>
+                <Box sx={eyebrowSx}>{c.soldOut ? 'Por ahora' : 'Precio'}</Box>
+                <Box sx={{ ...sansSx, mt: 0.5, fontSize: 'clamp(28px, 2.8vw, 44px)', lineHeight: 1.05, fontVariantNumeric: 'tabular-nums', color: c.soldOut ? 'var(--od-neutro-700)' : 'inherit' }}>
                   {c.soldOut ? 'Agotado' : c.price}
-                </Box>
-                <Box component="span" sx={{ fontSize: 14, color: 'var(--od-accent)' }}>
-                  Ver producto →
                 </Box>
               </Box>
             </Box>
-            <Box sx={{ order: { xs: 1, sm: 2 }, overflow: 'hidden', borderRadius: '2px' }}>
-              <OdImage src={c.image} alt={c.title} label={c.title} ratio="1 / 1" radius={0} sx={{ height: 1 }} />
+            <Box className="od-grain" sx={{ order: { xs: 1, md: 2 }, position: 'relative', overflow: 'hidden', aspectRatio: { xs: '4 / 3', md: 'auto' }, bgcolor: 'var(--od-noche)' }}>
+              {c.image ? (
+                <>
+                  <Box className="od-terr-bg" component="img" src={cdnImage(c.image, 400)} alt="" aria-hidden loading="lazy" sx={{ position: 'absolute', inset: '-10%', width: '120%', height: '120%', objectFit: 'cover', filter: 'blur(22px) brightness(0.5)', opacity: 0, transition: 'opacity 700ms var(--od-ease)' }} />
+                  <Box className="od-terr-img" component="img" src={cdnImage(c.image, 900)} alt={c.title} loading="lazy" sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', transition: 'transform 800ms var(--od-ease), box-shadow 800ms var(--od-ease)' }} />
+                </>
+              ) : (
+                // sin foto: el recuadro de la marca hace el mismo gesto (se encoge sobre el fondo oscuro)
+                <Box className="od-terr-img" sx={{ position: 'absolute', inset: 0, transition: 'transform 800ms var(--od-ease), box-shadow 800ms var(--od-ease)' }}>
+                  <OdImage label={c.title} radius={0} sx={{ width: 1, height: 1, aspectRatio: 'auto' }} />
+                </Box>
+              )}
+              <Box component="span" className="od-terr-label" sx={{ position: 'absolute', top: 16, right: 18, zIndex: 3, fontSize: 13, fontWeight: 600, color: c.image ? '#f6f4f1' : 'var(--od-tinta)', textShadow: c.image ? '0 1px 8px rgba(0,0,0,0.4)' : 'none', transition: 'color 500ms ease' }}>
+                Ver producto →
+              </Box>
             </Box>
           </Link>
+          </Box>
         ))}
       </Box>
 
-      <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', gap: 1.5, mt: 2 }}>
-        <ArrowButton label="Anterior" onClick={() => step(-1)} size={52} sx={{ bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', borderColor: 'var(--od-papel)', '&:hover': { borderColor: 'var(--od-papel)' } }}>
-          ←
-        </ArrowButton>
-        <ArrowButton label="Siguiente" onClick={() => step(1)} size={52} sx={{ bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', borderColor: 'var(--od-papel)', '&:hover': { borderColor: 'var(--od-papel)' } }}>
-          →
-        </ArrowButton>
-      </Box>
+      {/* flechas a los lados de la tarjeta del centro, en el hueco entre tarjetas */}
+      {[
+        { dir: -1, label: 'Anterior', left: `calc(50% - ${CARD_HALF} - 24px)`, glyph: '←' },
+        { dir: 1, label: 'Siguiente', left: `calc(50% + ${CARD_HALF} + 24px)`, glyph: '→' },
+      ].map((a) => (
+        <Box key={a.label} sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: '50%', left: a.left, zIndex: 2, transform: 'translate(-50%, -50%)' }}>
+          <ArrowButton label={a.label} onClick={() => step(a.dir)} size={44} sx={railArrowSx}>
+            {a.glyph}
+          </ArrowButton>
+        </Box>
+      ))}
     </Box>
   );
 }
