@@ -541,6 +541,9 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
             // cómo se lee el título sobre el fondo (lo fija OdFondoTerrario en data-texto)
             '&[data-texto="tinta"]': { color: 'var(--od-tinta)' },
             '&[data-texto="pastilla"] .od-terr-head > *': { px: 2.5, py: 1.25, borderRadius: '4px', bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', opacity: 1 },
+            // franja de cristal (desenfoca lo de atrás) y franja opaca un tono abajo (la que sugiere taste)
+            '&[data-texto="cristal"] .od-terr-head': { py: { xs: 2, md: 3 }, bgcolor: 'rgba(22,27,25,0.3)', backdropFilter: 'blur(18px) saturate(1.2)', WebkitBackdropFilter: 'blur(18px) saturate(1.2)' },
+            '&[data-texto="franja"] .od-terr-head': { py: { xs: 2, md: 3 }, bgcolor: 'var(--od-musgo-900)' },
           }}
         >
           {/* fondo: degradado Musgo que se mueve lento (opciones en od-fondo-prueba) */}

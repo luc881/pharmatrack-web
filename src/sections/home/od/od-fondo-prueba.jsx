@@ -15,8 +15,9 @@ import { OdFlowGradient } from 'src/layouts/od/od-flow-gradient';
 // ----------------------------------------------------------------------
 
 // texto: cómo se lee el título sobre el flow claro (opciones de taste-skill:
-// velo neutro solo bajo el texto, tinta oscura, o tarjeta sólida del color
-// de la página que lo lleva)
+// velo neutro solo bajo el texto, tinta oscura, tarjeta sólida del color
+// de la página que lo lleva, o franja opaca; la de cristal la pidió el
+// usuario aunque taste desaconseja el vidrio esmerilado)
 const CLARO = ['#173E36', '#247465', '#55B895', '#ACDDB5', '#E5F1CD'];
 const OPCIONES = [
   { id: 'flow', nombre: 'Flow musgo', flow: ['#0f2420', '#173E36', '#247465', '#55B895', '#ACDDB5'] },
@@ -25,6 +26,8 @@ const OPCIONES = [
   { id: 'flow-claro-arriba', nombre: 'Flow claro · velo solo bajo el título', flow: CLARO, arriba: true },
   { id: 'flow-claro-tinta', nombre: 'Flow claro · título en tinta oscura', flow: CLARO, texto: 'tinta' },
   { id: 'flow-claro-pastilla', nombre: 'Flow claro · título en tarjeta clara', flow: CLARO, texto: 'pastilla' },
+  { id: 'flow-claro-cristal', nombre: 'Flow claro · franja de cristal', flow: CLARO, texto: 'cristal' },
+  { id: 'flow-claro-franja', nombre: 'Flow claro · franja opaca (taste)', flow: CLARO, texto: 'franja' },
   { id: 'movimiento', nombre: 'Manchas en movimiento (actual)', manchas: true },
   { id: 'fluido', nombre: 'Fluido (estática 4)', img: 'cierre-fluido.jpg', velo: 0.35 },
   { id: 'prisma', nombre: 'Prisma (estática 9)', img: 'cierre-prisma.jpg' },
