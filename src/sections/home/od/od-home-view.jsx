@@ -21,7 +21,7 @@ import { LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
 
 import { OdFaq } from './od-faq';
-import { OdNovedades } from './od-novedades';
+import { OdCierre } from './od-cierre';
 import { OdDivulgacion } from './od-divulgacion';
 import { OdSpeciesScene } from './od-species-scene';
 import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
@@ -525,9 +525,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
       {/* Preguntas frecuentes (ancla #preguntas del masthead) */}
       <OdFaq mossTall={IMG.mossTall} bg={FOTOS.preguntas.src} />
-
-      {/* Novedades / suscripción */}
-      <OdNovedades ticker={ticker} />
+      {/* Cierre con el degradado prisma (reemplaza a la suscripción) */}
+      <OdCierre ticker={ticker} />
     </>
   );
 }

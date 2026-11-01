@@ -10,17 +10,14 @@ const f = (name, by) => ({ src: `/fotos/ambiente/${name}.jpg`, by });
 
 export const FOTOS = {
   criadero: f('criadero', 'Mamun Srizon'),
-  frasco: f('frasco', 'Trần Quang Phú'),
   preguntas: f('preguntas', 'Wyxina Tresse'),
   corteza: f('corteza', 'Wyxina Tresse'),
-  comoComprar: f('como-comprar', 'Sandie Peters'),
   fichas: f('fichas', 'Priscilla Du Preez'),
   divulgacion: f('divulgacion', 'hannah grace'),
   terrario: f('terrario', 'Wyxina Tresse'),
   isopodoAmarillo: f('isopodo-amarillo', 'Jackie Best'),
   isopodoBlanco: f('isopodo-blanco', 'Jackie Best'),
   isopodoMusgo: f('isopodo-musgo', 'Bria Dorothy'),
-  suscripcion: f('suscripcion', 'Florian Pinkert'),
 };
 
 // Autores sin repetir, para la línea de créditos del pie
