@@ -9,7 +9,7 @@ import { OdTicker } from './od-ticker';
 
 // ----------------------------------------------------------------------
 // Divisor 3D de las vistas interiores (no el home): marquesina de avisos, la
-// mesa con una roca con musgo (escena 'mesa', fondo oscuro) sobre una foto de naturaleza, y otra marquesina
+// mesa con una roca con musgo (escena 'mesa', fondo blanco) sobre una foto de naturaleza, y otra marquesina
 // inversa. Degrada a imagen de respaldo en móvil / motion reducido.
 // ----------------------------------------------------------------------
 
