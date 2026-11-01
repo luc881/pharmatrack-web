@@ -41,7 +41,7 @@ export function OdFaq({ mossTall }) {
       {/* foto de ambiente muy oscurecida: textura, no protagonista */}
       <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1 }}>
         <OdFlowGradient colors={SALVIA} />
-        <Box sx={{ position: 'absolute', inset: 0, backgroundImage: 'var(--od-noise)', backgroundSize: '120px', mixBlendMode: 'overlay', opacity: 1, filter: 'contrast(1.4)' }} />
+        <Box sx={{ position: 'absolute', inset: 0, backgroundImage: 'var(--od-noise)', backgroundSize: '140px', mixBlendMode: 'overlay', opacity: 0.85 }} />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 13, color: 'var(--color-neutral-500)' }}>
         <Box component="span">(Preguntas frecuentes)</Box>
@@ -64,7 +64,7 @@ export function OdFaq({ mossTall }) {
           </Box>
           <Box sx={{ mt: 'auto', pt: { xs: '40px', md: '80px' } }}>
             <Box sx={{ display: { xs: 'none', md: 'block' }, maxWidth: 300 }}>
-              <OdScene scene="tocon" fallbackSrc={mossTall} fallbackLabel="Tocón de madera" ratio="1 / 1" sx={{ width: { xs: '100%', md: '175%' }, ml: { md: '-37.5%' }, mt: { md: '-24%' }, mb: { md: '-8%' }, pointerEvents: 'none' }} />
+              <OdScene scene="tocon" fallbackSrc={mossTall} fallbackLabel="Tocón de madera" ratio="1 / 1" sx={{ width: { xs: '100%', md: '200%' }, ml: { md: '-50%' }, mt: { md: '-46%' }, mb: { md: '-6%' }, pointerEvents: 'none' }} />
             </Box>
             <Box sx={{ mt: { xs: 0, md: '34px' }, fontFamily: 'var(--font-heading)', fontSize: 27, lineHeight: 1.25, color: 'var(--color-neutral-500)' }}>
               ¿Te quedó una duda?

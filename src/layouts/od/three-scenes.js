@@ -113,9 +113,10 @@ export function buildStump(THREE, { scene }) {
   import('three/examples/jsm/loaders/GLTFLoader.js').then(({ GLTFLoader }) => {
     new GLTFLoader().load('/3d/tocon.glb', (gltf) => {
       const model = gltf.scene;
-      // encuadre por la esfera que lo envuelve: al girar nunca toca los bordes
+      // encuadre por la esfera que lo envuelve; sus esquinas al girar llegan a
+      // ~0.83 del radio, así que 2.2 aún deja margen en un cuadro de 1.89
       const sphere = new THREE.Box3().setFromObject(model).getBoundingSphere(new THREE.Sphere());
-      const k = 1.85 / sphere.radius;
+      const k = 2.2 / sphere.radius;
       model.scale.setScalar(k);
       model.position.copy(sphere.center.multiplyScalar(-k));
       g.add(model);
