@@ -25,9 +25,9 @@ import { OdFaq } from './od-faq';
 import { OdCierre } from './od-cierre';
 import { useHeroIntro } from './use-hero-intro';
 import { OdDivulgacion } from './od-divulgacion';
-import { OdFondoTerrario } from './od-fondo-prueba';
 import { usePhotoMotion } from './use-photo-motion';
 import { OdSpeciesScene } from './od-species-scene';
+import { OdFondoTerrario } from './od-fondo-terrario';
 import { CARD_W, OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
 
 // ----------------------------------------------------------------------
@@ -530,8 +530,6 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         <Box
           component="section"
           data-dark="1"
-          data-terr-section
-          data-titulo="oscuro"
           className="od-grain"
           sx={{
             position: 'relative',
@@ -539,17 +537,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
             overflow: 'clip',
             color: 'var(--od-papel)',
             bgcolor: 'var(--od-musgo-900)',
-            // título centrado dentro de un recuadro de cristal del ancho de la
-            // tarjeta del centro; la variante la fija OdFondoTerrario en data-titulo
-            '& .od-terr-head': { flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1.5, mx: 'auto', width: CARD_W, maxWidth: 'calc(100% - 36px)', px: { xs: 3, md: 5 }, py: { xs: 3.5, md: 5 }, borderRadius: '4px', backdropFilter: 'blur(20px) saturate(1.2)', WebkitBackdropFilter: 'blur(20px) saturate(1.2)' },
+            // título centrado en un recuadro de cristal lechoso del ancho de la tarjeta del centro
+            '& .od-terr-head': { flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1.5, mx: 'auto', width: CARD_W, maxWidth: 'calc(100% - 36px)', px: { xs: 3, md: 5 }, py: { xs: 3.5, md: 5 }, borderRadius: '4px', bgcolor: 'rgba(246,244,241,0.6)', color: 'var(--od-tinta)', backdropFilter: 'blur(20px) saturate(1.2)', WebkitBackdropFilter: 'blur(20px) saturate(1.2)' },
             '& .od-terr-head h2': { fontSize: 'clamp(40px, 5vw, 80px)' },
             '& .od-terr-head a': { opacity: 1 },
-            '&[data-titulo="oscuro"] .od-terr-head': { bgcolor: 'rgba(22,27,25,0.32)' },
-            '&[data-titulo="claro"] .od-terr-head': { bgcolor: 'rgba(246,244,241,0.16)', border: '1px solid rgba(246,244,241,0.35)', textShadow: '0 1px 16px rgba(22,27,25,0.35)' },
-            '&[data-titulo="lechoso"] .od-terr-head': { bgcolor: 'rgba(246,244,241,0.6)', color: 'var(--od-tinta)' },
           }}
         >
-          {/* fondo: degradado Musgo que se mueve lento (opciones en od-fondo-prueba) */}
+          {/* fondo: flow claro animado con grano (od-fondo-terrario) */}
           <OdFondoTerrario />
           <Box className="od-terr-head" sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
             <SectionHead mask title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
