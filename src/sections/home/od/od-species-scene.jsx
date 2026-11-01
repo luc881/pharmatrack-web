@@ -28,7 +28,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from 'src/layouts/od/od-gsa
 
 const BACKDROPS = ['musgo', 'olivo', 'salvia', 'hojarasca'].map((n) => `/brand/degradados/especie-${n}.jpg`);
 
-function Panel({ card, index, isLast, heading }) {
+function Panel({ card, index, isLast, heading, link }) {
   const backdrop = BACKDROPS[index % BACKDROPS.length];
   const photo = card.image;
   const loop = Array.from({ length: 6 }, () => card.title);
@@ -73,8 +73,8 @@ function Panel({ card, index, isLast, heading }) {
           <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(28px, 3vw, 44px)' }}>
             {heading}
           </Box>
-          <Box component={RouterLink} href={paths.catalog} sx={{ color: 'inherit', fontSize: 15, textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>
-            Ver todo el catálogo →
+          <Box component={RouterLink} href={link.href} sx={{ color: 'inherit', fontSize: 15, textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>
+            {link.label} →
           </Box>
         </Box>
       )}
@@ -106,8 +106,8 @@ function Panel({ card, index, isLast, heading }) {
 
       {isLast && (
         <Box sx={{ position: 'absolute', bottom: { xs: 28, md: 40 }, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
-          <Pill variant="light" href={paths.catalog}>
-            Ver todo el catálogo
+          <Pill variant="light" href={link.href}>
+            {link.label}
           </Pill>
         </Box>
       )}
@@ -154,14 +154,15 @@ function useSceneMotion(ref) {
   }, [ref]);
 }
 
-export function OdSpeciesScene({ cards, heading }) {
+// `link`: a dónde lleva el encabezado y el botón final; `id`: ancla de la sección.
+export function OdSpeciesScene({ cards, heading, id, link = { href: paths.catalog, label: 'Ver todo el catálogo' } }) {
   const ref = useRef(null);
   useSceneMotion(ref);
   if (!cards.length) return null;
   return (
-    <Box ref={ref} component="section" id="disponibles" aria-label={heading} sx={{ position: 'relative', scrollMarginTop: 80 }}>
+    <Box ref={ref} component="section" id={id} aria-label={heading} sx={{ position: 'relative', scrollMarginTop: 80 }}>
       {cards.map((card, i) => (
-        <Panel key={card.key} card={card} index={i} isLast={i === cards.length - 1} heading={i === 0 ? heading : null} />
+        <Panel key={card.key} card={card} index={i} isLast={i === cards.length - 1} heading={i === 0 ? heading : null} link={link} />
       ))}
     </Box>
   );
