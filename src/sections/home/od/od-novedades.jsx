@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 
+import { FOTOS } from 'src/lib/fotos-ambiente';
 import { OdTicker } from 'src/layouts/od/od-ticker';
 
 // ----------------------------------------------------------------------
@@ -13,15 +14,15 @@ import { OdTicker } from 'src/layouts/od/od-ticker';
 // endpoint que guarde el correo (audiencia de Resend).
 // ----------------------------------------------------------------------
 
-export function OdNovedades({ mossWide, ticker }) {
+export function OdNovedades({ ticker }) {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
 
   return (
     <>
       <OdTicker items={ticker} />
-      <Box component="section" data-dark="1" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '40px', md: '54px' }, overflow: 'hidden', isolation: 'isolate' }}>
-        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${mossWide})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '40px', md: '54px' }, overflow: 'hidden', isolation: 'isolate' }}>
+        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${FOTOS.suscripcion.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.28)' }} />
         <Box sx={{ maxWidth: 1040, mx: 'auto', bgcolor: 'var(--color-neutral-100)', color: 'var(--color-text)', p: { xs: '28px 22px', md: '38px 46px 36px' }, boxShadow: 'var(--shadow-md)' }}>
           <Box sx={{ mb: 1.5, fontSize: 13, color: 'var(--color-accent-700)' }}>Novedades</Box>

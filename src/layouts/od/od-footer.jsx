@@ -9,6 +9,7 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { CONFIG } from 'src/global-config';
+import { FOTOS_AUTORES } from 'src/lib/fotos-ambiente';
 
 import { SealFace, scrollToTop, sealHoverSx } from './od-scroll-seal';
 
@@ -132,6 +133,9 @@ export function OdFooter() {
           <Box>Camadas nuevas cada mes</Box>
         </Box>
         <Box sx={{ textAlign: { sm: 'right' } }}>©{new Date().getFullYear()} Opuntia Den</Box>
+      </Box>
+      <Box sx={{ mt: 2, fontSize: 13, color: 'var(--color-neutral-500)' }}>
+        Fotos de ambiente: {FOTOS_AUTORES.join(', ')} · vía Unsplash
       </Box>
 
       {/* Wordmark a sangre */}

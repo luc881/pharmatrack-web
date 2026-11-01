@@ -193,6 +193,7 @@ export function OdHowToBuy({ bg }) {
   return (
     <OdPanel
       id="como-comprar"
+      className="od-grain"
       sx={{ scrollMarginTop: 80, px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '72px', md: '110px' }, color: '#f6f4f1' }}
     >
       <OdImage

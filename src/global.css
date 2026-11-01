@@ -439,3 +439,21 @@ button:focus-visible,
 @media (prefers-reduced-motion: reduce) {
   .od-fxbtn, .od-tilt, .od-tilt-lg, .od-magnet { transform: none !important; scale: none !important; }
 }
+
+/** **************************************
+* Grano (rediseño): el mismo ruido fino sobre todas las fotos de ambiente y
+* los degradados, para que fotos de distintos autores se vean como una sola
+* sesión. La sección necesita position relative (se agrega aquí).
+*************************************** */
+.od-grain { position: relative; isolation: isolate; }
+.od-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.4 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+

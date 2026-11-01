@@ -75,6 +75,12 @@ reelio.framer.media, monopo.london). Prueba de paletas: `/prueba-paletas/` (se b
 
 ## Pendientes marcados
 
+- **Cambiar el video de la portada** (decisión del usuario, para después): por ahora se queda el
+  video de musgo actual, con grano y el estilo Aldena del paso 5b.
+- **Cambiar las fotos de ambiente por fotos propias.** Hoy son 12 de Unsplash, en
+  `public/fotos/ambiente/` y `src/lib/fotos-ambiente.js` (archivo y autor). Para cambiarlas basta con
+  reemplazar el archivo (mismo nombre) y el autor. La línea de créditos del pie sale de esa lista.
+  Opcional: pasarlas a espacios de imagen editables desde el dashboard.
 - **Huecos a los lados en pantallas de 1920px o más.** Las notas verticales de los márgenes
   (`OdGutterNote`) se quitaron en el paso 2 (commit cc5121e). Las había puesto el usuario para tapar
   ese hueco. El contenido ya crece hasta 1840px; en 2560px quedan 360px por lado. Se revisa al terminar

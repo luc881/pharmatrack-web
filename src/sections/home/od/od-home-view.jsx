@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { FOTOS } from 'src/lib/fotos-ambiente';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
@@ -156,7 +157,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
     { title: 'Colémbolos', body: 'El copiloto invisible: consumen el moho antes de que llegue a la camada.', img: IMG.mossWide },
   ];
 
-  const CAT_IMAGES = [IMG.isopodCubaris, IMG.mossTall, IMG.leafLitter, IMG.terrarium, IMG.isopodZebra, IMG.mossWide];
+  // fotos de ambiente provisionales (ver src/lib/fotos-ambiente.js)
+  const CAT_IMAGES = [FOTOS.isopodoAmarillo.src, FOTOS.terrario.src, FOTOS.isopodoMusgo.src, FOTOS.isopodoBlanco.src, FOTOS.fichas.src, FOTOS.divulgacion.src];
 
   // buildListings siembra el Map con `taxa` (orden alfabético del backend),
   // ya no con `animals` (Animal.id desc): sin reordenar, la home abriría con
@@ -204,7 +206,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       <OdMasthead />
 
       {/* Hero (video de musgo en bucle) */}
-      <Box component="section" data-dark="1" sx={{ position: 'relative', height: 'clamp(520px, 76vh, 900px)', overflow: 'hidden' }}>
+      <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', height: 'clamp(520px, 76vh, 900px)', overflow: 'hidden' }}>
         <Box
           component="video"
           autoPlay
@@ -319,7 +321,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       {/* Banda "El criadero": marquesina de nombres + cifras */}
       {/* El degradado (Feral, paleta de adorno) es el momento de color de la
           página: el resto va en neutros */}
-      <OdPanel sx={{ color: 'var(--color-neutral-100)', py: { xs: '56px', md: '88px' }, backgroundImage: 'url(/brand/degradados/aurora-musgo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <OdPanel className="od-grain" sx={{ color: 'var(--color-neutral-100)', py: { xs: '56px', md: '88px' }, backgroundImage: 'url(/brand/degradados/aurora-musgo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <Box sx={{ mx: 'auto', maxWidth: '30ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3.1vw, 46px)', lineHeight: 1.24 }}>
           Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.
         </Box>
@@ -487,16 +489,16 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       )}
 
       {/* Cómo comprar (tres pasos sobre foto a sangre) */}
-      <OdHowToBuy bg={IMG.mossWide} />
+      <OdHowToBuy bg={FOTOS.comoComprar.src} />
 
       {/* Divulgación (editorial en filas) */}
       <OdDivulgacion articles={articles} />
 
       {/* Preguntas frecuentes (ancla #preguntas del masthead) */}
-      <OdFaq mossTall={IMG.mossTall} />
+      <OdFaq mossTall={IMG.mossTall} bg={FOTOS.preguntas.src} />
 
       {/* Novedades / suscripción */}
-      <OdNovedades mossWide={IMG.mossWide} ticker={ticker} />
+      <OdNovedades ticker={ticker} />
     </>
   );
 }

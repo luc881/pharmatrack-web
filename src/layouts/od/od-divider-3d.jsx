@@ -2,6 +2,8 @@
 
 import Box from '@mui/material/Box';
 
+import { FOTOS } from 'src/lib/fotos-ambiente';
+
 import { OdScene } from './od-scene';
 import { OdTicker } from './od-ticker';
 
@@ -15,8 +17,8 @@ export function OdDivider3d({ media, ticker }) {
   return (
     <>
       <OdTicker items={ticker} />
-      <Box component="section" data-dark="1" sx={{ position: 'relative', display: 'grid', placeItems: 'center', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '96px' }, overflow: 'hidden', isolation: 'isolate' }}>
-        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${media.moss_tall})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', display: 'grid', placeItems: 'center', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '96px' }, overflow: 'hidden', isolation: 'isolate' }}>
+        <Box sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${FOTOS.corteza.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.22)' }} />
         <Box sx={{ display: 'grid', gap: '26px', justifyItems: 'center' }}>
           <OdScene
