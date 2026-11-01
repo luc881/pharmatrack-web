@@ -14,10 +14,17 @@ import { OdFlowGradient } from 'src/layouts/od/od-flow-gradient';
 // ponytail: al elegir, dejar solo la opción elegida y borrar el selector.
 // ----------------------------------------------------------------------
 
+// texto: cómo se lee el título sobre el flow claro (opciones de taste-skill:
+// velo neutro solo bajo el texto, tinta oscura, o tarjeta sólida del color
+// de la página que lo lleva)
+const CLARO = ['#173E36', '#247465', '#55B895', '#ACDDB5', '#E5F1CD'];
 const OPCIONES = [
   { id: 'flow', nombre: 'Flow musgo', flow: ['#0f2420', '#173E36', '#247465', '#55B895', '#ACDDB5'] },
   { id: 'flow-hondo', nombre: 'Flow musgo hondo', flow: ['#101714', '#132b25', '#173E36', '#247465', '#3f9a7f'] },
-  { id: 'flow-claro', nombre: 'Flow musgo claro', flow: ['#173E36', '#247465', '#55B895', '#ACDDB5', '#E5F1CD'], velo: 0.3 },
+  { id: 'flow-claro', nombre: 'Flow claro · velo parejo 30%', flow: CLARO, velo: 0.3 },
+  { id: 'flow-claro-arriba', nombre: 'Flow claro · velo solo bajo el título', flow: CLARO, arriba: true },
+  { id: 'flow-claro-tinta', nombre: 'Flow claro · título en tinta oscura', flow: CLARO, texto: 'tinta' },
+  { id: 'flow-claro-pastilla', nombre: 'Flow claro · título en tarjeta clara', flow: CLARO, texto: 'pastilla' },
   { id: 'movimiento', nombre: 'Manchas en movimiento (actual)', manchas: true },
   { id: 'fluido', nombre: 'Fluido (estática 4)', img: 'cierre-fluido.jpg', velo: 0.35 },
   { id: 'prisma', nombre: 'Prisma (estática 9)', img: 'cierre-prisma.jpg' },
@@ -35,12 +42,21 @@ export function OdFondoTerrario() {
 
   const o = OPCIONES[i];
 
+  useEffect(() => {
+    const sec = document.querySelector('[data-terr-section]');
+    if (!sec) return;
+    if (o.texto) sec.dataset.texto = o.texto;
+    else delete sec.dataset.texto;
+  }, [o.texto]);
+
   return (
     <>
       {o.flow && (
         <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1 }}>
           <OdFlowGradient key={o.id} colors={o.flow} />
           {o.velo && <Box sx={{ position: 'absolute', inset: 0, bgcolor: `rgba(22,27,25,${o.velo})` }} />}
+          {/* velo neutro que se desvanece: solo bajo el título */}
+          {o.arriba && <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(22,27,25,0.55) 0%, rgba(22,27,25,0.35) 18%, rgba(22,27,25,0) 34%)' }} />}
         </Box>
       )}
       {o.manchas && (

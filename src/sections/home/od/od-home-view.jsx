@@ -527,10 +527,25 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
       {/* Todo para tu terrario: carrusel 3D de tarjetas anchas sobre el degradado Musgo */}
       {terrario.length > 0 && (
-        <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '96px', md: '170px' }, overflow: 'clip', color: 'var(--od-papel)', bgcolor: 'var(--od-musgo-900)' }}>
+        <Box
+          component="section"
+          data-dark="1"
+          data-terr-section
+          className="od-grain"
+          sx={{
+            position: 'relative',
+            py: { xs: '96px', md: '170px' },
+            overflow: 'clip',
+            color: 'var(--od-papel)',
+            bgcolor: 'var(--od-musgo-900)',
+            // cómo se lee el título sobre el fondo (lo fija OdFondoTerrario en data-texto)
+            '&[data-texto="tinta"]': { color: 'var(--od-tinta)' },
+            '&[data-texto="pastilla"] .od-terr-head > *': { px: 2.5, py: 1.25, borderRadius: '4px', bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', opacity: 1 },
+          }}
+        >
           {/* fondo: degradado Musgo que se mueve lento (opciones en od-fondo-prueba) */}
           <OdFondoTerrario />
-          <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
+          <Box className="od-terr-head" sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
             <SectionHead mask title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 15, color: 'inherit', textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>
               Ver todos los insumos →

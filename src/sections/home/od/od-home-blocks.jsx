@@ -223,6 +223,16 @@ export function OdProductRail({ items }) {
   useInfiniteRail(ref, items.length);
   const loop = [0, 1, 2].flatMap((copy) => items.map((c) => ({ ...c, copy })));
   // flechas para escritorio: avanzan una tarjeta (el scroll-snap la centra)
+  // clic en una tarjeta de los lados: primero la trae al centro; ya centrada, abre el producto
+  const centerOrOpen = (e) => {
+    const el = ref.current;
+    const card = e.currentTarget.parentElement;
+    const d = card.offsetLeft + card.offsetWidth / 2 - (el.scrollLeft + el.clientWidth / 2);
+    if (Math.abs(d) > card.offsetWidth * 0.25) {
+      e.preventDefault();
+      el.scrollBy({ left: d, behavior: 'smooth' });
+    }
+  };
   const step = (dir) => {
     const el = ref.current;
     const card = el?.querySelector('[data-card]');
@@ -254,6 +264,7 @@ export function OdProductRail({ items }) {
             component={RouterLink}
             href={c.href}
             tabIndex={c.copy === 1 ? undefined : -1}
+            onClick={centerOrOpen}
             underline="none"
             sx={{
               flex: 1,
