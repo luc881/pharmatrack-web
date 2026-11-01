@@ -141,8 +141,11 @@ export function OdCategoryIndex({ items }) {
 // nativo con scroll-snap (deslizar en táctil, flechas en escritorio); el giro
 // lo calcula useCoverflow según la distancia de cada tarjeta al centro. Al
 // pasar el mouse la foto se encoge sobre un fondo desenfocado de sí misma.
-const CARD_W = 'min(88vw, 980px)';
-const CARD_HALF = 'min(44vw, 490px)';
+// la del centro ocupa media pantalla (o casi toda en celular) para que las de
+// los lados lleguen a los bordes, como en la referencia
+const CARD_W = 'max(min(88vw, 980px), 50vw)';
+const CARD_HALF = 'max(min(44vw, 490px), 25vw)';
+const GAP = 64;
 
 function useCoverflow(ref) {
   useEffect(() => {
@@ -187,7 +190,7 @@ export function OdProductRail({ items }) {
   const step = (dir) => {
     const el = ref.current;
     const card = el?.querySelector('[data-card]');
-    if (el && card) el.scrollBy({ left: dir * (card.offsetWidth + 48), behavior: 'smooth' });
+    if (el && card) el.scrollBy({ left: dir * (card.offsetWidth + GAP), behavior: 'smooth' });
   };
 
   return (
@@ -199,7 +202,7 @@ export function OdProductRail({ items }) {
         sx={{
           position: 'relative',
           display: 'flex',
-          gap: '48px',
+          gap: `${GAP}px`,
           overflowX: 'auto',
           scrollSnapType: 'x mandatory',
           scrollbarWidth: 'none',
@@ -233,7 +236,7 @@ export function OdProductRail({ items }) {
               '&:focus-visible': { outline: '2px solid var(--od-accent)', outlineOffset: 3 },
             }}
           >
-            <Box sx={{ order: { xs: 2, md: 1 }, display: 'flex', flexDirection: 'column', p: { xs: 1, md: 1.5 }, pt: { xs: 2.5, md: 1.5 }, minHeight: { md: 380 } }}>
+            <Box sx={{ order: { xs: 2, md: 1 }, display: 'flex', flexDirection: 'column', p: { xs: 1, md: 1.5 }, pt: { xs: 2.5, md: 1.5 }, minHeight: { md: 'max(380px, 20vw)' } }}>
               <Box sx={eyebrowSx}>{c.category}</Box>
               <Box sx={{ ...sansSx, mt: 1, fontSize: 'clamp(26px, 2.6vw, 40px)', lineHeight: 1.05 }}>{c.title}</Box>
               {c.description && <Box sx={{ mt: 2.5, maxWidth: '44ch', fontSize: 16, lineHeight: 1.55, color: 'var(--color-neutral-700)' }}>{c.description}</Box>}
@@ -267,8 +270,8 @@ export function OdProductRail({ items }) {
 
       {/* flechas a los lados de la tarjeta del centro, en el hueco entre tarjetas */}
       {[
-        { dir: -1, label: 'Anterior', left: `calc(50% - ${CARD_HALF} - 24px)`, glyph: '←' },
-        { dir: 1, label: 'Siguiente', left: `calc(50% + ${CARD_HALF} + 24px)`, glyph: '→' },
+        { dir: -1, label: 'Anterior', left: `calc(50% - ${CARD_HALF} - ${GAP / 2}px)`, glyph: '←' },
+        { dir: 1, label: 'Siguiente', left: `calc(50% + ${CARD_HALF} + ${GAP / 2}px)`, glyph: '→' },
       ].map((a) => (
         <Box key={a.label} sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: '50%', left: a.left, zIndex: 2, transform: 'translate(-50%, -50%)' }}>
           <ArrowButton label={a.label} onClick={() => step(a.dir)} size={44} sx={railArrowSx}>
