@@ -102,6 +102,7 @@ input[type='number']::-webkit-inner-spin-button {
 * apuntan a --od-* para no duplicar valores.
 *************************************** */
 :root {
+  --od-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.4 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --font-heading: var(--od-font-display);
 
   --color-bg: var(--od-crema);
@@ -454,55 +455,7 @@ button:focus-visible,
   pointer-events: none;
   opacity: 0.22;
   mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.4 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* Degradado Musgo en movimiento (fondo de «Todo para tu terrario"): tres
-   manchas de la paleta Musgo que derivan lento sobre musgo profundo. Solo se
-   mueve transform (barato); con movimiento reducido queda quieto. */
-.od-musgo-flow {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  overflow: hidden;
-  background: linear-gradient(160deg, #0f2420 0%, var(--od-musgo-900) 55%, #10231f 100%);
-}
-.od-musgo-flow > span {
-  position: absolute;
-  width: 75vmax;
-  height: 75vmax;
-  border-radius: 50%;
-  will-change: transform;
-}
-.od-musgo-flow > span:nth-child(1) {
-  top: -35%; left: -15%;
-  background: radial-gradient(circle, var(--od-musgo-700) 0%, transparent 62%);
-  opacity: 0.95;
-}
-.od-musgo-flow > span:nth-child(2) {
-  bottom: -45%; right: -20%;
-  background: radial-gradient(circle, var(--od-musgo-500) 0%, transparent 60%);
-  opacity: 0.5;
-}
-.od-musgo-flow > span:nth-child(3) {
-  top: 10%; left: 35%;
-  width: 55vmax; height: 55vmax;
-  background: radial-gradient(circle, var(--od-musgo-300) 0%, transparent 60%);
-  opacity: 0.18;
-}
-@keyframes odFlowA { to { transform: translate(28vw, 18%) scale(1.15); } }
-@keyframes odFlowB { to { transform: translate(-30vw, -22%) scale(0.9); } }
-@keyframes odFlowC { to { transform: translate(-22vw, 25%) scale(1.25); } }
-@media (prefers-reduced-motion: no-preference) {
-  .od-musgo-flow > span:nth-child(1) { animation: odFlowA 22s ease-in-out infinite alternate; }
-  .od-musgo-flow > span:nth-child(2) { animation: odFlowB 27s ease-in-out infinite alternate; }
-  .od-musgo-flow > span:nth-child(3) { animation: odFlowC 33s ease-in-out infinite alternate; }
-}
-
-/* Imagen de fondo que deriva lento (opciones de fondo del terrario) */
-@keyframes odDrift { to { transform: translate(4%, -3%) scale(1.1); } }
-@media (prefers-reduced-motion: no-preference) {
-  .od-fondo-drift { animation: odDrift 26s ease-in-out infinite alternate; will-change: transform; }
+  background-image: var(--od-noise);
 }
 
 /* Cursor de punto (OdCursor): con mouse, el cursor nativo se oculta y lo

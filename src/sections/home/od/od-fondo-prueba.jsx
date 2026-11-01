@@ -7,33 +7,23 @@ import Box from '@mui/material/Box';
 import { OdFlowGradient } from 'src/layouts/od/od-flow-gradient';
 
 // ----------------------------------------------------------------------
-// Fondo de «Todo para tu terrario» mientras se elige. Opciones: el flow
-// animado (OdFlowGradient, WebGL), las manchas en movimiento (.od-musgo-flow)
-// o degradados de Feral (public/brand/degradados/*.jpg) que derivan lento. Con ?fondo-terrario en la URL
-// aparece un botón para recorrerlas; sin él se ve FONDO_ELEGIDO.
-// ponytail: al elegir, dejar solo la opción elegida y borrar el selector.
+// Fondo de «Todo para tu terrario»: el flow claro animado (OdFlowGradient).
+// Mientras se elige cómo se lee el título hay cuatro variantes: título
+// arriba, fuera del degradado (sobre la página), o en franja de cristal; cada
+// una con o sin grano más notorio. Con ?fondo-terrario en la URL aparece un
+// botón para recorrerlas; sin él se ve FONDO_ELEGIDO.
+// ponytail: al elegir, dejar solo la variante elegida y borrar el selector.
 // ----------------------------------------------------------------------
 
-// texto: cómo se lee el título sobre el flow claro (opciones de taste-skill:
-// velo neutro solo bajo el texto, tinta oscura, tarjeta sólida del color
-// de la página que lo lleva, o franja opaca; la de cristal la pidió el
-// usuario aunque taste desaconseja el vidrio esmerilado)
 const CLARO = ['#173E36', '#247465', '#55B895', '#ACDDB5', '#E5F1CD'];
 const OPCIONES = [
-  { id: 'flow', nombre: 'Flow musgo', flow: ['#0f2420', '#173E36', '#247465', '#55B895', '#ACDDB5'] },
-  { id: 'flow-hondo', nombre: 'Flow musgo hondo', flow: ['#101714', '#132b25', '#173E36', '#247465', '#3f9a7f'] },
-  { id: 'flow-claro', nombre: 'Flow claro · velo parejo 30%', flow: CLARO, velo: 0.3 },
-  { id: 'flow-claro-arriba', nombre: 'Flow claro · velo solo bajo el título', flow: CLARO, arriba: true },
-  { id: 'flow-claro-tinta', nombre: 'Flow claro · título en tinta oscura', flow: CLARO, texto: 'tinta' },
-  { id: 'flow-claro-pastilla', nombre: 'Flow claro · título en tarjeta clara', flow: CLARO, texto: 'pastilla' },
-  { id: 'flow-claro-cristal', nombre: 'Flow claro · franja de cristal', flow: CLARO, texto: 'cristal' },
-  { id: 'flow-claro-franja', nombre: 'Flow claro · franja opaca (taste)', flow: CLARO, texto: 'franja' },
-  { id: 'movimiento', nombre: 'Manchas en movimiento (actual)', manchas: true },
-  { id: 'fluido', nombre: 'Fluido (estática 4)', img: 'cierre-fluido.jpg', velo: 0.35 },
-  { id: 'prisma', nombre: 'Prisma (estática 9)', img: 'cierre-prisma.jpg' },
+  { id: 'arriba', nombre: 'Título arriba, fuera del degradado', titulo: 'arriba' },
+  { id: 'arriba-grano', nombre: 'Título arriba + grano notorio', titulo: 'arriba', grano: true },
+  { id: 'cristal', nombre: 'Franja de cristal', titulo: 'cristal' },
+  { id: 'cristal-grano', nombre: 'Franja de cristal + grano notorio', titulo: 'cristal', grano: true },
 ];
 
-const FONDO_ELEGIDO = 'movimiento';
+const FONDO_ELEGIDO = 'arriba';
 
 export function OdFondoTerrario() {
   const [i, setI] = useState(() => OPCIONES.findIndex((o) => o.id === FONDO_ELEGIDO));
@@ -45,46 +35,25 @@ export function OdFondoTerrario() {
 
   const o = OPCIONES[i];
 
+  // el título vive en la sección: se marca en ella y, con el título arriba,
+  // el degradado empieza debajo de él (--terr-top)
   useEffect(() => {
     const sec = document.querySelector('[data-terr-section]');
-    if (!sec) return;
-    if (o.texto) sec.dataset.texto = o.texto;
-    else delete sec.dataset.texto;
-  }, [o.texto]);
+    const head = sec?.querySelector('.od-terr-head');
+    if (!sec || !head) return undefined;
+    sec.dataset.titulo = o.titulo;
+    const place = () => sec.style.setProperty('--terr-top', `${head.offsetTop + head.offsetHeight + 16}px`);
+    place();
+    window.addEventListener('resize', place);
+    return () => window.removeEventListener('resize', place);
+  }, [o.titulo]);
 
   return (
     <>
-      {o.flow && (
-        <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1 }}>
-          <OdFlowGradient key={o.id} colors={o.flow} />
-          {o.velo && <Box sx={{ position: 'absolute', inset: 0, bgcolor: `rgba(22,27,25,${o.velo})` }} />}
-          {/* velo neutro que se desvanece: solo bajo el título */}
-          {o.arriba && <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(22,27,25,0.55) 0%, rgba(22,27,25,0.35) 18%, rgba(22,27,25,0) 34%)' }} />}
-        </Box>
-      )}
-      {o.manchas && (
-        <Box aria-hidden className="od-musgo-flow">
-          <span />
-          <span />
-          <span />
-        </Box>
-      )}
-      {o.img && (
-        <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, overflow: 'hidden' }}>
-          {/* la imagen deriva lento (.od-fondo-drift); el velo oscurece las claras */}
-          <Box
-            key={o.id}
-            className="od-fondo-drift"
-            sx={{
-              position: 'absolute',
-              inset: '-8%',
-              backgroundImage: `linear-gradient(rgba(22,27,25,${o.velo ?? 0}), rgba(22,27,25,${o.velo ?? 0})), url(/brand/degradados/${o.img})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          />
-        </Box>
-      )}
+      <Box aria-hidden className="od-terr-bg" sx={{ position: 'absolute', inset: 0, zIndex: -1 }}>
+        <OdFlowGradient colors={CLARO} />
+        {o.grano && <Box sx={{ position: 'absolute', inset: 0, backgroundImage: 'var(--od-noise)', backgroundSize: '140px', opacity: 1, mixBlendMode: 'overlay' }} />}
+      </Box>
 
       {probando && (
         <Box
