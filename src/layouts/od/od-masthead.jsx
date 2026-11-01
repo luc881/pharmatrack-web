@@ -11,9 +11,10 @@ import { AccountButton } from 'src/layouts/components/account-button';
 import { SITE_NAV } from './od-nav';
 
 // ----------------------------------------------------------------------
-// Masthead editorial del home (solo en la portada): barra de enlaces simple +
-// wordmark gigante "OPUNTIA" + línea de tags y ubicación. Es estático: al hacer
-// scroll se va y aparece la barra flotante (ver revealOnScroll en OdHeader).
+// Barra de enlaces de la portada (solo en el home), en crema y encima del
+// video (portada estilo Aldena, paso 5b del rediseño; el wordmark gigante vive
+// en la portada misma). Es estática: al hacer scroll se va y aparece la barra
+// flotante (ver revealOnScroll en OdHeader).
 // ----------------------------------------------------------------------
 
 // Mismas rutas que la barra interior (sin Contacto: es el botón de la
@@ -29,12 +30,12 @@ const navLinkSx = {
   fontSize: 15,
   textDecoration: 'none',
   transition: 'color 300ms',
-  '&:hover': { color: 'var(--color-accent-700)' },
+  '&:hover': { opacity: 0.7 },
 };
 
 export function OdMasthead() {
   return (
-    <Box component="header" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: '18px' }}>
+    <Box component="header" sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pt: '18px', color: 'var(--od-papel)' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: { xs: 1.5, md: 3 }, flexWrap: 'nowrap' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0, gap: { xs: 2.5, md: '34px' } }}>
           <Box
@@ -44,7 +45,7 @@ export function OdMasthead() {
             sx={{ display: 'inline-flex', width: 34, height: 34, flexShrink: 0 }}
           >
             {/* Isotipo de marca: BRAND.md lo pide para espacios menores a 64 px */}
-            <Box component="img" src="/brand/assets/logo/isotipo-claro.svg" alt="" sx={{ width: 1, height: 1 }} />
+            <Box component="img" src="/brand/assets/logo/isotipo-oscuro.svg" alt="" sx={{ width: 1, height: 1 }} />
           </Box>
           {/* En movil los cinco enlaces se envolvian en dos renglones y se
               encimaban con el logo. Aqui corren en una sola linea que se
@@ -84,10 +85,10 @@ export function OdMasthead() {
           <Link
             component={RouterLink}
             href={paths.contact}
-            sx={{ display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 2, color: 'inherit', fontSize: 15, textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}
+            sx={{ display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 2, color: 'inherit', fontSize: 15, textDecoration: 'none', '&:hover': { opacity: 0.7 } }}
           >
             Contacto
-            <Box component="span" sx={{ flexShrink: 0, display: 'inline-grid', placeItems: 'center', width: 30, height: 30, border: '1px solid var(--color-text)', borderRadius: '4px' }}>
+            <Box component="span" sx={{ flexShrink: 0, display: 'inline-grid', placeItems: 'center', width: 30, height: 30, border: '1px solid currentColor', borderRadius: '4px' }}>
               →
             </Box>
           </Link>
@@ -98,27 +99,6 @@ export function OdMasthead() {
         </Box>
       </Box>
 
-      <Box sx={{ textAlign: 'center', mt: '26px' }}>
-        <Box sx={{ mb: '2px', fontSize: 'clamp(13px, 1.35vw, 21px)', letterSpacing: '0.42em', textIndent: '0.42em', textTransform: 'uppercase', color: 'var(--color-neutral-700)' }}>
-          Criadero
-        </Box>
-        <Box sx={{ fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(56px, 14.6vw, 220px)', lineHeight: 1, letterSpacing: '-0.01em', textTransform: 'uppercase', color: 'var(--color-text)' }}>
-          Opuntia
-        </Box>
-      </Box>
-
-      <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, m: '22px 0 26px', fontSize: 'clamp(12px, 1.05vw, 16px)', color: 'var(--color-neutral-800)' }}>
-        <Box sx={{ lineHeight: 1.35 }}>
-          Isópodos, colémbolos,
-          <br />
-          sustratos y bioactivo
-        </Box>
-        <Box sx={{ textAlign: 'right', lineHeight: 1.35 }}>
-          Entrega en persona,
-          <br />
-          Ciudad de México
-        </Box>
-      </Box>
     </Box>
   );
 }

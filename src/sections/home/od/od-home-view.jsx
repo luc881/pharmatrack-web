@@ -202,11 +202,10 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
   return (
     <>
-      {/* Masthead editorial (solo en el home; la barra flotante aparece al bajar) */}
-      <OdMasthead />
-
-      {/* Hero (video de musgo en bucle) */}
-      <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', height: 'clamp(520px, 76vh, 900px)', overflow: 'hidden' }}>
+      {/* Portada estilo Aldena: el video a sangre ocupa la primera pantalla, la
+          barra de enlaces y el nombre gigante van encima, y abajo el lema con
+          los botones. Grano y velo para que el texto se lea sobre el video. */}
+      <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', height: { xs: '92svh', md: '100svh' }, minHeight: 600, maxHeight: 1080, overflow: 'hidden', color: 'var(--od-papel)' }}>
         <Box
           component="video"
           autoPlay
@@ -214,7 +213,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           loop
           playsInline
           poster={media.hero_poster}
-          sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', bgcolor: 'var(--color-neutral-800)' }}
+          sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', bgcolor: 'var(--od-noche)' }}
         >
           <source src={media.hero_video_webm} type="video/webm" />
           <source src={media.hero_video_mp4} type="video/mp4" />
@@ -224,41 +223,75 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
             position: 'absolute',
             inset: 0,
             pointerEvents: 'none',
-            background:
-              'linear-gradient(180deg, rgba(32,31,29,0.44), rgba(32,31,29,0.16) 42%, rgba(32,31,29,0.52))',
+            background: 'linear-gradient(180deg, rgba(22,27,25,0.62) 0%, rgba(22,27,25,0.12) 38%, rgba(22,27,25,0.18) 58%, rgba(22,27,25,0.72) 100%)',
           }}
         />
+
+        <OdMasthead />
+
+        {/* Nombre gigante: el título de la página */}
+        <Box className="od-rise" sx={{ position: 'absolute', left: 0, right: 0, top: { xs: 92, md: 84 }, px: { xs: '14px', md: '24px' }, textAlign: 'center' }}>
+          <Box sx={{ mb: { xs: 0.5, md: 1 }, fontSize: 'clamp(13px, 1.2vw, 18px)', letterSpacing: '0.42em', textIndent: '0.42em', textTransform: 'uppercase', opacity: 0.85 }}>
+            Criadero
+          </Box>
+          <Box
+            component="h1"
+            aria-label="Opuntia Den, criadero de invertebrados en Ciudad de México"
+            sx={{
+              m: 0,
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 400,
+              // la palabra mide ~4.16em: llena el ancho sin cortarse, con tope en 4K
+              fontSize: 'min(calc((100vw - 56px) / 4.3), 440px)',
+              lineHeight: 0.86,
+              letterSpacing: '-0.02em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Opuntia
+          </Box>
+        </Box>
+
+        {/* Abajo: lema, frase y botones a la izquierda; datos a la derecha */}
         <Box
           className="od-rise"
           sx={{
             position: 'absolute',
-            inset: 0,
-            px: '32px',
+            left: 0,
+            right: 0,
+            bottom: { xs: 28, md: 44 },
+            px: { xs: '18px', md: 'var(--od-gutter)' },
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '26px',
-            textAlign: 'center',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            gap: 4,
           }}
         >
-          <Display
-            component="h1"
-            size="clamp(48px, 7.4vw, 122px)"
-            sx={{ lineHeight: 1, letterSpacing: '-0.01em', color: '#f6f4f1', maxWidth: '14ch' }}
-          >
-            Historia natural
-          </Display>
-          <Box sx={{ maxWidth: '46ch', fontSize: { xs: 15, md: 18 }, lineHeight: 1.6, color: 'rgba(246,245,241,0.9)' }}>
-            Isópodos y colémbolos criados en casa, con su ficha de cuidados. Entrega en persona en la CDMX.
+          <Box sx={{ maxWidth: 560 }}>
+            <Box component="p" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontSize: 'clamp(34px, 4.2vw, 64px)', lineHeight: 1.02 }}>
+              Historia natural
+            </Box>
+            <Box component="p" sx={{ mt: 1.75, mb: 0, maxWidth: '42ch', fontSize: { xs: 15, md: 17 }, lineHeight: 1.6, opacity: 0.9 }}>
+              Isópodos y colémbolos criados en casa, con su ficha de cuidados. Entrega en persona en la CDMX.
+            </Box>
+            <Box sx={{ mt: 3, display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+              <Pill variant="light" href={paths.catalog}>
+                Ver catálogo
+              </Pill>
+              <Pill variant="outline" href="#como-comprar">
+                Cómo comprar
+              </Pill>
+            </Box>
           </Box>
-          <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Pill variant="light" href={paths.catalog}>
-              Ver catálogo
-            </Pill>
-            <Pill variant="outline" href="#como-comprar">
-              Cómo comprar
-            </Pill>
+          <Box sx={{ display: { xs: 'none', md: 'block' }, textAlign: 'right', fontSize: 15, lineHeight: 1.5, opacity: 0.85 }}>
+            Isópodos, colémbolos,
+            <br />
+            sustratos y bioactivo
+            <br />
+            <br />
+            Entrega en persona,
+            <br />
+            Ciudad de México
           </Box>
         </Box>
         {/* Pista de scroll: lleva a lo disponible, con una línea que "cae" */}
@@ -270,7 +303,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
             left: '50%',
             bottom: 22,
             transform: 'translateX(-50%)',
-            display: 'flex',
+            // en móvil se encimaba con los botones de la portada
+            display: { xs: 'none', md: 'flex' },
             flexDirection: 'column',
             alignItems: 'center',
             gap: 1.25,
