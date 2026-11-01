@@ -524,11 +524,15 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           ninguna sección queda junto a otra del mismo tono */}
       <OdHowToBuy />
 
-      {/* Todo para tu terrario: carrusel 3D de tarjetas anchas sobre la foto de hojas */}
+      {/* Todo para tu terrario: carrusel 3D de tarjetas anchas sobre el degradado Musgo */}
       {terrario.length > 0 && (
-        <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'clip', color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
-          <Box aria-hidden data-parallax sx={{ position: 'absolute', inset: '-12% 0', zIndex: -2, backgroundImage: `url(${FOTOS.terrario.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-          <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(22,27,25,0.62)' }} />
+        <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '96px', md: '170px' }, overflow: 'clip', color: 'var(--od-papel)', bgcolor: 'var(--od-musgo-900)' }}>
+          {/* fondo: degradado Musgo que se mueve lento (.od-musgo-flow en global.css) */}
+          <Box aria-hidden className="od-musgo-flow">
+            <span />
+            <span />
+            <span />
+          </Box>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
             <SectionHead mask title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 15, color: 'inherit', textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>
