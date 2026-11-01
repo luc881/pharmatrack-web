@@ -143,7 +143,7 @@ export function OdCategoryIndex({ items }) {
 // pasar el mouse la foto se encoge sobre un fondo desenfocado de sí misma.
 // la del centro ocupa media pantalla (o casi toda en celular) para que las de
 // los lados lleguen a los bordes, como en la referencia
-const CARD_W = 'max(min(88vw, 980px), 50vw)';
+export const CARD_W = 'max(min(88vw, 980px), 50vw)';
 const CARD_HALF = 'max(min(44vw, 490px), 25vw)';
 const GAP = 64;
 

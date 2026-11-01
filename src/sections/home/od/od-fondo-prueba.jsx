@@ -8,20 +8,20 @@ import { OdFlowGradient } from 'src/layouts/od/od-flow-gradient';
 
 // ----------------------------------------------------------------------
 // Fondo de «Todo para tu terrario»: el flow claro animado (OdFlowGradient)
-// con grano notorio. Mientras se elige cómo va el título hay tres variantes
-// (centrado, gigante detrás de las tarjetas, nombre corriendo). Con ?fondo-terrario en la URL aparece un
+// con grano notorio. El título va centrado en un recuadro de cristal del ancho
+// de la tarjeta; mientras se elige hay tres variantes (oscuro, claro, lechoso). Con ?fondo-terrario en la URL aparece un
 // botón para recorrerlas; sin él se ve FONDO_ELEGIDO.
 // ponytail: al elegir, dejar solo la variante elegida y borrar el selector.
 // ----------------------------------------------------------------------
 
 const CLARO = ['#173E36', '#247465', '#55B895', '#ACDDB5', '#E5F1CD'];
 const OPCIONES = [
-  { id: 'centrado', nombre: 'Título centrado', titulo: 'centrado' },
-  { id: 'gigante', nombre: 'Título gigante detrás de las tarjetas', titulo: 'gigante' },
-  { id: 'marquesina', nombre: 'Nombre corriendo detrás (como Nuestra selección)', titulo: 'marquesina' },
+  { id: 'oscuro', nombre: 'Cristal oscuro', titulo: 'oscuro' },
+  { id: 'claro', nombre: 'Cristal claro con borde', titulo: 'claro' },
+  { id: 'lechoso', nombre: 'Cristal lechoso, letras oscuras', titulo: 'lechoso' },
 ];
 
-const FONDO_ELEGIDO = 'centrado';
+const FONDO_ELEGIDO = 'oscuro';
 
 export function OdFondoTerrario() {
   const [i, setI] = useState(() => OPCIONES.findIndex((o) => o.id === FONDO_ELEGIDO));
