@@ -339,19 +339,23 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           cuadrada chica con el título encima y el botón abajo a la izquierda;
           a la derecha la declaración en sans (Inter) que se entinta al bajar. */}
       <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' }, color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
-        <Box sx={{ position: 'relative', display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, alignItems: 'start' }}>
+        <Box sx={{ position: 'relative', mx: 'auto', maxWidth: 1180, display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
           <Box>
-            <Box data-shutter className="od-grain" sx={{ position: 'relative', width: { xs: 180, md: 'clamp(200px, 16vw, 260px)' }, aspectRatio: '1', overflow: 'clip', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
-              <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
-              <Box component="h2" sx={{ position: 'absolute', inset: 0, m: 0, display: 'grid', placeItems: 'center', fontFamily: 'var(--font-heading)', fontStyle: 'italic', fontWeight: 400, fontSize: { xs: 22, md: 26 }, color: '#f6f4f1', textShadow: '0 1px 12px rgba(0,0,0,0.45)' }}>
-                El criadero
+            {/* Afuera el giro 3D con brillo de las tarjetas de producto; adentro
+                el obturador y el grano (cada uno usa su propio ::after) */}
+            <Box className="od-tilt-lg od-glare" data-fx sx={{ position: 'relative', width: { xs: 180, md: 'clamp(200px, 16vw, 260px)' }, aspectRatio: '1', overflow: 'clip', borderRadius: '4px' }}>
+              <Box data-shutter className="od-grain" sx={{ width: 1, height: 1, bgcolor: 'var(--od-noche)', '&::after': { opacity: 0.28, mixBlendMode: 'screen' } }}>
+                <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
+                <Box component="h2" sx={{ position: 'absolute', inset: 0, zIndex: 1, m: 0, display: 'grid', placeItems: 'center', fontFamily: 'var(--font-heading)', fontStyle: 'italic', fontWeight: 400, fontSize: { xs: 22, md: 26 }, color: '#f6f4f1', textShadow: '0 1px 12px rgba(0,0,0,0.45)' }}>
+                  El criadero
+                </Box>
               </Box>
             </Box>
             <Box sx={{ mt: { xs: 3, md: 4 } }}>
               <Pill variant="light" href={paths.breeding}>Conoce el criadero</Pill>
             </Box>
           </Box>
-          <Box sx={{ fontFamily: 'var(--od-font-body)', fontWeight: 600, fontSize: 'clamp(28px, 3vw, 48px)', lineHeight: 1.1, letterSpacing: '-0.03em', maxWidth: '30ch' }}>
+          <Box sx={{ fontFamily: 'var(--od-font-body)', fontWeight: 600, fontSize: 'clamp(28px, 3vw, 48px)', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
             <OdInkText>
               {[
                 'Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.',
