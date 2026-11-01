@@ -9,7 +9,7 @@ import { OdTicker } from './od-ticker';
 
 // ----------------------------------------------------------------------
 // Divisor 3D de las vistas interiores (no el home): marquesina de avisos, la
-// mesa de frascos (stack-scene) sobre una foto de naturaleza, y otra marquesina
+// mesa con una roca con musgo (escena 'mesa', fondo blanco) sobre una foto de naturaleza, y otra marquesina
 // inversa. Degrada a imagen de respaldo en móvil / motion reducido.
 // ----------------------------------------------------------------------
 
@@ -22,14 +22,14 @@ export function OdDivider3d({ media, ticker }) {
         <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(32,31,29,0.22)' }} />
         <Box sx={{ display: 'grid', gap: '26px', justifyItems: 'center' }}>
           <OdScene
-            scene="stack"
+            scene="mesa"
             fallbackSrc={media.isopod_zebra}
-            fallbackLabel="Cultivos por especie"
+            fallbackLabel="Mesa con una roca con musgo"
             ratio="1 / 1"
             sx={{ width: 'min(460px, 74vw)' }}
           />
           <Box sx={{ fontSize: 13, color: 'var(--color-neutral-100)' }}>
-            Opuntia Den · Cultivos por especie
+            Opuntia Den · Musgo y roca
           </Box>
         </Box>
       </Box>

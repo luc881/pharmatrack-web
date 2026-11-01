@@ -46,7 +46,7 @@ export function useThreeScene(build, opts) {
       camera.position.set(...opts.position);
       camera.lookAt(...(opts.lookAt ?? [0, 0, 0]));
 
-      const step = build(THREE, { scene, camera, width, height });
+      const step = build(THREE, { scene, camera, width, height, renderer });
       setMounted(true);
 
       let raf = 0;
