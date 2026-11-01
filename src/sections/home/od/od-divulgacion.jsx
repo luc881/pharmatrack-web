@@ -5,6 +5,7 @@ import { useId, useState } from 'react';
 import Box from '@mui/material/Box';
 
 import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 
 import { cdnImage } from 'src/lib/cdn-image';
 import { Pill, OdImage, Display } from 'src/layouts/od/od-ui';
@@ -50,7 +51,12 @@ function Nota({ article, open, onToggle }) {
   return (
     <Box
       component="article"
+      // cerrada, toda la fila abre (no solo el texto del título: eso obligaba a un segundo clic)
+      onClick={(e) => {
+        if (!open && !e.target.closest('a, button')) onToggle();
+      }}
       sx={{
+        cursor: open ? 'auto' : 'pointer',
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', md: '1fr 1.25fr 1fr' },
         columnGap: { md: '48px' },
@@ -85,9 +91,12 @@ function Nota({ article, open, onToggle }) {
         )}
       </Box>
 
-      {/* centro: la portada; cerrada es una tira delgada */}
+      {/* centro: la portada; cerrada es una tira delgada, abierta lleva al post */}
       <Box
-        onClick={onToggle}
+        component={open ? RouterLink : 'div'}
+        href={open ? href : undefined}
+        tabIndex={open ? -1 : undefined}
+        aria-hidden={open ? true : undefined}
         className="od-grain"
         sx={{
           position: 'relative',
