@@ -85,6 +85,9 @@ const SITE_MEDIA_DEFAULTS = {
   hero_video_mp4: 'https://res.cloudinary.com/dnxavfqhj/video/upload/v1787115691/pukyu6z7wfkpqaifzmor.mp4',
   hero_video_webm: 'https://res.cloudinary.com/dnxavfqhj/video/upload/v1787115692/jjzcsbb3u6nccqmydh9z.webm',
   hero_poster: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115694/bbrlmcwkgjngvme9thzu.jpg',
+  // 1080p del mismo clip para pantallas grandes (el home lo elige con <source media>)
+  hero_video_hd_mp4: 'https://res.cloudinary.com/dnxavfqhj/video/upload/v1793566451/aqtfhnwymzmnsw79gyb2.mp4',
+  hero_video_hd_webm: 'https://res.cloudinary.com/dnxavfqhj/video/upload/v1793566454/jymambvcetnovw62bsok.webm',
   moss_tall: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115695/bfqjr7t2tu5vrl0mdkhr.jpg',
   moss_wide: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115697/no2ujblgtav0rjemgpix.jpg',
   leaf_litter: 'https://res.cloudinary.com/dnxavfqhj/image/upload/v1787115698/rmkknlujheewmo2isf8l.jpg',

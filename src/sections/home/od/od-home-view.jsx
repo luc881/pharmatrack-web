@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, Fragment } from 'react';
+import { useRef, Fragment, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -16,6 +16,7 @@ import { OdInkText } from 'src/layouts/od/od-ink-text';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { OdReveal, OdCountUp } from 'src/layouts/od/od-motion';
 import { OdSmoothScroll } from 'src/layouts/od/od-smooth-scroll';
+import { gsap, prefersReducedMotion } from 'src/layouts/od/od-gsap';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
 import { LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 
@@ -24,10 +25,10 @@ import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-
 
 import { OdFaq } from './od-faq';
 import { OdCierre } from './od-cierre';
+import { OdInsumos } from './od-insumos';
 import { useHeroIntro } from './use-hero-intro';
 import { OdDivulgacion } from './od-divulgacion';
 import { usePhotoMotion } from './use-photo-motion';
-import { OdSpeciesScene } from './od-species-scene';
 import { OdFondoTerrario } from './od-fondo-terrario';
 import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
 
@@ -77,7 +78,9 @@ const STATS = [
   { n: 'Ficha propia', label: 'Cada ejemplar sale con sus parámetros de origen.' },
 ];
 
-const firstLine = (text) => (text ?? '').split('\n').filter(Boolean)[0] ?? '';
+const HD_MEDIA = '(min-width: 1440px), (min-width: 900px) and (min-resolution: 1.5dppx)';
+
+const firstLine =(text) => (text ?? '').split('\n').filter(Boolean)[0] ?? '';
 
 export function OdHomeView({ species = [], products = [], articles = [], careSheets = [], media, ticker }) {
   const categories = useNavCategories();
@@ -98,6 +101,14 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
 
   // insumos para "Todo para tu terrario": productos reales + sus categorías
   const terrario = products.slice(0, 10).map((p) => ({ ...productToCard(p), description: firstLine(p.description) }));
+  const fichas = careSheets.slice(0, 10).map((f) => ({
+    key: f.slug,
+    href: paths.careSheet(f.slug),
+    image: f.cover,
+    category: f.group?.name ?? 'Ficha',
+    title: f.common_name || f.scientific_name,
+    price: f.difficulty ? `Dificultad: ${f.difficulty}` : 'Ver ficha',
+  }));
   // los ejemplares de id más alto son los recién llegados → badge "Nuevo"
   const newestIds = new Set(
     [...species].sort((a, b) => b.latestId - a.latestId).slice(0, 2).map((s) => s.key)
@@ -128,7 +139,13 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
   ];
 
   const heroRef = useRef(null);
+  const grainRef = useRef(null);
   useHeroIntro(heroRef);
+  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
+    const tween = gsap.to(grainRef.current, { x: 'random(-50, 50)', y: 'random(-50, 50)', duration: 0.09, ease: 'steps(1)', repeat: -1, repeatRefresh: true });
+    return () => tween.kill();
+  }, []);
   usePhotoMotion();
 
   return (
@@ -149,6 +166,10 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
           poster={media.hero_poster}
           sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', bgcolor: 'var(--od-noche)' }}
         >
+          {/* pantallas grandes (o retina) piden el 1080p; el resto, el 720p ligero.
+              ponytail: el original de Coverr es 1080p; en 4K lo disimula el grano */}
+          <source src={media.hero_video_hd_webm} type="video/webm" media={HD_MEDIA} />
+          <source src={media.hero_video_hd_mp4} type="video/mp4" media={HD_MEDIA} />
           <source src={media.hero_video_webm} type="video/webm" />
           <source src={media.hero_video_mp4} type="video/mp4" />
         </Box>
@@ -160,6 +181,10 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
             background: 'linear-gradient(180deg, rgba(22,27,25,0.62) 0%, rgba(22,27,25,0.12) 38%, rgba(22,27,25,0.18) 58%, rgba(22,27,25,0.72) 100%)',
           }}
         />
+        {/* grano de película: el ruido de la marca, más marcado y temblando */}
+        <Box sx={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          <Box ref={grainRef} sx={{ position: 'absolute', inset: '-60px', backgroundImage: 'var(--od-noise)', backgroundSize: '200px', opacity: 0.45, mixBlendMode: 'overlay' }} />
+        </Box>
 
         <OdMasthead />
 
@@ -376,32 +401,8 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
         </Box>
       )}
 
-      {/* «Todo para tu terrario»: encabezado oscuro; los productos van justo
-          debajo, en la tira sobre el flow claro */}
-      <OdPanel sx={{ pt: { xs: '56px', md: '80px' }, pb: { xs: '40px', md: '64px' } }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(238,236,230,0.18)', fontSize: 13, color: 'var(--color-neutral-500)' }}>
-          <Box component="span">(Qué necesita una colonia)</Box>
-          <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-neutral-100)' } }}>
-            Ver todos los insumos →
-          </Link>
-        </Box>
-        <Box className="od-orn-host" sx={{ width: 'fit-content', maxWidth: 1, mx: 'auto', pb: 1 }}>
-          <Box component="h2" sx={{ mx: 'auto', mt: { xs: '44px', md: '62px' }, maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
-            Todo para tu terrario
-          </Box>
-          <LeafDivider sx={{ mx: 'auto', mt: '28px', maxWidth: 360, px: 2, color: 'var(--od-arena-texto)' }} />
-        </Box>
-
-      </OdPanel>
-
-      {/* Insumos: tira de tarjetas chicas sobre el flow claro con grano, sin
-          texto (el título lo pone el bloque del frasco, justo arriba) */}
-      {terrario.length > 0 && (
-        <Box component="section" aria-label="Insumos para tu terrario" className="od-grain" sx={{ position: 'relative', py: { xs: '56px', md: '88px' }, overflow: 'clip', bgcolor: 'var(--od-musgo-900)' }}>
-          <OdFondoTerrario />
-          <OdProductRail items={terrario} />
-        </Box>
-      )}
+      {/* Insumos: varias propuestas a prueba (?insumos=1..3) */}
+      {terrario.length > 0 && <OdInsumos items={terrario} />}
 
       {/* Explora por categoría: índice con vista previa al hover */}
       {catItems.length > 0 && (
@@ -420,22 +421,30 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
       <OdHowToBuy />
 
 
-      {/* Fichas de cuidados como escena: una pantalla fija por ficha, con el
-          nombre corriendo detrás (antes era «Disponibles ahora») */}
-      <OdSpeciesScene
-        id="fichas"
-        heading="Fichas de cuidados"
-        link={{ href: paths.careSheets, label: 'Ver todas las fichas' }}
-        cards={careSheets.slice(0, 4).map((f) => ({
-          key: f.slug,
-          title: f.common_name || f.scientific_name,
-          scientific: f.locality ? `${f.scientific_name} «${f.locality}»` : f.scientific_name,
-          image: f.cover,
-          href: paths.careSheet(f.slug),
-          price: f.difficulty ? `Dificultad: ${f.difficulty}` : 'Ver ficha',
-          category: f.group?.name ?? '',
-        }))}
-      />
+      {/* Fichas de cuidados: encabezado oscuro y, debajo, la tira 3D sobre el
+          flow claro (antes era la de insumos) */}
+      {fichas.length > 0 && (
+        <>
+          <OdPanel id="fichas" sx={{ pt: { xs: '56px', md: '80px' }, pb: { xs: '40px', md: '64px' } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(238,236,230,0.18)', fontSize: 13, color: 'var(--color-neutral-500)' }}>
+              <Box component="span">(Antes de que llegue tu colonia)</Box>
+              <Link component={RouterLink} href={paths.careSheets} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-neutral-100)' } }}>
+                Ver todas las fichas →
+              </Link>
+            </Box>
+            <Box className="od-orn-host" sx={{ width: 'fit-content', maxWidth: 1, mx: 'auto', pb: 1 }}>
+              <Box component="h2" sx={{ mx: 'auto', mt: { xs: '44px', md: '62px' }, maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
+                Fichas de cuidados
+              </Box>
+              <LeafDivider sx={{ mx: 'auto', mt: '28px', maxWidth: 360, px: 2, color: 'var(--od-arena-texto)' }} />
+            </Box>
+          </OdPanel>
+          <Box component="section" aria-label="Fichas de cuidados" className="od-grain" sx={{ position: 'relative', py: { xs: '56px', md: '88px' }, overflow: 'clip', bgcolor: 'var(--od-musgo-900)' }}>
+            <OdFondoTerrario />
+            <OdProductRail items={fichas} cta="Ver ficha →" label="Fichas de cuidados" />
+          </Box>
+        </>
+      )}
 
       {/* Divulgación (editorial en filas) */}
       <OdDivulgacion articles={articles} />

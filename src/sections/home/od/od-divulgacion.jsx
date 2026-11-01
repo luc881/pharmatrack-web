@@ -98,7 +98,52 @@ function useNotaMotion(open, refs) {
   }, [open]);
 }
 
-function Nota({ article, open, onToggle }) {
+// Rejilla de divisores (estilo de la referencia de servicios): filetes
+// verticales en los bordes y a los lados de la portada, y una cruz «+» en cada
+// cruce con las líneas de fila. Los hijos absolutos con gridColumn usan esa
+// columna como caja: left 0 / right 0 caen justo en los bordes de la portada.
+const LINE = 'rgba(28,35,32,0.09)';
+
+function Cruz({ sx }) {
+  return (
+    <Box
+      aria-hidden
+      sx={[
+        {
+          position: 'absolute',
+          width: 11,
+          height: 11,
+          zIndex: 1,
+          pointerEvents: 'none',
+          translate: '-50% -50%',
+          background: 'linear-gradient(var(--color-neutral-500), var(--color-neutral-500)) center / 1px 100% no-repeat, linear-gradient(var(--color-neutral-500), var(--color-neutral-500)) center / 100% 1px no-repeat',
+        },
+        sx,
+      ]}
+    />
+  );
+}
+
+function Rejilla({ last }) {
+  const ys = last ? ['-0.5px', 'calc(100% + 0.5px)'] : ['-0.5px'];
+  return (
+    <Box aria-hidden sx={{ display: { xs: 'none', md: 'contents' } }}>
+      {/* filetes: bordes de la fila y lados de la portada */}
+      <Box sx={{ position: 'absolute', inset: 0, borderLeft: `1px solid ${LINE}`, borderRight: `1px solid ${LINE}`, pointerEvents: 'none' }} />
+      <Box sx={{ position: 'absolute', gridColumn: '2 / 3', top: 0, bottom: 0, left: 0, right: 0, borderLeft: `1px solid ${LINE}`, borderRight: `1px solid ${LINE}`, pointerEvents: 'none' }} />
+      {ys.map((y) => (
+        <Box key={y} sx={{ display: 'contents' }}>
+          <Cruz sx={{ top: y, left: 0 }} />
+          <Cruz sx={{ top: y, left: '100%' }} />
+          <Cruz sx={{ gridColumn: '2 / 3', top: y, left: 0 }} />
+          <Cruz sx={{ gridColumn: '2 / 3', top: y, left: '100%' }} />
+        </Box>
+      ))}
+    </Box>
+  );
+}
+
+function Nota({ article, open, onToggle, last }) {
   const id = useId();
   const refs = { root: useRef(null), media: useRef(null), panel: useRef(null) };
   useNotaMotion(open, refs);
@@ -114,15 +159,18 @@ function Nota({ article, open, onToggle }) {
         if (!open && !e.target.closest('a, button')) onToggle();
       }}
       sx={{
+        position: 'relative',
         cursor: open ? 'auto' : 'pointer',
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', md: '1fr 1.25fr 1fr' },
         columnGap: { md: '48px' },
         rowGap: 2,
         py: { xs: 3, md: 4.5 },
+        px: { md: '46px' },
         borderTop: '1px solid var(--color-divider)',
       }}
     >
+      <Rejilla last={last} />
       {/* izquierda: categoría y título (abren y cierran); etiquetas abajo */}
       <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Box
@@ -247,8 +295,8 @@ export function OdDivulgacion({ articles = [] }) {
       </Box>
 
       <Box sx={{ borderBottom: '1px solid var(--color-divider)' }}>
-        {rows.map((article) => (
-          <Nota key={article.id} article={article} open={open === article.id} onToggle={() => setOpen((cur) => (cur === article.id ? null : article.id))} />
+        {rows.map((article, i) => (
+          <Nota key={article.id} last={i === rows.length - 1} article={article} open={open === article.id} onToggle={() => setOpen((cur) => (cur === article.id ? null : article.id))} />
         ))}
       </Box>
     </Box>

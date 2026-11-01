@@ -217,7 +217,11 @@ const railArrowSx = { bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', bord
 const eyebrowSx = { fontSize: 12, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' };
 const sansSx = { fontFamily: 'var(--od-font-body)', fontWeight: 600, letterSpacing: '-0.03em' };
 
-export function OdProductRail({ items }) {
+export function OdProductRail({ items: given, cta = 'Ver producto →', label = 'Insumos para tu terrario' }) {
+  // con pocas tarjetas (p. ej. una sola ficha) la tira no llena la pantalla y
+  // no puede centrar: se repiten hasta tener seis
+  const reps = Math.ceil(6 / Math.max(given.length, 1));
+  const items = Array.from({ length: reps }, (_, r) => given.map((c) => ({ ...c, key: r ? `${c.key}~${r}` : c.key }))).flat();
   const ref = useRef(null);
   useCoverflow(ref);
   useInfiniteRail(ref, items.length);
@@ -244,7 +248,7 @@ export function OdProductRail({ items }) {
       <Box
         ref={ref}
         tabIndex={0}
-        aria-label="Insumos para tu terrario"
+        aria-label={label}
         sx={{
           position: 'relative',
           display: 'flex',
@@ -295,7 +299,7 @@ export function OdProductRail({ items }) {
                 </Box>
               )}
               <Box component="span" className="od-terr-label" sx={{ position: 'absolute', top: 12, right: 14, zIndex: 3, fontSize: 13, fontWeight: 600, color: c.image ? '#f6f4f1' : 'var(--od-tinta)', textShadow: c.image ? '0 1px 8px rgba(0,0,0,0.4)' : 'none', transition: 'color 500ms ease' }}>
-                Ver producto →
+                {cta}
               </Box>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', px: 1, pt: 2, pb: 1 }}>
