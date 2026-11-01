@@ -14,7 +14,7 @@ import { gsap, prefersReducedMotion } from 'src/layouts/od/od-gsap';
 // ----------------------------------------------------------------------
 // Cierre del home (2026-11-01, claro y sin degradado). «Desfile» como en
 // Aldena: la pregunta partida en dos con el video del musgo en un cuadro al
-// centro; al bajar, las dos mitades se acercan y montan sobre el cuadro, que
+// centro; al bajar, las dos mitades se juntan del todo encima del cuadro, que
 // crece. En celular se apila (cuadro arriba, dos líneas) y no se mueve.
 // ----------------------------------------------------------------------
 
@@ -38,10 +38,17 @@ export function OdCierre({ ticker, media }) {
   useEffect(() => {
     if (prefersReducedMotion() || !window.matchMedia('(min-width: 900px)').matches) return undefined;
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ scrollTrigger: { trigger: '[data-desfile]', start: 'top 95%', end: 'center 45%', scrub: 1 } });
-      // de separadas a montadas ~2/5 del cuadro de cada lado
-      tl.fromTo('[data-izq]', { x: '-14vw' }, { x: () => root.current.querySelector('[data-cuadro]').offsetWidth * 0.42, ease: 'none' }, 0)
-        .fromTo('[data-der]', { x: '14vw' }, { x: () => -root.current.querySelector('[data-cuadro]').offsetWidth * 0.42, ease: 'none' }, 0)
+      const tl = gsap.timeline({ scrollTrigger: { trigger: '[data-desfile]', start: 'top 95%', end: 'center 45%', scrub: 1, invalidateOnRefresh: true } });
+      // de separadas a juntas del todo: cada mitad recorre la mitad del hueco
+      // (cuadro + los dos gaps) menos un espacio normal entre «antes» y «de»
+      const join = () => {
+        const h2 = root.current.querySelector('[data-desfile]');
+        const gap = parseFloat(getComputedStyle(h2).columnGap) || 0;
+        const space = parseFloat(getComputedStyle(h2).fontSize) * 0.26;
+        return (root.current.querySelector('[data-cuadro]').offsetWidth + 2 * gap - space) / 2;
+      };
+      tl.fromTo('[data-izq]', { x: '-14vw' }, { x: () => join(), ease: 'none' }, 0)
+        .fromTo('[data-der]', { x: '14vw' }, { x: () => -join(), ease: 'none' }, 0)
         .fromTo('[data-cuadro]', { scale: 0.72 }, { scale: 1, ease: 'none' }, 0);
     }, root);
     return () => ctx.revert();

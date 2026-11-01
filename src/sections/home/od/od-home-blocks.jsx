@@ -217,15 +217,14 @@ const railArrowSx = { bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', bord
 const eyebrowSx = { fontSize: 15, fontWeight: 500, color: 'var(--color-neutral-600)' };
 const sansSx = { fontFamily: 'var(--od-font-body)', fontWeight: 600, letterSpacing: '-0.03em' };
 
-export function OdProductRail({ items: given, cta = 'Ver producto →', label = 'Insumos para tu terrario' }) {
-  // con pocas tarjetas (p. ej. una sola ficha) la tira no llena la pantalla y
-  // no puede centrar: se repiten hasta tener seis
-  const reps = Math.ceil(6 / Math.max(given.length, 1));
-  const items = Array.from({ length: reps }, (_, r) => given.map((c) => ({ ...c, key: r ? `${c.key}~${r}` : c.key }))).flat();
+export function OdProductRail({ items, cta = 'Ver producto →', label = 'Insumos para tu terrario' }) {
+  // con pocas tarjetas (p. ej. una sola ficha) no hay carrusel: van fijas y
+  // centradas, sin copias ni flechas
+  const few = items.length < 3;
   const ref = useRef(null);
   useCoverflow(ref);
-  useInfiniteRail(ref, items.length);
-  const loop = [0, 1, 2].flatMap((copy) => items.map((c) => ({ ...c, copy })));
+  useInfiniteRail(ref, few ? 0 : items.length);
+  const loop = few ? items.map((c) => ({ ...c, copy: 1 })) : [0, 1, 2].flatMap((copy) => items.map((c) => ({ ...c, copy })));
   // flechas para escritorio: avanzan una tarjeta (el scroll-snap la centra)
   // clic en una tarjeta de los lados: primero la trae al centro; ya centrada, abre el producto
   const centerOrOpen = (e) => {
@@ -252,6 +251,7 @@ export function OdProductRail({ items: given, cta = 'Ver producto →', label = 
         sx={{
           position: 'relative',
           display: 'flex',
+          justifyContent: few ? 'center' : 'flex-start',
           gap: `${GAP}px`,
           overflowX: 'auto',
           scrollSnapType: 'x mandatory',
@@ -315,7 +315,7 @@ export function OdProductRail({ items: given, cta = 'Ver producto →', label = 
       </Box>
 
       {/* flechas en los bordes */}
-      {[
+      {!few && [
         { dir: -1, label: 'Anterior', left: 'calc(var(--od-gutter, 40px) / 2 + 22px)', glyph: '←' },
         { dir: 1, label: 'Siguiente', left: 'calc(100% - var(--od-gutter, 40px) / 2 - 22px)', glyph: '→' },
       ].map((a) => (

@@ -54,6 +54,8 @@ export function OdInsumos({ items }) {
   }, [active]);
 
   const item = items[active];
+  // sin ninguna foto, el cuadro grande solo mostraría el logo de relleno: lista sola
+  const stageOn = items.some((it) => it.image);
 
   return (
     <OdPanel aria-label="Insumos para tu terrario" sx={{ color: 'var(--color-neutral-100)', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
@@ -64,8 +66,8 @@ export function OdInsumos({ items }) {
         </Link>
       </Box>
 
-      <Box sx={{ display: 'grid', gap: { xs: 0, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
-        <Box sx={{ display: { xs: 'none', md: 'block' }, position: 'sticky', top: 96 }}>
+      <Box sx={{ display: 'grid', gap: { xs: 0, md: 8 }, gridTemplateColumns: { xs: '1fr', md: stageOn ? '5fr 7fr' : '1fr' }, alignItems: 'start' }}>
+        <Box sx={{ display: { xs: 'none', md: stageOn ? 'block' : 'none' }, position: 'sticky', top: 96 }}>
           <Box ref={stage} className="od-grain" sx={{ position: 'relative', overflow: 'hidden', aspectRatio: '4 / 5', bgcolor: 'var(--od-noche)' }}>
             {items.map((it, i) => (
               <Box key={it.key} data-i={i} sx={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: i === 0 ? 1 : 0 }}>
@@ -85,11 +87,13 @@ export function OdInsumos({ items }) {
                 underline="none"
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
-                sx={{ display: 'grid', gridTemplateColumns: { xs: '64px 1fr auto', md: '1fr auto' }, alignItems: 'center', gap: { xs: 2, md: 3 }, py: { xs: 2, md: 2.75 }, color: 'inherit' }}
+                sx={{ display: 'grid', gridTemplateColumns: { xs: it.image ? '64px 1fr auto' : '1fr auto', md: '1fr auto' }, alignItems: 'center', gap: { xs: 2, md: 3 }, py: { xs: 2, md: 2.75 }, color: 'inherit' }}
               >
-                <Box sx={{ display: { xs: 'block', md: 'none' }, width: 64, aspectRatio: '1 / 1', overflow: 'hidden' }}>
-                  <Foto item={it} width={200} />
-                </Box>
+                {it.image ? (
+                  <Box sx={{ display: { xs: 'block', md: 'none' }, width: 64, aspectRatio: '1 / 1', overflow: 'hidden' }}>
+                    <Foto item={it} width={200} />
+                  </Box>
+                ) : null}
                 <Box sx={{ minWidth: 0 }}>
                   <Box sx={eyebrow}>{it.category}</Box>
                   <Box sx={{ mt: 0.5, fontFamily: 'var(--font-heading)', fontSize: { xs: 22, md: 'clamp(28px, 2.8vw, 44px)' }, lineHeight: 1.08 }}>{it.title}</Box>

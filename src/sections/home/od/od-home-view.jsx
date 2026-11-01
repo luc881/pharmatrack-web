@@ -73,8 +73,11 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
   const sorted = [...species].sort((a, b) => b.count - a.count || b.latestId - a.latestId);
   // "Disponibles ahora": solo lo que tiene existencias. Si no hay nada en
   // existencia se cae a la selección de siempre para no dejar la sección vacía.
-  const inStock = sorted.filter((s) => s.count > 0);
-  const selection = (inStock.length ? inStock : sorted).slice(0, 8);
+  // Solo lo que tiene foto (sin recuadros de relleno), y de preferencia en
+  // existencia; si no queda nada con foto, la sección no sale.
+  const withPhoto = sorted.filter((s) => s.photos?.[0] ?? s.taxonPhoto);
+  const inStock = withPhoto.filter((s) => s.count > 0);
+  const selection = (inStock.length ? inStock : withPhoto).slice(0, 8);
 
   // insumos para "Todo para tu terrario": productos reales + sus categorías
   const terrario = products.slice(0, 10).map((p) => ({ ...productToCard(p), description: firstLine(p.description) }));
