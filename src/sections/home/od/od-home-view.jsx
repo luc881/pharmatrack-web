@@ -266,7 +266,7 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
         <Box sx={{ position: 'relative', mx: 'auto', maxWidth: 1180, display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
           <Box>
             {/* el cactus 3D, sin fondo y girando (en celular, la foto de respaldo) */}
-            <OdScene scene="cactus" fallbackSrc={FOTOS.criadero.src} fallbackLabel="Terrarios con musgo bajo una lámpara" ratio="3 / 5" sx={{ width: { xs: 180, md: 'clamp(220px, 17vw, 300px)' } }} />
+            <OdScene scene="cactus" fallbackSrc={FOTOS.criadero.src} fallbackLabel="Terrarios con musgo bajo una lámpara" ratio="3 / 5" sx={{ width: { xs: 220, md: 'clamp(300px, 24vw, 440px)' } }} />
             <Box component="h2" sx={{ m: 0, mt: { xs: 2, md: 2.5 }, fontFamily: 'var(--font-heading)', fontStyle: 'italic', fontWeight: 400, fontSize: { xs: 24, md: 28 } }}>
               El criadero
             </Box>

@@ -5,17 +5,27 @@
 // el IntersectionObserver y el dispose.
 // ----------------------------------------------------------------------
 
+// Luz de ambiente con el HDRI «cobblestone parish road» (Poly Haven, reducido
+// a 512x256: public/3d/ambiente.hdr). Solo ilumina; no se ve de fondo.
+function lightWithHdri(THREE, scene, renderer) {
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.1;
+  import('three/examples/jsm/loaders/RGBELoader.js').then(({ RGBELoader }) => {
+    new RGBELoader().load('/3d/ambiente.hdr', (hdr) => {
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromEquirectangular(hdr).texture;
+      hdr.dispose();
+      pmrem.dispose();
+    });
+  });
+}
+
 // Tocón fotoescaneado (Poliigon TreeStump024, reducido a 15k triángulos y
 // texturas 1K en Blender: public/3d/tocon.glb). Gira lento; el GLTFLoader se
 // importa solo aquí para no pesar en el resto del sitio.
-export function buildStump(THREE, { scene }) {
-  scene.add(new THREE.HemisphereLight(0xf4ead9, 0x2a231c, 1.1));
-  const key = new THREE.DirectionalLight(0xfff1d8, 2.2);
-  key.position.set(3, 5, 4);
-  scene.add(key);
-  const rim = new THREE.DirectionalLight(0x9ad07a, 0.9);
-  rim.position.set(-4, 2, -3);
-  scene.add(rim);
+export function buildStump(THREE, { scene, renderer }) {
+  // iluminado solo con el HDRI (sin luces propias)
+  lightWithHdri(THREE, scene, renderer);
 
   const g = new THREE.Group();
   scene.add(g);
@@ -89,18 +99,7 @@ export function buildMesaRoca(THREE, { scene, renderer }) {
 // hornearon a texturas 1K en Blender: public/3d/cactus.glb). Sin fondo; solo gira.
 // Iluminado con un HDRI (antes se veía muy oscuro).
 export function buildCactus(THREE, { scene, renderer }) {
-  // luz de ambiente con el HDRI «cobblestone parish road» (Poly Haven,
-  // reducido a 512x256: public/3d/ambiente.hdr); solo ilumina, no se ve de fondo
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.1;
-  import('three/examples/jsm/loaders/RGBELoader.js').then(({ RGBELoader }) => {
-    new RGBELoader().load('/3d/ambiente.hdr', (hdr) => {
-      const pmrem = new THREE.PMREMGenerator(renderer);
-      scene.environment = pmrem.fromEquirectangular(hdr).texture;
-      hdr.dispose();
-      pmrem.dispose();
-    });
-  });
+  lightWithHdri(THREE, scene, renderer);
   const key = new THREE.DirectionalLight(0xfff4e2, 1.2);
   key.position.set(3, 5, 4);
   scene.add(key);
@@ -111,7 +110,7 @@ export function buildCactus(THREE, { scene, renderer }) {
     new GLTFLoader().load('/3d/cactus.glb', (gltf) => {
       const model = gltf.scene;
       const sphere = new THREE.Box3().setFromObject(model).getBoundingSphere(new THREE.Sphere());
-      const k = 1.7 / sphere.radius;
+      const k = 1.85 / sphere.radius;
       model.scale.setScalar(k);
       model.position.copy(sphere.center.multiplyScalar(-k));
       g.add(model);
