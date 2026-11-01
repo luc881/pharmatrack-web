@@ -179,6 +179,40 @@ function useCoverflow(ref) {
   }, [ref]);
 }
 
+// Carrusel infinito: la lista va tres veces seguidas y se arranca en la copia
+// del centro. Al terminar cada desplazamiento, si el centro quedó en una copia
+// de los lados, se salta sin animación a la misma tarjeta de la copia central
+// (mismo punto de anclaje, así que no se nota): siempre hay tarjetas a ambos lados.
+function useInfiniteRail(ref, count) {
+  useEffect(() => {
+    const el = ref.current;
+    const first = el?.querySelector('[data-card]');
+    if (!el || !first || !count) return undefined;
+    const period = () => count * (first.offsetWidth + GAP);
+    // arranque: la primera tarjeta de la copia central, centrada
+    const start = el.querySelectorAll('[data-card]')[count];
+    el.scrollTo({ left: start.offsetLeft + start.offsetWidth / 2 - el.clientWidth / 2, behavior: 'instant' });
+    let timer = 0;
+    const settle = () => {
+      const p = period();
+      const mid = el.scrollLeft + el.clientWidth / 2;
+      if (mid < p) el.scrollTo({ left: el.scrollLeft + p, behavior: 'instant' });
+      else if (mid >= 2 * p) el.scrollTo({ left: el.scrollLeft - p, behavior: 'instant' });
+    };
+    // scrollend donde existe; si no, un respiro tras el último scroll
+    const hasEnd = 'onscrollend' in window;
+    const onScroll = () => {
+      clearTimeout(timer);
+      timer = setTimeout(settle, 160);
+    };
+    el.addEventListener(hasEnd ? 'scrollend' : 'scroll', hasEnd ? settle : onScroll);
+    return () => {
+      clearTimeout(timer);
+      el.removeEventListener(hasEnd ? 'scrollend' : 'scroll', hasEnd ? settle : onScroll);
+    };
+  }, [ref, count]);
+}
+
 const railArrowSx = { bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', borderColor: 'var(--od-papel)', '&:hover': { borderColor: 'var(--od-papel)' } };
 const eyebrowSx = { fontSize: 12, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' };
 const sansSx = { fontFamily: 'var(--od-font-body)', fontWeight: 600, letterSpacing: '-0.03em' };
@@ -186,6 +220,8 @@ const sansSx = { fontFamily: 'var(--od-font-body)', fontWeight: 600, letterSpaci
 export function OdProductRail({ items }) {
   const ref = useRef(null);
   useCoverflow(ref);
+  useInfiniteRail(ref, items.length);
+  const loop = [0, 1, 2].flatMap((copy) => items.map((c) => ({ ...c, copy })));
   // flechas para escritorio: avanzan una tarjeta (el scroll-snap la centra)
   const step = (dir) => {
     const el = ref.current;
@@ -207,17 +243,17 @@ export function OdProductRail({ items }) {
           scrollSnapType: 'x mandatory',
           scrollbarWidth: 'none',
           '&::-webkit-scrollbar': { display: 'none' },
-          // relleno para que la primera y la última puedan quedar al centro
-          px: `calc(50% - ${CARD_HALF})`,
           py: 4,
           '&:focus-visible': { outline: '2px solid var(--od-papel)', outlineOffset: -4 },
         }}
       >
-        {items.map((c) => (
-          <Box key={c.key} data-card sx={{ flex: `0 0 ${CARD_W}`, scrollSnapAlign: 'center', display: 'flex' }}>
+        {loop.map((c) => (
+          // las copias de los lados no se anuncian ni reciben foco
+          <Box key={`${c.copy}-${c.key}`} data-card aria-hidden={c.copy !== 1 || undefined} sx={{ flex: `0 0 ${CARD_W}`, scrollSnapAlign: 'center', display: 'flex' }}>
           <Link
             component={RouterLink}
             href={c.href}
+            tabIndex={c.copy === 1 ? undefined : -1}
             underline="none"
             sx={{
               flex: 1,

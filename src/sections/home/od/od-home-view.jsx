@@ -25,6 +25,7 @@ import { OdFaq } from './od-faq';
 import { OdCierre } from './od-cierre';
 import { useHeroIntro } from './use-hero-intro';
 import { OdDivulgacion } from './od-divulgacion';
+import { OdFondoTerrario } from './od-fondo-prueba';
 import { usePhotoMotion } from './use-photo-motion';
 import { OdSpeciesScene } from './od-species-scene';
 import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
@@ -527,12 +528,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       {/* Todo para tu terrario: carrusel 3D de tarjetas anchas sobre el degradado Musgo */}
       {terrario.length > 0 && (
         <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '96px', md: '170px' }, overflow: 'clip', color: 'var(--od-papel)', bgcolor: 'var(--od-musgo-900)' }}>
-          {/* fondo: degradado Musgo que se mueve lento (.od-musgo-flow en global.css) */}
-          <Box aria-hidden className="od-musgo-flow">
-            <span />
-            <span />
-            <span />
-          </Box>
+          {/* fondo: degradado Musgo que se mueve lento (opciones en od-fondo-prueba) */}
+          <OdFondoTerrario />
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
             <SectionHead mask title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 15, color: 'inherit', textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>

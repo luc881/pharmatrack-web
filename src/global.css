@@ -499,6 +499,12 @@ button:focus-visible,
   .od-musgo-flow > span:nth-child(3) { animation: odFlowC 33s ease-in-out infinite alternate; }
 }
 
+/* Imagen de fondo que deriva lento (opciones de fondo del terrario) */
+@keyframes odDrift { to { transform: translate(4%, -3%) scale(1.1); } }
+@media (prefers-reduced-motion: no-preference) {
+  .od-fondo-drift { animation: odDrift 26s ease-in-out infinite alternate; will-change: transform; }
+}
+
 /* Cursor de punto (OdCursor): con mouse, el cursor nativo se oculta y lo
    sustituye el punto; en campos de texto vuelve el cursor de texto. */
 html.od-cursor-on,

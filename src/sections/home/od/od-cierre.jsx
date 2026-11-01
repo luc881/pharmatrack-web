@@ -7,8 +7,6 @@ import { Pill } from 'src/layouts/od/od-ui';
 import { OdTicker } from 'src/layouts/od/od-ticker';
 import { MaskLines } from 'src/layouts/od/od-mask-lines';
 
-import { OdCierreFondo } from './od-cierre-fondo';
-
 // ----------------------------------------------------------------------
 // Cierre del home (paso 5f): el degradado prisma musgo de Feral
 // (public/brand/degradados/cierre-prisma.jpg), oscuro arriba donde va el
@@ -37,10 +35,11 @@ export function OdCierre({ ticker }) {
           textAlign: 'center',
           color: 'var(--od-papel)',
           bgcolor: 'var(--od-noche)',
-          overflow: 'clip',
+          backgroundImage: 'url(/brand/degradados/cierre-prisma.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 40%',
         }}
       >
-        <OdCierreFondo />
         <Box component="h2" sx={{ m: 0, mx: 'auto', maxWidth: '16ch', fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(40px, 5.4vw, 84px)', lineHeight: 1.04 }}>
           <MaskLines>¿Dudas antes de comprar?</MaskLines>
         </Box>
