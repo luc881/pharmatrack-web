@@ -9,6 +9,7 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { FOTOS } from 'src/lib/fotos-ambiente';
+import { OdScene } from 'src/layouts/od/od-scene';
 import { OdPanel } from 'src/layouts/od/od-panel';
 import { Star, Pill } from 'src/layouts/od/od-ui';
 import { OdInkText } from 'src/layouts/od/od-ink-text';
@@ -264,15 +265,10 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
       <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' }, color: 'var(--od-musgo-900)' }}>
         <Box sx={{ position: 'relative', mx: 'auto', maxWidth: 1180, display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
           <Box>
-            {/* Afuera el giro 3D con brillo de las tarjetas de producto; adentro
-                el obturador y el grano (cada uno usa su propio ::after) */}
-            <Box className="od-tilt-lg od-glare" data-fx sx={{ position: 'relative', width: { xs: 180, md: 'clamp(200px, 16vw, 260px)' }, aspectRatio: '1', overflow: 'clip', borderRadius: '4px' }}>
-              <Box data-shutter className="od-grain" sx={{ width: 1, height: 1, bgcolor: 'var(--od-noche)', '&::after': { opacity: 0.28, mixBlendMode: 'screen' } }}>
-                <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
-                <Box component="h2" sx={{ position: 'absolute', inset: 0, zIndex: 1, m: 0, display: 'grid', placeItems: 'center', fontFamily: 'var(--font-heading)', fontStyle: 'italic', fontWeight: 400, fontSize: { xs: 22, md: 26 }, color: '#f6f4f1', textShadow: '0 1px 12px rgba(0,0,0,0.45)' }}>
-                  El criadero
-                </Box>
-              </Box>
+            {/* el cactus 3D, sin fondo y girando (en celular, la foto de respaldo) */}
+            <OdScene scene="cactus" fallbackSrc={FOTOS.criadero.src} fallbackLabel="Terrarios con musgo bajo una lámpara" ratio="3 / 5" sx={{ width: { xs: 180, md: 'clamp(220px, 17vw, 300px)' } }} />
+            <Box component="h2" sx={{ m: 0, mt: { xs: 2, md: 2.5 }, fontFamily: 'var(--font-heading)', fontStyle: 'italic', fontWeight: 400, fontSize: { xs: 24, md: 28 } }}>
+              El criadero
             </Box>
             <Box sx={{ mt: { xs: 3, md: 4 } }}>
               <Pill href={paths.breeding}>Conoce el criadero</Pill>

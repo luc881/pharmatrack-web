@@ -32,11 +32,8 @@ export function buildStump(THREE, { scene }) {
     });
   });
 
-  // gira lento y sube y baja apenas, como flotando
-  return (t) => {
+  return () => {
     g.rotation.y += 0.003;
-    g.position.y = Math.sin(t * 0.0009) * 0.09;
-    g.rotation.z = Math.sin(t * 0.0006) * 0.025;
   };
 }
 
@@ -88,9 +85,39 @@ export function buildMesaRoca(THREE, { scene, renderer }) {
   };
 }
 
+// Cactus en maceta de concreto (BlenderKit; sus materiales procedurales se
+// hornearon a texturas 1K en Blender: public/3d/cactus.glb). Sin fondo; solo gira.
+export function buildCactus(THREE, { scene }) {
+  scene.add(new THREE.HemisphereLight(0xfffaf0, 0x8a8478, 1.2));
+  const key = new THREE.DirectionalLight(0xfff4e2, 1.8);
+  key.position.set(3, 5, 4);
+  scene.add(key);
+  const rim = new THREE.DirectionalLight(0xc8e6d0, 0.6);
+  rim.position.set(-4, 2, -3);
+  scene.add(rim);
+
+  const g = new THREE.Group();
+  scene.add(g);
+  import('three/examples/jsm/loaders/GLTFLoader.js').then(({ GLTFLoader }) => {
+    new GLTFLoader().load('/3d/cactus.glb', (gltf) => {
+      const model = gltf.scene;
+      const sphere = new THREE.Box3().setFromObject(model).getBoundingSphere(new THREE.Sphere());
+      const k = 1.7 / sphere.radius;
+      model.scale.setScalar(k);
+      model.position.copy(sphere.center.multiplyScalar(-k));
+      g.add(model);
+    });
+  });
+
+  return () => {
+    g.rotation.y += 0.004;
+  };
+}
+
 // Registro por clave: OdScene recibe un string serializable (para poder usarse
 // desde páginas server component) y aquí se resuelve la función + la cámara.
 export const SCENES = {
+  cactus: { build: buildCactus, opts: { fov: 30, position: [0, 0.4, 7], lookAt: [0, 0, 0] } },
   tocon: { build: buildStump, opts: { fov: 32, position: [0, 0.7, 6.6], lookAt: [0, 0, 0] } },
   mesa: { build: buildMesaRoca, opts: { fov: 30, position: [0, 1.7, 6.2], lookAt: [0, 0, 0], background: 0x3b403d } },
 };
