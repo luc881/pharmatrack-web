@@ -26,6 +26,7 @@ import { OdFaq } from './od-faq';
 import { OdCierre } from './od-cierre';
 import { useHeroIntro } from './use-hero-intro';
 import { OdDivulgacion } from './od-divulgacion';
+import { usePhotoMotion } from './use-photo-motion';
 import { OdSpeciesScene } from './od-species-scene';
 import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
 
@@ -206,6 +207,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
   const heroRef = useRef(null);
   useHeroIntro(heroRef);
+  usePhotoMotion();
 
   return (
     <>
@@ -350,9 +352,8 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
             <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(30px, 3.4vw, 48px)', lineHeight: 1.08 }}>
               <MaskLines>El criadero</MaskLines>
             </Box>
-            {/* clip y no hidden: hidden vuelve el marco contenedor de scroll y congela el zoom (.od-zoom-in) */}
-            <Box className="od-grain" sx={{ mt: { xs: 3, md: 4 }, aspectRatio: '4 / 5', overflow: 'clip', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
-              <Box component="img" className="od-zoom-in" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
+            <Box data-shutter className="od-grain" sx={{ mt: { xs: 3, md: 4 }, aspectRatio: '4 / 5', overflow: 'clip', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
+              <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
             </Box>
           </Box>
           <Box sx={{ pt: { md: 9 } }}>
@@ -519,7 +520,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       {/* Todo para tu terrario: carrusel en perspectiva sobre la foto de hojas */}
       {terrario.length > 0 && (
         <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'clip', color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
-          <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${FOTOS.terrario.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+          <Box aria-hidden data-parallax sx={{ position: 'absolute', inset: '-12% 0', zIndex: -2, backgroundImage: `url(${FOTOS.terrario.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
           <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(22,27,25,0.62)' }} />
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
             <SectionHead mask title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />

@@ -471,18 +471,6 @@ button:focus-visible,
   }
 }
 
-/** **************************************
-* Movimiento (paso 6 del rediseño): todo ligado al scroll y solo con CSS.
-* Sin soporte de animation-timeline o con movimiento reducido, todo queda
-* quieto y completo.
-*  .od-zoom-in la foto entra con un leve zoom al aparecer
-*************************************** */
-@keyframes odZoomIn { from { transform: scale(1.12); } to { transform: none; } }
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .od-zoom-in { animation: odZoomIn linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
-  }
-}
 
 /* Cursor de punto (OdCursor): con mouse, el cursor nativo se oculta y lo
    sustituye el punto; en campos de texto vuelve el cursor de texto. */

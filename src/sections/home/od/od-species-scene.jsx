@@ -1,11 +1,14 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
+
 import Box from '@mui/material/Box';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { Pill } from 'src/layouts/od/od-ui';
+import { gsap, ScrollTrigger, prefersReducedMotion } from 'src/layouts/od/od-gsap';
 
 // ----------------------------------------------------------------------
 // Especies destacadas como escena (paso 5c del rediseño, inspirada en las
@@ -16,6 +19,11 @@ import { Pill } from 'src/layouts/od/od-ui';
 // Fondo: la foto propia de la especie desenfocada si existe; si no, un
 // degradado de Feral (public/brand/degradados/especie-*.jpg). Nunca una foto
 // de banco: no se presenta como el animal que se vende.
+//
+// Con GSAP (useSceneMotion): al entrar cada pantalla la tarjeta crece y se
+// endereza y el fondo se acerca; al cubrirla la siguiente, su contenido se
+// encoge y se apaga. El nombre que corre acelera con la velocidad del scroll.
+// Con movimiento reducido todo queda quieto.
 // ----------------------------------------------------------------------
 
 const BACKDROPS = ['musgo', 'olivo', 'salvia', 'hojarasca'].map((n) => `/brand/degradados/especie-${n}.jpg`);
@@ -28,6 +36,7 @@ function Panel({ card, index, isLast, heading }) {
   return (
     <Box
       component="article"
+      data-sc-panel
       data-dark="1"
       className="od-grain"
       sx={{ position: 'sticky', top: 0, height: '100svh', minHeight: 620, overflow: 'hidden', color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}
@@ -35,6 +44,7 @@ function Panel({ card, index, isLast, heading }) {
       {/* fondo: foto propia desenfocada o degradado */}
       <Box
         aria-hidden
+        data-sc-bg
         sx={{
           position: 'absolute',
           inset: photo ? '-6%' : 0,
@@ -48,7 +58,7 @@ function Panel({ card, index, isLast, heading }) {
 
       {/* el nombre corriendo detrás */}
       <Box aria-hidden sx={{ position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-58%)', overflow: 'hidden', pointerEvents: 'none' }}>
-        <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', animation: 'odMarquee 60s linear infinite', fontFamily: 'var(--font-heading)', fontSize: 'clamp(96px, 13vw, 220px)', lineHeight: 1, opacity: 0.14 }}>
+        <Box data-sc-marquee sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: 'clamp(96px, 13vw, 220px)', lineHeight: 1, opacity: 0.14 }}>
           {loop.map((t, i) => (
             <Box component="span" key={i} sx={{ px: '0.35em' }}>
               {t}
@@ -70,8 +80,8 @@ function Panel({ card, index, isLast, heading }) {
       )}
 
       {/* la especie */}
-      <Box sx={{ position: 'relative', height: 1, display: 'grid', placeItems: 'center', px: '18px' }}>
-        <Box component={RouterLink} href={card.href} sx={{ width: 'min(440px, 76vw)', color: 'inherit', textDecoration: 'none', '&:hover .od-sc-img': { transform: 'scale(1.03)' } }}>
+      <Box data-sc-content sx={{ position: 'relative', height: 1, display: 'grid', placeItems: 'center', px: '18px' }}>
+        <Box data-sc-card component={RouterLink} href={card.href} sx={{ width: 'min(440px, 76vw)', color: 'inherit', textDecoration: 'none', '&:hover .od-sc-img': { transform: 'scale(1.03)' } }}>
           <Box sx={{ position: 'relative', aspectRatio: '1 / 1', overflow: 'hidden', borderRadius: '4px', bgcolor: 'rgba(22,27,25,0.4)' }}>
             {photo ? (
               <Box className="od-sc-img" component="img" src={photo} alt={card.title} loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block', transition: 'transform 700ms var(--od-ease)', filter: card.soldOut ? 'grayscale(1)' : 'none' }} />
@@ -105,10 +115,51 @@ function Panel({ card, index, isLast, heading }) {
   );
 }
 
+function useSceneMotion(ref) {
+  useEffect(() => {
+    if (prefersReducedMotion() || !ref.current) return undefined;
+    let settle = 0;
+    const ctx = gsap.context(() => {
+      const panels = gsap.utils.toArray('[data-sc-panel]', ref.current);
+      panels.forEach((panel, i) => {
+        // entrada: mientras la pantalla sube hasta quedar fija
+        const enter = { trigger: panel, start: 'top bottom', end: 'top top', scrub: true };
+        gsap.fromTo(panel.querySelector('[data-sc-card]'), { scale: 0.84, rotate: i % 2 ? 3 : -3, autoAlpha: 0.35 }, { scale: 1, rotate: 0, autoAlpha: 1, ease: 'none', scrollTrigger: enter });
+        gsap.fromTo(panel.querySelector('[data-sc-bg]'), { scale: 1.16 }, { scale: 1, ease: 'none', scrollTrigger: { ...enter } });
+        // salida: mientras la siguiente la va cubriendo
+        const next = panels[i + 1];
+        if (next) {
+          gsap.to(panel.querySelector('[data-sc-content]'), { scale: 0.9, autoAlpha: 0.4, ease: 'none', scrollTrigger: { trigger: next, start: 'top bottom', end: 'top top', scrub: true } });
+        }
+      });
+
+      // el nombre que corre: velocidad base lenta, acelera al hacer scroll
+      const runs = gsap.utils.toArray('[data-sc-marquee]', ref.current).map((m) => gsap.to(m, { xPercent: -50, duration: 50, ease: 'none', repeat: -1 }));
+      ScrollTrigger.create({
+        trigger: ref.current,
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: (self) => {
+          const boost = 1 + Math.min(Math.abs(self.getVelocity()) / 180, 9);
+          runs.forEach((r) => r.timeScale(boost));
+          clearTimeout(settle);
+          settle = setTimeout(() => runs.forEach((r) => gsap.to(r, { timeScale: 1, duration: 1.2, ease: 'power2.out' })), 90);
+        },
+      });
+    }, ref);
+    return () => {
+      clearTimeout(settle);
+      ctx.revert();
+    };
+  }, [ref]);
+}
+
 export function OdSpeciesScene({ cards, heading }) {
+  const ref = useRef(null);
+  useSceneMotion(ref);
   if (!cards.length) return null;
   return (
-    <Box component="section" id="disponibles" aria-label={heading} sx={{ position: 'relative', scrollMarginTop: 80 }}>
+    <Box ref={ref} component="section" id="disponibles" aria-label={heading} sx={{ position: 'relative', scrollMarginTop: 80 }}>
       {cards.map((card, i) => (
         <Panel key={card.key} card={card} index={i} isLast={i === cards.length - 1} heading={i === 0 ? heading : null} />
       ))}

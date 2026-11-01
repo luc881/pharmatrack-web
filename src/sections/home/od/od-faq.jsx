@@ -33,7 +33,7 @@ export function OdFaq({ mossTall, bg }) {
   return (
     <OdPanel id="preguntas" className="od-grain" sx={{ pt: { xs: '56px', md: '72px' }, pb: { xs: '72px', md: '110px' } }}>
       {/* foto de ambiente muy oscurecida: textura, no protagonista */}
-      {bg && <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />}
+      {bg && <Box aria-hidden data-parallax sx={{ position: 'absolute', inset: '-12% 0', zIndex: -2, backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />}
       {bg && <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(22,27,25,0.78)' }} />}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 13, color: 'var(--color-neutral-500)' }}>
         <Box component="span">(Preguntas frecuentes)</Box>

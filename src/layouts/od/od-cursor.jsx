@@ -59,7 +59,12 @@ export function OdCursor() {
       x += (tx - x) * 0.24;
       y += (ty - y) * 0.24;
       scale += (target - scale) * 0.18;
-      el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${scale.toFixed(3)})`;
+      // crece cambiando su tamaño real (no con scale): escalar un punto de
+      // 14px lo estiraba como imagen y se veía pixeleado
+      const size = (14 * scale).toFixed(1);
+      el.style.width = `${size}px`;
+      el.style.height = `${size}px`;
+      el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
       raf = requestAnimationFrame(tick);
     };
 
@@ -91,7 +96,6 @@ export function OdCursor() {
         pointerEvents: 'none',
         opacity: 0,
         transition: 'opacity 200ms ease',
-        willChange: 'transform',
       }}
     />
   );

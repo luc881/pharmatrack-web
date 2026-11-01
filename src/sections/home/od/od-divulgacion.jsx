@@ -206,7 +206,7 @@ export function OdDivulgacion({ articles = [] }) {
                   </Box>
                 </Box>
               </Box>
-              <Box className="od-note-media" sx={{ mb: { md: '34px' } }}>
+              <Box className="od-note-media" data-shutter sx={{ mb: { md: '34px' } }}>
                 <OdImage src={article.cover_image} alt={article.title} label={article.title} ratio="16 / 10" radius={0} />
               </Box>
             </Link>
