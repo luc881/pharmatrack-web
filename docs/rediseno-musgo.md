@@ -1,101 +1,77 @@
-# Rediseño del sitio: plan acordado (taste-skill v2.1.5)
+# Rediseño del sitio (taste-skill v2.1.5): terminado el 2026-10-31
 
-Iniciado el 2026-10-31 y ajustado el mismo día con las referencias del usuario (aldena.framer.media,
-reelio.framer.media, monopo.london). Prueba de paletas: `/prueba-paletas/` (se borra al terminar).
+Referencias del usuario: aldena.framer.media, reelio.framer.media, monopo.london. Dirección de la skill:
+«dark room» en algunas secciones; el catálogo y las fichas siguen en hueso.
 
-## Hecho
+## Qué se hizo
 
-1. **Paleta (paso 1).** Primero Musgo; luego se cambió a la **opción A**, con dos paletas:
+1. **Paleta, opción A** (`public/brand/BRAND.md` §3):
    - página en neutros: fondo hueso #EEECE6, tinta #1C2320, oscuros #161B19;
-   - el verde musgo solo en el acento #247465 y en los degradados de Feral.
-   - Sin rojo. Ver `public/brand/BRAND.md` §3.
-2. **Tipografía y limpieza (paso 2).** Sin etiquetitas en mayúsculas, sin numeración 01/02/03, sin
-   emojis de interfaz y con texto de 13px como mínimo.
-3. **Marco (paso 3).**
+   - verde musgo solo en el acento #247465 y en los degradados de Feral (`public/brand/degradados/`);
+   - neutro gris azulado para lo no disponible;
+   - sin rojo.
+2. **Tipografía y limpieza.** Sin etiquetitas en mayúsculas, sin numeración 01/02/03, sin emojis de
+   interfaz y con 13px como mínimo.
+3. **Marco.**
    - El contenido crece hasta 1840px.
    - Barra flotante plana, sin cinta que corre ni franja de aviso.
-   - Sello flotante más chico.
+   - Sello flotante de 96–120px, oculto en móvil.
    - La cinta de novedades se edita en el dashboard (Links y eventos).
-   - Degradado «aurora» en la banda del criadero.
+4. **Estados.** OdEmpty en todos los vacíos; avisos del tema en neutro y éxito en musgo; 404 sobre el
+   degradado neutro.
+5. **Secciones del inicio**, en orden:
+   1. Portada estilo Aldena: video a sangre y «OPUNTIA» gigante (h1).
+   2. Franja de confianza.
+   3. Especies destacadas como escena fija: una pantalla por especie y degradados de fondo mientras no
+      haya foto propia.
+   4. El criadero en dos columnas, con texto que se entinta.
+   5. Banda del degradado aurora con nombres y cifras.
+   6. Compra por categoría.
+   7. Seis cosas dentro del frasco.
+   8. Cómo comprar, en claro.
+   9. Todo para tu terrario, en carrusel en perspectiva.
+   10. Divulgación.
+   11. Preguntas.
+   12. Cierre con el degradado prisma (reemplazó a la suscripción).
+   13. Pie con créditos de las fotos.
 
-## Pendiente
+   Claras y oscuras se alternan.
+6. **Movimiento**, solo con CSS ligado al scroll y respaldo para movimiento reducido:
+   - «OPUNTIA» se encoge al bajar;
+   - la foto del criadero entra con zoom;
+   - los títulos suben palabra por palabra;
+   - el texto del criadero se entinta;
+   - las tarjetas del carrusel se enderezan al centro;
+   - la barra toma el color de la sección.
 
-4. **Estados en neutro.** Desactivado, agotado, vacío, errores de formulario y avisos, y la 404 con el
-   degradado neutro (sin la ilustración genérica).
-5. **Secciones** (dirección de la skill: «dark room», solo en algunas secciones; el catálogo y las fichas
-   siguen en hueso).
-   - a. **Fotos libres de ambiente.**
-     - 8 a 12 fotos de Wikimedia, CC0 o CC BY (evitar BY-SA), bajadas con `assets.mjs --get`.
-     - Créditos en el pie.
-     - Mismo tratamiento en todas: grano CSS y un leve oscurecido.
-     - Van en los espacios de imagen del sitio para cambiarlas desde el dashboard.
-     - **Nunca en tarjetas ni fichas de producto:** una foto encontrada no se presenta como el animal
-       que se vende.
-   - b. **Portada estilo Aldena.** Foto de ambiente a sangre con grano, «OPUNTIA» gigante encima en
-     Playfair crema, «Historia natural» y un botón abajo a la izquierda.
-   - c. **Especies destacadas como escena fija.**
-     - Al bajar, la sección se queda fija.
-     - Fondo desenfocado a sangre: un degradado de Feral musgo mientras no haya foto propia, y la foto
-       propia desenfocada cuando exista.
-     - Foto nítida al centro.
-     - El nombre en Playfair gigante y tenue corre detrás.
-   - d. **«Todo para tu terrario» en carrusel en perspectiva.**
-     - Las tarjetas laterales van inclinadas y se enderezan al centro.
-     - Precio «Desde $…».
-     - Scroll nativo con scroll-snap y CSS.
-   - e. **El criadero en dos columnas.** Título corto a la izquierda y texto grande a la derecha, que
-     se entinta al bajar.
-   - f. **Cierre con degradado.** Prisma musgo antes del pie: «¿Dudas antes de comprar?» + WhatsApp.
-6. **Movimiento** (framer-motion y CSS, sin dependencias nuevas, con respaldo para movimiento reducido):
-   - texto que se entinta al bajar;
-   - la escena fija con el nombre que corre;
-   - el carrusel que se endereza;
-   - fotos que entran con un leve zoom;
-   - «OPUNTIA» que se encoge al hacer scroll;
-   - la barra que toma el color de la sección.
+**Fotos de ambiente provisionales:**
+- 9 de Unsplash en `public/fotos/ambiente/`, con su autor en `src/lib/fotos-ambiente.js`.
+- Llevan grano CSS (`.od-grain`).
+- Nunca en tarjetas ni fichas de producto.
 
-## Reglas
+## Pendientes (para después)
 
-- **Degradados.**
-  - 2 o 3 momentos por página.
-  - Nunca foto y degradado en la misma sección.
-  - Nunca en botones, tarjetas ni texto.
-  - Con el mismo grano que las fotos.
-  - Los elegidos se guardan en `public/brand/degradados/`.
-- **No copiar de las referencias:**
-  - la pantalla de carga y el cursor personalizado de Aldena (la skill los prohíbe);
-  - la cuadrícula de líneas con crucecitas y las etiquetitas «• Intro» de Reelio;
-  - las métricas inventadas.
-- **Letras que se deshacen en pixeles** (canvas, Aldena): opcional al final.
-- **Excepciones a la skill por marca:**
-  - itálica en nombres científicos;
-  - el sello y el divisor de hojas, con medida;
-  - los degradados.
-- **Fotos propias de los animales:** lo que más mejorará el sitio cuando existan.
-
-## Pendientes marcados
-
-- **Cambiar el video de la portada** (decisión del usuario, para después): por ahora se queda el
-  video de musgo actual, con grano y el estilo Aldena del paso 5b.
-- **Cambiar las fotos de ambiente por fotos propias.** Hoy son 12 de Unsplash, en
-  `public/fotos/ambiente/` y `src/lib/fotos-ambiente.js` (archivo y autor). Para cambiarlas basta con
-  reemplazar el archivo (mismo nombre) y el autor. La línea de créditos del pie sale de esa lista.
-  Opcional: pasarlas a espacios de imagen editables desde el dashboard.
-- **Huecos a los lados en pantallas de 1920px o más.** Las notas verticales de los márgenes
-  (`OdGutterNote`) se quitaron en el paso 2 (commit cc5121e). Las había puesto el usuario para tapar
-  ese hueco. El contenido ya crece hasta 1840px; en 2560px quedan 360px por lado. Se revisa al terminar
-  todos los pasos y, si aún molesta, se restauran desde ese commit.
-- **Destacado del nopal** en la cabecera del catálogo (`destacado-noche.svg`): trae fondo propio. Falta
+- **Cambiar el video de la portada** (decisión del usuario).
+- **Cambiar las fotos de ambiente por fotos propias.** Se reemplaza el archivo con el mismo nombre y
+  el autor en `fotos-ambiente.js`. Opcional: pasarlas a espacios editables desde el dashboard.
+- **Fotos propias de las especies.** Es lo que más mejorará el sitio: el catálogo y la escena de
+  especies las usan solas en cuanto existan (la escena usa la foto nítida y desenfocada de fondo).
+- **Portada del artículo «Cómo elegir tu primer gecko»:** es una foto de San Francisco. Se cambia en el
+  dashboard (Divulgación).
+- **Huecos a los lados en pantallas grandes.**
+  - En 1920px ya solo quedan 40px por lado; en 2560px quedan 360px.
+  - Las notas verticales de los márgenes (`OdGutterNote`, commit cc5121e) se pueden restaurar si
+    molesta.
+- **Destacado del nopal** de la cabecera del catálogo (`destacado-noche.svg`): trae fondo propio. Falta
   una versión de marca con fondo #161B19 o transparente.
-- **Logo y favicon:** el usuario puede aprobar copias recoloreadas (mismo trazo) para la paleta nueva.
+- **Logo y favicon:** el usuario puede aprobar copias recoloreadas (mismo trazo).
+- **Detalles menores:**
+  - «Fichas de *cuidados*» lleva una palabra en itálica de acento (la skill lo evita);
+  - el gran «DIVULGACIÓN» en gris;
+  - «(Preguntas frecuentes) / 06 respuestas» en la cabecera de preguntas;
+  - las pestañas del móvil a 12px.
 
 ## ¿Versión oscura?
 
-La skill no contempla un interruptor claro/oscuro: trata «clara u oscura» como una decisión de
-composición. Recomendación: no hacerlo por ahora, porque duplica todas las revisiones. Si se hace
-después:
-- `color-scheme: dark`;
-- fondo muy profundo con un tinte (no negro puro);
-- tinta clara suave (no blanco puro);
-- texto secundario a 4.5:1;
-- profundidad con superficies un paso más claras, sin brillos.
+No por ahora. La skill trata «clara u oscura» como composición, no como interruptor, y un interruptor
+duplicaría todas las revisiones.

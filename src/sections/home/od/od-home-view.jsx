@@ -503,6 +503,10 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         </Box>
       </OdPanel>
 
+      {/* Cómo comprar (claro) entre el frasco y el carrusel (oscuros): así
+          ninguna sección queda junto a otra del mismo tono */}
+      <OdHowToBuy />
+
       {/* Todo para tu terrario: carrusel en perspectiva sobre la foto de hojas */}
       {terrario.length > 0 && (
         <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'clip', color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
@@ -518,9 +522,6 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           <OdProductRail items={terrario} />
         </Box>
       )}
-
-      {/* Cómo comprar (tres pasos sobre foto a sangre) */}
-      <OdHowToBuy />
 
       {/* Divulgación (editorial en filas) */}
       <OdDivulgacion articles={articles} />
