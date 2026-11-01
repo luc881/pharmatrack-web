@@ -59,9 +59,9 @@ export default async function Page() {
         <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: 7, md: 9 }, display: 'grid', gap: { xs: 4, md: '48px' }, alignItems: 'center', gridTemplateColumns: { xs: '1fr', md: 'minmax(280px, 0.8fr) minmax(0, 1fr)' } }}>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <OdScene
-              scene="log"
+              scene="tocon"
               fallbackSrc={media.moss_tall}
-              fallbackLabel="Tronco con musgo del taller"
+              fallbackLabel="Tocón de madera"
               ratio="4 / 5"
               sx={{ maxWidth: 420 }}
             />

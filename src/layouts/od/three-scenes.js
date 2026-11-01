@@ -96,67 +96,35 @@ export function buildJar(THREE, { scene }) {
   };
 }
 
-// Tronco de corteza deformada con anillos, musgo y hojarasca (criadero).
-// Cámara: PerspectiveCamera(32) en (0, 0.2, 7.4), alpha.
-export function buildLog(THREE, { scene }) {
-  scene.add(new THREE.HemisphereLight(0xf4ead9, 0x2a231c, 0.9));
-  const key = new THREE.DirectionalLight(0xfff1d8, 1.7);
+// Tocón fotoescaneado (Poliigon TreeStump024, reducido a 15k triángulos y
+// texturas 1K en Blender: public/3d/tocon.glb). Gira lento; el GLTFLoader se
+// importa solo aquí para no pesar en el resto del sitio.
+export function buildStump(THREE, { scene }) {
+  scene.add(new THREE.HemisphereLight(0xf4ead9, 0x2a231c, 1.1));
+  const key = new THREE.DirectionalLight(0xfff1d8, 2.2);
   key.position.set(3, 5, 4);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0x9ad07a, 0.5);
-  rim.position.set(-4, 1, -3);
+  const rim = new THREE.DirectionalLight(0x9ad07a, 0.9);
+  rim.position.set(-4, 2, -3);
   scene.add(rim);
 
   const g = new THREE.Group();
-  const barkMat = new THREE.MeshStandardMaterial({ color: 0x5b4530, roughness: 1, flatShading: true });
-  const trunkGeo = new THREE.CylinderGeometry(0.72, 0.86, 5.4, 22, 8, false);
-  const pos = trunkGeo.attributes.position;
-  for (let i = 0; i < pos.count; i += 1) {
-    const x = pos.getX(i);
-    const y = pos.getY(i);
-    const z = pos.getZ(i);
-    const n = Math.sin(y * 5.5 + x * 3.1) * 0.045 + Math.cos(z * 4.3 + y * 2.2) * 0.05;
-    const r = Math.hypot(x, z) || 1;
-    pos.setX(i, x + (x / r) * n);
-    pos.setZ(i, z + (z / r) * n);
-  }
-  trunkGeo.computeVertexNormals();
-  g.add(new THREE.Mesh(trunkGeo, barkMat));
-
-  const ringMat = new THREE.MeshStandardMaterial({ color: 0xc0a074, roughness: 0.85 });
-  [-1, 1].forEach((sgn) => {
-    const cap = new THREE.Mesh(new THREE.CircleGeometry(sgn > 0 ? 0.74 : 0.87, 26), ringMat);
-    cap.position.y = sgn * 2.71;
-    cap.rotation.x = sgn > 0 ? -Math.PI / 2 : Math.PI / 2;
-    g.add(cap);
-    for (let k = 1; k <= 3; k += 1) {
-      const rg = new THREE.Mesh(new THREE.TorusGeometry(0.19 * k, 0.012, 6, 30), new THREE.MeshStandardMaterial({ color: 0x8a6a45, roughness: 0.9 }));
-      rg.position.y = sgn * 2.72;
-      rg.rotation.x = Math.PI / 2;
-      g.add(rg);
-    }
-  });
-  const mossMat = new THREE.MeshStandardMaterial({ color: 0x4a7a2e, roughness: 1, flatShading: true });
-  for (let i = 0; i < 34; i += 1) {
-    const m = new THREE.Mesh(new THREE.SphereGeometry(0.14 + Math.random() * 0.16, 8, 6), mossMat);
-    const a = Math.random() * Math.PI * 2;
-    m.position.set(Math.sin(a) * 0.78, (Math.random() - 0.5) * 4.9, Math.cos(a) * 0.78);
-    m.scale.set(1, 0.72, 0.8);
-    g.add(m);
-  }
-  const litter = new THREE.MeshStandardMaterial({ color: 0x8a5a2b, roughness: 1, side: THREE.DoubleSide });
-  for (let i = 0; i < 10; i += 1) {
-    const l = new THREE.Mesh(new THREE.CircleGeometry(0.2 + Math.random() * 0.12, 5), litter);
-    const a = Math.random() * Math.PI * 2;
-    l.position.set(Math.sin(a) * 0.85, (Math.random() - 0.5) * 4.6, Math.cos(a) * 0.85);
-    l.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-    g.add(l);
-  }
-  g.rotation.z = 0.05;
   scene.add(g);
+  import('three/examples/jsm/loaders/GLTFLoader.js').then(({ GLTFLoader }) => {
+    new GLTFLoader().load('/3d/tocon.glb', (gltf) => {
+      const model = gltf.scene;
+      const box = new THREE.Box3().setFromObject(model);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      const k = 3.4 / Math.max(size.x, size.y, size.z);
+      model.scale.setScalar(k);
+      model.position.copy(center.multiplyScalar(-k));
+      g.add(model);
+    });
+  });
 
   return () => {
-    g.rotation.y += 0.006;
+    g.rotation.y += 0.003;
   };
 }
 
@@ -213,6 +181,6 @@ export function buildStack(THREE, { scene }) {
 // desde páginas server component) y aquí se resuelve la función + la cámara.
 export const SCENES = {
   jar: { build: buildJar, opts: { fov: 32, position: [0, 0.5, 10.5] } },
-  log: { build: buildLog, opts: { fov: 32, position: [0, 0.2, 7.4], lookAt: [0, 0, 0] } },
+  tocon: { build: buildStump, opts: { fov: 32, position: [0, 0.7, 6.6], lookAt: [0, 0, 0] } },
   stack: { build: buildStack, opts: { fov: 30, position: [0, 3.4, 17], lookAt: [0, -0.6, 0], background: 0xd8d9d6 } },
 };

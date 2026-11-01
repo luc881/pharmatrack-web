@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -28,18 +28,46 @@ const FAQS = [
 
 const NAMES = 'Preguntas frecuentes · ';
 
-// fondo: flow animado en musgo hondo (antes una foto con velo, se veía poco profesional)
-const HONDO = ['#101714', '#132b25', '#173E36', '#247465', '#3f9a7f'];
+// Fondo animado (antes una foto con velo, se veía poco profesional). Mientras
+// se elige hay varias opciones de flow; con ?fondo-preguntas aparece un botón
+// para recorrerlas. ponytail: al elegir, dejar solo esa y borrar el selector.
+const FONDOS = [
+  { id: 'hondo', nombre: 'Musgo hondo (actual)', colors: ['#101714', '#132b25', '#173E36', '#247465', '#3f9a7f'] },
+  { id: 'hondo-grano', nombre: 'Musgo hondo + grano notorio', colors: ['#101714', '#132b25', '#173E36', '#247465', '#3f9a7f'], grano: true },
+  { id: 'musgo', nombre: 'Musgo brillante con velo', colors: ['#0f2420', '#173E36', '#247465', '#55B895', '#ACDDB5'], velo: 0.4 },
+  { id: 'salvia', nombre: 'Noche y salvia (apagado)', colors: ['#0e1311', '#161B19', '#1f3a33', '#3d6b5c', '#7fa08e'] },
+  { id: 'hojarasca', nombre: 'Musgo y hojarasca (tierra)', colors: ['#14110d', '#211c16', '#173E36', '#4f3d2a', '#8f6c42'] },
+  { id: 'lento', nombre: 'Musgo hondo, ondas grandes y lentas', colors: ['#101714', '#132b25', '#173E36', '#247465', '#3f9a7f'], scale: 0.24, speed: 0.03 },
+];
+const FONDO_ELEGIDO = 'hondo';
 
 export function OdFaq({ mossTall }) {
+  const [fi, setFi] = useState(() => FONDOS.findIndex((f) => f.id === FONDO_ELEGIDO));
+  const [probando, setProbando] = useState(false);
+  useEffect(() => {
+    setProbando(new URLSearchParams(window.location.search).has('fondo-preguntas'));
+  }, []);
+  const fondo = FONDOS[fi];
   const [open, setOpen] = useState(0);
 
   return (
     <OdPanel id="preguntas" className="od-grain" sx={{ pt: { xs: '56px', md: '72px' }, pb: { xs: '72px', md: '110px' } }}>
       {/* foto de ambiente muy oscurecida: textura, no protagonista */}
       <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1 }}>
-        <OdFlowGradient colors={HONDO} />
+        <OdFlowGradient key={fondo.id} colors={fondo.colors} scale={fondo.scale} speed={fondo.speed} />
+        {fondo.velo && <Box sx={{ position: 'absolute', inset: 0, bgcolor: `rgba(22,27,25,${fondo.velo})` }} />}
+        {fondo.grano && <Box sx={{ position: 'absolute', inset: 0, backgroundImage: 'var(--od-noise)', backgroundSize: '140px', mixBlendMode: 'overlay' }} />}
       </Box>
+      {probando && (
+        <Box
+          component="button"
+          type="button"
+          onClick={() => setFi((n) => (n + 1) % FONDOS.length)}
+          sx={{ position: 'fixed', left: 20, bottom: 20, zIndex: 1500, px: 2.5, py: 1.5, border: 0, borderRadius: '999px', font: 'inherit', fontSize: 14, cursor: 'pointer', bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', boxShadow: '0 6px 24px rgba(0,0,0,0.25)' }}
+        >
+          Fondo de preguntas: {fondo.nombre} ({fi + 1}/{FONDOS.length}) · Siguiente →
+        </Box>
+      )}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 13, color: 'var(--color-neutral-500)' }}>
         <Box component="span">(Preguntas frecuentes)</Box>
         <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 respuestas</Box>
@@ -61,7 +89,7 @@ export function OdFaq({ mossTall }) {
           </Box>
           <Box sx={{ mt: 'auto', pt: { xs: '40px', md: '80px' } }}>
             <Box sx={{ display: { xs: 'none', md: 'block' }, maxWidth: 300 }}>
-              <OdScene scene="log" fallbackSrc={mossTall} fallbackLabel="Tronco con musgo" ratio="3 / 5" />
+              <OdScene scene="tocon" fallbackSrc={mossTall} fallbackLabel="Tocón de madera" ratio="4 / 5" />
             </Box>
             <Box sx={{ mt: { xs: 0, md: '34px' }, fontFamily: 'var(--font-heading)', fontSize: 27, lineHeight: 1.25, color: 'var(--color-neutral-500)' }}>
               ¿Te quedó una duda?

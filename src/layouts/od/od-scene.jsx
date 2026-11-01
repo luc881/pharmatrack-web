@@ -10,7 +10,7 @@ import { useThreeScene } from './use-three-scene';
 // Contenedor de una escena three.js con degradación elegante: mientras la
 // escena no monta (móvil, motion reducido o cargando) se muestra la imagen de
 // respaldo; al montar, el canvas la cubre. El contenedor define el tamaño.
-// `scene` es una clave ('jar' | 'log') — así puede usarse desde páginas server
+// `scene` es una clave ('jar' | 'tocon' | 'stack') — así puede usarse desde páginas server
 // component sin pasar funciones a través del límite RSC.
 // ----------------------------------------------------------------------
 
