@@ -24,7 +24,7 @@ import { gsap, prefersReducedMotion } from 'src/layouts/od/od-gsap';
 const ALL = paths.catalogCategory('sustratos-y-accesorios');
 const LINE = '1px solid rgba(238,236,230,0.18)';
 const sans = { fontFamily: 'var(--od-font-body)', fontWeight: 600, letterSpacing: '-0.03em' };
-const eyebrow = { fontSize: 12, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-neutral-500)' };
+const eyebrow = { fontSize: 15, color: 'var(--color-neutral-400)' };
 
 function Foto({ item, width = 700 }) {
   return item.image ? (

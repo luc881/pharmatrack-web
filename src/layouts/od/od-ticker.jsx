@@ -12,7 +12,7 @@ export function OdTicker({ items, reverse = false }) {
   const loop = [...items, ...items, ...items, ...items];
   return (
     <Box data-dark="1" sx={{ bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-200)', py: '11px', overflow: 'hidden' }}>
-      <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontSize: 13, letterSpacing: '0.05em', animation: `${reverse ? 'odMarqueeR' : 'odMarquee'} 52s linear infinite` }}>
+      <Box className="od-marquee" sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontSize: 14, animation: `${reverse ? 'odMarqueeR' : 'odMarquee'} 52s linear infinite` }}>
         {loop.map((t, i) => (
           <Box component="span" key={i} sx={{ px: '40px' }}>
             {t}

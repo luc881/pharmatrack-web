@@ -60,7 +60,7 @@ export function OdFooter() {
       <Box sx={{ display: 'grid', gap: { xs: 5, md: '56px' }, alignItems: 'start', gridTemplateColumns: { xs: '1fr', md: 'minmax(320px, 1.5fr) minmax(240px, 1fr) minmax(160px, 0.6fr)' } }}>
         {/* Navegación */}
         <Box>
-          <Box sx={{ mb: { xs: 3, md: '34px' }, display: 'flex', alignItems: 'center', gap: 1.25, fontSize: 13, color: 'var(--color-neutral-400)' }}>
+          <Box sx={{ mb: { xs: 3, md: '34px' }, display: 'flex', alignItems: 'center', gap: 1.25, fontSize: 15, color: 'var(--color-neutral-300)' }}>
             <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-neutral-500)' }} />
             Navegación
           </Box>
@@ -77,7 +77,7 @@ export function OdFooter() {
 
         {/* Datos de la tienda */}
         <Box>
-          <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 13, color: 'var(--color-neutral-500)' }}>(Datos de la tienda)</Box>
+          <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 15, color: 'var(--color-neutral-300)' }}>Datos de la tienda</Box>
           <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, px: 1.875, py: 1, borderRadius: '999px', bgcolor: 'rgba(238,236,230,0.08)', fontSize: 13, color: 'var(--color-neutral-200)' }}>
             <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-accent-400)' }} />
             Apartados abiertos
@@ -103,7 +103,7 @@ export function OdFooter() {
 
         {/* Redes */}
         <Box>
-          <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 13, color: 'var(--color-neutral-500)' }}>(Redes)</Box>
+          <Box sx={{ mb: { xs: 2.5, md: '26px' }, fontSize: 15, color: 'var(--color-neutral-300)' }}>Redes</Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25, fontSize: 17 }}>
             {REDES.map((r) => (
               <Link
@@ -119,7 +119,7 @@ export function OdFooter() {
       </Box>
 
       {/* Barra inferior */}
-      <Box sx={{ mt: { xs: 6, md: '76px' }, display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr' }, fontSize: 13, color: 'var(--color-neutral-500)' }}>
+      <Box sx={{ mt: { xs: 6, md: '76px' }, display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr' }, fontSize: 14, color: 'var(--color-neutral-400)' }}>
         <Box>
           <Box>Ciudad de México {clock}</Box>
           <Box sx={{ '&::first-letter': { textTransform: 'uppercase' } }}>{today}</Box>
@@ -134,7 +134,7 @@ export function OdFooter() {
         </Box>
         <Box sx={{ textAlign: { sm: 'right' } }}>©{new Date().getFullYear()} Opuntia Den</Box>
       </Box>
-      <Box sx={{ mt: 2, fontSize: 13, color: 'var(--color-neutral-500)' }}>
+      <Box sx={{ mt: 2, fontSize: 14, color: 'var(--color-neutral-400)' }}>
         Fotos de ambiente: {FOTOS_AUTORES.join(', ')} · vía Unsplash
       </Box>
 
@@ -166,7 +166,7 @@ export function OdFooter() {
         >
           <SealFace light arrowSx={{ width: { xs: 40, md: 52 }, height: { xs: 40, md: 52 } }} />
         </Box>
-        <Box sx={{ mb: 0.75, fontFamily: 'var(--font-body)', fontSize: 22, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'var(--color-neutral-400)' }}>Invertebrados</Box>
+        <Box sx={{ mb: 0.75, fontFamily: 'var(--font-body)', fontSize: 22, color: 'var(--color-neutral-300)' }}>Criadero de invertebrados</Box>
         <Box sx={{ fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'min(15.5vw, 224px)', lineHeight: 1.02, letterSpacing: '0.01em', textTransform: 'uppercase', color: 'var(--color-neutral-100)' }}>Opuntia</Box>
       </Box>
     </Box>

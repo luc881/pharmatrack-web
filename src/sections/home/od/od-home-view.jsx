@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, Fragment, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -8,13 +8,13 @@ import Link from '@mui/material/Link';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
+import { Pill } from 'src/layouts/od/od-ui';
 import { FOTOS } from 'src/lib/fotos-ambiente';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdPanel } from 'src/layouts/od/od-panel';
-import { Star, Pill } from 'src/layouts/od/od-ui';
+import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdInkText } from 'src/layouts/od/od-ink-text';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
-import { OdReveal, OdCountUp } from 'src/layouts/od/od-motion';
 import { OdSmoothScroll } from 'src/layouts/od/od-smooth-scroll';
 import { gsap, prefersReducedMotion } from 'src/layouts/od/od-gsap';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
@@ -25,6 +25,7 @@ import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-
 
 import { OdFaq } from './od-faq';
 import { OdCierre } from './od-cierre';
+import { OdCifras } from './od-cifras';
 import { OdInsumos } from './od-insumos';
 import { useHeroIntro } from './use-hero-intro';
 import { OdDivulgacion } from './od-divulgacion';
@@ -53,30 +54,6 @@ const buildImg = (media) => ({
   mossWide: media.moss_wide,
 });
 
-// Nombres que corren en la marquesina de la banda de marca.
-// Marquesinas separadas por el destello tuna de la marca ("Isópodos ✦ Colémbolos").
-const MARQUEE_NAMES = ['Isópodos', 'Colémbolos', 'Cubaris', 'Porcellio', 'Armadillidium'];
-
-function StarRun({ words, times = 5 }) {
-  const run = Array.from({ length: times }, () => words).flat();
-  return (
-    <Box component="span">
-      {run.map((word, i) => (
-        <Fragment key={i}>
-          {word}
-          <Star spin sx={{ width: '0.32em', height: '0.32em', mx: '0.45em', verticalAlign: '0.32em' }} />
-        </Fragment>
-      ))}
-    </Box>
-  );
-}
-
-const STATS = [
-  { n: '14', label: 'Especies en cultivo activo, todas nacidas en casa.' },
-  { n: '6', label: 'Años criando y documentando cada camada.' },
-  { n: 'Mismo día', label: 'Entrega en persona dentro de la CDMX.' },
-  { n: 'Ficha propia', label: 'Cada ejemplar sale con sus parámetros de origen.' },
-];
 
 const HD_MEDIA = '(min-width: 1440px), (min-width: 900px) and (min-resolution: 1.5dppx)';
 
@@ -190,8 +167,8 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
 
         {/* Nombre gigante: el título de la página */}
         <Box sx={{ position: 'absolute', left: 0, right: 0, top: { xs: 92, md: 84 }, px: { xs: '14px', md: '24px' }, textAlign: 'center' }}>
-          <Box data-hero-kicker sx={{ mb: { xs: 0.5, md: 1 }, fontSize: 'clamp(13px, 1.2vw, 18px)', letterSpacing: '0.42em', textIndent: '0.42em', textTransform: 'uppercase', opacity: 0.85 }}>
-            Criadero
+          <Box data-hero-kicker sx={{ mb: { xs: 0.5, md: 1 }, fontSize: 'clamp(15px, 1.25vw, 21px)', opacity: 0.9 }}>
+            Criadero de invertebrados
           </Box>
           <Box
             component="h1"
@@ -311,74 +288,8 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
       </Box>
 
 
-      {/* Banda "El criadero": marquesina de nombres + cifras */}
-      {/* El degradado (Feral, paleta de adorno) es el momento de color de la
-          página: el resto va en neutros */}
-      <OdPanel className="od-grain" sx={{ color: 'var(--color-neutral-100)', py: { xs: '56px', md: '88px' }, backgroundImage: 'url(/brand/degradados/aurora-musgo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        <Box sx={{ mb: { xs: '44px', md: '60px' }, overflow: 'hidden' }}>
-          <Box
-            sx={{
-              display: 'flex',
-              width: 'max-content',
-              whiteSpace: 'nowrap',
-              fontFamily: 'var(--font-heading)',
-              // El piso de 48px era para escritorio: en un telefono solo cabian
-              // dos palabras y se leia como texto cortado, no como marquesina.
-              fontSize: { xs: 'clamp(24px, 7vw, 40px)', md: 'clamp(48px, 9.4vw, 148px)' },
-              lineHeight: 1.06,
-              letterSpacing: '-0.01em',
-              animation: 'odMarquee 110s linear infinite',
-            }}
-          >
-            <StarRun words={MARQUEE_NAMES} times={4} />
-            <StarRun words={MARQUEE_NAMES} times={4} />
-          </Box>
-        </Box>
-
-        {/* En movil minmax(220px) no cabia dos veces en 360px, asi que las
-            cuatro cifras se apilaban y ocupaban pantalla y media. */}
-        <Box
-          sx={{
-            px: { xs: '18px', md: 'var(--od-gutter)' },
-            display: 'grid',
-            gap: { xs: '28px 18px', md: '40px' },
-            gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(auto-fit, minmax(220px, 1fr))' },
-          }}
-        >
-          {STATS.map((s) => (
-            <Box
-              key={s.label}
-              sx={{
-                position: 'relative',
-                pt: 2,
-                // filete tuna corto que se extiende al pasar el cursor
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: 1,
-                  height: '1px',
-                  bgcolor: 'var(--od-tuna)',
-                  transform: 'scaleX(0.12)',
-                  transformOrigin: 'left',
-                  transition: 'transform 700ms var(--od-ease)',
-                },
-                '& .od-stat-n': { transition: 'transform 600ms var(--od-ease), color 400ms ease' },
-                '@media (hover: hover) and (pointer: fine)': {
-                  '&:hover::before': { transform: 'scaleX(1)' },
-                  '&:hover .od-stat-n': { transform: 'translateY(-4px)', color: '#fff' },
-                },
-              }}
-            >
-              <Box className="od-stat-n" sx={{ mb: 1.5, fontFamily: 'var(--font-heading)', fontSize: { xs: 28, md: 40 }, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums' }}>
-                {/^\d+$/.test(s.n) ? <OdCountUp value={Number(s.n)} /> : s.n}
-              </Box>
-              <Box sx={{ fontSize: { xs: 13, md: 15 }, lineHeight: 1.55, color: 'var(--color-neutral-400)' }}>{s.label}</Box>
-            </Box>
-          ))}
-        </Box>
-      </OdPanel>
+      {/* Banda de cifras: marquesina que sigue al scroll + cifras que ruedan */}
+      <OdCifras />
 
       {/* Disponibles ahora: cuadrícula de la tienda (taste: surtido en
           cuadrícula pareja, 4 por fila y 2 en celular, nombre y precio bajo la
@@ -409,7 +320,7 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
         <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', pb: 3.75 }}>
             <SectionHead mask title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
-            <Link component={RouterLink} href={paths.catalog} className="od-link" sx={{ fontSize: 13, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+            <Link component={RouterLink} href={paths.catalog} className="od-link" sx={{ fontSize: 15, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todo el catálogo →
             </Link>
           </Box>
@@ -426,8 +337,8 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
       {fichas.length > 0 && (
         <>
           <OdPanel id="fichas" sx={{ pt: { xs: '56px', md: '80px' }, pb: { xs: '40px', md: '64px' } }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(238,236,230,0.18)', fontSize: 13, color: 'var(--color-neutral-500)' }}>
-              <Box component="span">(Antes de que llegue tu colonia)</Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(238,236,230,0.18)', fontSize: 15, color: 'var(--color-neutral-400)' }}>
+              <Box component="span">Antes de que llegue tu colonia</Box>
               <Link component={RouterLink} href={paths.careSheets} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-neutral-100)' } }}>
                 Ver todas las fichas →
               </Link>
@@ -452,7 +363,7 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
       {/* Preguntas frecuentes (ancla #preguntas del masthead) */}
       <OdFaq mossTall={IMG.mossTall} />
       {/* Cierre con el degradado prisma (reemplaza a la suscripción) */}
-      <OdCierre ticker={ticker} />
+      <OdCierre ticker={ticker} media={media} />
     </>
   );
 }

@@ -62,8 +62,8 @@ export function OdTrustBar() {
             <Iconify icon={t.icon} width={20} />
           </Box>
           <Box sx={{ minWidth: 0 }}>
-            <Box sx={{ fontSize: { xs: 13, md: 15 }, fontWeight: 600, lineHeight: 1.3 }}>{t.title}</Box>
-            <Box sx={{ mt: 0.25, fontSize: { xs: 12, md: 13 }, lineHeight: 1.4, color: 'var(--color-neutral-600)' }}>{t.body}</Box>
+            <Box sx={{ fontSize: { xs: 14, md: 16 }, fontWeight: 600, lineHeight: 1.3 }}>{t.title}</Box>
+            <Box sx={{ mt: 0.25, fontSize: { xs: 13, md: 15 }, lineHeight: 1.45, color: 'var(--color-neutral-700)' }}>{t.body}</Box>
           </Box>
         </Box>
       ))}
@@ -113,7 +113,7 @@ export function OdCategoryIndex({ items }) {
             <Box sx={{ minWidth: 0, fontFamily: 'var(--font-heading)', fontSize: { xs: 24, md: 'clamp(34px, 3.6vw, 56px)' }, lineHeight: 1.05 }}>
               <RollText>{c.title}</RollText>
             </Box>
-            <Box className="od-row-meta" sx={{ fontSize: { xs: 13, md: 13 }, color: 'var(--color-neutral-600)', whiteSpace: 'nowrap', textAlign: 'right' }}>
+            <Box className="od-row-meta" sx={{ fontSize: { xs: 14, md: 16 }, color: 'var(--color-neutral-700)', whiteSpace: 'nowrap', textAlign: 'right' }}>
               {c.meta}
             </Box>
             <Box
@@ -214,7 +214,7 @@ function useInfiniteRail(ref, count) {
 }
 
 const railArrowSx = { bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', borderColor: 'var(--od-papel)', '&:hover': { borderColor: 'var(--od-papel)' } };
-const eyebrowSx = { fontSize: 12, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' };
+const eyebrowSx = { fontSize: 15, fontWeight: 500, color: 'var(--color-neutral-600)' };
 const sansSx = { fontFamily: 'var(--od-font-body)', fontWeight: 600, letterSpacing: '-0.03em' };
 
 export function OdProductRail({ items: given, cta = 'Ver producto →', label = 'Insumos para tu terrario' }) {

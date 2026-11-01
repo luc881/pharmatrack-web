@@ -32,7 +32,7 @@ const titleSx = {
 };
 
 const sans = { fontFamily: 'var(--od-font-body)', fontWeight: 600, letterSpacing: '-0.03em' };
-const label = { fontSize: 13, color: 'var(--color-neutral-600)' };
+const label = { fontSize: 15, color: 'var(--color-neutral-600)' };
 
 const fecha = (iso) =>
   iso ? new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' }).replace('.', '') : '';
@@ -189,7 +189,7 @@ function Nota({ article, open, onToggle, last }) {
         {tags.length > 0 && (
           <Box data-reveal sx={{ mt: 'auto', pt: 3, display: { xs: 'none', md: 'flex' }, flexWrap: 'wrap', gap: 1, opacity: open ? 1 : 0, visibility: open ? 'visible' : 'hidden' }}>
             {tags.map((t) => (
-              <Box key={t} component="span" sx={{ px: 1.25, py: 0.5, fontSize: 13, borderRadius: '2px', bgcolor: 'var(--color-neutral-200)' }}>
+              <Box key={t} component="span" sx={{ px: 1.25, py: 0.5, fontSize: 14, borderRadius: '2px', bgcolor: 'var(--color-neutral-200)' }}>
                 {t}
               </Box>
             ))}
@@ -287,7 +287,7 @@ export function OdDivulgacion({ articles = [] }) {
         </Box>
       </Display>
       <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3.75, flexWrap: 'wrap', mb: { xs: 4, md: 6 } }}>
-        <Box sx={{ fontSize: 15, lineHeight: 1.75, maxWidth: '52ch', color: 'var(--color-neutral-700)' }}>
+        <Box sx={{ fontSize: { xs: 16, md: 18 }, lineHeight: 1.6, maxWidth: '52ch' }}>
           Notas de cría, montaje de terrarios bioactivos y fichas de especie. Lo que aprendimos
           manteniendo colonias, escrito para que no repitas nuestros errores.
         </Box>

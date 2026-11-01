@@ -43,8 +43,8 @@ export function OdFaq({ mossTall }) {
         <OdFlowGradient colors={SALVIA} />
         <Box sx={{ position: 'absolute', inset: 0, backgroundImage: 'var(--od-noise)', backgroundSize: '140px', mixBlendMode: 'overlay', opacity: 0.85 }} />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 13, color: 'var(--color-neutral-500)' }}>
-        <Box component="span">(Preguntas frecuentes)</Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 15, color: 'var(--color-neutral-400)' }}>
+        <Box component="span">Preguntas frecuentes</Box>
         <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 respuestas</Box>
       </Box>
 
@@ -58,7 +58,7 @@ export function OdFaq({ mossTall }) {
       <Box sx={{ display: 'grid', alignItems: 'stretch', px: { md: 'var(--od-gutter-extra)' }, gridTemplateColumns: { xs: '1fr', md: 'minmax(260px, 0.75fr) minmax(340px, 1.65fr)' } }}>
         {/* Izquierda: escena del tronco + WhatsApp */}
         <Box sx={{ display: 'flex', flexDirection: 'column', p: { xs: '40px 18px 0', md: '62px 46px 0 40px' }, borderRight: { md: '1px solid rgba(238,236,230,0.14)' } }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, fontSize: 13, color: 'var(--color-neutral-400)' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, fontSize: 15, color: 'var(--color-neutral-300)' }}>
             <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'var(--color-neutral-500)' }} />
             Antes de tu primer ejemplar
           </Box>
