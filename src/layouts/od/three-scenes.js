@@ -87,14 +87,23 @@ export function buildMesaRoca(THREE, { scene, renderer }) {
 
 // Cactus en maceta de concreto (BlenderKit; sus materiales procedurales se
 // hornearon a texturas 1K en Blender: public/3d/cactus.glb). Sin fondo; solo gira.
-export function buildCactus(THREE, { scene }) {
-  scene.add(new THREE.HemisphereLight(0xfffaf0, 0x8a8478, 1.2));
-  const key = new THREE.DirectionalLight(0xfff4e2, 1.8);
+// Iluminado con un HDRI (antes se veía muy oscuro).
+export function buildCactus(THREE, { scene, renderer }) {
+  // luz de ambiente con el HDRI «cobblestone parish road» (Poly Haven,
+  // reducido a 512x256: public/3d/ambiente.hdr); solo ilumina, no se ve de fondo
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.1;
+  import('three/examples/jsm/loaders/RGBELoader.js').then(({ RGBELoader }) => {
+    new RGBELoader().load('/3d/ambiente.hdr', (hdr) => {
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromEquirectangular(hdr).texture;
+      hdr.dispose();
+      pmrem.dispose();
+    });
+  });
+  const key = new THREE.DirectionalLight(0xfff4e2, 1.2);
   key.position.set(3, 5, 4);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0xc8e6d0, 0.6);
-  rim.position.set(-4, 2, -3);
-  scene.add(rim);
 
   const g = new THREE.Group();
   scene.add(g);
