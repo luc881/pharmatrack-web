@@ -33,7 +33,7 @@ import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-hom
 // Home del rediseño editorial, reordenado (2026-10) según pautas de UX de
 // e-commerce: propuesta + dos CTA en el hero, confianza justo debajo, lo que
 // hay en existencia antes que la historia de marca, y nada que avance solo.
-// Orden: hero, el criadero, confianza, disponibles, categorías, el frasco,
+// Orden: hero, confianza, el criadero, disponibles, categorías, el frasco,
 // insumos, cómo comprar, divulgación, preguntas y novedades.
 // ----------------------------------------------------------------------
 
@@ -333,11 +333,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         </Box>
       </Box>
 
-      {/* El criadero justo debajo del video, compacto y al estilo Aldena: foto
+      <OdTrustBar />
+
+      {/* El criadero debajo de la barra de confianza, compacto y al estilo Aldena: foto
           cuadrada chica con el título encima y el botón abajo a la izquierda;
           a la derecha la declaración en sans (Inter) que se entinta al bajar. */}
-      <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
-        <Box sx={{ display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, alignItems: 'start' }}>
+      <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' }, color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
+        <Box sx={{ position: 'relative', display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, alignItems: 'start' }}>
           <Box>
             <Box data-shutter className="od-grain" sx={{ position: 'relative', width: { xs: 180, md: 'clamp(200px, 16vw, 260px)' }, aspectRatio: '1', overflow: 'clip', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
               <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
@@ -346,17 +348,20 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
               </Box>
             </Box>
             <Box sx={{ mt: { xs: 3, md: 4 } }}>
-              <Pill href={paths.breeding}>Conoce el criadero</Pill>
+              <Pill variant="light" href={paths.breeding}>Conoce el criadero</Pill>
             </Box>
           </Box>
-          <Box sx={{ fontFamily: 'var(--od-font-body)', fontWeight: 600, fontSize: 'clamp(24px, 2.4vw, 38px)', lineHeight: 1.14, letterSpacing: '-0.03em', maxWidth: '30ch' }}>
-            <OdInkText>Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.</OdInkText>
-            <OdInkText sx={{ mt: '0.9em' }}>Las catorce especies en cultivo nacen en casa, y cada ejemplar sale con su ficha de origen y se entrega en persona en la Ciudad de México.</OdInkText>
+          <Box sx={{ fontFamily: 'var(--od-font-body)', fontWeight: 600, fontSize: 'clamp(28px, 3vw, 48px)', lineHeight: 1.1, letterSpacing: '-0.03em', maxWidth: '30ch' }}>
+            <OdInkText>
+              {[
+                'Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.',
+                'Las catorce especies en cultivo nacen en casa, y cada ejemplar sale con su ficha de origen y se entrega en persona en la Ciudad de México.',
+              ]}
+            </OdInkText>
           </Box>
         </Box>
       </Box>
 
-      <OdTrustBar />
 
       {/* Disponibles ahora como escena: una pantalla fija por especie (las 4
           primeras); el resto en el catálogo */}
