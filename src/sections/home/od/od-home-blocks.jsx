@@ -7,7 +7,6 @@ import Link from '@mui/material/Link';
 
 import { RouterLink } from 'src/routes/components';
 
-import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { rowFillSx } from 'src/layouts/od/od-styles';
 import { OdHoverPreview } from 'src/layouts/od/od-hover-preview';
@@ -230,53 +229,26 @@ const STEPS = [
   { title: 'Recibe', body: 'Te llega la confirmación por correo y coordinamos la entrega en persona en CDMX.' },
 ];
 
-export function OdHowToBuy({ bg }) {
+export function OdHowToBuy() {
+  // Claro y sin foto (rediseño): antes era otra sección oscura con foto junto
+  // a «Todo para tu terrario». Las tres palabras cargan el orden; sin 01/02/03.
   return (
-    <OdPanel
-      id="como-comprar"
-      className="od-grain"
-      sx={{ scrollMarginTop: 80, px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '72px', md: '110px' }, color: '#f6f4f1' }}
-    >
-      <OdImage
-        src={bg}
-        alt=""
-        ratio="auto"
-        radius={0}
-        width={1600}
-        sx={{ position: 'absolute', inset: 0, zIndex: -2, aspectRatio: 'auto', borderRadius: 0 }}
-      />
-      <Box sx={{ position: 'absolute', inset: 0, zIndex: -1, background: 'linear-gradient(180deg, rgba(32,31,29,0.72), rgba(32,31,29,0.5))' }} />
-
-      <OdReveal sx={{ textAlign: 'center', mb: { xs: 5, md: 7 } }}>
-        <Box sx={{ mb: 1.5, fontSize: 13, opacity: 0.8 }}>Cómo comprar</Box>
-        <Box component="h2" sx={{ m: 0, mx: 'auto', maxWidth: '18ch', fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(32px, 4.2vw, 58px)', lineHeight: 1.08 }}>
-          Tres pasos, sin sorpresas
-        </Box>
-      </OdReveal>
-
-      <Box sx={{ display: 'grid', gap: { xs: 2, md: 3 }, gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' }, maxWidth: 1200, mx: 'auto' }}>
-        {STEPS.map((s, i) => (
-          <OdReveal key={s.title} delay={i * 0.1}>
-            <Box
-              data-fx
-              className="od-glow od-tilt"
-              sx={{
-                '--od-glow': 'rgba(85,184,149,0.45)',
-                height: 1,
-                p: { xs: '24px 22px', md: '34px 30px' },
-                bgcolor: 'rgba(246,245,241,0.08)',
-                border: '1px solid rgba(246,245,241,0.22)',
-                // el desenfoque cuesta en cada cuadro del scroll: solo escritorio
-                backdropFilter: { md: 'blur(6px)' },
-                '&:hover': { borderColor: 'rgba(246,245,241,0.5)' },
-              }}
-            >
-              <Box component="h3" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 24 }}>{s.title}</Box>
-              <Box sx={{ mt: 1, fontSize: 15, lineHeight: 1.65, opacity: 0.85 }}>{s.body}</Box>
-            </Box>
-          </OdReveal>
+    <Box component="section" id="como-comprar" sx={{ scrollMarginTop: 80, px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '72px', md: '130px' }, bgcolor: 'var(--od-papel)' }}>
+      <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(30px, 3.4vw, 48px)', lineHeight: 1.08 }}>
+        Tres pasos, sin sorpresas
+      </Box>
+      <Box component="ol" sx={{ listStyle: 'none', p: 0, m: 0, mt: { xs: 5, md: 8 }, display: 'grid', gap: { xs: 5, md: 6 }, gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' } }}>
+        {STEPS.map((step, i) => (
+          <Box component="li" key={step.title}>
+            <OdReveal delay={i * 0.08}>
+              <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(40px, 4.6vw, 68px)', lineHeight: 1, color: 'var(--od-accent)' }}>{step.title}</Box>
+              <Box component="p" sx={{ mt: 2.5, mb: 0, maxWidth: '34ch', fontSize: 17, lineHeight: 1.6 }}>
+                {step.body}
+              </Box>
+            </OdReveal>
+          </Box>
         ))}
       </Box>
-    </OdPanel>
+    </Box>
   );
 }

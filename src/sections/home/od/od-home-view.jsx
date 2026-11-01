@@ -12,6 +12,7 @@ import { FOTOS } from 'src/lib/fotos-ambiente';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdCountUp } from 'src/layouts/od/od-motion';
+import { OdInkText } from 'src/layouts/od/od-ink-text';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { Star, Pill, OdImage } from 'src/layouts/od/od-ui';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
@@ -330,15 +331,35 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         heading={inStock.length ? 'Disponibles ahora' : 'Nuestra selección'}
       />
 
+      {/* El criadero en dos columnas (paso 5e, estilo Reelio): título y foto a la
+          izquierda, el texto grande a la derecha se entinta al bajar. Claro,
+          entre la escena de especies y la banda del degradado (oscuras). */}
+      <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '72px', md: '140px' } }}>
+        <Box sx={{ display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
+          <Box>
+            <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(30px, 3.4vw, 48px)', lineHeight: 1.08 }}>
+              El criadero
+            </Box>
+            <Box className="od-grain" sx={{ mt: { xs: 3, md: 4 }, aspectRatio: '4 / 5', overflow: 'hidden', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
+              <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
+            </Box>
+          </Box>
+          <Box sx={{ pt: { md: 9 } }}>
+            <OdInkText sx={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 2.8vw, 42px)', lineHeight: 1.22 }}>
+              Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros. Las catorce especies en cultivo nacen en casa, y cada ejemplar sale con su ficha de origen y se entrega en persona en la Ciudad de México.
+            </OdInkText>
+            <Box sx={{ mt: { xs: 4, md: 5 } }}>
+              <Pill href={paths.breeding}>Conoce el criadero</Pill>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+
       {/* Banda "El criadero": marquesina de nombres + cifras */}
       {/* El degradado (Feral, paleta de adorno) es el momento de color de la
           página: el resto va en neutros */}
       <OdPanel className="od-grain" sx={{ color: 'var(--color-neutral-100)', py: { xs: '56px', md: '88px' }, backgroundImage: 'url(/brand/degradados/aurora-musgo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        <Box sx={{ mx: 'auto', maxWidth: '30ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3.1vw, 46px)', lineHeight: 1.24 }}>
-          Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.
-        </Box>
-
-        <Box sx={{ my: { xs: '44px', md: '60px' }, overflow: 'hidden' }}>
+        <Box sx={{ mb: { xs: '44px', md: '60px' }, overflow: 'hidden' }}>
           <Box
             sx={{
               display: 'flex',
@@ -400,12 +421,6 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
               <Box sx={{ fontSize: { xs: 13, md: 15 }, lineHeight: 1.55, color: 'var(--color-neutral-400)' }}>{s.label}</Box>
             </Box>
           ))}
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: '40px', md: '56px' } }}>
-          <Pill variant="light" href={paths.breeding}>
-            Conoce el criadero
-          </Pill>
         </Box>
       </OdPanel>
 
@@ -503,7 +518,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       )}
 
       {/* Cómo comprar (tres pasos sobre foto a sangre) */}
-      <OdHowToBuy bg={FOTOS.comoComprar.src} />
+      <OdHowToBuy />
 
       {/* Divulgación (editorial en filas) */}
       <OdDivulgacion articles={articles} />
