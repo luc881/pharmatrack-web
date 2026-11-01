@@ -51,7 +51,7 @@ export function OdTrustBar() {
             py: { xs: 2.25, md: 3 },
             px: { xs: 0.5, md: 2.5 },
             borderLeft: { md: i ? '1px solid var(--color-divider)' : 0 },
-            '&:hover .od-trust-ico': { bgcolor: 'var(--od-tuna)', color: '#fff' },
+            '@media (hover: hover)': { '&:hover .od-trust-ico': { bgcolor: 'var(--od-tuna)', color: '#fff' } },
           }}
           data-fx
         >

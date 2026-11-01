@@ -42,6 +42,8 @@ export function OdFaq({ mossTall }) {
       <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1 }}>
         <OdFlowGradient colors={SALVIA} />
         <Box sx={{ position: 'absolute', inset: 0, backgroundImage: 'var(--od-noise)', backgroundSize: '140px', mixBlendMode: 'overlay', opacity: 0.85 }} />
+        {/* en celular la parte clara del flow quedaba detrás del texto claro: velo */}
+        <Box sx={{ display: { xs: 'block', md: 'none' }, position: 'absolute', inset: 0, bgcolor: 'rgba(22,27,25,0.6)' }} />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 15, color: 'var(--color-neutral-400)' }}>
         <Box component="span">Preguntas frecuentes</Box>
@@ -77,7 +79,7 @@ export function OdFaq({ mossTall }) {
               href={WA}
               target="_blank"
               rel="noopener"
-              sx={{ display: 'inline-flex', alignItems: 'center', gap: '34px', pl: '22px', pr: '15px', py: '15px', borderRadius: '6px', bgcolor: 'var(--color-neutral-100)', color: 'var(--color-accent-900)', fontSize: 15, textDecoration: 'none', transition: 'background 300ms', '&:hover': { bgcolor: 'var(--color-accent-200)' } }}
+              sx={{ display: 'inline-flex', alignItems: 'center', gap: '34px', pl: '22px', pr: '15px', py: '15px', borderRadius: '6px', bgcolor: 'var(--color-neutral-100)', color: 'var(--color-accent-900)', fontSize: 15, textDecoration: 'none', transition: 'background 300ms', '@media (hover: hover)': { '&:hover': { bgcolor: 'var(--color-accent-200)' } } }}
             >
               Preguntar por WhatsApp
               <Box component="span" sx={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '4px', bgcolor: 'var(--color-accent-900)', color: 'var(--color-neutral-100)' }}>↗</Box>
@@ -100,7 +102,7 @@ export function OdFaq({ mossTall }) {
                     type="button"
                     onClick={() => setOpen(isOpen ? -1 : i)}
                     aria-expanded={isOpen}
-                    sx={{ width: 1, display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 2.5, p: { xs: '20px 4px', md: '24px 26px' }, bgcolor: 'transparent', border: 0, cursor: 'pointer', font: 'inherit', color: 'var(--color-neutral-100)', textAlign: 'left', transition: 'background 260ms, color 260ms', '&:hover': { bgcolor: 'rgba(238,236,230,0.08)', color: 'var(--color-accent-300)' } }}
+                    sx={{ width: 1, display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 2.5, p: { xs: '20px 4px', md: '24px 26px' }, bgcolor: 'transparent', border: 0, cursor: 'pointer', font: 'inherit', color: 'var(--color-neutral-100)', textAlign: 'left', transition: 'background 260ms, color 260ms', '@media (hover: hover)': { '&:hover': { bgcolor: 'rgba(238,236,230,0.08)', color: 'var(--color-accent-300)' } } }}
                   >
                     <Box component="span" sx={{ fontSize: { xs: 16, md: 18 }, fontWeight: 500 }}>{item.q}</Box>
                     <Box component="span" sx={{ flexShrink: 0, width: 10, height: 10, borderRadius: '50%', border: '1px solid var(--color-neutral-500)', bgcolor: isOpen ? 'var(--color-accent-400)' : 'transparent', transition: 'background 260ms' }} />

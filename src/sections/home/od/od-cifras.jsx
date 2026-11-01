@@ -67,10 +67,15 @@ function Cifra({ value }) {
     );
   }
   return (
-    <Box component="span" aria-label={value} sx={{ display: 'inline-block', overflow: 'hidden', pb: '0.08em' }}>
-      {[...value].map((ch, i) => (
-        <Box key={i} component="span" aria-hidden data-ch sx={{ display: 'inline-block', whiteSpace: 'pre' }}>
-          {ch}
+    // una máscara por palabra (letras sin partirse entre renglones)
+    <Box component="span" aria-label={value}>
+      {value.split(' ').map((word, w) => (
+        <Box key={w} component="span" aria-hidden sx={{ display: 'inline-block', overflow: 'hidden', pb: '0.08em', whiteSpace: 'nowrap', mr: '0.25em' }}>
+          {[...word].map((ch, i) => (
+            <Box key={i} component="span" data-ch sx={{ display: 'inline-block' }}>
+              {ch}
+            </Box>
+          ))}
         </Box>
       ))}
     </Box>
@@ -149,7 +154,7 @@ export function OdCifras() {
       >
         {STATS.map((s) => (
           <Box key={s.label} data-stat>
-            <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: { xs: 34, md: 'clamp(44px, 4.4vw, 80px)' }, lineHeight: 1, letterSpacing: '-0.02em', fontVariantNumeric: 'lining-nums', whiteSpace: 'nowrap' }}>
+            <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: { xs: 'clamp(26px, 7.6vw, 34px)', md: 'clamp(44px, 4.4vw, 80px)' }, lineHeight: 1, letterSpacing: '-0.02em', fontVariantNumeric: 'lining-nums', whiteSpace: { md: 'nowrap' } }}>
               <Cifra value={s.n} />
             </Box>
             <Box component="p" data-label sx={{ m: 0, mt: { xs: 1.5, md: 2.5 }, maxWidth: '26ch', fontSize: { xs: 15, md: 17 }, lineHeight: 1.5, color: 'var(--color-neutral-300)' }}>

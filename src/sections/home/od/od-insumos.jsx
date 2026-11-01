@@ -49,8 +49,9 @@ export function OdInsumos({ items }) {
     }
     top.current += 1;
     const rows = list.current?.querySelectorAll('[data-row] > a') ?? [];
-    const wide = window.matchMedia('(min-width: 900px)').matches;
-    gsap.to(rows, { opacity: (i) => (i === active ? 1 : 0.38), x: (i) => (i === active && wide ? 14 : 0), duration: 0.6, ease: 'power3.out' });
+    // solo con mouse: en táctil no hay cursor que «pase» y las filas se verían apagadas
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    gsap.to(rows, { opacity: (i) => (i === active ? 1 : 0.38), x: (i) => (i === active ? 14 : 0), duration: 0.6, ease: 'power3.out' });
   }, [active]);
 
   const item = items[active];

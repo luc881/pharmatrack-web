@@ -315,10 +315,7 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
         </Box>
       )}
 
-      {/* Insumos: «Vitrina» oscura (lista + foto grande con cortina) */}
-      {terrario.length > 0 && <OdInsumos items={terrario} />}
-
-      {/* Explora por categoría: índice con vista previa al hover */}
+      {/* Explora por categoría (entre cifras e insumos: separa los dos bloques oscuros) */}
       {catItems.length > 0 && (
         <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', pb: 3.75 }}>
@@ -330,6 +327,9 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
           <OdCategoryIndex items={catItems} />
         </Box>
       )}
+
+      {/* Insumos: «Vitrina» oscura (lista + foto grande con cortina) */}
+      {terrario.length > 0 && <OdInsumos items={terrario} />}
 
       {/* Cómo comprar */}
       <OdHowToBuy />
