@@ -11,18 +11,18 @@ import { RouterLink } from 'src/routes/components';
 import { FOTOS } from 'src/lib/fotos-ambiente';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdPanel } from 'src/layouts/od/od-panel';
+import { OdCountUp } from 'src/layouts/od/od-motion';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
-import { OdReveal, OdCountUp } from 'src/layouts/od/od-motion';
-import { Star, Pill, OdImage, Display } from 'src/layouts/od/od-ui';
+import { Star, Pill, OdImage } from 'src/layouts/od/od-ui';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
-import { StarRule, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
+import { LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 
-import { OdCatalogCard } from 'src/sections/catalog/od/od-catalog-card';
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
 
 import { OdFaq } from './od-faq';
 import { OdNovedades } from './od-novedades';
 import { OdDivulgacion } from './od-divulgacion';
+import { OdSpeciesScene } from './od-species-scene';
 import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
 
 // ----------------------------------------------------------------------
@@ -323,34 +323,12 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
       <OdTrustBar />
 
-      {/* Disponibles ahora (lo primero que se busca: qué hay en existencia) */}
-      {selection.length > 0 && (
-        <Box component="section" id="disponibles" sx={{ position: 'relative', scrollMarginTop: 80, px: { xs: '18px', md: 'var(--od-gutter)' }, pt: { xs: '56px', md: '90px' }, pb: { xs: '48px', md: '80px' } }}>
-          <OdReveal>
-            <Box className="od-orn-host" sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { md: '28px' }, mb: '64px' }}>
-              <StarRule sx={{ display: { xs: 'none', md: 'flex' } }} />
-              <Box sx={{ textAlign: 'center' }}>
-                <Display size="clamp(34px, 4.4vw, 66px)" sx={{ maxWidth: '16ch', mx: 'auto' }}>
-                  {inStock.length ? 'Disponibles ahora' : 'Nuestra selección'}
-                </Display>
-              </Box>
-              <StarRule flip sx={{ display: { xs: 'none', md: 'flex' } }} />
-            </Box>
-          </OdReveal>
-          {/* flex centrado con ancho fijo: una sola tarjeta queda al centro sin
-              estirarse; con varias se acomodan centradas y envuelven en filas */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '28px 18px', justifyContent: 'center' }}>
-            {selection.map((item, i) => (
-              <OdReveal key={item.key} delay={i * 0.08} sx={{ width: { xs: 'calc(50% - 9px)', md: 'clamp(240px, 21vw, 330px)' }, maxWidth: '100%' }}>
-                <OdCatalogCard card={animalToCard(item, newestIds.has(item.key))} index={i} />
-              </OdReveal>
-            ))}
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: '46px' }}>
-            <Pill href={paths.catalog}>Ver todo el catálogo</Pill>
-          </Box>
-        </Box>
-      )}
+      {/* Disponibles ahora como escena: una pantalla fija por especie (las 4
+          primeras); el resto en el catálogo */}
+      <OdSpeciesScene
+        cards={selection.slice(0, 4).map((item) => animalToCard(item, newestIds.has(item.key)))}
+        heading={inStock.length ? 'Disponibles ahora' : 'Nuestra selección'}
+      />
 
       {/* Banda "El criadero": marquesina de nombres + cifras */}
       {/* El degradado (Feral, paleta de adorno) es el momento de color de la
