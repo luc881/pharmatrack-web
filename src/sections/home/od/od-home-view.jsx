@@ -533,12 +533,17 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           className="od-grain"
           sx={{
             position: 'relative',
-            py: { xs: '96px', md: '170px' },
+            // pantalla completa, con título y carrusel centrados a lo alto
+            minHeight: '100svh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            py: { xs: '64px', md: '80px' },
             overflow: 'clip',
             color: 'var(--od-papel)',
             bgcolor: 'var(--od-musgo-900)',
             // título centrado en un recuadro de cristal lechoso del ancho de la tarjeta del centro
-            '& .od-terr-head': { flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1.5, mx: 'auto', width: CARD_W, maxWidth: 'calc(100% - 36px)', px: { xs: 3, md: 5 }, py: { xs: 3.5, md: 5 }, borderRadius: '4px', bgcolor: 'rgba(246,244,241,0.6)', color: 'var(--od-tinta)', backdropFilter: 'blur(20px) saturate(1.2)', WebkitBackdropFilter: 'blur(20px) saturate(1.2)' },
+            '& .od-terr-head': { flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1.5, mx: 'auto', width: CARD_W, maxWidth: 'calc(100% - 36px)', px: { xs: 3, md: 5 }, py: { xs: 3.5, md: 5 }, borderRadius: '4px', bgcolor: 'rgba(246,244,241,0.6)', color: 'var(--od-musgo-900)', backdropFilter: 'blur(20px) saturate(1.2)', WebkitBackdropFilter: 'blur(20px) saturate(1.2)' },
             '& .od-terr-head h2': { fontSize: 'clamp(40px, 5vw, 80px)' },
             '& .od-terr-head a': { opacity: 1 },
           }}
