@@ -401,7 +401,7 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
         </Box>
       )}
 
-      {/* Insumos: varias propuestas a prueba (?insumos=1..3) */}
+      {/* Insumos: «Vitrina» oscura (lista + foto grande con cortina) */}
       {terrario.length > 0 && <OdInsumos items={terrario} />}
 
       {/* Explora por categoría: índice con vista previa al hover */}
