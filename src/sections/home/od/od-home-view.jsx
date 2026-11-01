@@ -16,7 +16,7 @@ import { OdInkText } from 'src/layouts/od/od-ink-text';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
 import { Star, Pill, OdImage } from 'src/layouts/od/od-ui';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
-import { LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
+import { RiseWords, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
 
@@ -237,6 +237,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           </Box>
           <Box
             component="h1"
+            className="od-shrink"
             aria-label="Opuntia Den, criadero de invertebrados en Ciudad de México"
             sx={{
               m: 0,
@@ -338,10 +339,11 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         <Box sx={{ display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
           <Box>
             <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(30px, 3.4vw, 48px)', lineHeight: 1.08 }}>
-              El criadero
+              <RiseWords>El criadero</RiseWords>
             </Box>
-            <Box className="od-grain" sx={{ mt: { xs: 3, md: 4 }, aspectRatio: '4 / 5', overflow: 'hidden', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
-              <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
+            {/* clip y no hidden: hidden vuelve el marco contenedor de scroll y congela el zoom (.od-zoom-in) */}
+            <Box className="od-grain" sx={{ mt: { xs: 3, md: 4 }, aspectRatio: '4 / 5', overflow: 'clip', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
+              <Box component="img" className="od-zoom-in" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
             </Box>
           </Box>
           <Box sx={{ pt: { md: 9 } }}>
@@ -503,7 +505,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
       {/* Todo para tu terrario: carrusel en perspectiva sobre la foto de hojas */}
       {terrario.length > 0 && (
-        <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'hidden', color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
+        <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'clip', color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
           <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${FOTOS.terrario.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
           <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(22,27,25,0.62)' }} />
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>

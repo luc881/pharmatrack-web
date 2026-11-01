@@ -9,6 +9,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { rowFillSx } from 'src/layouts/od/od-styles';
+import { RiseWords } from 'src/layouts/od/od-ornaments';
 import { OdHoverPreview } from 'src/layouts/od/od-hover-preview';
 import { OdImage, RollText, OdRowGroup, ArrowButton } from 'src/layouts/od/od-ui';
 
@@ -235,7 +236,7 @@ export function OdHowToBuy() {
   return (
     <Box component="section" id="como-comprar" sx={{ scrollMarginTop: 80, px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '72px', md: '130px' }, bgcolor: 'var(--od-papel)' }}>
       <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(30px, 3.4vw, 48px)', lineHeight: 1.08 }}>
-        Tres pasos, sin sorpresas
+        <RiseWords>Tres pasos, sin sorpresas</RiseWords>
       </Box>
       <Box component="ol" sx={{ listStyle: 'none', p: 0, m: 0, mt: { xs: 5, md: 8 }, display: 'grid', gap: { xs: 5, md: 6 }, gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' } }}>
         {STEPS.map((step, i) => (

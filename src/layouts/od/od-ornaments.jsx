@@ -20,11 +20,23 @@ export function NumberedKicker({ children, sx }) {
   return <Box sx={[{ ...LABEL, color: 'var(--od-text-muted)' }, ...asArray(sx)]}>{children}</Box>;
 }
 
+// Palabras que suben una tras otra al aparecer el título (.od-word en
+// global.css). Cada palabra empieza un poco después que la anterior.
+export function RiseWords({ children }) {
+  if (typeof children !== 'string') return children;
+  return children.split(' ').map((w, i, all) => (
+    <span key={i} className="od-word" style={{ animationRange: `entry ${Math.min(i * 7, 42)}% entry ${Math.min(55 + i * 7, 100)}%` }}>
+      {w}
+      {i < all.length - 1 ? '\u00a0' : ''}
+    </span>
+  ));
+}
+
 // Título de sección (sin rótulo encima ni marca debajo: rediseño Musgo).
 export function SectionHead({ title, size = 'clamp(30px, 3.4vw, 46px)', sx }) {
   return (
     <Box component="h2" sx={[{ m: 0, fontFamily: 'var(--od-font-display)', fontWeight: 400, fontSize: size, lineHeight: 1.08, textWrap: 'balance' }, ...asArray(sx)]}>
-      {title}
+      <RiseWords>{title}</RiseWords>
     </Box>
   );
 }

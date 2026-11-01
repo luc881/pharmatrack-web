@@ -5,6 +5,7 @@ import { paths } from 'src/routes/paths';
 import { CONFIG } from 'src/global-config';
 import { Pill } from 'src/layouts/od/od-ui';
 import { OdTicker } from 'src/layouts/od/od-ticker';
+import { RiseWords } from 'src/layouts/od/od-ornaments';
 
 // ----------------------------------------------------------------------
 // Cierre del home (paso 5f): el degradado prisma musgo de Feral
@@ -36,7 +37,7 @@ export function OdCierre({ ticker }) {
         }}
       >
         <Box component="h2" sx={{ m: 0, mx: 'auto', maxWidth: '16ch', fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(40px, 5.4vw, 84px)', lineHeight: 1.04 }}>
-          ¿Dudas antes de comprar?
+          <RiseWords>¿Dudas antes de comprar?</RiseWords>
         </Box>
         <Box component="p" sx={{ mt: 2.5, mb: 0, mx: 'auto', maxWidth: '44ch', fontSize: { xs: 16, md: 18 }, lineHeight: 1.6, opacity: 0.88 }}>
           Escríbenos por WhatsApp: te ayudamos a elegir tu primera colonia y a armar su terrario.
