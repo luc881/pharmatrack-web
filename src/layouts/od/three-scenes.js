@@ -42,7 +42,7 @@ export function buildStump(THREE, { scene }) {
 
 // Mesa Nimbus con una roca con musgo encima (Poliigon CoffeeTableNimbusGold
 // Replica001 + RockBoulderLarge049, combinados y reducidos en Blender:
-// public/3d/mesa-roca.glb). Fondo blanco; solo gira. El ambiente de reflejos
+// public/3d/mesa-roca.glb). Fondo gris verdoso oscuro (en blanco se perdían los detalles); solo gira. El ambiente de reflejos
 // (RoomEnvironment) hace que la base dorada se vea como metal.
 export function buildMesaRoca(THREE, { scene, renderer }) {
   import('three/examples/jsm/environments/RoomEnvironment.js').then(({ RoomEnvironment }) => {
@@ -78,5 +78,5 @@ export function buildMesaRoca(THREE, { scene, renderer }) {
 // desde páginas server component) y aquí se resuelve la función + la cámara.
 export const SCENES = {
   tocon: { build: buildStump, opts: { fov: 32, position: [0, 0.7, 6.6], lookAt: [0, 0, 0] } },
-  mesa: { build: buildMesaRoca, opts: { fov: 30, position: [0, 1.7, 6.2], lookAt: [0, 0, 0], background: 0xffffff } },
+  mesa: { build: buildMesaRoca, opts: { fov: 30, position: [0, 1.7, 6.2], lookAt: [0, 0, 0], background: 0x3b403d } },
 };
