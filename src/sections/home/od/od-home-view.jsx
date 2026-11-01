@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment } from 'react';
+import { useRef, Fragment } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -14,14 +14,17 @@ import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdCountUp } from 'src/layouts/od/od-motion';
 import { OdInkText } from 'src/layouts/od/od-ink-text';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
+import { MaskLines } from 'src/layouts/od/od-mask-lines';
 import { Star, Pill, OdImage } from 'src/layouts/od/od-ui';
+import { OdSmoothScroll } from 'src/layouts/od/od-smooth-scroll';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
-import { RiseWords, LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
+import { LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
 
 import { OdFaq } from './od-faq';
 import { OdCierre } from './od-cierre';
+import { useHeroIntro } from './use-hero-intro';
 import { OdDivulgacion } from './od-divulgacion';
 import { OdSpeciesScene } from './od-species-scene';
 import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
@@ -201,14 +204,20 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       : []),
   ];
 
+  const heroRef = useRef(null);
+  useHeroIntro(heroRef);
+
   return (
     <>
+      <OdSmoothScroll />
+
       {/* Portada estilo Aldena: el video a sangre ocupa la primera pantalla, la
           barra de enlaces y el nombre gigante van encima, y abajo el lema con
           los botones. Grano y velo para que el texto se lea sobre el video. */}
-      <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', height: { xs: '92svh', md: '100svh' }, minHeight: 600, maxHeight: 1080, overflow: 'hidden', color: 'var(--od-papel)' }}>
+      <Box ref={heroRef} component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', height: { xs: '92svh', md: '100svh' }, minHeight: 600, maxHeight: 1080, overflow: 'hidden', color: 'var(--od-papel)' }}>
         <Box
           component="video"
+          data-hero-video
           autoPlay
           muted
           loop
@@ -231,13 +240,13 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         <OdMasthead />
 
         {/* Nombre gigante: el título de la página */}
-        <Box className="od-rise" sx={{ position: 'absolute', left: 0, right: 0, top: { xs: 92, md: 84 }, px: { xs: '14px', md: '24px' }, textAlign: 'center' }}>
-          <Box sx={{ mb: { xs: 0.5, md: 1 }, fontSize: 'clamp(13px, 1.2vw, 18px)', letterSpacing: '0.42em', textIndent: '0.42em', textTransform: 'uppercase', opacity: 0.85 }}>
+        <Box sx={{ position: 'absolute', left: 0, right: 0, top: { xs: 92, md: 84 }, px: { xs: '14px', md: '24px' }, textAlign: 'center' }}>
+          <Box data-hero-kicker sx={{ mb: { xs: 0.5, md: 1 }, fontSize: 'clamp(13px, 1.2vw, 18px)', letterSpacing: '0.42em', textIndent: '0.42em', textTransform: 'uppercase', opacity: 0.85 }}>
             Criadero
           </Box>
           <Box
             component="h1"
-            className="od-shrink"
+            data-hero-word
             aria-label="Opuntia Den, criadero de invertebrados en Ciudad de México"
             sx={{
               m: 0,
@@ -256,7 +265,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
         {/* Abajo: lema, frase y botones a la izquierda; datos a la derecha */}
         <Box
-          className="od-rise"
+          data-hero-bottom
           sx={{
             position: 'absolute',
             left: 0,
@@ -339,7 +348,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         <Box sx={{ display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
           <Box>
             <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(30px, 3.4vw, 48px)', lineHeight: 1.08 }}>
-              <RiseWords>El criadero</RiseWords>
+              <MaskLines>El criadero</MaskLines>
             </Box>
             {/* clip y no hidden: hidden vuelve el marco contenedor de scroll y congela el zoom (.od-zoom-in) */}
             <Box className="od-grain" sx={{ mt: { xs: 3, md: 4 }, aspectRatio: '4 / 5', overflow: 'clip', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
@@ -430,7 +439,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       {catItems.length > 0 && (
         <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', pb: 3.75 }}>
-            <SectionHead title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
+            <SectionHead mask title="Compra por categoría" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalog} className="od-link" sx={{ fontSize: 13, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
               Ver todo el catálogo →
             </Link>
@@ -513,7 +522,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${FOTOS.terrario.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
           <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(22,27,25,0.62)' }} />
           <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
-            <SectionHead title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
+            <SectionHead mask title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 15, color: 'inherit', textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>
               Ver todos los insumos →
             </Link>

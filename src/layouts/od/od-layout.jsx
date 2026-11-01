@@ -6,6 +6,7 @@ import { CloseCursor } from 'src/layouts/components/close-cursor';
 import { OdHeader } from './od-header';
 import { OdFooter } from './od-footer';
 import { OdTopbar } from './od-topbar';
+import { OdCursor } from './od-cursor';
 import { OdTabBar } from './od-tab-bar';
 import { OdSideArt } from './od-contours';
 import { OdDivider3d } from './od-divider-3d';
@@ -48,6 +49,7 @@ export async function OdLayout({ children, homeMasthead = false, divider3d = tru
       {!hideTabBar && <OdTabBar />}
       <OdScrollSeal />
       <CloseCursor />
+      <OdCursor />
     </Box>
   );
 }
