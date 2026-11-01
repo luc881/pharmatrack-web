@@ -215,7 +215,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
       {/* Portada estilo Aldena: el video a sangre ocupa la primera pantalla, la
           barra de enlaces y el nombre gigante van encima, y abajo el lema con
           los botones. Grano y velo para que el texto se lea sobre el video. */}
-      <Box ref={heroRef} component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', height: { xs: '92svh', md: '100svh' }, minHeight: 600, maxHeight: 1080, overflow: 'hidden', color: 'var(--od-papel)' }}>
+      <Box ref={heroRef} component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', height: { xs: '92svh', md: '100svh' }, minHeight: 600, overflow: 'hidden', color: 'var(--od-papel)' }}>
         <Box
           component="video"
           data-hero-video
