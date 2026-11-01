@@ -45,21 +45,35 @@ export function buildStump(THREE, { scene }) {
 // public/3d/mesa-roca.glb). Fondo gris verdoso oscuro (en blanco se perdían los detalles); solo gira. El ambiente de reflejos
 // (RoomEnvironment) hace que la base dorada se vea como metal.
 export function buildMesaRoca(THREE, { scene, renderer }) {
-  import('three/examples/jsm/environments/RoomEnvironment.js').then(({ RoomEnvironment }) => {
-    const pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    pmrem.dispose();
-  });
-  scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d4cc, 0.6));
-  const key = new THREE.DirectionalLight(0xffffff, 1.4);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x3b403d, 0.6));
+  const key = new THREE.DirectionalLight(0xfff6ea, 1.2);
   key.position.set(3, 5, 4);
   scene.add(key);
+  // foco suave desde arriba sobre la piedra (está en el eje de giro, no se mueve)
+  const spot = new THREE.SpotLight(0xfff4e2, 18, 0, 0.45, 0.8, 2);
+  spot.position.set(0.3, 4.2, 0.8);
+  spot.target.position.set(0, 0.6, 0);
+  scene.add(spot, spot.target);
 
   const g = new THREE.Group();
   scene.add(g);
-  import('three/examples/jsm/loaders/GLTFLoader.js').then(({ GLTFLoader }) => {
+  Promise.all([
+    import('three/examples/jsm/loaders/GLTFLoader.js'),
+    import('three/examples/jsm/environments/RoomEnvironment.js'),
+  ]).then(([{ GLTFLoader }, { RoomEnvironment }]) => {
+    // reflejos solo para la mesa (el dorado necesita algo que reflejar); en la
+    // piedra el ambiente la aplanaba y se veía como plástico
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    pmrem.dispose();
     new GLTFLoader().load('/3d/mesa-roca.glb', (gltf) => {
       const model = gltf.scene;
+      model.traverse((o) => {
+        if (o.isMesh && o.material?.name !== 'Roca') {
+          o.material.envMap = env;
+          o.material.needsUpdate = true;
+        }
+      });
       // encuadre por la esfera que lo envuelve (la mesa es redonda: al girar no se sale)
       const sphere = new THREE.Box3().setFromObject(model).getBoundingSphere(new THREE.Sphere());
       const k = 1.6 / sphere.radius;
