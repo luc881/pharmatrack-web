@@ -531,7 +531,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
           component="section"
           data-dark="1"
           data-terr-section
-          data-titulo="arriba"
+          data-titulo="centrado"
           className="od-grain"
           sx={{
             position: 'relative',
@@ -539,17 +539,35 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
             overflow: 'clip',
             color: 'var(--od-papel)',
             bgcolor: 'var(--od-musgo-900)',
-            // cómo se lee el título (lo fija OdFondoTerrario en data-titulo):
-            // arriba = sobre la página, y el degradado empieza debajo de él
-            '&[data-titulo="arriba"]': { bgcolor: 'transparent', color: 'var(--od-tinta)', pt: { xs: '56px', md: '88px' } },
-            '&[data-titulo="arriba"] .od-terr-bg': { top: 'var(--terr-top, 0px)' },
-            '&[data-titulo="arriba"] .od-terr-head': { mb: { xs: 5, md: 8 } },
-            // cristal = franja que desenfoca el flow detrás del título
-            '&[data-titulo="cristal"] .od-terr-head': { py: { xs: 2, md: 3 }, bgcolor: 'rgba(22,27,25,0.3)', backdropFilter: 'blur(18px) saturate(1.2)', WebkitBackdropFilter: 'blur(18px) saturate(1.2)' },
+            // cómo va el título (lo fija OdFondoTerrario en data-titulo)
+            '& .od-terr-marquee': { display: 'none' },
+            '& .od-terr-head a': { opacity: 1, textShadow: '0 1px 14px rgba(22,27,25,0.5)' },
+            // centrado: grande, al centro, con el enlace debajo
+            '&[data-titulo="centrado"] .od-terr-head': { flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1.5 },
+            '&[data-titulo="centrado"] .od-terr-head h2': { fontSize: 'clamp(40px, 5vw, 80px)', textShadow: '0 2px 30px rgba(22,27,25,0.35)' },
+            // gigante: el título enorme y las tarjetas encima de su parte baja
+            '&[data-titulo="gigante"] .od-terr-head': { flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1, mb: 'calc(-0.42 * clamp(48px, 9vw, 190px))' },
+            '&[data-titulo="gigante"] .od-terr-head h2': { fontSize: 'clamp(48px, 9vw, 190px)', lineHeight: 1, whiteSpace: 'nowrap', textShadow: '0 2px 40px rgba(22,27,25,0.3)' },
+            '&[data-titulo="gigante"] .od-terr-head a': { order: -1 },
+            '&[data-titulo="gigante"] .od-terr-rail': { position: 'relative', zIndex: 1 },
+            // nombre corriendo detrás de las tarjetas (como «Nuestra selección»); el h2 queda para lectores
+            '&[data-titulo="marquesina"] .od-terr-marquee': { display: 'block' },
+            '&[data-titulo="marquesina"] .od-terr-head': { justifyContent: 'center' },
+            '&[data-titulo="marquesina"] .od-terr-head h2': { position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' },
+            '&[data-titulo="marquesina"] .od-terr-rail': { position: 'relative', zIndex: 1 },
           }}
         >
           {/* fondo: degradado Musgo que se mueve lento (opciones en od-fondo-prueba) */}
           <OdFondoTerrario />
+          <Box aria-hidden className="od-terr-marquee" sx={{ position: 'absolute', left: 0, right: 0, bottom: { xs: 8, md: 20 }, overflow: 'hidden', pointerEvents: 'none' }}>
+            <Box sx={{ display: 'flex', width: 'max-content', whiteSpace: 'nowrap', fontFamily: 'var(--font-heading)', fontSize: 'clamp(110px, 15vw, 260px)', lineHeight: 1, color: 'var(--od-papel)', opacity: 0.4, animation: 'odMarquee 70s linear infinite' }}>
+              {Array.from({ length: 4 }, (_, i) => (
+                <Box component="span" key={i} sx={{ px: '0.3em' }}>
+                  Todo para tu terrario
+                </Box>
+              ))}
+            </Box>
+          </Box>
           <Box className="od-terr-head" sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
             <SectionHead mask title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
             <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 15, color: 'inherit', textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>
@@ -557,7 +575,9 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
             </Link>
           </Box>
 
-          <OdProductRail items={terrario} />
+          <Box className="od-terr-rail">
+            <OdProductRail items={terrario} />
+          </Box>
         </Box>
       )}
 
