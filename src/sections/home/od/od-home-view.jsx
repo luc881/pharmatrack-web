@@ -260,7 +260,8 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
       {/* El criadero debajo de la barra de confianza, compacto y al estilo Aldena: foto
           cuadrada chica con el título encima y el botón abajo a la izquierda;
           a la derecha la declaración en sans (Inter) que se entinta al bajar. */}
-      <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' }, color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
+      {/* claro (antes oscuro): así no se funde con la banda de cifras, que va justo después */}
+      <Box component="section" sx={{ position: 'relative', px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' }, color: 'var(--od-musgo-900)' }}>
         <Box sx={{ position: 'relative', mx: 'auto', maxWidth: 1180, display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
           <Box>
             {/* Afuera el giro 3D con brillo de las tarjetas de producto; adentro
@@ -274,7 +275,7 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
               </Box>
             </Box>
             <Box sx={{ mt: { xs: 3, md: 4 } }}>
-              <Pill variant="light" href={paths.breeding}>Conoce el criadero</Pill>
+              <Pill href={paths.breeding}>Conoce el criadero</Pill>
             </Box>
           </Box>
           <Box sx={{ fontFamily: 'var(--od-font-body)', fontWeight: 600, fontSize: 'clamp(28px, 3vw, 48px)', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
@@ -444,7 +445,7 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
       <OdDivulgacion articles={articles} />
 
       {/* Preguntas frecuentes (ancla #preguntas del masthead) */}
-      <OdFaq mossTall={IMG.mossTall} bg={FOTOS.preguntas.src} />
+      <OdFaq mossTall={IMG.mossTall} />
       {/* Cierre con el degradado prisma (reemplaza a la suscripción) */}
       <OdCierre ticker={ticker} />
     </>

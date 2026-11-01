@@ -8,6 +8,7 @@ import Collapse from '@mui/material/Collapse';
 import { CONFIG } from 'src/global-config';
 import { OdScene } from 'src/layouts/od/od-scene';
 import { OdPanel } from 'src/layouts/od/od-panel';
+import { OdFlowGradient } from 'src/layouts/od/od-flow-gradient';
 
 // ----------------------------------------------------------------------
 // Preguntas frecuentes (sección del home, ancla #preguntas). Fondo terracota,
@@ -27,14 +28,18 @@ const FAQS = [
 
 const NAMES = 'Preguntas frecuentes · ';
 
-export function OdFaq({ mossTall, bg }) {
+// fondo: flow animado en musgo hondo (antes una foto con velo, se veía poco profesional)
+const HONDO = ['#101714', '#132b25', '#173E36', '#247465', '#3f9a7f'];
+
+export function OdFaq({ mossTall }) {
   const [open, setOpen] = useState(0);
 
   return (
     <OdPanel id="preguntas" className="od-grain" sx={{ pt: { xs: '56px', md: '72px' }, pb: { xs: '72px', md: '110px' } }}>
       {/* foto de ambiente muy oscurecida: textura, no protagonista */}
-      {bg && <Box aria-hidden data-parallax sx={{ position: 'absolute', inset: '-12% 0', zIndex: -2, backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />}
-      {bg && <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(22,27,25,0.78)' }} />}
+      <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1 }}>
+        <OdFlowGradient colors={HONDO} />
+      </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, fontSize: 13, color: 'var(--color-neutral-500)' }}>
         <Box component="span">(Preguntas frecuentes)</Box>
         <Box component="span" sx={{ fontVariantNumeric: 'tabular-nums' }}>06 respuestas</Box>
