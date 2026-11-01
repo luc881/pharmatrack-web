@@ -11,7 +11,7 @@ import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { rowFillSx } from 'src/layouts/od/od-styles';
 import { OdHoverPreview } from 'src/layouts/od/od-hover-preview';
-import { OdImage, RollText, OdRowGroup } from 'src/layouts/od/od-ui';
+import { OdImage, RollText, OdRowGroup, ArrowButton } from 'src/layouts/od/od-ui';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -136,45 +136,86 @@ export function OdCategoryIndex({ items }) {
 // global de prefers-reduced-motion la detiene.
 
 export function OdProductRail({ items }) {
+  const ref = useRef(null);
+  // flechas para escritorio: avanzan una tarjeta (el scroll-snap la centra)
+  const step = (dir) => {
+    const el = ref.current;
+    const card = el?.querySelector('[data-card]');
+    if (el && card) el.scrollBy({ left: dir * (card.offsetWidth + 24), behavior: 'smooth' });
+  };
+
   return (
-    <Box sx={{ overflow: 'hidden' }}>
-      <Box className="od-band" sx={{ display: 'flex', gap: '18px', width: 'max-content', animation: `odMarquee ${Math.max(40, items.length * 9)}s linear infinite` }}>
-        {[...items, ...items].map((c, i) => (
+    <Box sx={{ position: 'relative' }}>
+      {/* Carrusel en perspectiva (paso 5d): scroll nativo con scroll-snap; la
+          inclinación de los lados sale de una animación ligada al scroll
+          horizontal (.od-cover-card en global.css). Sin soporte: tarjetas
+          planas. */}
+      <Box
+        ref={ref}
+        tabIndex={0}
+        aria-label="Insumos para tu terrario"
+        sx={{
+          display: 'flex',
+          gap: '24px',
+          overflowX: 'auto',
+          scrollSnapType: 'x mandatory',
+          scrollbarWidth: 'none',
+          '&::-webkit-scrollbar': { display: 'none' },
+          // relleno para que la primera y la última puedan quedar al centro
+          px: 'calc(50% - min(43vw, 300px))',
+          py: 3,
+          '&:focus-visible': { outline: '2px solid var(--od-papel)', outlineOffset: -4 },
+        }}
+      >
+        {items.map((c) => (
           <Link
-            key={`${c.key}-${i}`}
+            key={c.key}
+            data-card
+            className="od-cover-card"
             component={RouterLink}
             href={c.href}
             underline="none"
-            data-fx
-            aria-hidden={i >= items.length || undefined}
-            tabIndex={i >= items.length ? -1 : undefined}
             sx={{
-              flex: '0 0 clamp(240px, 21vw, 360px)',
-              color: 'inherit',
-              '& .od-rail-cta': { transition: 'opacity 300ms, transform 400ms var(--od-ease)' },
-              '&:hover .od-img-zoom': { transform: 'scale(1.06)' },
-              '@media (hover: hover)': {
-                '& .od-rail-cta': { opacity: 0, transform: 'translateY(6px)' },
-                '&:hover .od-rail-cta, &:focus-visible .od-rail-cta': { opacity: 1, transform: 'none' },
-              },
+              flex: '0 0 min(86vw, 600px)',
+              scrollSnapAlign: 'center',
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+              gap: { xs: 2, sm: 3 },
+              p: { xs: 2, sm: 2.5 },
+              borderRadius: '4px',
+              bgcolor: 'var(--od-papel)',
+              color: 'var(--od-tinta)',
+              '&:hover .od-img-zoom': { transform: 'scale(1.05)' },
+              '&:focus-visible': { outline: '2px solid var(--od-accent)', outlineOffset: 3 },
             }}
           >
-            <Box className="od-tilt-lg od-glare" data-fx sx={{ position: 'relative', overflow: 'hidden', '--od-tilt-k': 1.8, '--od-tilt-s': 1.07 }}>
-              <OdImage src={c.image} alt={c.title} label={c.title} ratio="4 / 3" radius={0} />
+            <Box sx={{ order: { xs: 2, sm: 1 }, display: 'flex', flexDirection: 'column', minHeight: { sm: 300 } }}>
+              <Box sx={{ fontSize: 13, color: 'var(--color-neutral-600)' }}>{c.category}</Box>
+              <Box sx={{ mt: 0.75, fontFamily: 'var(--font-heading)', fontSize: { xs: 24, md: 28 }, lineHeight: 1.12 }}>{c.title}</Box>
+              {c.description && <Box sx={{ mt: 1.5, fontSize: 15, lineHeight: 1.6, color: 'var(--color-neutral-700)' }}>{c.description}</Box>}
+              <Box sx={{ mt: 'auto', pt: 2.5, display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 2 }}>
+                <Box sx={{ fontFamily: 'var(--font-heading)', fontSize: { xs: 24, md: 30 }, fontVariantNumeric: 'tabular-nums', color: c.soldOut ? 'var(--od-neutro-700)' : 'inherit' }}>
+                  {c.soldOut ? 'Agotado' : c.price}
+                </Box>
+                <Box component="span" sx={{ fontSize: 14, color: 'var(--od-accent)' }}>
+                  Ver producto →
+                </Box>
+              </Box>
             </Box>
-            <Box sx={{ mt: 1.75, fontSize: 13, color: 'var(--color-neutral-600)' }}>{c.category}</Box>
-            <Box sx={{ mt: 0.5, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 2 }}>
-              <Box component="span" sx={{ fontFamily: 'var(--font-heading)', fontSize: 18 }}>{c.title}</Box>
-              <Box component="span" sx={{ fontSize: 14, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{c.price}</Box>
-            </Box>
-            {c.description && (
-              <Box sx={{ mt: 0.75, fontSize: 13, lineHeight: 1.55, color: 'var(--color-neutral-600)', maxWidth: '34ch' }}>{c.description}</Box>
-            )}
-            <Box className="od-rail-cta" sx={{ mt: 1.25, fontSize: 13, color: 'var(--color-accent-700)' }}>
-              Ver producto →
+            <Box sx={{ order: { xs: 1, sm: 2 }, overflow: 'hidden', borderRadius: '2px' }}>
+              <OdImage src={c.image} alt={c.title} label={c.title} ratio="1 / 1" radius={0} sx={{ height: 1 }} />
             </Box>
           </Link>
         ))}
+      </Box>
+
+      <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', gap: 1.5, mt: 2 }}>
+        <ArrowButton label="Anterior" onClick={() => step(-1)} size={52} sx={{ bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', borderColor: 'var(--od-papel)', '&:hover': { borderColor: 'var(--od-papel)' } }}>
+          ←
+        </ArrowButton>
+        <ArrowButton label="Siguiente" onClick={() => step(1)} size={52} sx={{ bgcolor: 'var(--od-papel)', color: 'var(--od-tinta)', borderColor: 'var(--od-papel)', '&:hover': { borderColor: 'var(--od-papel)' } }}>
+          →
+        </ArrowButton>
       </Box>
     </Box>
   );

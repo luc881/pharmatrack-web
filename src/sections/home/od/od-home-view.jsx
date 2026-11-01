@@ -486,12 +486,14 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         </Box>
       </OdPanel>
 
-      {/* Todo para tu terrario (banda que avanza sola; se pausa al pasar el cursor) */}
+      {/* Todo para tu terrario: carrusel en perspectiva sobre la foto de hojas */}
       {terrario.length > 0 && (
-        <Box component="section" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'hidden', '&:hover .od-band': { animationPlayState: 'paused' } }}>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, mb: 3.75, borderBottom: '1px solid var(--color-divider)' }}>
-            <SectionHead title="Todo para tu terrario" size="clamp(26px, 3vw, 40px)" />
-            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} className="od-link" sx={{ fontSize: 13, color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-accent-700)' } }}>
+        <Box component="section" data-dark="1" className="od-grain" sx={{ position: 'relative', py: { xs: '64px', md: '110px' }, overflow: 'hidden', color: 'var(--od-papel)', bgcolor: 'var(--od-noche)' }}>
+          <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -2, backgroundImage: `url(${FOTOS.terrario.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+          <Box aria-hidden sx={{ position: 'absolute', inset: 0, zIndex: -1, bgcolor: 'rgba(22,27,25,0.62)' }} />
+          <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
+            <SectionHead title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
+            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 15, color: 'inherit', textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>
               Ver todos los insumos →
             </Link>
           </Box>
