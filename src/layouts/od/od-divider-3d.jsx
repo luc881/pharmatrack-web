@@ -9,7 +9,7 @@ import { OdTicker } from './od-ticker';
 
 // ----------------------------------------------------------------------
 // Divisor 3D de las vistas interiores (no el home): marquesina de avisos, la
-// mesa con un terrario plantado (escena 'mesa', fondo oscuro) sobre una foto de naturaleza, y otra marquesina
+// mesa con una pecera y una roca (escena 'mesa', fondo negro) sobre una foto de naturaleza, y otra marquesina
 // inversa. Degrada a imagen de respaldo en móvil / motion reducido.
 // ----------------------------------------------------------------------
 
@@ -24,12 +24,12 @@ export function OdDivider3d({ media, ticker }) {
           <OdScene
             scene="mesa"
             fallbackSrc={media.isopod_zebra}
-            fallbackLabel="Mesa con un terrario plantado"
+            fallbackLabel="Mesa con una pecera y una roca"
             ratio="1 / 1"
             sx={{ width: 'min(460px, 74vw)' }}
           />
           <Box sx={{ fontSize: 13, color: 'var(--color-neutral-100)' }}>
-            Opuntia Den · Terrario plantado
+            Opuntia Den · Pecera con roca
           </Box>
         </Box>
       </Box>

@@ -47,10 +47,10 @@ export function buildStump(THREE, { scene, renderer }) {
   };
 }
 
-// Mesa Nimbus con un acuario plantado encima, sin peces ni agua (Poliigon
-// CoffeeTableNimbusGoldReplica001 + aquarium.blend; materiales horneados,
-// pasto aclarado y malla comprimida con Draco en Blender:
-// public/3d/mesa-acuario.glb, 1 MB). El vidrio usa transmisión. Fondo oscuro,
+// Mesa Nimbus con una pecera vacía y una roca adentro (Poliigon
+// CoffeeTableNimbusGoldReplica001 + el recipiente de aquarium.blend + rock.blend;
+// materiales horneados y malla comprimida con Draco en Blender:
+// public/3d/mesa-acuario.glb, 1 MB). Fondo negro,
 // luz del HDRI; solo gira. El decodificador de Draco vive en public/draco.
 export function buildMesaAcuario(THREE, { scene, renderer }) {
   // iluminado solo con el HDRI (también da los reflejos del dorado)
@@ -63,6 +63,17 @@ export function buildMesaAcuario(THREE, { scene, renderer }) {
     new GLTFLoader().setDRACOLoader(draco).load('/3d/mesa-acuario.glb', (gltf) => {
       draco.dispose();
       const model = gltf.scene;
+      model.traverse((o) => {
+        if (!o.isMesh) return;
+        const name = o.material?.name ?? '';
+        // la placa de vidrio del piso tapaba media base con una franja negra
+        if (name.startsWith('Aqua_Base')) o.visible = false;
+        // vidrio: transparente simple con reflejos (la transmisión sobre el
+        // fondo negro lo teñía de café)
+        if (name.startsWith('Aqua_Glass')) {
+          o.material = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.05, metalness: 0, transparent: true, opacity: 0.14, depthWrite: false, side: THREE.DoubleSide });
+        }
+      });
       // encuadre por la esfera que lo envuelve (la mesa es redonda: al girar no se sale)
       const sphere = new THREE.Box3().setFromObject(model).getBoundingSphere(new THREE.Sphere());
       const k = 1.6 / sphere.radius;
@@ -109,5 +120,5 @@ export function buildCactus(THREE, { scene, renderer }) {
 export const SCENES = {
   cactus: { build: buildCactus, opts: { fov: 30, position: [0, 0.4, 7], lookAt: [0, 0, 0] } },
   tocon: { build: buildStump, opts: { fov: 32, position: [0, 0.7, 6.6], lookAt: [0, 0, 0] } },
-  mesa: { build: buildMesaAcuario, opts: { fov: 30, position: [0, 1.7, 6.2], lookAt: [0, 0, 0], background: 0x3b403d } },
+  mesa: { build: buildMesaAcuario, opts: { fov: 30, position: [0, 1.7, 6.2], lookAt: [0, 0, 0], background: 0x000000 } },
 };
