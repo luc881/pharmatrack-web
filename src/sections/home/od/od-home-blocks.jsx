@@ -136,16 +136,16 @@ export function OdCategoryIndex({ items }) {
 // cursor; la sección padre pausa `.od-band`. Movimiento reducido: la regla
 // global de prefers-reduced-motion la detiene.
 
-// Carrusel 3D de insumos (estilo Reelio): tarjetas anchas, la del centro de
-// frente y las de los lados giradas hacia atrás, como flotando. Es scroll
+// Tira 3D de insumos: tarjetas chicas (foto 4:5, nombre y precio debajo), las
+// de los lados apenas giradas hacia atrás, como flotando. Es scroll
 // nativo con scroll-snap (deslizar en táctil, flechas en escritorio); el giro
 // lo calcula useCoverflow según la distancia de cada tarjeta al centro. Al
 // pasar el mouse la foto se encoge sobre un fondo desenfocado de sí misma.
 // la del centro ocupa media pantalla (o casi toda en celular) para que las de
 // los lados lleguen a los bordes, como en la referencia
-export const CARD_W = 'max(min(88vw, 980px), 50vw)';
-const CARD_HALF = 'max(min(44vw, 490px), 25vw)';
-const GAP = 64;
+// tarjetas chicas (taste: 25-35% del ancho, tres completas y la cuarta cortada)
+const CARD_FLEX = { xs: '0 0 78vw', md: '0 0 clamp(280px, 28vw, 440px)' };
+const GAP = 32;
 
 function useCoverflow(ref) {
   useEffect(() => {
@@ -162,7 +162,7 @@ function useCoverflow(ref) {
         // con la caja ya girada y se detenía antes del centro
         const card = c.firstElementChild;
         card.style.transformOrigin = d > 0 ? 'left center' : 'right center';
-        card.style.transform = `perspective(1600px) rotateY(${d * 34}deg) scale(${1 - Math.min(Math.abs(d), 1) * 0.12})`;
+        card.style.transform = `perspective(1600px) rotateY(${d * 14}deg) scale(${1 - Math.min(Math.abs(d), 1) * 0.06})`;
       });
     };
     const onScroll = () => {
@@ -259,7 +259,7 @@ export function OdProductRail({ items }) {
       >
         {loop.map((c) => (
           // las copias de los lados no se anuncian ni reciben foco
-          <Box key={`${c.copy}-${c.key}`} data-card aria-hidden={c.copy !== 1 || undefined} sx={{ flex: `0 0 ${CARD_W}`, scrollSnapAlign: 'center', display: 'flex' }}>
+          <Box key={`${c.copy}-${c.key}`} data-card aria-hidden={c.copy !== 1 || undefined} sx={{ flex: CARD_FLEX, scrollSnapAlign: 'center', display: 'flex' }}>
           <Link
             component={RouterLink}
             href={c.href}
@@ -268,10 +268,9 @@ export function OdProductRail({ items }) {
             underline="none"
             sx={{
               flex: 1,
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-              gap: { xs: 0, md: 3 },
-              p: { xs: 1.5, md: 2 },
+              display: 'flex',
+              flexDirection: 'column',
+              p: 1.25,
               borderRadius: '2px',
               bgcolor: 'var(--od-papel)',
               color: 'var(--od-tinta)',
@@ -283,22 +282,11 @@ export function OdProductRail({ items }) {
               '&:focus-visible': { outline: '2px solid var(--od-accent)', outlineOffset: 3 },
             }}
           >
-            <Box sx={{ order: { xs: 2, md: 1 }, display: 'flex', flexDirection: 'column', p: { xs: 1, md: 1.5 }, pt: { xs: 2.5, md: 1.5 }, minHeight: { md: 'max(380px, 20vw)' } }}>
-              <Box sx={eyebrowSx}>{c.category}</Box>
-              <Box sx={{ ...sansSx, mt: 1, fontSize: 'clamp(26px, 2.6vw, 40px)', lineHeight: 1.05 }}>{c.title}</Box>
-              {c.description && <Box sx={{ mt: 2.5, maxWidth: '44ch', fontSize: 16, lineHeight: 1.55, color: 'var(--color-neutral-700)' }}>{c.description}</Box>}
-              <Box sx={{ mt: 'auto', pt: 3 }}>
-                <Box sx={eyebrowSx}>{c.soldOut ? 'Por ahora' : 'Precio'}</Box>
-                <Box sx={{ ...sansSx, mt: 0.5, fontSize: 'clamp(28px, 2.8vw, 44px)', lineHeight: 1.05, fontVariantNumeric: 'tabular-nums', color: c.soldOut ? 'var(--od-neutro-700)' : 'inherit' }}>
-                  {c.soldOut ? 'Agotado' : c.price}
-                </Box>
-              </Box>
-            </Box>
-            <Box className="od-grain" sx={{ order: { xs: 1, md: 2 }, position: 'relative', overflow: 'hidden', aspectRatio: { xs: '4 / 3', md: 'auto' }, bgcolor: 'var(--od-noche)' }}>
+            <Box className="od-grain" sx={{ position: 'relative', overflow: 'hidden', aspectRatio: '4 / 5', bgcolor: 'var(--od-noche)' }}>
               {c.image ? (
                 <>
-                  <Box className="od-terr-bg" component="img" src={cdnImage(c.image, 400)} alt="" aria-hidden loading="lazy" sx={{ position: 'absolute', inset: '-10%', width: '120%', height: '120%', objectFit: 'cover', filter: 'blur(22px) brightness(0.5)', opacity: 0, transition: 'opacity 700ms var(--od-ease)' }} />
-                  <Box className="od-terr-img" component="img" src={cdnImage(c.image, 900)} alt={c.title} loading="lazy" sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', transition: 'transform 800ms var(--od-ease), box-shadow 800ms var(--od-ease)' }} />
+                  <Box className="od-terr-bg" component="img" src={cdnImage(c.image, 300)} alt="" aria-hidden loading="lazy" sx={{ position: 'absolute', inset: '-10%', width: '120%', height: '120%', objectFit: 'cover', filter: 'blur(22px) brightness(0.5)', opacity: 0, transition: 'opacity 700ms var(--od-ease)' }} />
+                  <Box className="od-terr-img" component="img" src={cdnImage(c.image, 700)} alt={c.title} loading="lazy" sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover', transition: 'transform 800ms var(--od-ease), box-shadow 800ms var(--od-ease)' }} />
                 </>
               ) : (
                 // sin foto: el recuadro de la marca hace el mismo gesto (se encoge sobre el fondo oscuro)
@@ -306,8 +294,15 @@ export function OdProductRail({ items }) {
                   <OdImage label={c.title} radius={0} sx={{ width: 1, height: 1, aspectRatio: 'auto' }} />
                 </Box>
               )}
-              <Box component="span" className="od-terr-label" sx={{ position: 'absolute', top: 16, right: 18, zIndex: 3, fontSize: 13, fontWeight: 600, color: c.image ? '#f6f4f1' : 'var(--od-tinta)', textShadow: c.image ? '0 1px 8px rgba(0,0,0,0.4)' : 'none', transition: 'color 500ms ease' }}>
+              <Box component="span" className="od-terr-label" sx={{ position: 'absolute', top: 12, right: 14, zIndex: 3, fontSize: 13, fontWeight: 600, color: c.image ? '#f6f4f1' : 'var(--od-tinta)', textShadow: c.image ? '0 1px 8px rgba(0,0,0,0.4)' : 'none', transition: 'color 500ms ease' }}>
                 Ver producto →
+              </Box>
+            </Box>
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', px: 1, pt: 2, pb: 1 }}>
+              <Box sx={eyebrowSx}>{c.category}</Box>
+              <Box sx={{ ...sansSx, mt: 0.75, fontSize: 'clamp(20px, 1.6vw, 26px)', lineHeight: 1.15 }}>{c.title}</Box>
+              <Box sx={{ ...sansSx, mt: 'auto', pt: 1.5, fontSize: 'clamp(20px, 1.6vw, 26px)', lineHeight: 1.1, fontVariantNumeric: 'tabular-nums', color: c.soldOut ? 'var(--od-neutro-700)' : 'inherit' }}>
+                {c.soldOut ? 'Agotado' : c.price}
               </Box>
             </Box>
           </Link>
@@ -315,10 +310,10 @@ export function OdProductRail({ items }) {
         ))}
       </Box>
 
-      {/* flechas a los lados de la tarjeta del centro, en el hueco entre tarjetas */}
+      {/* flechas en los bordes */}
       {[
-        { dir: -1, label: 'Anterior', left: `calc(50% - ${CARD_HALF} - ${GAP / 2}px)`, glyph: '←' },
-        { dir: 1, label: 'Siguiente', left: `calc(50% + ${CARD_HALF} + ${GAP / 2}px)`, glyph: '→' },
+        { dir: -1, label: 'Anterior', left: 'calc(var(--od-gutter, 40px) / 2 + 22px)', glyph: '←' },
+        { dir: 1, label: 'Siguiente', left: 'calc(100% - var(--od-gutter, 40px) / 2 - 22px)', glyph: '→' },
       ].map((a) => (
         <Box key={a.label} sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', top: '50%', left: a.left, zIndex: 2, transform: 'translate(-50%, -50%)' }}>
           <ArrowButton label={a.label} onClick={() => step(a.dir)} size={44} sx={railArrowSx}>

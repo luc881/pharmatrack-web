@@ -28,7 +28,7 @@ import { OdDivulgacion } from './od-divulgacion';
 import { usePhotoMotion } from './use-photo-motion';
 import { OdSpeciesScene } from './od-species-scene';
 import { OdFondoTerrario } from './od-fondo-terrario';
-import { CARD_W, OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
+import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
 
 // ----------------------------------------------------------------------
 // Home del rediseño editorial, reordenado (2026-10) según pautas de UX de
@@ -457,7 +457,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         </Box>
       )}
 
-      {/* Bloque oscuro del frasco: "Seis cosas dentro del frasco" +
+      {/* Bloque oscuro del frasco: «Todo para tu terrario» +
           6 ingredientes con el frasco 3D al centro (placeholder por ahora) */}
       <OdPanel sx={{ py: { xs: '64px', md: '96px' } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(238,236,230,0.18)', fontSize: 13, color: 'var(--color-neutral-500)' }}>
@@ -466,7 +466,7 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         </Box>
         <Box className="od-orn-host" sx={{ width: 'fit-content', maxWidth: 1, mx: 'auto', pb: 1 }}>
           <Box component="h2" sx={{ mx: 'auto', mt: { xs: '44px', md: '62px' }, maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
-            Seis cosas dentro del frasco. Nada más.
+            Todo para tu terrario
           </Box>
           <LeafDivider sx={{ mx: 'auto', mt: '28px', maxWidth: 360, px: 2, color: 'var(--od-arena-texto)' }} />
         </Box>
@@ -516,52 +516,23 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: '32px', md: '56px' } }}>
           <Pill variant="light" href={paths.catalogCategory('sustratos-y-accesorios')}>
-            Comprar un cultivo ↗
+            Ver todos los insumos →
           </Pill>
         </Box>
       </OdPanel>
 
-      {/* Cómo comprar (claro) entre el frasco y el carrusel (oscuros): así
-          ninguna sección queda junto a otra del mismo tono */}
-      <OdHowToBuy />
-
-      {/* Todo para tu terrario: carrusel 3D de tarjetas anchas sobre el degradado Musgo */}
+      {/* Insumos: tira de tarjetas chicas sobre el flow claro con grano, sin
+          texto (el título lo pone el bloque del frasco, justo arriba) */}
       {terrario.length > 0 && (
-        <Box
-          component="section"
-          data-dark="1"
-          className="od-grain"
-          sx={{
-            position: 'relative',
-            // pantalla completa, con título y carrusel centrados a lo alto
-            minHeight: '100svh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            py: { xs: '64px', md: '80px' },
-            overflow: 'clip',
-            color: 'var(--od-papel)',
-            bgcolor: 'var(--od-musgo-900)',
-            // título centrado en un recuadro de cristal lechoso del ancho de la tarjeta del centro
-            '& .od-terr-head': { flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 1.5, mx: 'auto', width: CARD_W, maxWidth: 'calc(100% - 36px)', px: { xs: 3, md: 5 }, py: { xs: 3.5, md: 5 }, borderRadius: '4px', bgcolor: 'rgba(246,244,241,0.6)', color: 'var(--od-musgo-900)', backdropFilter: 'blur(20px) saturate(1.2)', WebkitBackdropFilter: 'blur(20px) saturate(1.2)' },
-            '& .od-terr-head h2': { fontSize: 'clamp(40px, 5vw, 80px)' },
-            '& .od-terr-head a': { opacity: 1 },
-          }}
-        >
-          {/* fondo: flow claro animado con grano (od-fondo-terrario) */}
+        <Box component="section" aria-label="Insumos para tu terrario" className="od-grain" sx={{ position: 'relative', py: { xs: '56px', md: '88px' }, overflow: 'clip', bgcolor: 'var(--od-musgo-900)' }}>
           <OdFondoTerrario />
-          <Box className="od-terr-head" sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 3, flexWrap: 'wrap', px: { xs: '18px', md: 'var(--od-gutter)' }, mb: { xs: 2, md: 3 } }}>
-            <SectionHead mask title="Todo para tu terrario" size="clamp(28px, 3.4vw, 48px)" />
-            <Link component={RouterLink} href={paths.catalogCategory('sustratos-y-accesorios')} sx={{ fontSize: 15, color: 'inherit', textDecoration: 'none', opacity: 0.85, '&:hover': { opacity: 1 } }}>
-              Ver todos los insumos →
-            </Link>
-          </Box>
-
-          <Box className="od-terr-rail">
-            <OdProductRail items={terrario} />
-          </Box>
+          <OdProductRail items={terrario} />
         </Box>
       )}
+
+      {/* Cómo comprar */}
+      <OdHowToBuy />
+
 
       {/* Divulgación (editorial en filas) */}
       <OdDivulgacion articles={articles} />
