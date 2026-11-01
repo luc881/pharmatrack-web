@@ -63,11 +63,14 @@ export function buildMesaAcuario(THREE, { scene, renderer }) {
     new GLTFLoader().setDRACOLoader(draco).load('/3d/mesa-acuario.glb', (gltf) => {
       draco.dispose();
       const model = gltf.scene;
+      // la placa del piso (1 cm entre la madera y el vidrio) era de vidrio y
+      // dejaba una línea negra; ahora es opaca, del tono de la madera (su
+      // mapeo no casa con la textura de la madera, que se veía gris)
+      const plate = new THREE.MeshStandardMaterial({ color: 0x4f2c1b, roughness: 0.8 });
       model.traverse((o) => {
         if (!o.isMesh) return;
         const name = o.material?.name ?? '';
-        // la placa de vidrio del piso tapaba media base con una franja negra
-        if (name.startsWith('Aqua_Base')) o.visible = false;
+        if (name.startsWith('Aqua_Base')) o.material = plate;
         // vidrio: transparente simple con reflejos (la transmisión sobre el
         // fondo negro lo teñía de café)
         if (name.startsWith('Aqua_Glass')) {
