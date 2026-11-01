@@ -113,18 +113,20 @@ export function buildStump(THREE, { scene }) {
   import('three/examples/jsm/loaders/GLTFLoader.js').then(({ GLTFLoader }) => {
     new GLTFLoader().load('/3d/tocon.glb', (gltf) => {
       const model = gltf.scene;
-      const box = new THREE.Box3().setFromObject(model);
-      const size = box.getSize(new THREE.Vector3());
-      const center = box.getCenter(new THREE.Vector3());
-      const k = 3.4 / Math.max(size.x, size.y, size.z);
+      // encuadre por la esfera que lo envuelve: al girar nunca toca los bordes
+      const sphere = new THREE.Box3().setFromObject(model).getBoundingSphere(new THREE.Sphere());
+      const k = 1.85 / sphere.radius;
       model.scale.setScalar(k);
-      model.position.copy(center.multiplyScalar(-k));
+      model.position.copy(sphere.center.multiplyScalar(-k));
       g.add(model);
     });
   });
 
-  return () => {
+  // gira lento y sube y baja apenas, como flotando
+  return (t) => {
     g.rotation.y += 0.003;
+    g.position.y = Math.sin(t * 0.0009) * 0.09;
+    g.rotation.z = Math.sin(t * 0.0006) * 0.025;
   };
 }
 
