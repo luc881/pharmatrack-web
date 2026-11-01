@@ -14,7 +14,6 @@ import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdCountUp } from 'src/layouts/od/od-motion';
 import { OdInkText } from 'src/layouts/od/od-ink-text';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
-import { MaskLines } from 'src/layouts/od/od-mask-lines';
 import { Star, Pill, OdImage } from 'src/layouts/od/od-ui';
 import { OdSmoothScroll } from 'src/layouts/od/od-smooth-scroll';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
@@ -34,7 +33,7 @@ import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-hom
 // Home del rediseño editorial, reordenado (2026-10) según pautas de UX de
 // e-commerce: propuesta + dos CTA en el hero, confianza justo debajo, lo que
 // hay en existencia antes que la historia de marca, y nada que avance solo.
-// Orden: hero, confianza, disponibles, categorías, el criadero, el frasco,
+// Orden: hero, el criadero, confianza, disponibles, categorías, el frasco,
 // insumos, cómo comprar, divulgación, preguntas y novedades.
 // ----------------------------------------------------------------------
 
@@ -334,6 +333,29 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         </Box>
       </Box>
 
+      {/* El criadero justo debajo del video, compacto y al estilo Aldena: foto
+          cuadrada chica con el título encima y el botón abajo a la izquierda;
+          a la derecha la declaración en sans (Inter) que se entinta al bajar. */}
+      <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '64px', md: '110px' } }}>
+        <Box sx={{ display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, alignItems: 'start' }}>
+          <Box>
+            <Box data-shutter className="od-grain" sx={{ position: 'relative', width: { xs: 180, md: 'clamp(200px, 16vw, 260px)' }, aspectRatio: '1', overflow: 'clip', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
+              <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
+              <Box component="h2" sx={{ position: 'absolute', inset: 0, m: 0, display: 'grid', placeItems: 'center', fontFamily: 'var(--font-heading)', fontStyle: 'italic', fontWeight: 400, fontSize: { xs: 22, md: 26 }, color: '#f6f4f1', textShadow: '0 1px 12px rgba(0,0,0,0.45)' }}>
+                El criadero
+              </Box>
+            </Box>
+            <Box sx={{ mt: { xs: 3, md: 4 } }}>
+              <Pill href={paths.breeding}>Conoce el criadero</Pill>
+            </Box>
+          </Box>
+          <Box sx={{ fontFamily: 'var(--od-font-body)', fontWeight: 600, fontSize: 'clamp(24px, 2.4vw, 38px)', lineHeight: 1.14, letterSpacing: '-0.03em', maxWidth: '30ch' }}>
+            <OdInkText>Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros.</OdInkText>
+            <OdInkText sx={{ mt: '0.9em' }}>Las catorce especies en cultivo nacen en casa, y cada ejemplar sale con su ficha de origen y se entrega en persona en la Ciudad de México.</OdInkText>
+          </Box>
+        </Box>
+      </Box>
+
       <OdTrustBar />
 
       {/* Disponibles ahora como escena: una pantalla fija por especie (las 4
@@ -342,30 +364,6 @@ export function OdHomeView({ species = [], products = [], articles = [], media, 
         cards={selection.slice(0, 4).map((item) => animalToCard(item, newestIds.has(item.key)))}
         heading={inStock.length ? 'Disponibles ahora' : 'Nuestra selección'}
       />
-
-      {/* El criadero en dos columnas (paso 5e, estilo Reelio): título y foto a la
-          izquierda, el texto grande a la derecha se entinta al bajar. Claro,
-          entre la escena de especies y la banda del degradado (oscuras). */}
-      <Box component="section" sx={{ px: { xs: '18px', md: 'var(--od-gutter)' }, py: { xs: '72px', md: '140px' } }}>
-        <Box sx={{ display: 'grid', gap: { xs: 4, md: 8 }, gridTemplateColumns: { xs: '1fr', md: '5fr 7fr' }, alignItems: 'start' }}>
-          <Box>
-            <Box component="h2" sx={{ m: 0, fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(30px, 3.4vw, 48px)', lineHeight: 1.08 }}>
-              <MaskLines>El criadero</MaskLines>
-            </Box>
-            <Box data-shutter className="od-grain" sx={{ mt: { xs: 3, md: 4 }, aspectRatio: '4 / 5', overflow: 'clip', borderRadius: '4px', bgcolor: 'var(--od-noche)' }}>
-              <Box component="img" src={FOTOS.criadero.src} alt="Terrarios con musgo bajo una lámpara" loading="lazy" sx={{ width: 1, height: 1, objectFit: 'cover', display: 'block' }} />
-            </Box>
-          </Box>
-          <Box sx={{ pt: { md: 9 } }}>
-            <OdInkText sx={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 2.8vw, 42px)', lineHeight: 1.22 }}>
-              Un criadero pequeño con registro largo: cada colonia se documenta y viaja con sus parámetros. Las catorce especies en cultivo nacen en casa, y cada ejemplar sale con su ficha de origen y se entrega en persona en la Ciudad de México.
-            </OdInkText>
-            <Box sx={{ mt: { xs: 4, md: 5 } }}>
-              <Pill href={paths.breeding}>Conoce el criadero</Pill>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
 
       {/* Banda "El criadero": marquesina de nombres + cifras */}
       {/* El degradado (Feral, paleta de adorno) es el momento de color de la
