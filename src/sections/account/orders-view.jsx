@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -114,6 +115,20 @@ function OrderCard({ order, onCancel, onPay }) {
         </Typography>
         <Typography variant="subtitle1">{fCurrency(order.total)}</Typography>
       </Box>
+
+      {order.tracking_number && (
+        <Typography variant="body2" sx={{ mt: 1.5 }}>
+          Enviado por {order.shipping_carrier?.toUpperCase()} · guía {order.tracking_number}
+          {order.tracking_url && (
+            <>
+              {' · '}
+              <Link href={order.tracking_url} target="_blank" rel="noopener">
+                Rastrear envío
+              </Link>
+            </>
+          )}
+        </Typography>
+      )}
 
       {order.status === 'paid' && (
         <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
