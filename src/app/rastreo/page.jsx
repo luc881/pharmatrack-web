@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 
-import { OdPageHead } from 'src/layouts/od/od-ui';
 import { OdLayout } from 'src/layouts/od/od-layout';
 
 import { TrackingView } from 'src/sections/account/tracking-view';
@@ -14,12 +13,9 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <OdLayout>
-      <OdPageHead
-        title="Rastrea tu envío"
-        intro="Escribe tu número de guía y te decimos por dónde va tu paquete. No necesitas cuenta."
-        introWidth="60ch"
-      />
+    // sideArt: el contenido va centrado y angosto; en pantallas anchas los
+    // lados llevan las curvas de nivel animadas
+    <OdLayout sideArt={1000}>
       {/* useSearchParams (?guia=) pide Suspense al prerenderizar */}
       <Suspense>
         <TrackingView />

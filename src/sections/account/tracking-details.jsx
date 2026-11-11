@@ -5,13 +5,14 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { fDateTime } from 'src/utils/format-time';
+import { fDate, fDateTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
 // la paquetería manda fechas en formatos distintos: si no se entiende, tal cual
-const when = (date) => {
-  const formatted = fDateTime(date);
+export const when = (date) => {
+  // una fecha sin hora (la entrega estimada) no lleva «12:00 am»
+  const formatted = /^\d{4}-\d{2}-\d{2}$/.test(date) ? fDate(date) : fDateTime(date);
   return formatted && formatted !== 'Invalid' ? formatted : date;
 };
 
