@@ -27,6 +27,10 @@ export default async function sitemap() {
     { url: CONFIG.siteUrl, changeFrequency: 'daily' },
     { url: `${CONFIG.siteUrl}/catalogo`, changeFrequency: 'daily' },
     { url: `${CONFIG.siteUrl}/links`, changeFrequency: 'weekly' },
+    ...['criadero', 'asesoria', 'envios', 'rastreo', 'contacto'].map((page) => ({
+      url: `${CONFIG.siteUrl}/${page}`,
+      changeFrequency: 'monthly',
+    })),
     ...buildCategories(animals, groups).map((category) => ({
       url: `${CONFIG.siteUrl}/catalogo/${category.slug}`,
       changeFrequency: 'daily',
