@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useRef, useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 
 import Box from '@mui/material/Box';
@@ -14,13 +14,14 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { Iconify } from 'src/components/iconify';
 
-import { stateForZip } from './mx-zip';
+import { lookupZip, stateForZip } from './mx-zip';
 
 // ----------------------------------------------------------------------
 
@@ -116,8 +117,39 @@ export function AccountView() {
       .catch(() => {});
   }, []);
 
-  const set = (field) => (e) => {
-    const { value } = e.target;
+  // Colonias del código postal escrito, para elegir en vez de teclear
+  const [suburbs, setSuburbs] = useState([]);
+  // El CP que el cliente acaba de teclear: solo ese llena municipio y estado.
+  // El que llega guardado de su cuenta solo carga la lista de colonias.
+  const typedZip = useRef(null);
+
+  useEffect(() => {
+    const zip = form.zip_code;
+    if (!/^\d{5}$/.test(zip)) {
+      setSuburbs([]);
+      return undefined;
+    }
+    let stale = false;
+    lookupZip(zip).then((found) => {
+      if (stale) return;
+      setSuburbs(found?.suburbs ?? []);
+      if (!found || typedZip.current !== zip) return;
+      setForm((f) => ({
+        ...f,
+        city: found.city || f.city,
+        state: found.state || f.state,
+        neighborhood: found.suburbs.length === 1 ? found.suburbs[0] : f.neighborhood,
+      }));
+    });
+    return () => {
+      stale = true;
+    };
+  }, [form.zip_code]);
+
+  const set = (field) => (e) => setValue(field, e.target.value);
+
+  const setValue = (field, value) => {
+    if (field === 'zip_code') typedZip.current = value;
     setForm((f) => {
       const next = { ...f, [field]: value };
       // El CP sugiere el estado (rangos por entidad); si el cliente ya eligió
@@ -208,12 +240,7 @@ export function AccountView() {
               <TextField label="Núm. int." value={form.int_number} onChange={set('int_number')} />
             </Box>
 
-            <TextField
-              label="Colonia"
-              value={form.neighborhood}
-              onChange={set('neighborhood')}
-            />
-
+            {/* El CP va antes: llena municipio y estado y trae sus colonias */}
             <Box sx={{ gap: 2, display: 'grid', gridTemplateColumns: '1fr 2fr' }}>
               <TextField
                 label="Código postal"
@@ -221,14 +248,29 @@ export function AccountView() {
                 onChange={set('zip_code')}
                 error={!zipOk}
                 slotProps={{ htmlInput: { inputMode: 'numeric', maxLength: 5 } }}
-                helperText={zipOk ? 'Completa el estado solo' : '5 dígitos'}
+                helperText={zipOk ? 'Llena municipio y estado' : '5 dígitos'}
               />
-              <TextField
-                label="Municipio o alcaldía"
-                value={form.city}
-                onChange={set('city')}
+              <Autocomplete
+                freeSolo
+                openOnFocus
+                options={suburbs}
+                inputValue={form.neighborhood}
+                onInputChange={(_, value) => setValue('neighborhood', value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Colonia"
+                    helperText={suburbs.length > 1 ? 'Elige de la lista o escríbela' : undefined}
+                  />
+                )}
               />
             </Box>
+
+            <TextField
+              label="Municipio o alcaldía"
+              value={form.city}
+              onChange={set('city')}
+            />
 
             <TextField select label="Estado" value={form.state} onChange={set('state')}>
               {states.map((name) => (

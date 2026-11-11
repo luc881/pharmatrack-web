@@ -40,3 +40,40 @@ export function stateForZip(zip) {
   const number = Number(zip);
   return RANGES.find(([start, end]) => number >= start && number <= end)?.[2] ?? null;
 }
+
+const plain = (text) =>
+  text
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase();
+
+// Envia escribe los estados a su manera («Ciudad de Mexico», «México»,
+// «Coahuila de Zaragoza»); aquí se pasan a los nombres de nuestra lista
+function matchState(name, states) {
+  const wanted = plain(name ?? '');
+  if (wanted === 'mexico') return 'Estado de México';
+  return (
+    states.find((state) => plain(state) === wanted) ??
+    // el más largo primero: «Baja California Sur» antes que «Baja California»
+    [...states].sort((a, b) => b.length - a.length).find((state) => wanted.startsWith(plain(state))) ??
+    null
+  );
+}
+
+// Código postal → colonias, municipio y estado. Catálogo público de Envia.com
+// (sin token): los mismos datos con los que después se valida la guía. Si no
+// responde devuelve null y el cliente captura a mano.
+export async function lookupZip(zip) {
+  try {
+    const res = await fetch(`https://geocodes.envia.com/zipcode/MX/${zip}`);
+    const [found] = await res.json();
+    if (!found) return null;
+    return {
+      suburbs: found.suburbs ?? [],
+      city: found.regions?.region_2 || found.locality || '',
+      state: matchState(found.state?.name, RANGES.map((range) => range[2])),
+    };
+  } catch {
+    return null;
+  }
+}
