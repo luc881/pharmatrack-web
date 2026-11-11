@@ -17,8 +17,8 @@ import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 
-import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
+import { fDate, fDateTime } from 'src/utils/format-time';
 
 import { Pill, OdEmpty } from 'src/layouts/od/od-ui';
 
@@ -37,6 +37,92 @@ export const ORDER_STATUS = {
 };
 
 const totalLabel = (status) => (status === 'pending' ? 'Total estimado' : 'Total');
+
+// Rastreo dentro del sitio: el API pregunta a la paquetería en el momento.
+// Si no hay movimientos (o no responde), queda el enlace directo a la paquetería.
+function Tracking({ order }) {
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState(null);
+
+  const toggle = () => {
+    setOpen(!open);
+    if (data) return;
+    fetch(`/api/shop/orders/${order.id}/tracking`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((found) => setData(found ?? { events: [] }))
+      .catch(() => setData({ events: [] }));
+  };
+
+  // la paquetería manda fechas en formatos distintos: si no se entiende, tal cual
+  const when = (date) => {
+    const formatted = fDateTime(date);
+    return formatted && formatted !== 'Invalid' ? formatted : date;
+  };
+
+  return (
+    <Box sx={{ mt: 1.5 }}>
+      <Box sx={{ gap: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+        <Typography variant="body2" sx={{ flexGrow: 1 }}>
+          Enviado por {order.shipping_carrier?.toUpperCase()} · guía {order.tracking_number}
+        </Typography>
+        <Button size="small" onClick={toggle} aria-expanded={open}>
+          {open ? 'Ocultar rastreo' : 'Ver rastreo'}
+        </Button>
+      </Box>
+
+      <Collapse in={open}>
+        <Box sx={{ mt: 1, p: 2, borderRadius: 1, bgcolor: 'background.neutral' }}>
+          {!data && (
+            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              Consultando a la paquetería…
+            </Typography>
+          )}
+
+          {data?.status_label && (
+            <Typography variant="subtitle2">{data.status_label}</Typography>
+          )}
+          {data?.estimated_delivery && (
+            <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
+              Entrega estimada: {when(data.estimated_delivery)}
+            </Typography>
+          )}
+
+          {data?.events?.length > 0 && (
+            <Stack spacing={1} sx={{ mt: 1.5 }}>
+              {data.events.map((event, index) => (
+                <Box key={`${event.date}-${index}`}>
+                  <Typography variant="body2">{event.description}</Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    {[event.date && when(event.date), event.location].filter(Boolean).join(' · ')}
+                  </Typography>
+                </Box>
+              ))}
+            </Stack>
+          )}
+
+          {data && !data.status_label && !data.events?.length && (
+            <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
+              Todavía no hay movimientos. La paquetería puede tardar unas horas en registrar
+              el paquete.
+            </Typography>
+          )}
+
+          {data && order.tracking_url && (
+            <Link
+              href={order.tracking_url}
+              target="_blank"
+              rel="noopener"
+              variant="caption"
+              sx={{ mt: 1.5, display: 'inline-block' }}
+            >
+              Ver en la paquetería
+            </Link>
+          )}
+        </Box>
+      </Collapse>
+    </Box>
+  );
+}
 
 function OrderCard({ order, onCancel, onPay }) {
   const state = ORDER_STATUS[order.status] ?? ORDER_STATUS.pending;
@@ -116,19 +202,7 @@ function OrderCard({ order, onCancel, onPay }) {
         <Typography variant="subtitle1">{fCurrency(order.total)}</Typography>
       </Box>
 
-      {order.tracking_number && (
-        <Typography variant="body2" sx={{ mt: 1.5 }}>
-          Enviado por {order.shipping_carrier?.toUpperCase()} · guía {order.tracking_number}
-          {order.tracking_url && (
-            <>
-              {' · '}
-              <Link href={order.tracking_url} target="_blank" rel="noopener">
-                Rastrear envío
-              </Link>
-            </>
-          )}
-        </Typography>
-      )}
+      {order.tracking_number && <Tracking order={order} />}
 
       {order.status === 'paid' && (
         <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>

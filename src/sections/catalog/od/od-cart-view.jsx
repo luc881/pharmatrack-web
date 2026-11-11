@@ -189,6 +189,9 @@ export function OdCartView() {
   const [notice, setNotice] = useState('');
   const [delivery, setDelivery] = useState('pickup');
   const [phone, setPhone] = useState('');
+  // Dirección guardada en la cuenta: con envío se enseña aquí para que el
+  // cliente la confirme (o la capture) antes de pedir la cotización
+  const [address, setAddress] = useState(null);
   const [shippingEnabled, setShippingEnabled] = useState(true);
   const [promo, setPromo] = useState('');
   const [promoMsg, setPromoMsg] = useState('');
@@ -216,6 +219,7 @@ export function OdCartView() {
       .then((res) => (res.ok ? res.json() : null))
       .then((me) => {
         if (me?.phone) setPhone((current) => current || me.phone);
+        setAddress(me?.address || '');
       })
       .catch(() => {});
   }, [signedIn]);
@@ -439,6 +443,22 @@ export function OdCartView() {
                         error={isPickup && phone.length > 0 && !phoneOk}
                         helperText={isPickup ? 'Para coordinar la entrega. Queda guardada en tu cuenta.' : 'Opcional: para contactarte más rápido.'}
                       />
+                      {!isPickup && address !== null && (
+                        <Box sx={{ mt: 1.5, p: 1.5, borderRadius: '12px', bgcolor: 'var(--color-bg)', fontSize: 13, lineHeight: 1.6, color: 'var(--color-neutral-700)' }}>
+                          {address ? (
+                            <>
+                              <strong style={{ color: 'var(--color-text)' }}>Enviamos a:</strong> {address}{' '}
+                              <RouterLink href={paths.account} style={{ color: 'inherit' }}>Cambiar</RouterLink>
+                            </>
+                          ) : (
+                            <>
+                              Aún no tienes dirección de envío.{' '}
+                              <RouterLink href={paths.account} style={{ color: 'inherit' }}>Agrégala en tu cuenta</RouterLink>{' '}
+                              para cotizarte sin pedírtela por WhatsApp; tu carrito se conserva.
+                            </>
+                          )}
+                        </Box>
+                      )}
                       {error && <Alert severity="error" sx={{ mt: 2, typography: 'caption' }}>{error}</Alert>}
                       <Box sx={{ mt: 3, display: 'flex', gap: 1.5 }}>
                         <Button color="inherit" onClick={() => { setError(''); setStep(0); }} sx={{ borderRadius: '999px' }}>
