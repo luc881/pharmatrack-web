@@ -36,6 +36,7 @@ const MAIN = [
 
 const HELP = [
   { label: 'Envíos y entregas', href: paths.shipping },
+  { label: 'Rastrea tu envío', href: paths.tracking },
   { label: 'Preguntas frecuentes', href: `${paths.root}#preguntas` },
   { label: 'Contacto', href: paths.contact },
   { label: 'Términos y privacidad', href: paths.terms },

@@ -1,6 +1,7 @@
 import { getToken } from 'next-auth/jwt';
 
 import { CONFIG } from 'src/global-config';
+import { visitorHeaders } from 'src/lib/visitor-headers';
 
 // ----------------------------------------------------------------------
 // Proxy same-origin hacia /shop de la API. El token del cliente vive dentro
@@ -32,10 +33,16 @@ async function forward(req, { params }) {
   try {
     const res = await fetch(`${CONFIG.serverUrl}/api/v1/shop/${path.join('/')}`, {
       method: req.method,
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        ...visitorHeaders(req),
+      },
       body,
       cache: 'no-store',
     });
+    // 204 (cuenta eliminada) no lleva cuerpo, y Response no admite uno ahí
+    if (res.status === 204) return new Response(null, { status: 204 });
     return new Response(await res.text(), {
       status: res.status,
       headers: { 'Content-Type': 'application/json' },

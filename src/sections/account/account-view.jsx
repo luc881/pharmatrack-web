@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRef, useState, useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
@@ -166,6 +167,33 @@ export function AccountView() {
 
   const zipOk = !form.zip_code || /^\d{5}$/.test(form.zip_code);
 
+  // Eliminar cuenta: confirmación en la tarjeta (Collapse), sin popup nativo
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      const res = await fetch('/api/shop/me', { method: 'DELETE' });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        setDeleteError(
+          typeof body.detail === 'string' ? body.detail : 'No se pudo eliminar tu cuenta.'
+        );
+        return;
+      }
+      // Lo guardado en este navegador también se va
+      window.localStorage.clear();
+      await signOut({ callbackUrl: '/' });
+    } catch {
+      setDeleteError('No se pudo eliminar tu cuenta. Revisa tu conexión.');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const handleSave = async () => {
     if (!zipOk) {
       setError('El código postal son 5 dígitos.');
@@ -311,6 +339,48 @@ export function AccountView() {
                 Mis pedidos
               </Button>
             </Box>
+
+            <Divider sx={{ borderStyle: 'dashed' }} />
+
+            <Collapse in={!confirmDelete}>
+              <Button size="small" color="error" onClick={() => setConfirmDelete(true)}>
+                Eliminar mi cuenta
+              </Button>
+            </Collapse>
+
+            <Collapse in={confirmDelete}>
+              <Box sx={{ p: 2, borderRadius: 1, bgcolor: 'error.lighter' }}>
+                <Typography variant="body2" sx={{ color: 'error.darker' }}>
+                  Se borran tu nombre, teléfono, dirección, favoritos y carrito, y se cancelan
+                  tus pedidos pendientes. Los pedidos ya entregados quedan en nuestro registro
+                  de ventas sin tus datos. No se puede deshacer.
+                </Typography>
+                {deleteError && (
+                  <Alert severity="error" sx={{ mt: 1.5, typography: 'caption' }}>
+                    {deleteError}
+                  </Alert>
+                )}
+                <Box sx={{ mt: 1.5, gap: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    size="small"
+                    color="inherit"
+                    disabled={deleting}
+                    onClick={() => setConfirmDelete(false)}
+                  >
+                    Conservar mi cuenta
+                  </Button>
+                  <Button
+                    size="small"
+                    color="error"
+                    variant="contained"
+                    loading={deleting}
+                    onClick={handleDelete}
+                  >
+                    Sí, eliminar
+                  </Button>
+                </Box>
+              </Box>
+            </Collapse>
           </Stack>
         </Card>
       )}

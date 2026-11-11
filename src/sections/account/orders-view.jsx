@@ -6,7 +6,6 @@ import { useSearchParams } from 'next/navigation';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -17,14 +16,15 @@ import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 
+import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
-import { fDate, fDateTime } from 'src/utils/format-time';
 
 import { Pill, OdEmpty } from 'src/layouts/od/od-ui';
 
 import { Label } from 'src/components/label';
 
 import { SignInPrompt } from './account-view';
+import { TrackingDetails } from './tracking-details';
 
 // ----------------------------------------------------------------------
 
@@ -53,12 +53,6 @@ function Tracking({ order }) {
       .catch(() => setData({ events: [] }));
   };
 
-  // la paquetería manda fechas en formatos distintos: si no se entiende, tal cual
-  const when = (date) => {
-    const formatted = fDateTime(date);
-    return formatted && formatted !== 'Invalid' ? formatted : date;
-  };
-
   return (
     <Box sx={{ mt: 1.5 }}>
       <Box sx={{ gap: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -71,53 +65,8 @@ function Tracking({ order }) {
       </Box>
 
       <Collapse in={open}>
-        <Box sx={{ mt: 1, p: 2, borderRadius: 1, bgcolor: 'background.neutral' }}>
-          {!data && (
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              Consultando a la paquetería…
-            </Typography>
-          )}
-
-          {data?.status_label && (
-            <Typography variant="subtitle2">{data.status_label}</Typography>
-          )}
-          {data?.estimated_delivery && (
-            <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
-              Entrega estimada: {when(data.estimated_delivery)}
-            </Typography>
-          )}
-
-          {data?.events?.length > 0 && (
-            <Stack spacing={1} sx={{ mt: 1.5 }}>
-              {data.events.map((event, index) => (
-                <Box key={`${event.date}-${index}`}>
-                  <Typography variant="body2">{event.description}</Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                    {[event.date && when(event.date), event.location].filter(Boolean).join(' · ')}
-                  </Typography>
-                </Box>
-              ))}
-            </Stack>
-          )}
-
-          {data && !data.status_label && !data.events?.length && (
-            <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
-              Todavía no hay movimientos. La paquetería puede tardar unas horas en registrar
-              el paquete.
-            </Typography>
-          )}
-
-          {data && order.tracking_url && (
-            <Link
-              href={order.tracking_url}
-              target="_blank"
-              rel="noopener"
-              variant="caption"
-              sx={{ mt: 1.5, display: 'inline-block' }}
-            >
-              Ver en la paquetería
-            </Link>
-          )}
+        <Box sx={{ mt: 1 }}>
+          <TrackingDetails data={data} trackingUrl={order.tracking_url} />
         </Box>
       </Collapse>
     </Box>

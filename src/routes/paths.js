@@ -17,6 +17,7 @@ export const paths = {
   orders: '/mis-pedidos',
   breeding: '/criadero',
   shipping: '/envios',
+  tracking: '/rastreo',
   advisory: '/asesoria',
   contact: '/contacto',
   privacy: '/privacidad',

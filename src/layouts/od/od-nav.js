@@ -14,6 +14,7 @@ export const SITE_NAV = [
   { label: 'Fichas de cuidados', href: paths.careSheets },
   { label: 'Asesoría', href: paths.advisory },
   { label: 'Envíos', href: paths.shipping, secondary: true },
+  { label: 'Rastrear envío', href: paths.tracking, secondary: true },
   { label: 'Contacto', href: paths.contact, secondary: true },
 ];
 
