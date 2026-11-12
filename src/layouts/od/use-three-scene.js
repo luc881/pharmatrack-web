@@ -25,8 +25,9 @@ export function useThreeScene(build, opts) {
 
     let disposed = false;
     let cleanup = () => {};
+    let wait = null;
 
-    (async () => {
+    const start = async () => {
       const THREE = await import('three');
       if (disposed) return;
 
@@ -84,10 +85,25 @@ export function useThreeScene(build, opts) {
         renderer.dispose();
         renderer.domElement.remove();
       };
-    })();
+    };
+
+    // `lazy`: no descarga ni arma nada hasta que el contenedor está a una
+    // pantalla y media de entrar (escenas pesadas, abajo en la página)
+    if (opts.lazy) {
+      wait = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          wait.disconnect();
+          start();
+        },
+        { rootMargin: '150% 0px' }
+      );
+      wait.observe(el);
+    } else start();
 
     return () => {
       disposed = true;
+      wait?.disconnect();
       cleanup();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

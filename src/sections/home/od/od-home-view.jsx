@@ -11,14 +11,13 @@ import { RouterLink } from 'src/routes/components';
 import { Pill } from 'src/layouts/od/od-ui';
 import { FOTOS } from 'src/lib/fotos-ambiente';
 import { OdScene } from 'src/layouts/od/od-scene';
-import { OdPanel } from 'src/layouts/od/od-panel';
 import { OdReveal } from 'src/layouts/od/od-motion';
 import { OdInkText } from 'src/layouts/od/od-ink-text';
 import { OdMasthead } from 'src/layouts/od/od-masthead';
+import { SectionHead } from 'src/layouts/od/od-ornaments';
 import { OdSmoothScroll } from 'src/layouts/od/od-smooth-scroll';
 import { gsap, prefersReducedMotion } from 'src/layouts/od/od-gsap';
 import { useNavCategories } from 'src/layouts/nav-categories-context';
-import { LeafDivider, SectionHead } from 'src/layouts/od/od-ornaments';
 
 import { OdCatalogCard } from 'src/sections/catalog/od/od-catalog-card';
 import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-view';
@@ -26,12 +25,12 @@ import { animalToCard, productToCard } from 'src/sections/catalog/od/od-catalog-
 import { OdFaq } from './od-faq';
 import { OdCierre } from './od-cierre';
 import { OdCifras } from './od-cifras';
+import { OdFichas } from './od-fichas';
 import { OdInsumos } from './od-insumos';
 import { useHeroIntro } from './use-hero-intro';
 import { OdDivulgacion } from './od-divulgacion';
 import { usePhotoMotion } from './use-photo-motion';
-import { OdFondoTerrario } from './od-fondo-terrario';
-import { OdTrustBar, OdHowToBuy, OdProductRail, OdCategoryIndex } from './od-home-blocks';
+import { OdTrustBar, OdHowToBuy, OdCategoryIndex } from './od-home-blocks';
 
 // ----------------------------------------------------------------------
 // Home del rediseño editorial, reordenado (2026-10) según pautas de UX de
@@ -81,13 +80,14 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
 
   // insumos para "Todo para tu terrario": productos reales + sus categorías
   const terrario = products.slice(0, 10).map((p) => ({ ...productToCard(p), description: firstLine(p.description) }));
-  const fichas = careSheets.slice(0, 10).map((f) => ({
+  const fichas = careSheets.map((f) => ({
     key: f.slug,
     href: paths.careSheet(f.slug),
     image: f.cover,
     category: f.group?.name ?? 'Ficha',
     title: f.common_name || f.scientific_name,
-    price: f.difficulty ? `Dificultad: ${f.difficulty}` : 'Ver ficha',
+    scientific: f.scientific_name,
+    difficulty: f.difficulty,
   }));
   // los ejemplares de id más alto son los recién llegados → badge "Nuevo"
   const newestIds = new Set(
@@ -335,30 +335,9 @@ export function OdHomeView({ species = [], products = [], articles = [], careShe
       <OdHowToBuy />
 
 
-      {/* Fichas de cuidados: encabezado oscuro y, debajo, la tira 3D sobre el
-          flow claro (antes era la de insumos) */}
-      {fichas.length > 0 && (
-        <>
-          <OdPanel id="fichas" sx={{ pt: { xs: '56px', md: '80px' }, pb: { xs: '40px', md: '64px' } }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3, px: { xs: '18px', md: 'var(--od-gutter)' }, pb: 2.75, borderBottom: '1px solid rgba(238,236,230,0.18)', fontSize: 15, color: 'var(--color-neutral-400)' }}>
-              <Box component="span">Antes de que llegue tu colonia</Box>
-              <Link component={RouterLink} href={paths.careSheets} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: 'var(--color-neutral-100)' } }}>
-                Ver todas las fichas →
-              </Link>
-            </Box>
-            <Box className="od-orn-host" sx={{ width: 'fit-content', maxWidth: 1, mx: 'auto', pb: 1 }}>
-              <Box component="h2" sx={{ mx: 'auto', mt: { xs: '44px', md: '62px' }, maxWidth: '20ch', px: 2, textAlign: 'center', fontFamily: 'var(--font-heading)', fontWeight: 300, fontSize: 'clamp(30px, 3.8vw, 54px)', lineHeight: 1.12, color: 'var(--color-neutral-100)' }}>
-                Fichas de cuidados
-              </Box>
-              <LeafDivider sx={{ mx: 'auto', mt: '28px', maxWidth: 360, px: 2, color: 'var(--od-arena-texto)' }} />
-            </Box>
-          </OdPanel>
-          <Box component="section" aria-label="Fichas de cuidados" className="od-grain" sx={{ position: 'relative', py: { xs: '56px', md: '88px' }, overflow: 'clip', bgcolor: 'var(--od-musgo-900)' }}>
-            <OdFondoTerrario />
-            <OdProductRail items={fichas} cta="Ver ficha →" label="Fichas de cuidados" />
-          </Box>
-        </>
-      )}
+      {/* Fichas de cuidados: arco con la escena 3D del libro que se abre a la
+          lista con foto (od-fichas.jsx) */}
+      {fichas.length > 0 && <OdFichas items={fichas} />}
 
       {/* Divulgación (editorial en filas) */}
       <OdDivulgacion articles={articles} />
