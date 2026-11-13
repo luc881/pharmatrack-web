@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { cdnImage } from 'src/lib/cdn-image';
 import { Pill, OdImage, Display } from 'src/layouts/od/od-ui';
 import { gsap, prefersReducedMotion } from 'src/layouts/od/od-gsap';
 
@@ -215,11 +214,8 @@ function Nota({ article, open, onToggle, last }) {
           aspectRatio: open ? { xs: '16 / 10', md: 'auto' } : 'auto',
         }}
       >
-        {article.cover_image ? (
-          <Box component="img" src={cdnImage(article.cover_image, 1200)} alt={article.title} loading="lazy" sx={{ position: 'absolute', inset: 0, width: 1, height: 1, objectFit: 'cover' }} />
-        ) : (
-          <OdImage label={article.title} radius={0} sx={{ position: 'absolute', inset: 0, aspectRatio: 'auto' }} />
-        )}
+        {/* OdImage: si la portada no carga, queda el placeholder de la marca */}
+        <OdImage src={article.cover_image} alt={article.title} label={article.title} width={1200} radius={0} sx={{ position: 'absolute', inset: 0, aspectRatio: 'auto' }} />
       </Box>
 
       {/* derecha: fecha y abrir/cerrar; al abrir, el resumen y el enlace */}

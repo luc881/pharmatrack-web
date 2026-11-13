@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 
@@ -20,6 +20,17 @@ import { BrandSeal } from './od-ornaments';
 // overflow. Con `src` pinta la foto real; sin ella, un placeholder rotulado
 // (el cliente sube su fotografía después — ver Assets del handoff).
 export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 16, width = 800, sx }) {
+  // si la foto no carga (enlace roto, servicio caído) se ve el placeholder de
+  // la marca en vez del texto alternativo del navegador
+  const [failed, setFailed] = useState(null);
+  const imgRef = useRef(null);
+  useEffect(() => {
+    // pudo fallar antes de hidratar: onError ya no se dispara
+    const img = imgRef.current;
+    if (img?.complete && !img.naturalWidth) setFailed(src);
+  }, [src]);
+  const showPhoto = src && failed !== src;
+
   return (
     <Box
       sx={[
@@ -37,12 +48,14 @@ export function OdImage({ src, alt = '', label = '', ratio = '1 / 1', radius = 1
         className="od-img-zoom"
         sx={{ width: 1, height: 1, transition: 'transform 1100ms var(--od-ease)' }}
       >
-        {src ? (
+        {showPhoto ? (
           <Box
+            ref={imgRef}
             component="img"
             src={cdnImage(src, width)}
             alt={alt}
             loading="lazy"
+            onError={() => setFailed(src)}
             sx={{ width: 1, height: 1, display: 'block', objectFit: 'cover' }}
           />
         ) : (
