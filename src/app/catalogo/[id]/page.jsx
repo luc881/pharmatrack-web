@@ -17,6 +17,7 @@ import { renderInline } from 'src/sections/care-sheets/sheet-markdown';
 import { OdCatalogView } from 'src/sections/catalog/od/od-catalog-view';
 import { OdSpeciesDetailsView } from 'src/sections/catalog/od/od-species-details-view';
 import {
+  varietyOf,
   groupBySlug,
   rootGroupOf,
   groupPathOf,
@@ -40,10 +41,11 @@ const isLegacyAnimalId = (param) => /^\d+$/.test(param);
 
 // Resuelve un listado (morph o especie) del listado agrupado
 const findListing = (listings, parsed) => {
+  if (parsed.type === 'combo') return listings.find((i) => i.key === `c${parsed.ids.join('x')}`);
   if (parsed.type === 'morph') return listings.find((i) => i.morph?.id === parsed.id);
-  // species / legacy-species: el listado de la especie sin morph, o el primero de esa especie
+  // species / legacy-species: el listado nominal de la especie, o el primero de esa especie
   return (
-    listings.find((i) => !i.morph && i.species.id === parsed.id) ||
+    listings.find((i) => !i.morphs.length && i.species.id === parsed.id) ||
     listings.find((i) => i.species.id === parsed.id)
   );
 };
@@ -62,7 +64,7 @@ export async function generateMetadata({ params }) {
   if (isLegacyAnimalId(param)) {
     const animal = await getAnimal(param);
     if (!animal?.species) return { title: 'No encontrado' };
-    permanentRedirect(`/catalogo/${listingSlug(animal.species, animal.morphs?.[0] ?? null)}`);
+    permanentRedirect(`/catalogo/${listingSlug(animal.species, varietyOf(animal))}`);
   }
 
   const { groups, listings } = await loadCatalog();
@@ -108,7 +110,7 @@ export default async function Page({ params }) {
   if (isLegacyAnimalId(param)) {
     const animal = await getAnimal(param);
     if (!animal?.species) notFound();
-    permanentRedirect(`/catalogo/${listingSlug(animal.species, animal.morphs?.[0] ?? null)}`);
+    permanentRedirect(`/catalogo/${listingSlug(animal.species, varietyOf(animal))}`);
   }
 
   const { groups, listings } = await loadCatalog();

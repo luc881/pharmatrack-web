@@ -125,26 +125,48 @@ export function isBulkWeight(product) {
 }
 
 // ----------------------------------------------------------------------
-// Listados por MORPH: cada morph de una especie es su propia entrada del
-// catálogo (precio, fotos, descripción propia); la ficha de cuidados se
-// hereda de la especie. Los ejemplares sin morph se agrupan por especie.
+// Listados por VARIEDAD: cada variedad de una especie es su propia entrada
+// del catálogo (precio, fotos, descripción propia); la ficha de cuidados se
+// hereda de la especie. Los ejemplares sin variedad (nominal) se agrupan por
+// especie. Hay dos tipos de especie (species.variety_mode):
+//   named → variedades con nombre (Glacier, Papaya): una por ejemplar
+//   genes → genes combinables (Banana + Pastel): la entrada es la combinación
+// Las funciones de abajo aceptan un morph, una lista de morphs o null.
 // ----------------------------------------------------------------------
 
+const byId = (a, b) => a.id - b.id;
+const asVariety = (morph) =>
+  (Array.isArray(morph) ? morph : morph ? [morph] : []).slice().sort(byId);
+
+// La variedad que define el listado de un ejemplar
+export function varietyOf(animal) {
+  const morphs = animal.morphs ?? [];
+  return animal.species?.variety_mode === 'genes' ? asVariety(morphs) : morphs.slice(0, 1);
+}
+
+// s{especie} (nominal) · m{morph} (una variedad) · c{id}x{id} (combinación)
 export function listingKey(species, morph) {
-  return morph ? `m${morph.id}` : `s${species.id}`;
+  const variety = asVariety(morph);
+  if (!variety.length) return `s${species.id}`;
+  if (variety.length === 1) return `m${variety[0].id}`;
+  return `c${variety.map((m) => m.id).join('x')}`;
 }
 
 export function listingTitle(species, morph) {
   const base = species.common_name ?? scientificName(species);
-  return morph ? `${base} ${morph.name}` : base;
+  const variety = asVariety(morph);
+  return variety.length ? `${base} ${variety.map((m) => m.name).join(' ')}` : base;
 }
 
 export function listingSlug(species, morph) {
   return `${slugify(listingTitle(species, morph))}-${listingKey(species, morph)}`;
 }
 
-// Sufijo del slug: -m{id} (morph), -s{id} (especie) o -{num} (species legacy)
+// Sufijo del slug: -c{id}x{id} (combinación de genes), -m{id} (morph),
+// -s{id} (especie) o -{num} (species legacy)
 export function parseListingParam(param) {
+  const combo = /-c(\d+(?:x\d+)+)$/.exec(param);
+  if (combo) return { type: 'combo', ids: combo[1].split('x').map(Number) };
   const morph = /-m(\d+)$/.exec(param);
   if (morph) return { type: 'morph', id: Number(morph[1]) };
   const species = /-s(\d+)$/.exec(param);
@@ -161,16 +183,19 @@ export function parseListingParam(param) {
 export function buildListings(animals, taxa = []) {
   const map = new Map();
 
-  const seed = (species, morph) => {
-    const key = listingKey(species, morph);
+  const seed = (species, variety) => {
+    const morphs = asVariety(variety);
+    // una sola variedad: la descripción y la foto de esa variedad
+    const morph = morphs.length === 1 ? morphs[0] : null;
+    const key = listingKey(species, morphs);
     let entry = map.get(key);
     if (entry) return entry;
     entry = {
       key,
       species,
       morph,
-      title: listingTitle(species, morph),
-      slug: listingSlug(species, morph),
+      title: listingTitle(species, morphs),
+      slug: listingSlug(species, morphs),
       description: morph?.description ?? species.description ?? null,
       minPrice: null,
       maxPrice: null,
@@ -183,26 +208,26 @@ export function buildListings(animals, taxa = []) {
       // de la especie. animalToCard usa photos[0] ?? taxonPhoto, para que una
       // foto real de ejemplar siempre le gane a la del taxon.
       taxonPhoto: morph?.image ?? species.image ?? null,
-      morphs: morph ? [morph] : [],
+      morphs,
       sexes: [],
     };
     map.set(key, entry);
     return entry;
   };
 
-  // 1) Una entrada por cada taxon visible: la especie base y cada morph.
+  // 1) Una entrada por cada taxon visible: la especie base y cada variedad.
+  //    En una especie de genes un gen suelo no es algo que se venda: sus
+  //    entradas salen de las combinaciones que hay en los ejemplares.
   taxa.forEach((species) => {
     seed(species, null);
+    if (species.variety_mode === 'genes') return;
     (species.morphs ?? []).forEach((morph) => seed(species, morph));
   });
 
   // 2) Adjuntar los ejemplares a su entrada (creandola si el taxon no vino).
   animals.forEach((animal) => {
     if (!animal.species) return;
-    // ponytail: agrupa por el primer morph del ejemplar (un ejemplar suele
-    // tener un solo morph); sin morph, agrupa por especie
-    const morph = animal.morphs?.[0] ?? null;
-    const entry = seed(animal.species, morph);
+    const entry = seed(animal.species, varietyOf(animal));
     entry.lastPrice = animal.price;
     // El listado existe por CUALQUIER ejemplar (así aparece "agotado" cuando
     // ya no queda ninguno disponible), pero count/min/maxPrice solo cuentan

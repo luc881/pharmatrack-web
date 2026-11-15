@@ -44,7 +44,7 @@ export default async function Page({ params }) {
   );
   const forSale = listings.length
     ? {
-        slug: (listings.find((l) => !l.morph) ?? listings[0]).slug,
+        slug: (listings.find((l) => !l.morphs.length) ?? listings[0]).slug,
         count: listings.reduce((n, l) => n + l.count, 0),
       }
     : null;

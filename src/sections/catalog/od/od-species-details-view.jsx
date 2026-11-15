@@ -42,7 +42,7 @@ const CARE_FIELDS = [
 const paraSx = { m: 0, mb: '20px', maxWidth: '68ch', fontSize: 16, lineHeight: 1.85 };
 
 export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true, guide = null }) {
-  const { species, key, slug, morph, photos, morphs, minPrice, maxPrice, compareAt = null, count = null, taxonPhoto = null } = item;
+  const { species, key, slug, photos, morphs, minPrice, maxPrice, compareAt = null, count = null, taxonPhoto = null } = item;
 
   // Agotado: el listado existe (fotos/descripción de la especie) pero no
   // queda ningún ejemplar disponible para cotizar hoy — mismo criterio que
@@ -252,7 +252,7 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
             <Display component="h1" size="clamp(36px, 4.4vw, 62px)" sx={{ lineHeight: 1.04 }}>
               {title}
             </Display>
-            {!morph && (
+            {!morphs.length && (
               <Box
                 component="span"
                 sx={{

@@ -89,7 +89,7 @@ export const animalToCard = (i, isNew = false) => {
     // "Nominal" distingue la forma base de sus variantes. Va como campo aparte
     // y NO dentro de title: listingSlug deriva del titulo, asi que meterlo ahi
     // cambiaria la URL de todas las especies y romperia los enlaces existentes.
-    taxonLabel: i.morph ? null : 'Nominal',
+    taxonLabel: i.morphs?.length ? null : 'Nominal',
     soldOut,
     badge,
     badgeVariant: isNew || pct ? 'accent' : 'neutral',
