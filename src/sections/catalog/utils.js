@@ -208,6 +208,9 @@ export function buildListings(animals, taxa = []) {
       // de la especie. animalToCard usa photos[0] ?? taxonPhoto, para que una
       // foto real de ejemplar siempre le gane a la del taxon.
       taxonPhoto: morph?.image ?? species.image ?? null,
+      // todas las fotos de la variedad (o de la especie): la galería las usa
+      // cuando ningún ejemplar trae fotos propias
+      taxonPhotos: (morph ? morph.photos : species.photos) ?? [],
       morphs,
       sexes: [],
     };
@@ -219,7 +222,9 @@ export function buildListings(animals, taxa = []) {
   //    En una especie de genes un gen suelo no es algo que se venda: sus
   //    entradas salen de las combinaciones que hay en los ejemplares.
   taxa.forEach((species) => {
-    seed(species, null);
+    // la nominal se anuncia aparte de sus variedades: oculta, no hay tarjeta
+    // base, pero Glacier sigue
+    if (species.nominal_public !== false) seed(species, null);
     if (species.variety_mode === 'genes') return;
     (species.morphs ?? []).forEach((morph) => seed(species, morph));
   });
@@ -246,7 +251,9 @@ export function buildListings(animals, taxa = []) {
       if (!entry.photos.includes(url)) entry.photos.push(url);
     });
   });
-  return [...map.values()].map((entry) => {
+  return [...map.values()].map((raw) => {
+    // sin fotos de ejemplares, las de la variedad o especie (fuente de verdad)
+    const entry = raw.photos.length ? raw : { ...raw, photos: [...raw.taxonPhotos] };
     const tiers = entry.species.price_tiers;
     if (tiers?.length) {
       const prices = tiers.map((t) => t.price);
