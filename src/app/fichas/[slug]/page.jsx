@@ -49,6 +49,24 @@ export default async function Page({ params }) {
       }
     : null;
 
+  // Cada variedad con su foto (de Animales) y, si hay ejemplares, el enlace a ellos
+  const species = taxa.find((t) => t.id === sheet.species_id);
+  const unquote = (name) => name.replace(/^['"‘’“”]+|['"‘’“”]+$/g, '');
+  const varieties = (species?.morphs ?? [])
+    .map((m) => {
+      const src = m.photos?.[0] ?? m.image;
+      const listing = listings.find((l) => l.morphs.length === 1 && l.morph?.id === m.id);
+      return (
+        src && {
+          name: unquote(m.name),
+          src,
+          href: listing ? `/catalogo/${listing.slug}/` : null,
+          count: listing?.count ?? 0,
+        }
+      );
+    })
+    .filter(Boolean);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -68,7 +86,7 @@ export default async function Page({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
-      <OdCareSheetDetailView guide={sheet} forSale={forSale} />
+      <OdCareSheetDetailView guide={sheet} forSale={forSale} varieties={varieties} />
     </OdLayout>
   );
 }

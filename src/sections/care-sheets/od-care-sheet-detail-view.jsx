@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 
 import { CONFIG } from 'src/global-config';
 import { Pill, Star, OdImage } from 'src/layouts/od/od-ui';
-import { videoPoster, sheetSections } from 'src/lib/care-sheets';
+import { placePhotos, videoPoster, sheetSections } from 'src/lib/care-sheets';
 
 import { SheetLink } from './sheet-link';
 import { SheetHeroMedia } from './sheet-hero-media';
@@ -13,11 +13,15 @@ import { renderInline, renderMarkdown } from './sheet-markdown';
 // especie de PhasmaMX con la marca:
 //  - Portada oscura a todo lo ancho: video o foto de fondo con velo, nombre
 //    científico grande, nombre común, autoridad, localidad y etiquetas.
+//  - Una franja con los datos que más se buscan (temperatura, humedad,
+//    tamaño, dificultad) en cifras grandes.
 //  - Debajo, en pantallas grandes, dos columnas: el contenido (descripción,
-//    morfología, hábitat, lo básico, secciones del cuerpo, galería) y una
-//    barra lateral fija con tarjetas (ficha técnica, datos rápidos, origen,
-//    etiquetas, en venta). En celular todo en una columna, los datos rápidos
-//    arriba.
+//    morfología, hábitat, lo básico, secciones del cuerpo) y una barra lateral
+//    con tarjetas (ficha técnica, datos rápidos, origen, etiquetas) y, fijos al
+//    leer, el índice de la ficha y la tarjeta de venta. En celular, una columna.
+//  - Las fotos van dentro de las secciones (placePhotos): las que eligieron
+//    sección en el dashboard, ahí; las demás se reparten solas. Las variedades
+//    llevan la foto de su variedad (de Animales).
 // Texto en tuna solo sobre papel/noche (sobre crema queda en 4.49:1): aquí la
 // tuna es decorativa (barras, destellos) y los números van en tinta.
 // ----------------------------------------------------------------------
@@ -65,7 +69,13 @@ const proseSx = {
     border: 'var(--od-rule)',
     borderRadius: 'var(--od-radius-sm)',
   },
-  '& table': { width: 1, minWidth: 520, borderCollapse: 'collapse', fontSize: 'var(--od-text-sm)' },
+  // en celular la tabla se ajusta al ancho (antes se cortaba a la derecha)
+  '& table': {
+    width: 1,
+    minWidth: { xs: 0, sm: 520 },
+    borderCollapse: 'collapse',
+    fontSize: 'var(--od-text-sm)',
+  },
   '& th, & td': { p: 1.5, textAlign: 'left', verticalAlign: 'top', borderBottom: 'var(--od-rule)' },
   '& tbody tr:last-child > *': { borderBottom: 0 },
   '& thead th': LABEL,
@@ -79,12 +89,13 @@ function SectionHead({ id, children }) {
       component="h2"
       id={id}
       sx={{
-        ...LABEL,
         m: 0,
         mb: 3,
         pb: 1.5,
-        fontSize: 15,
-        fontWeight: 500,
+        fontFamily: 'var(--od-font-display)',
+        fontWeight: 400,
+        fontSize: { xs: 28, md: 36 },
+        lineHeight: 1.15,
         color: 'var(--od-text)',
         borderBottom: 'var(--od-rule)',
       }}
@@ -100,11 +111,9 @@ function Section({ id, title, children }) {
       component="section"
       aria-labelledby={id}
       className="od-reveal"
-      sx={{ mt: { xs: 6, md: 8 }, '&:first-of-type': { mt: 0 } }}
+      sx={{ mt: { xs: 7, md: 10 }, scrollMarginTop: 96, '&:first-of-type': { mt: 0 } }}
     >
-      <SectionHead id={id}>
-        {title}
-      </SectionHead>
+      <SectionHead id={id}>{title}</SectionHead>
       {children}
     </Box>
   );
@@ -206,6 +215,96 @@ function Chip({ children, dark = false }) {
   );
 }
 
+// Fotos de una sección: una sola a lo ancho; dos o más, en pares
+function SectionPhotos({ photos }) {
+  if (!photos.length) return null;
+  const single = photos.length === 1;
+  return (
+    <Box
+      sx={{
+        mt: 4,
+        display: 'grid',
+        gap: 1.5,
+        gridTemplateColumns: { xs: '1fr', sm: single ? '1fr' : 'repeat(2, minmax(0, 1fr))' },
+      }}
+    >
+      {photos.map((p) => (
+        <Box component="figure" key={p.src} sx={{ m: 0 }}>
+          <OdImage
+            src={p.src}
+            alt={p.alt}
+            ratio={single ? '16 / 10' : '4 / 5'}
+            radius={10}
+            width={single ? 1200 : 720}
+          />
+          <Box
+            component="figcaption"
+            sx={{ mt: 1, fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}
+          >
+            {p.alt}
+          </Box>
+        </Box>
+      ))}
+    </Box>
+  );
+}
+
+// Una tarjeta por variedad con su foto; lleva a sus ejemplares si hay en venta
+function Varieties({ items }) {
+  if (!items.length) return null;
+  return (
+    <Box
+      component="ul"
+      sx={{
+        m: 0,
+        mt: 4,
+        p: 0,
+        listStyle: 'none',
+        display: 'grid',
+        gap: 1.5,
+        gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' },
+      }}
+    >
+      {items.map((v) => {
+        const body = (
+          <>
+            <OdImage src={v.src} alt={v.name} ratio="1 / 1" radius={10} width={560} />
+            <Box sx={{ mt: 1, fontFamily: 'var(--od-font-display)', fontSize: 20 }}>{v.name}</Box>
+            {v.href && (
+              <Box sx={{ fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}>
+                {v.count} en venta →
+              </Box>
+            )}
+          </>
+        );
+        return (
+          <li key={v.name}>
+            {v.href ? (
+              <SheetLink
+                href={v.href}
+                sx={{ ...focusSx, display: 'block', color: 'inherit', textDecoration: 'none' }}
+              >
+                {body}
+              </SheetLink>
+            ) : (
+              body
+            )}
+          </li>
+        );
+      })}
+    </Box>
+  );
+}
+
+// Lo que más se busca, en cifras grandes, bajo la portada
+const GLANCE = [/^temperatura/i, /^humedad/i, /tamaño|hembra adulta/i, /^dificultad/i];
+
+// «17–28 °C (mejor 22–26 °C)» → cifra «17–28 °C» y nota «mejor 22–26 °C»
+const splitFigure = (value) => {
+  const [figure, ...note] = String(value).split(/\s*[(,]\s*/);
+  return { figure, note: note.join(', ').replace(/\)$/, '') };
+};
+
 const crumbSx = {
   ...focusSx,
   color: 'inherit',
@@ -213,7 +312,7 @@ const crumbSx = {
   '&:hover': { textDecoration: 'underline' },
 };
 
-export function OdCareSheetDetailView({ guide, forSale = null }) {
+export function OdCareSheetDetailView({ guide, forSale = null, varieties = [] }) {
   const updated = (guide.updated_at ?? '').slice(0, 10);
   const { intro, sections } = sheetSections(guide.body ?? '');
   // la dificultad sale del campo propio; una fila «Dificultad» en los datos rápidos la repetiría
@@ -226,13 +325,28 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
   const taxonomy = guide.taxonomy.map((t) => ({ label: t.rank, value: t.name, italic: t.italic }));
   const morphology = guide.morphology ?? [];
   const tags = guide.tags ?? [];
+  const glance = GLANCE.map((re) => facts.find((f) => re.test(f.label))).filter(Boolean);
 
-  // contador para ids estables de las secciones del contenido (#sec-N)
-  let n = 0;
-  const next = () => {
-    n += 1;
-    return n;
-  };
+  const titles = sections.map((s) => s.title);
+  // sin video, la primera foto es la portada y no se repite abajo
+  const isVarieties = (t) => /^variedades/i.test(t);
+  const { bySection, rest } = placePhotos(guide.photos, titles, {
+    skipFirst: !guide.video,
+    noAuto: (t) => varieties.length > 0 && isVarieties(t),
+  });
+  // sin sección «Variedades» en el cuerpo, las fotos de variedades van con su propia sección
+  const ownVarieties = varieties.length > 0 && !titles.some(isVarieties);
+
+  const toc = [
+    { id: 'descripcion', title: 'Descripción general' },
+    morphology.length > 0 && { id: 'morfologia', title: 'Morfología' },
+    ownVarieties && { id: 'variedades', title: 'Variedades' },
+    guide.habitat && { id: 'habitat', title: 'Hábitat y comportamiento' },
+    guide.basics.length > 0 && { id: 'lo-basico', title: 'Lo básico' },
+    ...sections.map((sec, i) => ({ id: `sec-${i + 1}`, title: sec.title })),
+    (rest.length > 0 || guide.video) && { id: 'fotos', title: 'Más fotos' },
+    guide.references.length > 0 && { id: 'referencias', title: 'Referencias' },
+  ].filter(Boolean);
 
   return (
     <>
@@ -388,6 +502,52 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
           color: 'var(--od-text)',
         }}
       >
+        {glance.length >= 2 && (
+          <Box
+            component="dl"
+            aria-label="Lo esencial en cifras"
+            sx={{
+              gridColumn: '1 / -1',
+              m: 0,
+              pb: { xs: 4, md: 6 },
+              display: 'grid',
+              gap: { xs: 3, md: 4 },
+              gridTemplateColumns: {
+                xs: 'repeat(2, minmax(0, 1fr))',
+                md: `repeat(${glance.length}, minmax(0, 1fr))`,
+              },
+              borderBottom: 'var(--od-rule)',
+            }}
+          >
+            {glance.map((f) => (
+              <Box key={f.label}>
+                <Box component="dt" sx={LABEL}>
+                  {f.label}
+                </Box>
+                <Box
+                  component="dd"
+                  sx={{
+                    m: 0,
+                    mt: 1,
+                    fontFamily: 'var(--od-font-display)',
+                    fontSize: { xs: 24, md: 34 },
+                    lineHeight: 1.15,
+                  }}
+                >
+                  {splitFigure(f.value).figure}
+                </Box>
+                {splitFigure(f.value).note && (
+                  <Box
+                    sx={{ mt: 0.5, fontSize: 'var(--od-text-sm)', color: 'var(--od-text-muted)' }}
+                  >
+                    {splitFigure(f.value).note}
+                  </Box>
+                )}
+              </Box>
+            ))}
+          </Box>
+        )}
+
         <Box component="article" sx={{ minWidth: 0 }}>
           <Section id="descripcion" title="Descripción general">
             <Box
@@ -447,6 +607,12 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
             </Section>
           )}
 
+          {ownVarieties && (
+            <Section id="variedades" title="Variedades">
+              <Varieties items={varieties} />
+            </Section>
+          )}
+
           {guide.habitat && (
             <Section id="habitat" title="Hábitat y comportamiento">
               <Box
@@ -463,7 +629,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
               component="section"
               aria-labelledby="lo-basico"
               className="od-card od-reveal"
-              sx={{ mt: { xs: 6, md: 8 }, overflow: 'hidden' }}
+              sx={{ mt: { xs: 7, md: 10 }, overflow: 'hidden', scrollMarginTop: 96 }}
             >
               <div className="od-ticks" />
               <Box sx={{ p: { xs: 2.5, sm: 3.5 } }}>
@@ -514,20 +680,19 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
             />
           )}
 
-          {sections.map((s) => {
-            const num = next();
-            return (
-              <Section key={s.title} id={`sec-${num}`} title={s.title}>
-                <Box
-                  sx={proseSx}
-                  dangerouslySetInnerHTML={{ __html: renderMarkdown(s.markdown) }}
-                />
-              </Section>
-            );
-          })}
+          {sections.map((sec, i) => (
+            <Section key={sec.title} id={`sec-${i + 1}`} title={sec.title}>
+              <Box
+                sx={proseSx}
+                dangerouslySetInnerHTML={{ __html: renderMarkdown(sec.markdown) }}
+              />
+              {isVarieties(sec.title) && <Varieties items={varieties} />}
+              <SectionPhotos photos={bySection[i]} />
+            </Section>
+          ))}
 
-          {(guide.photos.length > 0 || guide.video) && (
-            <Section id="fotos" title="Fotos y video">
+          {(rest.length > 0 || guide.video) && (
+            <Section id="fotos" title="Más fotos">
               <Box
                 sx={{
                   display: 'grid',
@@ -538,7 +703,7 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
                   gap: 1.5,
                 }}
               >
-                {guide.photos.map((f) => (
+                {rest.map((f) => (
                   <OdImage
                     key={f.src}
                     src={f.src}
@@ -672,38 +837,69 @@ export function OdCareSheetDetailView({ guide, forSale = null }) {
               </Box>
             </Card>
           )}
-          <Card
-            dark
-            title={forSale ? 'En venta' : '¿Dudas de cuidado?'}
+          {/* índice y venta quedan a la vista mientras se lee (ocupan el hueco de la columna) */}
+          <Box
             sx={{
               position: { lg: 'sticky' },
               top: { lg: 112 },
+              display: 'grid',
+              gap: 2.5,
               animation: 'odSlide 0.8s var(--od-ease) 0.7s both',
             }}
           >
-            <Box sx={{ px: 2.5, py: 2.5, display: 'grid', gap: 2 }}>
-              <Box sx={{ fontFamily: 'var(--od-font-display)', fontSize: 22, lineHeight: 1.25 }}>
-                {forSale
-                  ? `${forSale.count} ${forSale.count === 1 ? 'ejemplar disponible' : 'ejemplares disponibles'}`
-                  : 'Te ayudamos por WhatsApp.'}
-              </Box>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                {forSale && (
-                  <Pill variant="light" href={`/catalogo/${forSale.slug}/`}>
-                    Ver ejemplares
+            {toc.length > 2 && (
+              <Card title="En esta ficha" sx={{ display: { xs: 'none', lg: 'block' } }}>
+                <Box component="nav" aria-label="Secciones de la ficha">
+                  <Box component="ol" sx={{ m: 0, py: 1, px: 0, listStyle: 'none' }}>
+                    {toc.map((t) => (
+                      <li key={t.id}>
+                        <Box
+                          component="a"
+                          href={`#${t.id}`}
+                          sx={{
+                            ...focusSx,
+                            display: 'block',
+                            px: 2.5,
+                            py: 0.75,
+                            fontSize: 15,
+                            color: 'inherit',
+                            textDecoration: 'none',
+                            '&:hover': { color: 'var(--od-text-muted)' },
+                          }}
+                        >
+                          {t.title}
+                        </Box>
+                      </li>
+                    ))}
+                  </Box>
+                </Box>
+              </Card>
+            )}
+            <Card dark title={forSale ? 'En venta' : '¿Dudas de cuidado?'}>
+              <Box sx={{ px: 2.5, py: 2.5, display: 'grid', gap: 2 }}>
+                <Box sx={{ fontFamily: 'var(--od-font-display)', fontSize: 22, lineHeight: 1.25 }}>
+                  {forSale
+                    ? `${forSale.count} ${forSale.count === 1 ? 'ejemplar disponible' : 'ejemplares disponibles'}`
+                    : 'Te ayudamos por WhatsApp.'}
+                </Box>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {forSale && (
+                    <Pill variant="light" href={`/catalogo/${forSale.slug}/`}>
+                      Ver ejemplares
+                    </Pill>
+                  )}
+                  <Pill
+                    href={`https://wa.me/${CONFIG.whatsapp}`}
+                    target="_blank"
+                    rel="noopener"
+                    variant={forSale ? 'outline' : 'light'}
+                  >
+                    Escríbenos
                   </Pill>
-                )}
-                <Pill
-                  href={`https://wa.me/${CONFIG.whatsapp}`}
-                  target="_blank"
-                  rel="noopener"
-                  variant={forSale ? 'outline' : 'light'}
-                >
-                  Escríbenos
-                </Pill>
+                </Box>
               </Box>
-            </Box>
-          </Card>
+            </Card>
+          </Box>
         </Box>
       </Box>
     </>

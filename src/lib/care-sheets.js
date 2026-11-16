@@ -30,3 +30,32 @@ export function sheetSections(body) {
     }),
   };
 }
+
+const fold = (s) =>
+  String(s ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLowerCase();
+
+// Reparte las fotos de la ficha entre las secciones del cuerpo (por título).
+// La foto con `section` va en esa sección (si se renombró, cae en automático);
+// las automáticas van de una en una cada dos secciones sin foto propia, y las
+// que sobren quedan en `rest` («Más fotos»). skipFirst: la primera ya es la
+// portada y no se repite en automático. noAuto(título): secciones que no
+// reciben fotos automáticas (Variedades ya trae las suyas).
+export function placePhotos(photos, titles, { skipFirst = false, noAuto = () => false } = {}) {
+  const at = new Map(titles.map((t, i) => [fold(t), i]));
+  const bySection = titles.map(() => []);
+  const auto = [];
+  photos.forEach((p, i) => {
+    const target = p.section ? at.get(fold(p.section)) : undefined;
+    if (target !== undefined) bySection[target].push(p);
+    else if (!(skipFirst && i === 0)) auto.push(p);
+  });
+  const slots = titles
+    .map((_, i) => i)
+    .filter((i) => i % 2 === 0 && !bySection[i].length && !noAuto(titles[i]));
+  slots.forEach((i, k) => auto[k] && bySection[i].push(auto[k]));
+  return { bySection, rest: auto.slice(slots.length) };
+}
