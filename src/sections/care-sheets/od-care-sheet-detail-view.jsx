@@ -216,10 +216,13 @@ const crumbSx = {
 export function OdCareSheetDetailView({ guide, forSale = null }) {
   const updated = (guide.updated_at ?? '').slice(0, 10);
   const { intro, sections } = sheetSections(guide.body ?? '');
-  const facts = [
-    ...(guide.difficulty ? [{ label: 'Dificultad', value: guide.difficulty }] : []),
-    ...guide.facts,
-  ];
+  // la dificultad sale del campo propio; una fila «Dificultad» en los datos rápidos la repetiría
+  const facts = guide.difficulty
+    ? [
+        { label: 'Dificultad', value: guide.difficulty },
+        ...guide.facts.filter((f) => f.label.trim().toLowerCase() !== 'dificultad'),
+      ]
+    : guide.facts;
   const taxonomy = guide.taxonomy.map((t) => ({ label: t.rank, value: t.name, italic: t.italic }));
   const morphology = guide.morphology ?? [];
   const tags = guide.tags ?? [];
