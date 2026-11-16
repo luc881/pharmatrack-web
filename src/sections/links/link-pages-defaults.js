@@ -12,33 +12,6 @@ export const LINK_PAGES_DEFAULTS = {
       url_label: 'Más información',
     },
   ],
-  guides: [
-    {
-      name: 'Fásmidos',
-      url: '/fichas/phyllium-gardabagusi-argopuro',
-      sub: false,
-    },
-    {
-      name: 'Phyllium gardabagusi "Argopuro"',
-      url: '/fichas/phyllium-gardabagusi-argopuro',
-      sub: true,
-    },
-    {
-      name: 'Isópodos',
-      url: '/articulos/isopodos-y-colembolos-el-equipo-de-limpieza-del-terrario-2',
-      sub: false,
-    },
-    {
-      name: 'Colémbolos',
-      url: '/articulos/isopodos-y-colembolos-el-equipo-de-limpieza-del-terrario-2',
-      sub: false,
-    },
-    {
-      name: 'Cucarachas',
-      url: '',
-      sub: false,
-    },
-  ],
   pages: {
     links: {
       label: 'Criadero · CDMX',
