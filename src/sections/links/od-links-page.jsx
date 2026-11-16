@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 
-import { getLinkPages } from 'src/lib/public-api';
 import { Pill, Star } from 'src/layouts/od/od-ui';
 import { OdSideArt } from 'src/layouts/od/od-contours';
+import { getLinkPages, getCareSheets } from 'src/lib/public-api';
 
 import { slugify } from 'src/sections/catalog/utils';
 
@@ -12,8 +12,9 @@ import { OdCountdown } from './od-countdown';
 
 // ----------------------------------------------------------------------
 // Página tipo "linktree" propia de /links (bio de Instagram, QR del ticket,
-// tarjetas). Textos, botones, guías y eventos se editan en el dashboard
-// (Sitio → Links y eventos) y llegan por getLinkPages().
+// tarjetas). Textos, botones y eventos se editan en el dashboard
+// (Sitio → Links y eventos) y llegan por getLinkPages(). Las guías se arman
+// solas con las fichas publicadas (getCareSheets).
 // Página sin el layout del sitio (barra, pestañas, sello flotante): ligera y
 // pensada para el celular.
 //
@@ -90,13 +91,16 @@ function Kicker({ id, children }) {
 }
 
 const SECTIONS = {
-  guides: ({ guides, prefix }) =>
-    guides.length ? (
+  guides: ({ sheets, prefix }) =>
+    sheets.length ? (
       <Box component="section" aria-labelledby="guias" sx={{ mt: 6 }}>
         <Kicker id="guias">
           Guías de cuidado
         </Kicker>
-        <OdGuides guides={guides} prefix={prefix} />
+        <OdGuides sheets={sheets} prefix={prefix} />
+        <Box sx={{ mt: 1.5 }}>
+          {linkPill({ label: `Ver todas las guías (${sheets.length})`, url: '/fichas', primary: true }, `clic_${prefix}guias_todas`)}
+        </Box>
       </Box>
     ) : null,
 
@@ -134,7 +138,10 @@ const SECTIONS = {
 };
 
 export async function OdLinksPage({ pageKey, visit, prefix = '', sections }) {
-  const data = await getLinkPages();
+  const [data, sheets] = await Promise.all([
+    getLinkPages(),
+    sections.includes('guides') ? getCareSheets() : [],
+  ]);
   const page = data.pages[pageKey];
 
   return (
@@ -172,7 +179,7 @@ export async function OdLinksPage({ pageKey, visit, prefix = '', sections }) {
 
         {sections.map((s) => {
           const Section = SECTIONS[s];
-          return <Section key={s} page={page} guides={data.guides} events={data.events} prefix={prefix} />;
+          return <Section key={s} page={page} sheets={sheets} events={data.events} prefix={prefix} />;
         })}
 
         {/* Pie */}

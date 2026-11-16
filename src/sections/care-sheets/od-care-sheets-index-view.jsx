@@ -252,7 +252,8 @@ function GridView({ sheets }) {
 
 export function OdCareSheetsIndexView({ sheets }) {
   const params = useSearchParams();
-  const [q, setQ] = useState('');
+  // ?q= llega del buscador de /links; ?grupo= de sus botones por grupo
+  const [q, setQ] = useState(() => params.get('q') ?? '');
   const [groupId, setGroupId] = useState(() => Number(params.get('grupo')) || null);
   const [view, setView] = useState('index');
   const preview = useRef(null);
