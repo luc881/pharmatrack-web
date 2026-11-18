@@ -22,7 +22,7 @@ import { shopInfoFor } from '../shop-info';
 import { useFavorites } from '../use-favorites';
 import { animalToCard } from './od-catalog-view';
 import { OdCatalogCard } from './od-catalog-card';
-import { scientificName, saleFormatLabel } from '../utils';
+import { scientificName, saleFormatLabel, PIECE_SEX_LABELS } from '../utils';
 
 // ----------------------------------------------------------------------
 // Ficha de producto editorial. Reutiliza la lógica de carrito (cart.add, misma
@@ -42,7 +42,7 @@ const CARE_FIELDS = [
 const paraSx = { m: 0, mb: '20px', maxWidth: '68ch', fontSize: 16, lineHeight: 1.85 };
 
 export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], shippingEnabled = true, guide = null }) {
-  const { species, key, slug, photos, morphs, minPrice, maxPrice, compareAt = null, count = null, taxonPhoto = null } = item;
+  const { species, key, slug, photos, morphs, minPrice, maxPrice, compareAt = null, count = null, taxonPhoto = null, lots = [] } = item;
 
   // Agotado: el listado existe (fotos/descripción de la especie) pero no
   // queda ningún ejemplar disponible para cotizar hoy — mismo criterio que
@@ -65,19 +65,24 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
   const [tierIndex, setTierIndex] = useState(0);
   const selectedTier = tiers[tierIndex];
 
+  // «Por pieza» con varios lotes (sin sexar, hembras, machos): se elige cuál
+  const [lotIndex, setLotIndex] = useState(0);
+  const lot = lots.length > 1 ? lots[Math.min(lotIndex, lots.length - 1)] : null;
+  const lotLabel = lot ? PIECE_SEX_LABELS[lot.sex] ?? lot.sex : null;
+
   // Con paquetes/colonias (tiers) el conteo de ejemplares no es 1:1 con
   // paquetes comprables, así que ahí se conserva el tope fijo de 9.
-  const maxQty = tiers.length ? 9 : Math.max(1, Math.min(9, count ?? 9));
+  const maxQty = tiers.length ? 9 : Math.max(1, Math.min(9, lot ? lot.stock : (count ?? 9)));
 
   const [qty, setQty] = useState(1);
   const [gal, setGal] = useState(0);
   const gallery = photos.length ? photos : taxonPhoto ? [taxonPhoto] : [null];
   const galIndex = Math.min(gal, gallery.length - 1);
 
-  const whatsappText = `Hola, me interesa ${title} (${sci})${selectedTier ? ` — paquete de ${selectedTier.quantity}` : ''}`;
+  const whatsappText = `Hola, me interesa ${title} (${sci})${selectedTier ? ` — paquete de ${selectedTier.quantity}` : ''}${lotLabel ? ` — ${lotLabel.toLowerCase()}` : ''}`;
 
   const excerpt = (item.description ?? '').split('\n').filter(Boolean)[0];
-  const price = selectedTier ? selectedTier.price : minPrice;
+  const price = selectedTier ? selectedTier.price : lot ? lot.price : minPrice;
 
   // Si la especie tiene ficha de cuidados (/fichas), la sección de cuidados
   // sale de ahí: es la fuente principal. Sin ficha, de los campos de la especie.
@@ -119,9 +124,9 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
 
   const handleAdd = () => {
     cart.add({
-      key: `${key}-${selectedTier?.quantity ?? 'u'}`,
+      key: `${key}-${selectedTier?.quantity ?? 'u'}${lot ? `-${lot.sex}` : ''}`,
       title,
-      detail: selectedTier ? `Paquete de ${selectedTier.quantity}` : sci,
+      detail: selectedTier ? `Paquete de ${selectedTier.quantity}` : lotLabel ? `${sci} · ${lotLabel}` : sci,
       price,
       qty,
       image: photos[0] ?? taxonPhoto,
@@ -303,7 +308,9 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
               {formatLabel
                 ? species.sale_format === 'package'
                   ? `Paquete de ${species.package_size} ejemplares`
-                  : 'Cepa (colonia establecida)'
+                  : species.sale_format === 'piece'
+                    ? 'Por pieza (se venden de uno en uno)'
+                    : 'Cepa (colonia establecida)'
                 : 'Ejemplar individual'}
             </Box>
           </Box>
@@ -339,12 +346,47 @@ export function OdSpeciesDetailsView({ item, categoryPath = [], related = [], sh
             </Box>
           )}
 
+          {/* «Por pieza»: sin sexar, hembras o machos, cada uno con su precio */}
+          {lots.length > 1 && (
+            <Box sx={{ mt: '26px' }}>
+              <Box sx={{ mb: 1.5, fontSize: 13, color: 'var(--color-neutral-600)' }}>Sexo</Box>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                {lots.map((l, index) => (
+                  <Box
+                    key={l.sex}
+                    component="button"
+                    type="button"
+                    aria-pressed={lot === l}
+                    onClick={() => {
+                      setLotIndex(index);
+                      setQty(1);
+                    }}
+                    sx={{
+                      px: '20px',
+                      py: '10px',
+                      cursor: 'pointer',
+                      font: 'inherit',
+                      fontSize: 14,
+                      borderRadius: '999px',
+                      transition: 'background 300ms, color 300ms, border-color 300ms',
+                      ...(lot === l
+                        ? { bgcolor: 'var(--color-neutral-900)', color: 'var(--color-neutral-100)', border: '1px solid var(--color-neutral-900)' }
+                        : { bgcolor: 'transparent', color: 'inherit', border: '1px solid var(--color-divider)', '&:hover': { borderColor: 'var(--color-accent)' } }),
+                    }}
+                  >
+                    {PIECE_SEX_LABELS[l.sex] ?? l.sex} · {l.stock}
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          )}
+
           <Box sx={{ mt: '30px', fontFamily: 'var(--font-heading)', fontSize: 40, fontVariantNumeric: 'tabular-nums' }}>
             {price == null ? (
               'Consultar'
             ) : (
               <>
-                {!selectedTier && minPrice !== maxPrice && (
+                {!selectedTier && !lot && minPrice !== maxPrice && (
                   <Box component="span" sx={{ fontSize: 17, color: 'var(--color-neutral-600)', mr: 1 }}>Desde</Box>
                 )}
                 {!selectedTier && compareAt > minPrice && (

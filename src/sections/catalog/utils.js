@@ -105,8 +105,14 @@ export function speciesSlug(species) {
 export function saleFormatLabel(species) {
   if (species?.sale_format === 'package') return `Paquete de ${species.package_size}`;
   if (species?.sale_format === 'colony') return 'Cepa';
+  if (species?.sale_format === 'piece') return 'Por pieza';
   return null;
 }
+
+// «Por pieza»: un lote por sexo (sin sexar, hembras, machos), cada uno con su
+// precio y su cantidad; la ficha deja elegir cuál cotizar
+export const PIECE_SEX_LABELS = { unknown: 'Sin sexar', female: 'Hembra', male: 'Macho' };
+const PIECE_SEX_ORDER = ['unknown', 'female', 'male'];
 
 // "-15%" cuando hay precio anterior (compareAt) por encima del actual
 export function offerPct(price, compareAt) {
@@ -213,6 +219,7 @@ export function buildListings(animals, taxa = []) {
       taxonPhotos: (morph ? morph.photos : species.photos) ?? [],
       morphs,
       sexes: [],
+      lots: [],
     };
     map.set(key, entry);
     return entry;
@@ -238,7 +245,17 @@ export function buildListings(animals, taxa = []) {
     // ya no queda ninguno disponible), pero count/min/maxPrice solo cuentan
     // los disponibles: son los únicos comprables hoy.
     if (animal.status === 'available') {
-      entry.count += 1;
+      const piece = animal.species.sale_format === 'piece';
+      // por pieza cuentan las piezas del lote, no los registros
+      entry.count += piece ? Number(animal.stock ?? 1) : 1;
+      if (piece) {
+        entry.lots.push({
+          sex: animal.sex,
+          price: animal.price,
+          compareAt: animal.compare_at_price ?? null,
+          stock: Number(animal.stock ?? 1),
+        });
+      }
       if (entry.minPrice === null || animal.price < entry.minPrice) {
         entry.minPrice = animal.price;
         entry.compareAt = animal.compare_at_price ?? null;
@@ -250,6 +267,9 @@ export function buildListings(animals, taxa = []) {
     [animal.image, ...(animal.photos ?? [])].filter(Boolean).forEach((url) => {
       if (!entry.photos.includes(url)) entry.photos.push(url);
     });
+  });
+  map.forEach((entry) => {
+    entry.lots.sort((a, b) => PIECE_SEX_ORDER.indexOf(a.sex) - PIECE_SEX_ORDER.indexOf(b.sex));
   });
   return [...map.values()].map((raw) => {
     // sin fotos de ejemplares, las de la variedad o especie (fuente de verdad)
